@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>dex</title>
+    <link rel="stylesheet" href="tcg.css" />
+  </head>
+  <body>
+    <h1>Shinies</h1>
+    Started: 2024.10.03
+    <hr />
+    <div id="content">loading...</div>
+
+    <script>
+      const url =
+        'https://script.google.com/macros/s/AKfycbwgVdhfVpgvtTLFt4v-HPN95s6f8SomDnqPovzugCCrENHEZr057k2bChwQMg_8O00-vw/exec';
+      document.getElementById('content').action = url;
+
+      // fetching the data from each column in the sheet
+      // then populating the respective datalist
+      fetch(`${url}?header=tags`)
+        .then((response) => response.json())
+        .then(({ data }) => {
+          console.log(data);
+          fillBinder('content', data);
+        })
+        .catch((error) => console.error('!!!!!!!!', error));
+
+      // function to add options to datalists
+      const fillBinder = (id, arr) => {
+        let result = '';
+        for (const card of arr) {
+          result += card;
+        }
+        document.getElementById(id).innerHTML = result;
+      };
+    </script>
+  </body>
+</html>
