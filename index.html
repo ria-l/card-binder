@@ -3,55 +3,53 @@
   <head>
     <meta charset="“UTF-8”" />
     <link rel="stylesheet" href="tcg.css" />
-    <title>Reward Binder</title>
+    <title>Card Binder</title>
   </head>
   <body>
     <div>
       <button onclick="fetchData()">Reload</button>
       | Rows:
-      <button onclick="updateInputPageSize('delta', 0, -1)">-</button>
+      <button onclick="changePageSize('delta', 0, -1)">-</button>
       <input type="text" id="inputRow" />
-      <button onclick="updateInputPageSize('delta', 0, 1)">+</button>
+      <button onclick="changePageSize('delta', 0, 1)">+</button>
       Cols:
-      <button onclick="updateInputPageSize('delta', -1, 0)">-</button>
+      <button onclick="changePageSize('delta', -1, 0)">-</button>
       <input type="text" id="inputCol" />
-      <button onclick="updateInputPageSize('delta', 1, 0)">+</button>
+      <button onclick="changePageSize('delta', 1, 0)">+</button>
       <button onclick="fillBinder()">Apply</button>
       |
-      <button onclick="updateInputPageSize('absolute', 0,0)" class="solid">
+      <button onclick="changePageSize('absolute', 0,0)" class="solid">
         None
       </button>
-      <button onclick="updateInputPageSize('absolute', 3,3)" class="solid">
+      <button onclick="changePageSize('absolute', 3,3)" class="solid">
         3x3
       </button>
-      <button onclick="updateInputPageSize('absolute', 4,4)" class="solid">
+      <button onclick="changePageSize('absolute', 4,4)" class="solid">
         4x4
       </button>
-      <button onclick="updateInputPageSize('absolute', 8,4)" class="solid">
+      <button onclick="changePageSize('absolute', 8,4)" class="solid">
         8x4
       </button>
       <br />
       Card size: <input type="text" id="inputImgWidth" />
-      <button onclick="updateImgWidth()">Apply</button>
+      <button onclick="applyImgWidth()">Apply</button>
       |
-      <button onclick="updateInputImgWidth('delta', -100)">-100</button>
-      <button onclick="updateInputImgWidth('delta', -10)">-10</button>
-      <button onclick="updateInputImgWidth('delta', 10)">+10</button>
-      <button onclick="updateInputImgWidth('delta', 100)">+100</button>
+      <button onclick="changeImgWidth('delta', -100)">-100</button>
+      <button onclick="changeImgWidth('delta', -10)">-10</button>
+      <button onclick="changeImgWidth('delta', 10)">+10</button>
+      <button onclick="changeImgWidth('delta', 100)">+100</button>
       |
-      <button onclick="updateInputImgWidth('absolute', 50)" class="solid">
-        50
-      </button>
-      <button onclick="updateInputImgWidth('absolute', 100)" class="solid">
+      <button onclick="changeImgWidth('absolute', 50)" class="solid">50</button>
+      <button onclick="changeImgWidth('absolute', 100)" class="solid">
         100
       </button>
-      <button onclick="updateInputImgWidth('absolute', 150)" class="solid">
+      <button onclick="changeImgWidth('absolute', 150)" class="solid">
         150
       </button>
-      <button onclick="updateInputImgWidth('absolute', 200)" class="solid">
+      <button onclick="changeImgWidth('absolute', 200)" class="solid">
         200
       </button>
-      <button onclick="updateInputImgWidth('absolute', 300)" class="solid">
+      <button onclick="changeImgWidth('absolute', 300)" class="solid">
         300
       </button>
     </div>
@@ -79,25 +77,26 @@
           .then(() => {
             fillBinder();
             if (!sizeInputObj.value) {
-              updateInputImgWidth('absolute', 50);
+              changeImgWidth('absolute', 50);
             }
             if (!colInputObj.value || !rowInputObj.value) {
-              updateInputPageSize('absolute', 8, 4);
+              changePageSize('absolute', 8, 4);
             }
           })
           .catch(
             (error) => (document.getElementById('content').innerHTML = error)
           );
+        console.log('done');
       };
 
       const fillBinder = () => {
         let newContent = '';
         const imgWidth = document.getElementById('inputImgWidth').value;
-        const data = JSON.parse(localStorage.getItem('data'));
+        const cards = JSON.parse(localStorage.getItem('data'));
         const rows = parseInt(rowInputObj.value);
         const cols = parseInt(colInputObj.value);
 
-        data.forEach((v, i) => {
+        cards.forEach((v, i) => {
           const imgTag = `${v} style="width:${imgWidth}px;" />`;
 
           if (!rows || !cols) {
@@ -133,7 +132,7 @@
         document.getElementById('status').innerHTML = '';
       };
 
-      const updateImgWidth = () => {
+      const applyImgWidth = () => {
         document
           .querySelectorAll('img')
           .forEach(
@@ -144,7 +143,7 @@
           );
       };
 
-      const updateInputImgWidth = (type, input) => {
+      const changeImgWidth = (type, input) => {
         const w = document.getElementById('inputImgWidth');
 
         if (type == 'delta') {
@@ -153,10 +152,10 @@
         } else {
           w.value = input;
         }
-        updateImgWidth();
+        applyImgWidth();
       };
 
-      const updateInputPageSize = (type, col, row) => {
+      const changePageSize = (type, col, row) => {
         const r = document.getElementById('inputRow');
         const c = document.getElementById('inputCol');
 
