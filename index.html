@@ -48,6 +48,7 @@
         fetch(`${url}?header=tags`)
           .then((response) => response.json())
           .then(({ data }) => {
+            localStorage.clear();
             localStorage.setItem("data", JSON.stringify(data));
           })
           .catch((error) => (document.getElementById("content").innerHTML = error));
