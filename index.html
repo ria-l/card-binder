@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset=“UTF-8”>
+    <meta charset="“UTF-8”" />
     <link rel="stylesheet" href="tcg.css" />
     <title>Reward Binder</title>
   </head>
@@ -11,13 +11,13 @@
       <input type="text" id="inputRow" value="4" />
       Cols:
       <input type="text" id="inputCol" value="8" />
-      <button onclick="fetchData()">Apply</button>
+      <button onclick="fillBinder()">Apply</button>
       |
       <button onclick="updateInputPageSize(0,0)">None</button>
       <button onclick="updateInputPageSize(3,3)">3x3</button>
       <button onclick="updateInputPageSize(4,4)">4x4</button>
       <button onclick="updateInputPageSize(8,4)">8x4</button>
-
+      |
       Card size: <input type="text" id="inputImgWidth" value="50" />
       <button onclick="updateImgWidth()">Apply</button>
       |
@@ -31,36 +31,31 @@
       <button onclick="updateInputImgWidth('absolute', 150)" class="solid">150</button>
       <button onclick="updateInputImgWidth('absolute', 200)" class="solid">200</button>
       <button onclick="updateInputImgWidth('absolute', 300)" class="solid">300</button>
-    
     </div>
     <div id="status"></div>
     <div id="content"></div>
 
     <script>
       const url =
-        'https://script.google.com/macros/s/AKfycbyseTU2lYihy0VzgjKIgyqFKydSfd-mPkaHniW79BFgsHob_D7Cr6-Fd9sacErhmzdq/exec';
-      document.getElementById('content').action = url;
-      const cols = document.getElementById('inputCol');
-      const rows = document.getElementById('inputRow');
+        "https://script.google.com/macros/s/AKfycbyseTU2lYihy0VzgjKIgyqFKydSfd-mPkaHniW79BFgsHob_D7Cr6-Fd9sacErhmzdq/exec";
+      document.getElementById("content").action = url;
+      const cols = document.getElementById("inputCol");
+      const rows = document.getElementById("inputRow");
 
       const fetchData = () => {
-        document.getElementById('status').innerHTML = 'loading...';
+        document.getElementById("status").innerHTML = "loading...";
 
         fetch(`${url}?header=tags`)
           .then((response) => response.json())
           .then(({ data }) => {
-            fillBinder(data, rows.value, cols.value);
+            localStorage.setItem("data", JSON.stringify(data));
           })
-          .catch(
-            (error) => (document.getElementById('content').innerHTML = error)
-          );
+          .catch((error) => (document.getElementById("content").innerHTML = error));
       };
 
-      fetchData();
-
       const fillBinder = (data, rows, cols) => {
-        let newContent = '';
-        const imgWidth = document.getElementById('inputImgWidth').value;
+        let newContent = "";
+        const imgWidth = document.getElementById("inputImgWidth").value;
         data.forEach((v, i) => {
           const imgTag = `${v} style="width:${imgWidth}px;" />`;
 
@@ -70,50 +65,43 @@
             const rowIndex = (i + 1) % cols;
             const pageIndex = (i + 1) % (rows * cols);
             const tdTag = `<td>${imgTag}</td>`;
-            let fullTag = '';
-            // first card on page
+            let fullTag = "";
             if (pageIndex == 1) {
+              // first card on page
               fullTag += `<table style="float:left;padding:10px;">`;
             }
-            // first card in row
             if (rowIndex == 1) {
+              // first card in row
               fullTag += `<tr>${tdTag}`;
-            }
-            // last card in row
-            else if (rowIndex == 0) {
+            } else if (rowIndex == 0) {
+              // last card in row
               fullTag += `${tdTag}</tr>`;
-            }
-            // middle card
-            else {
+            } else {
+              // middle card
               fullTag += `${tdTag}`;
             }
             // last card on page
             if (pageIndex == 0) {
-              fullTag += '</table>';
+              fullTag += "</table>";
             }
             newContent += fullTag;
           }
         });
 
-        document.getElementById('content').innerHTML = newContent;
-        document.getElementById('status').innerHTML = '';
+        document.getElementById("content").innerHTML = newContent;
+        document.getElementById("status").innerHTML = "";
       };
 
       const updateImgWidth = () => {
         document
-          .querySelectorAll('img')
-          .forEach(
-            (e) =>
-              (e.style.width = `${
-                document.getElementById('inputImgWidth').value
-              }px`)
-          );
+          .querySelectorAll("img")
+          .forEach((e) => (e.style.width = `${document.getElementById("inputImgWidth").value}px`));
       };
 
       const updateInputImgWidth = (type, input) => {
-        const w = document.getElementById('inputImgWidth');
+        const w = document.getElementById("inputImgWidth");
 
-        if (type == 'delta') {
+        if (type == "delta") {
           const wInt = parseInt(w.value) + parseInt(input);
           w.value = wInt.toString();
         } else {
@@ -123,12 +111,17 @@
       };
 
       const updateInputPageSize = (col, row) => {
-        const r = document.getElementById('inputRow');
-        const c = document.getElementById('inputCol');
+        const r = document.getElementById("inputRow");
+        const c = document.getElementById("inputCol");
         r.value = row.toString();
         c.value = col.toString();
-        fetchData(); 
-      }
+        fillBinder();
+      };
+
+      fetchData();
+      cards_str = localStorage.getItem("data");
+      cards = JSON.parse(cards_str);
+      fillBinder(cards, rows.value, cols.value);
     </script>
   </body>
 </html>
