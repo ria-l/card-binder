@@ -5,17 +5,24 @@
     <link rel="stylesheet" href="tcg.css" />
   </head>
   <body>
-    <h1>Shinies</h1>
-    rows: <input type="text" id="rowinput" value="2" /> cols:
-    <input type="text" id="colinput" value="3" />
-    <button onclick="getvalues()">Click</button>
-    <br />
-    Started: 2024.10.03
-    <br />
-    <input type="text" id="imgwidth" value="50" />
-    <button onclick="changeWidth()">Click</button>
-
-    <hr />
+    <div>
+      rows:
+      <input type="text" id="rowinput" value="4" style="width: 20px" />
+      cols:
+      <input type="text" id="colinput" value="8" style="width: 20px" />
+      <button onclick="getvalues()">Change page size</button>
+    </div>
+    <div>
+      <input type="text" id="imgwidth" value="50" style="width: 20px" />
+      <button onclick="changeWidth()">Change card width</button> |
+      <button onclick="changeValueInput('d',-100)">-100</button>
+      <button onclick="changeValueInput('d',-10)">-10</button>
+      <button onclick="changeValueInput('a',50)">50</button>
+      <button onclick="changeValueInput('a',100)">100</button>
+      <button onclick="changeValueInput('a',300)">300</button>
+      <button onclick="changeValueInput('d',10)">+10</button>
+      <button onclick="changeValueInput('d',100)">+100</button>
+    </div>
     <div id="status">loading...</div>
     <div id="content"></div>
 
@@ -87,6 +94,19 @@
             (p) =>
               (p.style.width = `${document.getElementById('imgwidth').value}px`)
           );
+      };
+
+      const changeValueInput = (type, value) => {
+        w = document.getElementById('imgwidth');
+
+        if (type == 'd') {
+          newval = parseInt(w.value);
+          newval += parseInt(value);
+          w.value = newval.toString();
+        } else {
+          w.value = value;
+        }
+        changeWidth();
       };
     </script>
   </body>
