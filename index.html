@@ -47,15 +47,17 @@
 
       // function to add options to datalists
       const fillBinder = (arr, rows, cols) => {
-        console.log(arr);
         d = '';
         arr.forEach((v, i) => {
+          za_width = document.getElementById('imgwidth').value;
+          fulltag = `${v} style="width:${za_width}px;" />`;
+          console.log(fulltag);
           if (!rows || !cols) {
-            d += `${v} `;
+            d += fulltag;
           } else {
             col_mod = (i + 1) % cols;
             row_mod = (i + 1) % (rows * cols);
-            cell = `<td>${v}</td>`;
+            cell = `<td>${fulltag}</td>`;
             s = '';
             if (row_mod == 1) {
               s += `<table style='float:left;padding:10px;'>`;
@@ -70,7 +72,6 @@
             if (row_mod == 0) {
               s += '</table>';
             }
-            console.log(s);
             d += s;
           }
         });
