@@ -2,111 +2,113 @@
 <html>
   <head>
     <title>dex</title>
-    <link rel="stylesheet" href="tcg.css" />
   </head>
   <body>
     <div>
-      rows:
-      <input type="text" id="rowinput" value="4" style="width: 20px" />
-      cols:
-      <input type="text" id="colinput" value="8" style="width: 20px" />
-      <button onclick="getvalues()">Change page size</button>
+      Rows:
+      <input type="text" id="inputRow" value="4" style="width: 20px" />
+      Cols:
+      <input type="text" id="inputCol" value="8" style="width: 20px" />
+      <button onclick="fetchData()">Change page size</button>
     </div>
     <div>
-      <input type="text" id="imgwidth" value="50" style="width: 20px" />
-      <button onclick="changeWidth()">Change card width</button> |
-      <button onclick="changeValueInput('d',-100)">-100</button>
-      <button onclick="changeValueInput('d',-10)">-10</button>
-      <button onclick="changeValueInput('a',50)">50</button>
-      <button onclick="changeValueInput('a',100)">100</button>
-      <button onclick="changeValueInput('a',300)">300</button>
-      <button onclick="changeValueInput('d',10)">+10</button>
-      <button onclick="changeValueInput('d',100)">+100</button>
+      <input type="text" id="inputImgWidth" value="50" style="width: 20px" />
+      <button onclick="updateImgWidth()">Change card width</button> |
+      <button onclick="updateInputImgWidth('delta', -100)">-100</button>
+      <button onclick="updateInputImgWidth('delta', -10)">-10</button>
+      <button onclick="updateInputImgWidth('absolute', 50)">50</button>
+      <button onclick="updateInputImgWidth('absolute', 100)">100</button>
+      <button onclick="updateInputImgWidth('absolute', 300)">300</button>
+      <button onclick="updateInputImgWidth('delta', 10)">+10</button>
+      <button onclick="updateInputImgWidth('delta', 100)">+100</button>
     </div>
-    <div id="status">loading...</div>
+    <div id="status"></div>
     <div id="content"></div>
 
     <script>
       const url =
         'https://script.google.com/macros/s/AKfycbyseTU2lYihy0VzgjKIgyqFKydSfd-mPkaHniW79BFgsHob_D7Cr6-Fd9sacErhmzdq/exec';
       document.getElementById('content').action = url;
+      const cols = document.getElementById('inputCol');
+      const rows = document.getElementById('inputRow');
 
-      const getvalues = () => {
+      const fetchData = () => {
         document.getElementById('status').innerHTML = 'loading...';
 
         fetch(`${url}?header=tags`)
           .then((response) => response.json())
           .then(({ data }) => {
-            fillBinder(data, rowvalue.value, colvalue.value);
+            fillBinder(data, rows.value, cols.value);
           })
           .catch(
             (error) => (document.getElementById('content').innerHTML = error)
           );
       };
-      let cols = 8;
-      let rows = 4;
 
-      // fetching the data from each column in the sheet
-      // then populating the respective datalist
-      let colvalue = document.getElementById('colinput');
-      let rowvalue = document.getElementById('rowinput');
-      getvalues();
+      fetchData();
 
-      // function to add options to datalists
-      const fillBinder = (arr, rows, cols) => {
-        d = '';
-        arr.forEach((v, i) => {
-          za_width = document.getElementById('imgwidth').value;
-          fulltag = `${v} style="width:${za_width}px;" />`;
-          console.log(fulltag);
+      const fillBinder = (data, rows, cols) => {
+        newContent = '';
+        imgWidth = document.getElementById('inputImgWidth').value;
+        data.forEach((v, i) => {
+          imgTag = `${v} style="width:${imgWidth}px;" />`;
+
           if (!rows || !cols) {
-            d += fulltag;
+            newContent += imgTag;
           } else {
-            col_mod = (i + 1) % cols;
-            row_mod = (i + 1) % (rows * cols);
-            cell = `<td>${fulltag}</td>`;
-            s = '';
-            if (row_mod == 1) {
-              s += `<table style='float:left;padding:10px;'>`;
+            rowIndex = (i + 1) % cols;
+            pageIndex = (i + 1) % (rows * cols);
+            tdTag = `<td>${imgTag}</td>`;
+            fullTag = '';
+            // first card on page
+            if (pageIndex == 1) {
+              fullTag += `<table style="float:left;padding:10px;">`;
             }
-            if (col_mod == 0) {
-              s += `${cell}</tr>`;
-            } else if (col_mod == 1) {
-              s += `<tr>${cell}`;
-            } else {
-              s += `${cell}`;
+            // first card in row
+            if (rowIndex == 1) {
+              fullTag += `<tr>${tdTag}`;
             }
-            if (row_mod == 0) {
-              s += '</table>';
+            // last card in row
+            else if (rowIndex == 0) {
+              fullTag += `${tdTag}</tr>`;
             }
-            d += s;
+            // middle card
+            else {
+              fullTag += `${tdTag}`;
+            }
+            // last card on page
+            if (pageIndex == 0) {
+              fullTag += '</table>';
+            }
+            newContent += fullTag;
           }
         });
 
-        document.getElementById('content').innerHTML = d;
+        document.getElementById('content').innerHTML = newContent;
         document.getElementById('status').innerHTML = '';
       };
 
-      const changeWidth = () => {
+      const updateImgWidth = () => {
         document
           .querySelectorAll('img')
           .forEach(
-            (p) =>
-              (p.style.width = `${document.getElementById('imgwidth').value}px`)
+            (e) =>
+              (e.style.width = `${
+                document.getElementById('inputImgWidth').value
+              }px`)
           );
       };
 
-      const changeValueInput = (type, value) => {
-        w = document.getElementById('imgwidth');
+      const updateInputImgWidth = (type, input) => {
+        w = document.getElementById('inputImgWidth');
 
-        if (type == 'd') {
-          newval = parseInt(w.value);
-          newval += parseInt(value);
-          w.value = newval.toString();
+        if (type == 'delta') {
+          wInt = parseInt(w.value) + parseInt(input);
+          w.value = wInt.toString();
         } else {
-          w.value = value;
+          w.value = input;
         }
-        changeWidth();
+        updateImgWidth();
       };
     </script>
   </body>
