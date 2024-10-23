@@ -10,20 +10,28 @@
       <button onclick="fetchData()">Reload</button>
       | Rows:
       <button onclick="updateInputPageSize('delta', 0, -1)">-</button>
-      <input type="text" id="inputRow" value="4" />
+      <input type="text" id="inputRow" />
       <button onclick="updateInputPageSize('delta', 0, 1)">+</button>
       Cols:
       <button onclick="updateInputPageSize('delta', -1, 0)">-</button>
-      <input type="text" id="inputCol" value="8" />
+      <input type="text" id="inputCol" />
       <button onclick="updateInputPageSize('delta', 1, 0)">+</button>
       <button onclick="fillBinder()">Apply</button>
       |
-      <button onclick="updateInputPageSize('absolute', 0,0)">None</button>
-      <button onclick="updateInputPageSize('absolute', 3,3)">3x3</button>
-      <button onclick="updateInputPageSize('absolute', 4,4)">4x4</button>
-      <button onclick="updateInputPageSize('absolute', 8,4)">8x4</button>
+      <button onclick="updateInputPageSize('absolute', 0,0)" class="solid">
+        None
+      </button>
+      <button onclick="updateInputPageSize('absolute', 3,3)" class="solid">
+        3x3
+      </button>
+      <button onclick="updateInputPageSize('absolute', 4,4)" class="solid">
+        4x4
+      </button>
+      <button onclick="updateInputPageSize('absolute', 8,4)" class="solid">
+        8x4
+      </button>
       <br />
-      Card size: <input type="text" id="inputImgWidth" value="50" />
+      Card size: <input type="text" id="inputImgWidth" />
       <button onclick="updateImgWidth()">Apply</button>
       |
       <button onclick="updateInputImgWidth('delta', -100)">-100</button>
@@ -56,6 +64,7 @@
       document.getElementById('content').action = url;
       const colInputObj = document.getElementById('inputCol');
       const rowInputObj = document.getElementById('inputRow');
+      const sizeInputObj = document.getElementById('inputImgWidth');
 
       const fetchData = () => {
         console.log('fetching...');
@@ -67,7 +76,15 @@
             localStorage.clear();
             localStorage.setItem('data', JSON.stringify(data));
           })
-          .then(fillBinder())
+          .then(() => {
+            fillBinder();
+            if (!sizeInputObj.value) {
+              updateInputImgWidth('absolute', 50);
+            }
+            if (!colInputObj.value || !rowInputObj.value) {
+              updateInputPageSize('absolute', 8, 4);
+            }
+          })
           .catch(
             (error) => (document.getElementById('content').innerHTML = error)
           );
@@ -156,9 +173,6 @@
       };
 
       fetchData();
-      cards_str = localStorage.getItem('data');
-      cards = JSON.parse(cards_str);
-      fillBinder(cards, rowInputObj.value, colInputObj.value);
     </script>
   </body>
 </html>
