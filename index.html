@@ -7,19 +7,19 @@
   <body>
     <div>
       Rows:
-      <input type="text" id="inputRow" value="4" style="width: 20px" />
+      <input type="text" id="inputRow" value="4" />
       Cols:
-      <input type="text" id="inputCol" value="8" style="width: 20px" />
+      <input type="text" id="inputCol" value="8" />
       <button onclick="fetchData()">Change page size</button>
     </div>
     <div>
-      <input type="text" id="inputImgWidth" value="50" style="width: 20px" />
+      <input type="text" id="inputImgWidth" value="50" />
       <button onclick="updateImgWidth()">Change card width</button> |
       <button onclick="updateInputImgWidth('delta', -100)">-100</button>
       <button onclick="updateInputImgWidth('delta', -10)">-10</button>
-      <button onclick="updateInputImgWidth('absolute', 50)">50</button>
-      <button onclick="updateInputImgWidth('absolute', 100)">100</button>
-      <button onclick="updateInputImgWidth('absolute', 300)">300</button>
+      <button onclick="updateInputImgWidth('absolute', 50)" class="solid">50</button>
+      <button onclick="updateInputImgWidth('absolute', 100)" class="solid">100</button>
+      <button onclick="updateInputImgWidth('absolute', 300)" class="solid">300</button>
       <button onclick="updateInputImgWidth('delta', 10)">+10</button>
       <button onclick="updateInputImgWidth('delta', 100)">+100</button>
     </div>
