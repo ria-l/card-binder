@@ -48,18 +48,18 @@
       fetchData();
 
       const fillBinder = (data, rows, cols) => {
-        newContent = '';
-        imgWidth = document.getElementById('inputImgWidth').value;
+        let newContent = '';
+        const imgWidth = document.getElementById('inputImgWidth').value;
         data.forEach((v, i) => {
-          imgTag = `${v} style="width:${imgWidth}px;" />`;
+          const imgTag = `${v} style="width:${imgWidth}px;" />`;
 
           if (!rows || !cols) {
-            newContent += imgTag;
+            newContent += ` ${imgTag} `;
           } else {
-            rowIndex = (i + 1) % cols;
-            pageIndex = (i + 1) % (rows * cols);
-            tdTag = `<td>${imgTag}</td>`;
-            fullTag = '';
+            const rowIndex = (i + 1) % cols;
+            const pageIndex = (i + 1) % (rows * cols);
+            const tdTag = `<td>${imgTag}</td>`;
+            let fullTag = '';
             // first card on page
             if (pageIndex == 1) {
               fullTag += `<table style="float:left;padding:10px;">`;
@@ -100,10 +100,10 @@
       };
 
       const updateInputImgWidth = (type, input) => {
-        w = document.getElementById('inputImgWidth');
+        const w = document.getElementById('inputImgWidth');
 
         if (type == 'delta') {
-          wInt = parseInt(w.value) + parseInt(input);
+          const wInt = parseInt(w.value) + parseInt(input);
           w.value = wInt.toString();
         } else {
           w.value = input;
