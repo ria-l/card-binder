@@ -3,31 +3,44 @@
   <head>
     <meta charset="“UTF-8”" />
     <link rel="stylesheet" href="tcg.css" />
+    <script type="text/javascript" src="tcg.js"></script>
     <title>Card Binder</title>
   </head>
   <body>
     <div>
       <button onclick="fetchData()">Reload</button>
       | Rows:
-      <button onclick="changePageSize('delta', 0, -1)">-</button>
+      <button onclick="changePageSize('delta', 0, -1);fillBinder();">-</button>
       <input type="text" id="inputRow" />
-      <button onclick="changePageSize('delta', 0, 1)">+</button>
+      <button onclick="changePageSize('delta', 0, 1);fillBinder();">+</button>
       Cols:
-      <button onclick="changePageSize('delta', -1, 0)">-</button>
+      <button onclick="changePageSize('delta', -1, 0);fillBinder();">-</button>
       <input type="text" id="inputCol" />
-      <button onclick="changePageSize('delta', 1, 0)">+</button>
+      <button onclick="changePageSize('delta', 1, 0);fillBinder();">+</button>
       <button onclick="fillBinder()">Apply</button>
       |
-      <button onclick="changePageSize('absolute', 0,0)" class="solid">
+      <button
+        onclick="changePageSize('absolute', 0,0);fillBinder();"
+        class="solid"
+      >
         None
       </button>
-      <button onclick="changePageSize('absolute', 3,3)" class="solid">
+      <button
+        onclick="changePageSize('absolute', 3,3);fillBinder();"
+        class="solid"
+      >
         3x3
       </button>
-      <button onclick="changePageSize('absolute', 4,4)" class="solid">
+      <button
+        onclick="changePageSize('absolute', 4,4);fillBinder();"
+        class="solid"
+      >
         4x4
       </button>
-      <button onclick="changePageSize('absolute', 8,4)" class="solid">
+      <button
+        onclick="changePageSize('absolute', 8,4);fillBinder();"
+        class="solid"
+      >
         8x4
       </button>
       <br />
@@ -55,123 +68,5 @@
     </div>
     <div id="status"></div>
     <div id="content"></div>
-
-    <script>
-      const url =
-        'https://script.google.com/macros/s/AKfycbyseTU2lYihy0VzgjKIgyqFKydSfd-mPkaHniW79BFgsHob_D7Cr6-Fd9sacErhmzdq/exec';
-      document.getElementById('content').action = url;
-      const colInputObj = document.getElementById('inputCol');
-      const rowInputObj = document.getElementById('inputRow');
-      const sizeInputObj = document.getElementById('inputImgWidth');
-
-      const fetchData = () => {
-        console.log('fetching...');
-        document.getElementById('status').innerHTML = 'loading...';
-
-        fetch(`${url}?header=tags`)
-          .then((response) => response.json())
-          .then(({ data }) => {
-            localStorage.clear();
-            localStorage.setItem('data', JSON.stringify(data));
-          })
-          .then(() => {
-            fillBinder();
-            if (!sizeInputObj.value) {
-              changeImgWidth('absolute', 50);
-            }
-            if (!colInputObj.value || !rowInputObj.value) {
-              changePageSize('absolute', 8, 4);
-            }
-          })
-          .catch(
-            (error) => (document.getElementById('content').innerHTML = error)
-          );
-        console.log('done');
-      };
-
-      const fillBinder = () => {
-        let newContent = '';
-        const imgWidth = document.getElementById('inputImgWidth').value;
-        const cards = JSON.parse(localStorage.getItem('data'));
-        const rows = parseInt(rowInputObj.value);
-        const cols = parseInt(colInputObj.value);
-
-        cards.forEach((v, i) => {
-          const imgTag = `${v} style="width:${imgWidth}px;" />`;
-
-          if (!rows || !cols) {
-            newContent += ` ${imgTag} `;
-          } else {
-            const rowIndex = (i + 1) % cols;
-            const pageIndex = (i + 1) % (rows * cols);
-            const tdTag = `<td>${imgTag}</td>`;
-            let fullTag = '';
-            if (pageIndex == 1) {
-              // first card on page
-              fullTag += `<table style="float:left;padding:10px;">`;
-            }
-            if (rowIndex == 1) {
-              // first card in row
-              fullTag += `<tr>${tdTag}`;
-            } else if (rowIndex == 0) {
-              // last card in row
-              fullTag += `${tdTag}</tr>`;
-            } else {
-              // middle card
-              fullTag += `${tdTag}`;
-            }
-            // last card on page
-            if (pageIndex == 0) {
-              fullTag += '</table>';
-            }
-            newContent += fullTag;
-          }
-        });
-
-        document.getElementById('content').innerHTML = newContent;
-        document.getElementById('status').innerHTML = '';
-      };
-
-      const applyImgWidth = () => {
-        document
-          .querySelectorAll('img')
-          .forEach(
-            (e) =>
-              (e.style.width = `${
-                document.getElementById('inputImgWidth').value
-              }px`)
-          );
-      };
-
-      const changeImgWidth = (type, input) => {
-        const w = document.getElementById('inputImgWidth');
-
-        if (type == 'delta') {
-          const wInt = parseInt(w.value) + parseInt(input);
-          w.value = wInt.toString();
-        } else {
-          w.value = input;
-        }
-        applyImgWidth();
-      };
-
-      const changePageSize = (type, col, row) => {
-        const r = document.getElementById('inputRow');
-        const c = document.getElementById('inputCol');
-
-        if (type == 'delta') {
-          const rInt = parseInt(r.value) + row;
-          const cInt = parseInt(c.value) + col;
-          r.value = rInt.toString();
-          c.value = cInt.toString();
-        } else {
-          r.value = row.toString();
-          c.value = col.toString();
-        }
-        fillBinder();
-      };
-
-      fetchData();
-    </script>
   </body>
 </html>
