@@ -5,6 +5,7 @@ let rowInputObj = document.getElementById('inputRow');
 let sizeInputObj = document.getElementById('inputImgWidth');
 
 localStorage.clear();
+console.log('cleared storage');
 
 const processData = (values) => {
   const imgWidth = document.getElementById('inputImgWidth').value;
@@ -35,7 +36,8 @@ const fetchData = () => {
   fetch(url)
     .then((response) => response.json())
     .then(({ data }) => {
-      console.log(`fetched`);
+      console.log(`fetched ${data}`);
+      localStorage.setItem('data', data);
       tags = processData(data);
       localStorage.setItem('tags', tags);
     })
