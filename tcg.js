@@ -74,8 +74,9 @@ const fetchData = () => {
       shinies = data.filter((row) => row[1] == 'shiny');
       // add back the headers
       shinies.unshift(headers);
-      localStorage.setItem('data', JSON.stringify(shinies));
-      createTags(sortByColor(shinies));
+      toStore = sortByColor(shinies);
+      localStorage.setItem('data', JSON.stringify(toStore));
+      createTags(toStore);
     })
     .then(() => {
       fillBinder();
@@ -85,6 +86,8 @@ const fetchData = () => {
 
 const fillBinder = () => {
   let newContent = '';
+  const storedData = JSON.parse(localStorage.data);
+  createTags(storedData);
   const cards = localStorage.tags.split(',');
   const rows = parseInt(rowInputObj.value);
   const cols = parseInt(colInputObj.value);
