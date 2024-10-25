@@ -7,7 +7,7 @@
     <title>Card Binder</title>
   </head>
   <body>
-    <div>
+    <div class="header">
       <button onclick="fetchData()">Reload</button>
       | Rows:
       <button onclick="changePageSize('delta', 0, -1);fillBinder();">-</button>
@@ -44,13 +44,13 @@
         8x4
       </button>
       <br />
-      Card size: <input type="text" id="inputImgWidth" />
-      <button onclick="applyImgWidth()">Apply</button>
-      |
+      Card size:
       <button onclick="changeImgWidth('delta', -100)">-100</button>
       <button onclick="changeImgWidth('delta', -10)">-10</button>
+      <input type="text" id="inputImgWidth" />
       <button onclick="changeImgWidth('delta', 10)">+10</button>
       <button onclick="changeImgWidth('delta', 100)">+100</button>
+      <button onclick="applyImgWidth()">Apply</button>
       |
       <button onclick="changeImgWidth('absolute', 50)" class="solid">50</button>
       <button onclick="changeImgWidth('absolute', 100)" class="solid">
@@ -67,6 +67,6 @@
       </button>
     </div>
     <div id="status"></div>
-    <div id="content"></div>
+    <div id="content" class="content"></div>
   </body>
 </html>

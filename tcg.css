@@ -1,31 +1,42 @@
 * {
-	font-family: 'Segoe UI', 'Helvetica Neue',
-		'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-		'Noto Color Emoji';
-	font-size: 14px;
+  font-family: 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-size: 14px;
 }
 
 button {
-	background-color: #e6f4ff;
-	border-radius: 6px;
-	border: 1px #fff solid;
-	fill: rgba(0, 0, 0, 0.15);
-	font-weight: 400;
-	margin: 5px 2px 5px 2px;
-	padding-block: 5px;
-}
-
-.solid {
-	border: 1px rgb(9, 88, 217) solid;
+  background-color: #e6f4ff;
+  border-radius: 6px;
+  border: 1px #fff solid;
+  fill: rgba(0, 0, 0, 0.15);
+  font-weight: 400;
+  margin: 5px 2px 5px 2px;
+  padding-block: 5px;
 }
 
 input {
-	border-radius: 6px;
-	border: 1px #000 solid;
-	fill: rgba(0, 0, 0, 0.15);
-	font-weight: 400;
-	margin: 5px 2px 5px 2px;
-	padding: 5px;
-	width: 30px;
-	text-align: center;
+  border-radius: 6px;
+  border: 1px #000 solid;
+  fill: rgba(0, 0, 0, 0.15);
+  font-weight: 400;
+  margin: 5px 2px 5px 2px;
+  padding: 5px;
+  width: 30px;
+  text-align: center;
+}
+
+.content {
+  margin-top: 100px;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  background-color: #fff;
+  text-align: center;
+  width: 100%;
+}
+
+.solid {
+  border: 1px rgb(9, 88, 217) solid;
 }
