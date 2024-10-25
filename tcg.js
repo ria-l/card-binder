@@ -7,7 +7,44 @@ let sizeInputObj = document.getElementById('inputImgWidth');
 localStorage.clear();
 console.log('cleared storage');
 
-const processData = (values) => {
+
+const sortByCol = (arr, cols, colName) => {
+  // arr = JSON.parse(localStorage.data);
+  // cols = arr[0];
+  index = cols.indexOf(colName);
+
+  // console.log(arr);
+  // console.log(cols);
+  // console.log(colName);
+  // console.log(index);
+
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  let pivot = arr[0];
+  let leftArr = [];
+  let rightArr = [];
+
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i][index] < pivot[index]) {
+      leftArr.push(arr[i]);
+    } else {
+      rightArr.push(arr[i]);
+    }
+  }
+  // console.log('next');
+  // console.log(leftArr);
+  // console.log(rightArr);
+  // console.log(pivot);
+  return [
+    ...sortByCol(leftArr, cols, colName),
+    pivot,
+    ...sortByCol(rightArr, cols, colName),
+  ];
+};
+
+const createTags = (values) => {
   const imgWidth = document.getElementById('inputImgWidth').value;
   tags = [];
   for (var i = 0; i < values.length; i++) {
@@ -27,7 +64,7 @@ const processData = (values) => {
       }
     }
   }
-  return tags;
+  localStorage.setItem('tags', tags);
 };
 const fetchData = () => {
   console.log('fetching...');
@@ -36,10 +73,10 @@ const fetchData = () => {
   fetch(url)
     .then((response) => response.json())
     .then(({ data }) => {
-      console.log(`fetched ${data}`);
-      localStorage.setItem('data', data);
-      tags = processData(data);
-      localStorage.setItem('tags', tags);
+      console.log(`fetched`);
+      console.log(data);
+      localStorage.setItem('data', JSON.stringify(data));
+      createTags(data);
     })
     .then(() => {
       fillBinder();
