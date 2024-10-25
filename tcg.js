@@ -1,71 +1,65 @@
+// todo: split binders into storage
+// todo: add binder name to page
+// todo: add binder selection
+
 const url =
   'https://script.google.com/macros/s/AKfycbzGqHn7b4NNZ_X5-PNBxjnLSnajFJb75rMt0yTBUEm9BMsSz2FMeb93OtNSV6ivgX6shw/exec';
 let colInputObj = document.getElementById('inputCol');
 let rowInputObj = document.getElementById('inputRow');
 let sizeInputObj = document.getElementById('inputImgWidth');
-
+let index;
 localStorage.clear();
 console.log('cleared storage');
 
-
-const sortByCol = (arr, cols, colName) => {
-  // arr = JSON.parse(localStorage.data);
-  // cols = arr[0];
-  index = cols.indexOf(colName);
-
-  // console.log(arr);
-  // console.log(cols);
-  // console.log(colName);
-  // console.log(index);
-
-  if (arr.length <= 1) {
-    return arr;
+const sortMatrix = (a, b) => {
+  if (a[index] === b[index]) {
+    return 0;
+  } else {
+    return a[index] < b[index] ? -1 : 1;
   }
+};
 
-  let pivot = arr[0];
-  let leftArr = [];
-  let rightArr = [];
+const sortByColor = (raw) => {
+  header = raw[0];
+  unsorted = raw.slice(1);
 
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i][index] < pivot[index]) {
-      leftArr.push(arr[i]);
-    } else {
-      rightArr.push(arr[i]);
-    }
-  }
-  // console.log('next');
-  // console.log(leftArr);
-  // console.log(rightArr);
-  // console.log(pivot);
-  return [
-    ...sortByCol(leftArr, cols, colName),
-    pivot,
-    ...sortByCol(rightArr, cols, colName),
-  ];
+  index = header.indexOf('card #');
+  byCardNum = unsorted.sort(sortMatrix);
+
+  index = header.indexOf('release date');
+  byRelease = byCardNum.sort(sortMatrix);
+
+  index = header.indexOf('dex #');
+  byDex = byRelease.sort(sortMatrix);
+
+  index = header.indexOf('pkmn type #');
+  byPkmnType = byDex.sort(sortMatrix);
+
+  index = header.indexOf('card type #');
+  byCardType = byPkmnType.sort(sortMatrix);
+
+  return byCardType;
 };
 
 const createTags = (values) => {
   const imgWidth = document.getElementById('inputImgWidth').value;
   tags = [];
   for (var i = 0; i < values.length; i++) {
-    if (values[i][1] == 'shiny') {
-      if (values[i][3] == 'x') {
-        tags.push(
-          `<img src='img/${values[i][5].toLowerCase()}/${
-            values[i][0]
-          }' title='${values[i][0]} : ${values[i][7]} : ${
-            values[i][6]
-          }' style="width:${imgWidth}px;" />`
-        );
-      } else {
-        tags.push(
-          `<img src='img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png' title='${values[i][0]} : ${values[i][7]} : ${values[i][6]}' style="width:${imgWidth}px;" />`
-        );
-      }
+    if (values[i][3] == 'x') {
+      tags.push(
+        `<img src='img/${values[i][5].toLowerCase()}/${values[i][0]}' title='${
+          values[i][0]
+        } : ${values[i][7]} : ${values[i][6]}' style="width:${imgWidth}px;" />`
+      );
+    } else {
+      tags.push(
+        `<img src='img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png' title='${values[i][0]} : ${values[i][7]} : ${values[i][6]}' style="width:${imgWidth}px;" />`
+      );
     }
   }
   localStorage.setItem('tags', tags);
 };
+
 const fetchData = () => {
   console.log('fetching...');
   document.getElementById('status').innerHTML = 'loading...';
@@ -74,9 +68,14 @@ const fetchData = () => {
     .then((response) => response.json())
     .then(({ data }) => {
       console.log(`fetched`);
-      console.log(data);
-      localStorage.setItem('data', JSON.stringify(data));
-      createTags(data);
+      // get the column names
+      headers = data[0];
+      // filter only the card rows
+      shinies = data.filter((row) => row[1] == 'shiny');
+      // add back the headers
+      shinies.unshift(headers);
+      localStorage.setItem('data', JSON.stringify(shinies));
+      createTags(sortByColor(shinies));
     })
     .then(() => {
       fillBinder();
