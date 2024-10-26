@@ -1,4 +1,4 @@
-const url =
+const appscript =
   'https://script.google.com/macros/s/AKfycbzGqHn7b4NNZ_X5-PNBxjnLSnajFJb75rMt0yTBUEm9BMsSz2FMeb93OtNSV6ivgX6shw/exec';
 let index;
 localStorage.clear();
@@ -10,7 +10,7 @@ console.log('cleared storage');
 const fetchAndFillBinder = () => {
   document.getElementById('status').innerHTML = 'loading...';
 
-  fetch(url)
+  fetch(appscript)
     .then((response) => response.json())
     .then(({ data }) => {
       console.log(`fetched`);
@@ -27,7 +27,7 @@ const fetchAndFillBinder = () => {
  * main!
  */
 window.onload = () => {
-  document.getElementById('content').action = url;
+  document.getElementById('content').action = appscript;
   resizeCards('absolute', 50);
   setInputsForGrid('absolute', 8, 4);
   fetchAndFillBinder();
