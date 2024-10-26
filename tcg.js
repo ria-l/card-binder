@@ -15,10 +15,11 @@ const fetchAndFillBinder = () => {
     .then(({ data }) => {
       console.log(`fetched`);
       storeBinders(data);
-      createTags(JSON.parse(localStorage.getItem('shiny')));
+      binderName = localStorage.getItem('bindername');
+      createTags(JSON.parse(localStorage.getItem(binderName)));
     })
     .then(() => {
-      fillBinder('shiny');
+      fillBinder(binderName);
     })
     .catch((error) => (document.getElementById('content').innerHTML = error));
 };

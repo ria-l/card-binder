@@ -20,7 +20,9 @@
       <button onclick="changeGrid('relative', -1, 0);">-</button>
       <input type="text" id="inputCol" />
       <button onclick="changeGrid('relative', 1, 0);">+</button>
-      <button onclick="fillBinder('data')">Apply</button>
+      <button onclick="fillBinder(localStorage.getItem('bindername'))">
+        Apply
+      </button>
       |
       <button onclick="changeGrid('absolute', 0,0);" class="solid">None</button>
       <button onclick="changeGrid('absolute', 3,3);" class="solid">3x3</button>
