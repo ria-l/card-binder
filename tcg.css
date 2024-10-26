@@ -25,7 +25,8 @@ input {
   text-align: center;
 }
 
-.content {
+.content,
+.status {
   margin-top: 100px;
 }
 

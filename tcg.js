@@ -4,9 +4,6 @@
 
 const url =
   'https://script.google.com/macros/s/AKfycbzGqHn7b4NNZ_X5-PNBxjnLSnajFJb75rMt0yTBUEm9BMsSz2FMeb93OtNSV6ivgX6shw/exec';
-let colInputObj = document.getElementById('inputCol');
-let rowInputObj = document.getElementById('inputRow');
-let sizeInputObj = document.getElementById('inputImgWidth');
 let index;
 localStorage.clear();
 console.log('cleared storage');
@@ -42,7 +39,7 @@ const sortByColor = (raw) => {
 };
 
 const createTags = (values) => {
-  const imgWidth = document.getElementById('inputImgWidth').value;
+  const imgWidth = document.getElementById('inputCardSize').value;
   tags = [];
   for (var i = 0; i < values.length; i++) {
     if (values[i][3] == 'x') {
@@ -60,8 +57,28 @@ const createTags = (values) => {
   localStorage.setItem('tags', tags);
 };
 
+function storeBinders(data) {
+  const cols = data[0];
+  const binderNames = new Set();
+  const binderIndex = cols.indexOf('binder');
+  for (const row of data) {
+    binderNames.add(row[binderIndex]);
+  }
+  for (const binder of binderNames) {
+    // filter only the card rows
+    filtered = data.filter((row) => row[1] == binder);
+    filtered.unshift(cols);
+
+    toStore = sortByColor(filtered);
+    localStorage.setItem(binder, JSON.stringify(toStore));
+  }
+  console.log(`stored ${[...binderNames].join(' ')}`);
+}
+
 const fetchAndFillBinder = () => {
-  console.log('fetching...');
+  /**
+   * Initial data fetch and binder fill.
+   */
   document.getElementById('status').innerHTML = 'loading...';
 
   fetch(url)
@@ -69,36 +86,43 @@ const fetchAndFillBinder = () => {
     .then(({ data }) => {
       console.log(`fetched`);
       // get the column names
-      headers = data[0];
+      header = data[0];
       // filter only the card rows
       shinies = data.filter((row) => row[1] == 'shiny');
-      // add back the headers
-      shinies.unshift(headers);
+      // add back the header
+      shinies.unshift(header);
       toStore = sortByColor(shinies);
       localStorage.setItem('data', JSON.stringify(toStore));
       createTags(toStore);
     })
     .then(() => {
-      fillBinder();
+      fillBinder('data');
     })
     .catch((error) => (document.getElementById('content').innerHTML = error));
 };
 
-const fillBinder = () => {
-  let newContent = '';
-  const storedData = JSON.parse(localStorage.data);
-  createTags(storedData);
-  const cards = localStorage.tags.split(',');
-  const rows = parseInt(rowInputObj.value);
-  const cols = parseInt(colInputObj.value);
+const fillBinder = (binder) => {
+  /**
+   * Fills binder using data in localstorage.
+   */
+  createTags(JSON.parse(localStorage.getItem(binder)));
 
-  cards.forEach((v, i) => {
+  const cardTags = localStorage.getItem('tags').split(',');
+  const rows = parseInt(document.getElementById('inputRow').value);
+  const cols = parseInt(document.getElementById('inputCol').value);
+  let newContent = '';
+
+  cardTags.forEach((tag, i) => {
+    // don't create tables if grid is 0 or blank.
     if (!rows || !cols) {
-      newContent += ` ${v} `;
+      newContent += ` ${tag} `;
     } else {
+      // make the tables.
+      // this is putting each card into a row/col bucket by using
+      // the remainder value from the modulo function as a numbering system.
       const rowIndex = (i + 1) % cols;
       const pageIndex = (i + 1) % (rows * cols);
-      const tdTag = `<td>${v}</td>`;
+      const tdTag = `<td>${tag}</td>`;
       let fullTag = '';
       if (pageIndex == 1) {
         // first card on page
@@ -127,53 +151,61 @@ const fillBinder = () => {
 };
 
 const setCardSize = () => {
+  /**
+   * Updates cards with whatever value is in the input field.
+   */
   document
     .querySelectorAll('img')
     .forEach(
       (e) =>
-        (e.style.width = `${document.getElementById('inputImgWidth').value}px`)
+        (e.style.width = `${document.getElementById('inputCardSize').value}px`)
     );
 };
 
 const setInputForCardSize = (type, input) => {
-  const w = document.getElementById('inputImgWidth');
-
-  if (type == 'delta') {
-    const wInt = parseInt(w.value) + parseInt(input);
-    w.value = wInt.toString();
-  } else {
-    w.value = input;
-  }
+  /**
+   * Updates the input fiels for the card size.
+   */
+  const w = document.getElementById('inputCardSize');
+  type == 'relative'
+    ? (w.value = (parseInt(w.value) + parseInt(input)).toString())
+    : (w.value = input);
 };
 
-const setInputsForBinderSize = (type, col, row) => {
-  const r = document.getElementById('inputRow');
-  const c = document.getElementById('inputCol');
+const resizeCards = (type, input) => {
+  /**
+   * Sets inputs and then applies changes. Used by the UI buttons and initial fill.
+   */
+  setInputForCardSize(type, input);
+  setCardSize();
+};
 
-  if (type == 'delta') {
-    const rInt = parseInt(r.value) + row;
-    const cInt = parseInt(c.value) + col;
-    r.value = rInt.toString();
-    c.value = cInt.toString();
-  } else {
-    r.value = row.toString();
-    c.value = col.toString();
-  }
+const setInputsForGrid = (type, col, row) => {
+  /**
+   * Updates the input fields for the grid size.
+   */
+  const r = document.getElementById('inputRow');
+  type == 'relative'
+    ? (r.value = (parseInt(r.value) + row).toString())
+    : (r.value = row.toString());
+
+  const c = document.getElementById('inputCol');
+  type == 'relative'
+    ? (c.value = (parseInt(c.value) + col).toString())
+    : (c.value = col.toString());
+};
+
+const changeGrid = (type, col, row) => {
+  /**
+   * Sets inputs and then fills binder. Used by the UI buttons.
+   */
+  setInputsForGrid(type, col, row);
+  fillBinder('data');
 };
 
 window.onload = function () {
   document.getElementById('content').action = url;
-  colInputObj = document.getElementById('inputCol');
-  rowInputObj = document.getElementById('inputRow');
-  sizeInputObj = document.getElementById('inputImgWidth');
-
-  if (!sizeInputObj.value) {
-    setInputForCardSize('absolute', 50);
-    setCardSize();
-  }
-  if (!colInputObj.value || !rowInputObj.value) {
-    setInputsForBinderSize('absolute', 8, 4);
-  }
-
+  resizeCards('absolute', 50);
+  setInputsForGrid('absolute', 8, 4);
   fetchAndFillBinder();
 };

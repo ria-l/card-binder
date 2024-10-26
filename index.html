@@ -10,73 +10,35 @@
     <div class="header">
       <button onclick="fetchAndFillBinder()">Reload</button>
       | Rows:
-      <button onclick="setInputsForBinderSize('delta', 0, -1);fillBinder();">
-        -
-      </button>
+      <button onclick="changeGrid('relative', 0, -1);">-</button>
       <input type="text" id="inputRow" />
-      <button onclick="setInputsForBinderSize('delta', 0, 1);fillBinder();">
-        +
-      </button>
+      <button onclick="changeGrid('relative', 0, 1);">+</button>
       Cols:
-      <button onclick="setInputsForBinderSize('delta', -1, 0);fillBinder();">
-        -
-      </button>
+      <button onclick="changeGrid('relative', -1, 0);">-</button>
       <input type="text" id="inputCol" />
-      <button onclick="setInputsForBinderSize('delta', 1, 0);fillBinder();">
-        +
-      </button>
+      <button onclick="changeGrid('relative', 1, 0);">+</button>
       <button onclick="fillBinder()">Apply</button>
       |
-      <button
-        onclick="setInputsForBinderSize('absolute', 0,0);fillBinder();"
-        class="solid"
-      >
-        None
-      </button>
-      <button
-        onclick="setInputsForBinderSize('absolute', 3,3);fillBinder();"
-        class="solid"
-      >
-        3x3
-      </button>
-      <button
-        onclick="setInputsForBinderSize('absolute', 4,4);fillBinder();"
-        class="solid"
-      >
-        4x4
-      </button>
-      <button
-        onclick="setInputsForBinderSize('absolute', 8,4);fillBinder();"
-        class="solid"
-      >
-        8x4
-      </button>
+      <button onclick="changeGrid('absolute', 0,0);" class="solid">None</button>
+      <button onclick="changeGrid('absolute', 3,3);" class="solid">3x3</button>
+      <button onclick="changeGrid('absolute', 4,4);" class="solid">4x4</button>
+      <button onclick="changeGrid('absolute', 8,4);" class="solid">8x4</button>
       <br />
       Card size:
-      <button onclick="setInputForCardSize('delta', -100)">-100</button>
-      <button onclick="setInputForCardSize('delta', -10)">-10</button>
-      <input type="text" id="inputImgWidth" />
-      <button onclick="setInputForCardSize('delta', 10)">+10</button>
-      <button onclick="setInputForCardSize('delta', 100)">+100</button>
+      <button onclick="resizeCards('relative', -100);">-100</button>
+      <button onclick="resizeCards('relative', -10);">-10</button>
+      <input type="text" id="inputCardSize" />
+      <button onclick="resizeCards('relative', 10);">+10</button>
+      <button onclick="resizeCards('relative', 100);">+100</button>
       <button onclick="setCardSize()">Apply</button>
       |
-      <button onclick="setInputForCardSize('absolute', 50)" class="solid">
-        50
-      </button>
-      <button onclick="setInputForCardSize('absolute', 100)" class="solid">
-        100
-      </button>
-      <button onclick="setInputForCardSize('absolute', 150)" class="solid">
-        150
-      </button>
-      <button onclick="setInputForCardSize('absolute', 200)" class="solid">
-        200
-      </button>
-      <button onclick="setInputForCardSize('absolute', 300)" class="solid">
-        300
-      </button>
+      <button onclick="resizeCards('absolute', 50);" class="solid">50</button>
+      <button onclick="resizeCards('absolute', 100);" class="solid">100</button>
+      <button onclick="resizeCards('absolute', 150);" class="solid">150</button>
+      <button onclick="resizeCards('absolute', 200);" class="solid">200</button>
+      <button onclick="resizeCards('absolute', 300);" class="solid">300</button>
     </div>
-    <div id="status"></div>
+    <div id="status" class="status"></div>
     <div id="content" class="content"></div>
   </body>
 </html>
