@@ -1,4 +1,3 @@
-// todo: split binders into storage
 // todo: add binder name to page
 // todo: add binder selection
 
@@ -26,22 +25,28 @@ const createTags = (values) => {
   localStorage.setItem('tags', tags);
 };
 
+/**
+ * stores card data for each binder into its own bucket in local storage.
+ *
+ * @param {array} data data from sheets
+ */
 const storeBinders = (data) => {
-  const cols = data[0];
+  const header = data[0];
   const binderNames = new Set();
-  const binderIndex = cols.indexOf('binder');
-  for (const row of data) {
+  const binderIndex = header.indexOf('binder');
+  for (const row of data.slice(1)) {
     binderNames.add(row[binderIndex]);
   }
-  for (const binder of binderNames) {
+  for (const name of binderNames) {
     // filter only the card rows
-    filtered = data.filter((row) => row[1] == binder);
-    filtered.unshift(cols);
+    filtered = data.filter((row) => row[1] == name);
+    // add back the header
+    filtered.unshift(header);
 
     toStore = sortByColor(filtered);
-    localStorage.setItem(binder, JSON.stringify(toStore));
+    localStorage.setItem(name, JSON.stringify(toStore));
   }
-  console.log(`stored ${[...binderNames].join(' ')}`);
+  console.log(`stored binders for ${[...binderNames].join(', ')}`);
 };
 
 /**
@@ -93,4 +98,5 @@ const fillBinder = (binder) => {
 
   document.getElementById('content').innerHTML = newContent;
   document.getElementById('status').innerHTML = '';
+  console.log(`filled with ${binder} binder.`)
 };

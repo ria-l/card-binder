@@ -14,18 +14,11 @@ const fetchAndFillBinder = () => {
     .then((response) => response.json())
     .then(({ data }) => {
       console.log(`fetched`);
-      // get the column names
-      header = data[0];
-      // filter only the card rows
-      shinies = data.filter((row) => row[1] == 'shiny');
-      // add back the header
-      shinies.unshift(header);
-      toStore = sortByColor(shinies);
-      localStorage.setItem('data', JSON.stringify(toStore));
-      createTags(toStore);
+      storeBinders(data);
+      createTags(JSON.parse(localStorage.getItem('shiny')));
     })
     .then(() => {
-      fillBinder('data');
+      fillBinder('shiny');
     })
     .catch((error) => (document.getElementById('content').innerHTML = error));
 };
