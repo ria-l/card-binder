@@ -8,6 +8,8 @@ let index;
 localStorage.clear();
 console.log('cleared storage');
 
+// Sorting
+
 const sortMatrix = (a, b) => {
   if (a[index] === b[index]) {
     return 0;
@@ -16,9 +18,9 @@ const sortMatrix = (a, b) => {
   }
 };
 
-const sortByColor = (raw) => {
-  header = raw[0];
-  unsorted = raw.slice(1);
+const sortByColor = (data) => {
+  header = data[0];
+  unsorted = data.slice(1);
 
   index = header.indexOf('card #');
   byCardNum = unsorted.sort(sortMatrix);
@@ -38,6 +40,13 @@ const sortByColor = (raw) => {
   return byCardType;
 };
 
+// Code generating
+
+/**
+ * Creates tags from  and stores them in localstorage.
+ *
+ * @param {Array} values rows of data from the spreadsheet.
+ */
 const createTags = (values) => {
   const imgWidth = document.getElementById('inputCardSize').value;
   tags = [];
@@ -57,7 +66,7 @@ const createTags = (values) => {
   localStorage.setItem('tags', tags);
 };
 
-function storeBinders(data) {
+const storeBinders = (data) => {
   const cols = data[0];
   const binderNames = new Set();
   const binderIndex = cols.indexOf('binder');
@@ -73,38 +82,14 @@ function storeBinders(data) {
     localStorage.setItem(binder, JSON.stringify(toStore));
   }
   console.log(`stored ${[...binderNames].join(' ')}`);
-}
-
-const fetchAndFillBinder = () => {
-  /**
-   * Initial data fetch and binder fill.
-   */
-  document.getElementById('status').innerHTML = 'loading...';
-
-  fetch(url)
-    .then((response) => response.json())
-    .then(({ data }) => {
-      console.log(`fetched`);
-      // get the column names
-      header = data[0];
-      // filter only the card rows
-      shinies = data.filter((row) => row[1] == 'shiny');
-      // add back the header
-      shinies.unshift(header);
-      toStore = sortByColor(shinies);
-      localStorage.setItem('data', JSON.stringify(toStore));
-      createTags(toStore);
-    })
-    .then(() => {
-      fillBinder('data');
-    })
-    .catch((error) => (document.getElementById('content').innerHTML = error));
 };
 
+/**
+ * Fills binder using data in localstorage.
+ *
+ * @param {string} binder binder name
+ */
 const fillBinder = (binder) => {
-  /**
-   * Fills binder using data in localstorage.
-   */
   createTags(JSON.parse(localStorage.getItem(binder)));
 
   const cardTags = localStorage.getItem('tags').split(',');
@@ -150,10 +135,51 @@ const fillBinder = (binder) => {
   document.getElementById('status').innerHTML = '';
 };
 
+/**
+ * Initial data fetch and binder fill.
+ */
+const fetchAndFillBinder = () => {
+  document.getElementById('status').innerHTML = 'loading...';
+
+  fetch(url)
+    .then((response) => response.json())
+    .then(({ data }) => {
+      console.log(`fetched`);
+      // get the column names
+      header = data[0];
+      // filter only the card rows
+      shinies = data.filter((row) => row[1] == 'shiny');
+      // add back the header
+      shinies.unshift(header);
+      toStore = sortByColor(shinies);
+      localStorage.setItem('data', JSON.stringify(toStore));
+      createTags(toStore);
+    })
+    .then(() => {
+      fillBinder('data');
+    })
+    .catch((error) => (document.getElementById('content').innerHTML = error));
+};
+
+// Display
+
+/**
+ * Updates the input fiels for the card size.
+ *
+ * @param {string} type absolute or relative change
+ * @param {int} input card width in pixels
+ */
+const setInputForCardSize = (type, input) => {
+  const w = document.getElementById('inputCardSize');
+  type == 'relative'
+    ? (w.value = (parseInt(w.value) + parseInt(input)).toString())
+    : (w.value = input);
+};
+
+/**
+ * Updates cards with whatever value is in the input field.
+ */
 const setCardSize = () => {
-  /**
-   * Updates cards with whatever value is in the input field.
-   */
   document
     .querySelectorAll('img')
     .forEach(
@@ -162,28 +188,25 @@ const setCardSize = () => {
     );
 };
 
-const setInputForCardSize = (type, input) => {
-  /**
-   * Updates the input fiels for the card size.
-   */
-  const w = document.getElementById('inputCardSize');
-  type == 'relative'
-    ? (w.value = (parseInt(w.value) + parseInt(input)).toString())
-    : (w.value = input);
-};
-
+/**
+ * Sets inputs and then applies changes. Used by the UI buttons and initial fill.
+ *
+ * @param {string} type absolute or relative change
+ * @param {int} input card width in pixels
+ */
 const resizeCards = (type, input) => {
-  /**
-   * Sets inputs and then applies changes. Used by the UI buttons and initial fill.
-   */
   setInputForCardSize(type, input);
   setCardSize();
 };
 
+/**
+ * Updates the input fields for the grid size.
+ *
+ * @param {string} type absolute or relative change
+ * @param {int} col number of cols
+ * @param {int} row number of rows
+ */
 const setInputsForGrid = (type, col, row) => {
-  /**
-   * Updates the input fields for the grid size.
-   */
   const r = document.getElementById('inputRow');
   type == 'relative'
     ? (r.value = (parseInt(r.value) + row).toString())
@@ -195,15 +218,22 @@ const setInputsForGrid = (type, col, row) => {
     : (c.value = col.toString());
 };
 
+/**
+ * Sets inputs and then applies changes.
+ *
+ * @param {string} type absolute or relative change
+ * @param {int} col number of cols
+ * @param {int} row number of rows
+ */
 const changeGrid = (type, col, row) => {
-  /**
-   * Sets inputs and then fills binder. Used by the UI buttons.
-   */
   setInputsForGrid(type, col, row);
   fillBinder('data');
 };
 
-window.onload = function () {
+/**
+ * main!
+ */
+window.onload = () => {
   document.getElementById('content').action = url;
   resizeCards('absolute', 50);
   setInputsForGrid('absolute', 8, 4);
