@@ -60,7 +60,7 @@ const createTags = (values) => {
   localStorage.setItem('tags', tags);
 };
 
-const fetchData = () => {
+const fetchAndFillBinder = () => {
   console.log('fetching...');
   document.getElementById('status').innerHTML = 'loading...';
 
@@ -126,7 +126,7 @@ const fillBinder = () => {
   document.getElementById('status').innerHTML = '';
 };
 
-const applyImgWidth = () => {
+const setCardSize = () => {
   document
     .querySelectorAll('img')
     .forEach(
@@ -135,7 +135,7 @@ const applyImgWidth = () => {
     );
 };
 
-const changeImgWidth = (type, input) => {
+const setInputForCardSize = (type, input) => {
   const w = document.getElementById('inputImgWidth');
 
   if (type == 'delta') {
@@ -144,10 +144,9 @@ const changeImgWidth = (type, input) => {
   } else {
     w.value = input;
   }
-  applyImgWidth();
 };
 
-const changePageSize = (type, col, row) => {
+const setInputsForBinderSize = (type, col, row) => {
   const r = document.getElementById('inputRow');
   const c = document.getElementById('inputCol');
 
@@ -169,10 +168,12 @@ window.onload = function () {
   sizeInputObj = document.getElementById('inputImgWidth');
 
   if (!sizeInputObj.value) {
-    changeImgWidth('absolute', 50);
+    setInputForCardSize('absolute', 50);
+    setCardSize();
   }
   if (!colInputObj.value || !rowInputObj.value) {
-    changePageSize('absolute', 8, 4);
+    setInputsForBinderSize('absolute', 8, 4);
   }
-  fetchData();
+
+  fetchAndFillBinder();
 };

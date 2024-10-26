@@ -8,61 +8,71 @@
   </head>
   <body>
     <div class="header">
-      <button onclick="fetchData()">Reload</button>
+      <button onclick="fetchAndFillBinder()">Reload</button>
       | Rows:
-      <button onclick="changePageSize('delta', 0, -1);fillBinder();">-</button>
+      <button onclick="setInputsForBinderSize('delta', 0, -1);fillBinder();">
+        -
+      </button>
       <input type="text" id="inputRow" />
-      <button onclick="changePageSize('delta', 0, 1);fillBinder();">+</button>
+      <button onclick="setInputsForBinderSize('delta', 0, 1);fillBinder();">
+        +
+      </button>
       Cols:
-      <button onclick="changePageSize('delta', -1, 0);fillBinder();">-</button>
+      <button onclick="setInputsForBinderSize('delta', -1, 0);fillBinder();">
+        -
+      </button>
       <input type="text" id="inputCol" />
-      <button onclick="changePageSize('delta', 1, 0);fillBinder();">+</button>
+      <button onclick="setInputsForBinderSize('delta', 1, 0);fillBinder();">
+        +
+      </button>
       <button onclick="fillBinder()">Apply</button>
       |
       <button
-        onclick="changePageSize('absolute', 0,0);fillBinder();"
+        onclick="setInputsForBinderSize('absolute', 0,0);fillBinder();"
         class="solid"
       >
         None
       </button>
       <button
-        onclick="changePageSize('absolute', 3,3);fillBinder();"
+        onclick="setInputsForBinderSize('absolute', 3,3);fillBinder();"
         class="solid"
       >
         3x3
       </button>
       <button
-        onclick="changePageSize('absolute', 4,4);fillBinder();"
+        onclick="setInputsForBinderSize('absolute', 4,4);fillBinder();"
         class="solid"
       >
         4x4
       </button>
       <button
-        onclick="changePageSize('absolute', 8,4);fillBinder();"
+        onclick="setInputsForBinderSize('absolute', 8,4);fillBinder();"
         class="solid"
       >
         8x4
       </button>
       <br />
       Card size:
-      <button onclick="changeImgWidth('delta', -100)">-100</button>
-      <button onclick="changeImgWidth('delta', -10)">-10</button>
+      <button onclick="setInputForCardSize('delta', -100)">-100</button>
+      <button onclick="setInputForCardSize('delta', -10)">-10</button>
       <input type="text" id="inputImgWidth" />
-      <button onclick="changeImgWidth('delta', 10)">+10</button>
-      <button onclick="changeImgWidth('delta', 100)">+100</button>
-      <button onclick="applyImgWidth()">Apply</button>
+      <button onclick="setInputForCardSize('delta', 10)">+10</button>
+      <button onclick="setInputForCardSize('delta', 100)">+100</button>
+      <button onclick="setCardSize()">Apply</button>
       |
-      <button onclick="changeImgWidth('absolute', 50)" class="solid">50</button>
-      <button onclick="changeImgWidth('absolute', 100)" class="solid">
+      <button onclick="setInputForCardSize('absolute', 50)" class="solid">
+        50
+      </button>
+      <button onclick="setInputForCardSize('absolute', 100)" class="solid">
         100
       </button>
-      <button onclick="changeImgWidth('absolute', 150)" class="solid">
+      <button onclick="setInputForCardSize('absolute', 150)" class="solid">
         150
       </button>
-      <button onclick="changeImgWidth('absolute', 200)" class="solid">
+      <button onclick="setInputForCardSize('absolute', 200)" class="solid">
         200
       </button>
-      <button onclick="changeImgWidth('absolute', 300)" class="solid">
+      <button onclick="setInputForCardSize('absolute', 300)" class="solid">
         300
       </button>
     </div>
