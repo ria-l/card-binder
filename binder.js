@@ -7,7 +7,10 @@
  *
  * @param {Array} values rows of data from the spreadsheet.
  */
-const createTags = (values) => {
+const createTags = () => {
+  binderName = localStorage.getItem('bindername');
+  binderData = JSON.parse(localStorage.getItem(binderName));
+
   const header = JSON.parse(localStorage.getItem('binder'))[0];
   const jcaught = header.indexOf('caught');
   const jfilename = header.indexOf('file name');
@@ -17,18 +20,18 @@ const createTags = (values) => {
 
   const imgWidth = document.getElementById('inputCardSize').value;
   tags = [];
-  for (var i = 0; i < values.length; i++) {
-    if (values[i][jcaught] == 'x') {
+  for (var i = 0; i < binderData.length; i++) {
+    if (binderData[i][jcaught] == 'x') {
       tags.push(
-        `<img src='img/${values[i][jset].toLowerCase()}/${
-          values[i][jfilename]
-        }' title='${values[i][jfilename]} : ${values[i][jpkmntype]} : ${
-          values[i][jcardtype]
+        `<img src='img/${binderData[i][jset].toLowerCase()}/${
+          binderData[i][jfilename]
+        }' title='${binderData[i][jfilename]} : ${binderData[i][jpkmntype]} : ${
+          binderData[i][jcardtype]
         }' style="width:${imgWidth}px;" />`
       );
     } else {
       tags.push(
-        `<img src='img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png' title='${values[i][jfilename]} : ${values[i][jpkmntype]} : ${values[i][jcardtype]}' style="width:${imgWidth}px;" />`
+        `<img src='img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png' title='${binderData[i][jfilename]} : ${binderData[i][jpkmntype]} : ${binderData[i][jcardtype]}' style="width:${imgWidth}px;" />`
       );
     }
   }
@@ -57,6 +60,7 @@ const storeBinders = (data) => {
     toStore = sortByColor(filtered);
     localStorage.setItem(name, JSON.stringify(toStore));
   }
+  localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
   console.log(`stored binders for ${[...binderNames].join(', ')}`);
 };
 

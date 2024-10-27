@@ -16,6 +16,10 @@
       >
         Reload
       </button>
+      <select id="selectBinder"></select>
+      <button onclick="storeNewBinder();createTags();fillBinder();">
+        Apply
+      </button>
       | Rows:
       <button onclick="changeGrid('relative', 0, -1);">-</button>
       <input type="text" id="inputRow" />
@@ -24,7 +28,9 @@
       <button onclick="changeGrid('relative', -1, 0);">-</button>
       <input type="text" id="inputCol" />
       <button onclick="changeGrid('relative', 1, 0);">+</button>
-      <button onclick="fillBinder(localStorage.getItem('bindername'))">
+      <button
+        onclick="createTags();fillBinder(localStorage.getItem('bindername'))"
+      >
         Apply
       </button>
       |

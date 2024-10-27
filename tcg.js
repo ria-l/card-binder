@@ -22,9 +22,7 @@ const fetchAndFillBinder = () => {
     .then(({ data }) => {
       console.log(`fetched`);
       storeBinders(data);
-      binderName = localStorage.getItem('bindername');
-      binderData = JSON.parse(localStorage.getItem(binderName));
-      createTags(binderData);
+      createTags();
     })
     .then(() => {
       fillBinder(binderName);
@@ -32,6 +30,27 @@ const fetchAndFillBinder = () => {
     .catch((error) => (document.getElementById('content').innerHTML = error));
 };
 
+const populateDropdown = () => {
+  select = document.getElementById('selectBinder');
+  binders = JSON.parse(localStorage.getItem('bindernames'));
+  console.log(binders);
+  defaultbinder = localStorage.getItem('bindername');
+  s = '';
+  for (e of binders) {
+    if (e != 'binder' && e != defaultbinder) {
+      s += `<option value="${e}">${e}</option>`;
+    }
+    if (e == defaultbinder) {
+      s += `<option value="${e}" selected="selected">${e}</option>`;
+    }
+  }
+  select.innerHTML = s;
+};
+
+const storeNewBinder = () => {
+  select = document.getElementById('selectBinder');
+  localStorage.setItem('bindername', select.options[select.selectedIndex].text);
+};
 /**
  * main!
  */
@@ -40,4 +59,5 @@ window.onload = () => {
   resizeCards('absolute', 50);
   setInputsForGrid('absolute', 8, 4);
   fetchAndFillBinder();
+  populateDropdown();
 };
