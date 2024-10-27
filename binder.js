@@ -1,5 +1,6 @@
 // todo: add binder name to page
 // todo: add binder selection
+// todo: add all binder display
 
 /**
  * Creates tags from  and stores them in localstorage.
@@ -65,8 +66,6 @@ const storeBinders = (data) => {
  * @param {string} binder binder name
  */
 const fillBinder = (binder) => {
-  createTags(JSON.parse(localStorage.getItem(binder)));
-
   const cardTags = localStorage.getItem('tags').split(',');
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);
