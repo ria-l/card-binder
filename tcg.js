@@ -17,7 +17,7 @@ const fetchAndFillBinder = () => {
       createTags();
     })
     .then(() => {
-      fillBinder(localStorage.getItem('bindername'));
+      fillBinder();
     })
     .catch((error) => (document.getElementById('content').innerHTML = error));
 };
@@ -54,7 +54,7 @@ window.onload = () => {
   const binderName = localStorage.getItem('bindername');
   if (binderName) {
     console.log('loading from storage');
-    fillBinder(binderName);
+    fillBinder();
   } else {
     fetchAndFillBinder();
   }

@@ -64,5 +64,5 @@ const setInputsForGrid = (type, col, row) => {
  */
 const changeGrid = (type, col, row) => {
   setInputsForGrid(type, col, row);
-  fillBinder(localStorage.getItem('bindername'));
+  fillBinder();
 };

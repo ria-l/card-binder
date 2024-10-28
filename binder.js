@@ -10,7 +10,7 @@ const createTags = () => {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
   const header = JSON.parse(localStorage.getItem('binder'))[0];
-  
+
   const jcaught = header.indexOf('caught');
   const jfilename = header.indexOf('file name');
   const jset = header.indexOf('set');
@@ -67,10 +67,8 @@ const storeBinders = (data) => {
 
 /**
  * Fills binder using data in localstorage.
- *
- * @param {string} binder binder name
  */
-const fillBinder = (binder) => {
+const fillBinder = () => {
   createTags();
 
   const cardTags = localStorage.getItem('tags').split(',');
@@ -114,5 +112,4 @@ const fillBinder = (binder) => {
 
   document.getElementById('content').innerHTML = newContent;
   document.getElementById('status').innerHTML = '';
-  console.log(`filled with ${binder} binder.`);
 };

@@ -12,8 +12,6 @@ const test_setup = () => {
   // dupe onLoad actions
   localStorage.clear();
   document.getElementById('status').innerHTML = '(test) loading...';
-  console.log('(test) fetching...');
-  console.log(`(test) fetched`);
 
   localStorage.setItem('bindername', 'test');
   localStorage.setItem(
@@ -33,4 +31,8 @@ const test_all = () => {
   test_setInputForCardSize();
   console.log('** test_setInputsForGrid');
   test_setInputsForGrid();
+  console.log('** test_fetchAndFillBinder');
+  test_fetchAndFillBinder();
+  console.log('** test_populateDropdown');
+  test_populateDropdown();
 };

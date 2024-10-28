@@ -97,7 +97,7 @@ const test_fillbinder = () => {
   const cols = parseInt(document.getElementById('inputCol').value);
 
   try {
-    fillBinder(localStorage.getItem('bindername'));
+    fillBinder();
   } catch (err) {
     console.log(err);
   }
