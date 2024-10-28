@@ -1,7 +1,8 @@
 ## bug
 
-- bug: on reload, shiny is loading instead of the deafult binder
-- bug: sometimes cards are a couple pixels off vertically which makes the tables float fucky
+- on reload, shiny is loading instead of the deafult binder
+- sometimes cards are a couple pixels off vertically which makes the tables float fucky
+- header covers cards when window is too narrow
 
 ## todo
 
@@ -12,3 +13,5 @@
 - sort by dex
 - sorting tests
 - add all binder display
+- standardize var and func names
+- make consolidated functions for button clicks
