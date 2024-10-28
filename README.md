@@ -3,6 +3,7 @@
 - on reload, shiny is loading instead of the deafult binder
 - sometimes cards are a couple pixels off vertically which makes the tables float fucky
 - header covers cards when window is too narrow
+- applying new binder doesn't work
 
 ## todo
 
