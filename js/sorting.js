@@ -1,6 +1,3 @@
-// todo: sort by set & card number
-// todo: sort by dex
-
 const sortMatrix = (a, b) => {
   if (a[index] === b[index]) {
     return 0;

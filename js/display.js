@@ -1,5 +1,3 @@
-// bug: sometimes cards are a couple pixels off vertically which makes the tables float fucky
-
 /**
  * Updates the input fiels for the card size.
  *

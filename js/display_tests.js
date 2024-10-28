@@ -1,5 +1,3 @@
-// setInputForCardSize
-
 const test_setInputForCardSize = () => {
   try {
     setInputForCardSize('absolute', 365);

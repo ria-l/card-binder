@@ -46,6 +46,7 @@ const storeNewBinder = () => {
 
 /**
  * main!
+ * update tests_setup if this changes.
  */
 window.onload = () => {
   document.getElementById('content').action = appscript;

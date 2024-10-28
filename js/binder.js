@@ -1,6 +1,3 @@
-// todo: add all binder display
-// bug: on reload, shiny is loading instead of the deafult binder
-
 /**
  * Creates tags from  and stores them in localstorage.
  *
