@@ -1,0 +1,10 @@
+{
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.showTabs": "multiple",
+  "workbench.editor.splitOnDragAndDrop": false,
+  "workbench.editor.tabActionCloseVisibility": true,
+  "workbench.editor.tabActionLocation": "right",
+  "workbench.editor.tabActionUnpinVisibility": true,
+  "workbench.editor.tabSizing": "fit",
+  "workbench.editor.tabSizingFixedMaxWidth": 300
+}
