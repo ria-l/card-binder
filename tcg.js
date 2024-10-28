@@ -18,6 +18,7 @@ const fetchAndFillBinder = () => {
     })
     .then(() => {
       fillBinder();
+      populateDropdown();
     })
     .catch((error) => (document.getElementById('content').innerHTML = error));
 };
@@ -58,5 +59,4 @@ window.onload = () => {
   } else {
     fetchAndFillBinder();
   }
-  populateDropdown();
 };
