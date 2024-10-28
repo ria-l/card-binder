@@ -1,6 +1,5 @@
-// todo: add binder name to page
-// todo: add binder selection
 // todo: add all binder display
+// bug: on reload, shiny is loading instead of the deafult binder
 
 /**
  * Creates tags from  and stores them in localstorage.
@@ -8,10 +7,10 @@
  * @param {Array} values rows of data from the spreadsheet.
  */
 const createTags = () => {
-  binderName = localStorage.getItem('bindername');
-  binderData = JSON.parse(localStorage.getItem(binderName));
-
+  const binderName = localStorage.getItem('bindername');
+  const binderData = JSON.parse(localStorage.getItem(binderName));
   const header = JSON.parse(localStorage.getItem('binder'))[0];
+  
   const jcaught = header.indexOf('caught');
   const jfilename = header.indexOf('file name');
   const jset = header.indexOf('set');
@@ -19,7 +18,8 @@ const createTags = () => {
   const jpkmntype = header.indexOf('pkmn type');
 
   const imgWidth = document.getElementById('inputCardSize').value;
-  tags = [];
+  const tags = [];
+
   for (var i = 0; i < binderData.length; i++) {
     if (binderData[i][jcaught] == 'x') {
       tags.push(
@@ -44,14 +44,16 @@ const createTags = () => {
  * @param {array} data data from sheets
  */
 const storeBinders = (data) => {
+  // loads binder names into var
   const header = data[0];
   localStorage.setItem('bindername', header[0]);
   const binderNames = new Set();
   const binderIndex = header.indexOf('binder');
-
   for (const row of data) {
     binderNames.add(row[binderIndex]);
   }
+
+  // parses and stores binder data
   for (const name of binderNames) {
     // filter only the card rows
     filtered = data.filter((row) => row[binderIndex] == name);
@@ -61,7 +63,6 @@ const storeBinders = (data) => {
     localStorage.setItem(name, JSON.stringify(toStore));
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
-  console.log(`stored binders for ${[...binderNames].join(', ')}`);
 };
 
 /**
@@ -70,6 +71,8 @@ const storeBinders = (data) => {
  * @param {string} binder binder name
  */
 const fillBinder = (binder) => {
+  createTags();
+
   const cardTags = localStorage.getItem('tags').split(',');
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);

@@ -7,19 +7,32 @@
     <script type="text/javascript" src="sorting.js"></script>
     <script type="text/javascript" src="display.js"></script>
     <script type="text/javascript" src="binder.js"></script>
+    <script type="text/javascript" src="tests.js"></script>
     <title>Card Binder</title>
   </head>
   <body>
     <div class="header">
+      <!-- Reload -->
       <button
-        onclick="localStorage.clear();console.log('cleared storage');fetchAndFillBinder()"
+        onclick="
+        localStorage.clear();
+        console.log('cleared storage');
+        fetchAndFillBinder();"
       >
         Reload
       </button>
+
+      <!-- Select -->
       <select id="selectBinder"></select>
-      <button onclick="storeNewBinder();createTags();fillBinder();">
+      <button
+        onclick="
+        storeNewBinder();
+        fetchAndFillBinder();"
+      >
         Apply
       </button>
+
+      <!-- Rows and Cols -->
       | Rows:
       <button onclick="changeGrid('relative', 0, -1);">-</button>
       <input type="text" id="inputRow" />
@@ -29,7 +42,9 @@
       <input type="text" id="inputCol" />
       <button onclick="changeGrid('relative', 1, 0);">+</button>
       <button
-        onclick="createTags();fillBinder(localStorage.getItem('bindername'))"
+        onclick="
+        createTags();
+        fillBinder(localStorage.getItem('bindername'))"
       >
         Apply
       </button>
@@ -39,6 +54,8 @@
       <button onclick="changeGrid('absolute', 4,4);" class="solid">4x4</button>
       <button onclick="changeGrid('absolute', 8,4);" class="solid">8x4</button>
       <br />
+
+      <!-- Card Size -->
       Card size:
       <button onclick="resizeCards('relative', -100);">-100</button>
       <button onclick="resizeCards('relative', -10);">-10</button>
