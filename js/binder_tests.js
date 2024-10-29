@@ -23,7 +23,7 @@ const subtest_tags_width_matches_input = () => {
 };
 
 const test_create_tags = () => {
-  setInputForCardSize('absolute', 80);
+  setInputForCardSize('absolute', 250);
   setInputsForGrid('absolute', 3, 3);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
@@ -49,7 +49,7 @@ const test_create_tags = () => {
 // storeBinders
 
 const test_storebinders = () => {
-  setInputForCardSize('absolute', 80);
+  setInputForCardSize('absolute', 250);
   setInputsForGrid('absolute', 3, 3);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
@@ -86,7 +86,7 @@ const test_storebinders = () => {
 // fillBinder
 
 const test_fillbinder = () => {
-  setInputForCardSize('absolute', 80);
+  setInputForCardSize('absolute', 250);
   setInputsForGrid('absolute', 3, 3);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
@@ -117,7 +117,7 @@ const test_fillbinder = () => {
   }
   if (
     content.includes(
-      '<tr><td><img src="img/sve/sve.001.basic_g_energy.png" title="sve.001.basic_g_energy.png : grass : energy" style="width:80px;"></td><td><img src="img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png" title="sve.002.basic_r_energy.png : fire : energy" style="width:80px;"></td><td><img src="img/sw/sw.022.arcanine.jpg" title="sw.022.arcanine.jpg : fire : energy" style="width:80px;"></td></tr>'
+      '<tr><td><img src="img/sve/sve.001.basic_g_energy.png" title="sve.001.basic_g_energy.png : grass : energy" style="width:250px;"></td><td><img src="img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png" title="sve.002.basic_r_energy.png : fire : energy" style="width:250px;"></td><td><img src="img/sw/sw.022.arcanine.jpg" title="sw.022.arcanine.jpg : fire : energy" style="width:250px;"></td></tr>'
     )
   ) {
     console.log('pass');

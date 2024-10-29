@@ -1,16 +1,6 @@
-// for each test, need to add a variation of this to the beginning:
-// setInputForCardSize('absolute', 80);
-// setInputsForGrid('absolute', 3, 3);
-// test_setup();
-// data = JSON.parse(localStorage.getItem('test_data'));
-// storeBinders(data)
-// createTags();
-// fillBinder(localStorage.getItem('bindername'));
-// populateDropdown();
-
 const test_fetchAndFillBinder = () => {
   try {
-    setInputForCardSize('absolute', 80);
+    setInputForCardSize('absolute', 250);
     setInputsForGrid('absolute', 3, 3);
     test_setup();
     data = JSON.parse(localStorage.getItem('test_data'));
@@ -26,7 +16,7 @@ const test_fetchAndFillBinder = () => {
 };
 
 const subtest_populateDropdown = () => {
-  setInputForCardSize('absolute', 80);
+  setInputForCardSize('absolute', 250);
   setInputsForGrid('absolute', 3, 3);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));

@@ -1,5 +1,5 @@
 // for each test, need to add a variation of this to the beginning:
-// setInputForCardSize('absolute', 80);
+// setInputForCardSize('absolute', 250);
 // setInputsForGrid('absolute', 3, 3);
 // test_setup();
 // data = JSON.parse(localStorage.getItem('test_data'));
@@ -29,7 +29,8 @@ const test_setup = () => {
     ["","sve.005.basic_p_energy.png","test_binder","basic_p_energy","x","2024-10-27T04:00:00.000Z","SVE","energy","psychic",5,"2023-03-31T04:00:00.000Z","",5,21],
     ["","sve.006.basic_f_energy.png","test_binder","basic_f_energy","","2024-10-27T04:00:00.000Z","SVE","energy","fighting",6,"2023-03-31T04:00:00.000Z","",6,21],
     ["","sve.007.basic_d_energy.png","test_binder","basic_d_energy","x","2024-10-27T04:00:00.000Z","SVE","energy","dark",7,"2023-03-31T04:00:00.000Z","",7,21],
-    ["","sve.008.basic_m_energy.png","test_binder","basic_m_energy","","2024-10-27T04:00:00.000Z","SVE","energy","metal",8,"2023-03-31T04:00:00.000Z","",8,21]]`
+    ["","sve.008.basic_m_energy.png","test_binder","basic_m_energy","","2024-10-27T04:00:00.000Z","SVE","energy","metal",8,"2023-03-31T04:00:00.000Z","",8,21],
+    ["","xyp.XY177.karen_.jpg","test_binder","karen_","x","2024-10-27T04:00:00.000Z","XYP","support","n/a",177,"2023-03-31T04:00:00.000Z","",19,20]]`
   );
 };
 
