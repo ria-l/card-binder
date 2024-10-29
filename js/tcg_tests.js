@@ -9,10 +9,10 @@ const test_fetchAndFillBinder = () => {
     fillBinder();
   } catch (err) {
     console.log(err);
-    console.log('fail');
+    console.log('❌ fail');
     return;
   }
-  console.log('pass');
+  console.log('✅ pass');
 };
 
 const subtest_populateDropdown = () => {
@@ -27,20 +27,21 @@ const subtest_populateDropdown = () => {
   try {
     populateDropdown();
   } catch (err) {
+    console.log('❌ fail');
     console.log(err);
   }
 
   const dropdown = document.getElementById('selectBinder').innerHTML;
   if (dropdown.includes('test_binder')) {
-    console.log('pass');
+    console.log('✅ pass');
   } else {
-    console.log('fail');
-    console.log(dropdown);
+    console.log('❌ fail');
+    console.log(`dropdown: ${dropdown}`);
   }
 };
 
 const test_applying_drowndown = () => {
-  console.log('failok');
+  console.log('❌ failpass');
 };
 
 const test_populateDropdown = () => {
