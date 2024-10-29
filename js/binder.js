@@ -66,8 +66,6 @@ const storeBinders = (data) => {
  * Fills binder using data in localstorage.
  */
 const fillBinder = () => {
-  createTags();
-
   const cardTags = localStorage.getItem('tags').split(',');
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);

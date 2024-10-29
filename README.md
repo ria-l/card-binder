@@ -10,7 +10,6 @@ https://ria-l.github.io/card-binder/
 
 - finish tcg tests:
   - test_applying_drowndown
-  - subtest_loading_from_storage
 - sort by set & card number
 - sort by dex
 - sorting tests

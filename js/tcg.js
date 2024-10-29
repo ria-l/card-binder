@@ -17,6 +17,7 @@ const fetchAndFillBinder = () => {
       createTags();
     })
     .then(() => {
+      createTags();
       fillBinder();
       populateDropdown();
     })
@@ -53,9 +54,9 @@ window.onload = () => {
   setInputForCardSize('absolute', 50);
   setInputsForGrid('absolute', 8, 4);
 
-  const binderName = localStorage.getItem('bindername');
-  if (binderName) {
+  if (localStorage.getItem('bindername')) {
     console.log('loading from storage');
+    createTags();
     fillBinder();
   } else {
     fetchAndFillBinder();
