@@ -1,6 +1,5 @@
 * {
-  font-family: 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family: 'Roboto', 'Noto Sans', sans-serif;
   font-size: 14px;
 }
 
@@ -25,13 +24,12 @@ input {
   text-align: center;
 }
 
-.content,
-.status {
-  margin-top: 100px;
+table {
+  padding: 10px;
 }
 
 .header {
-  position: fixed;
+  position: sticky;
   top: 0;
   background-color: #fff;
   text-align: center;

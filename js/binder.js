@@ -87,7 +87,7 @@ const fillBinder = () => {
       let fullTag = '';
       if (pageIndex == 1) {
         // first card on page
-        fullTag += `<table style="float:left;padding:10px;">`;
+        fullTag += `<table>`;
       }
       if (rowIndex == 1) {
         // first card in row
