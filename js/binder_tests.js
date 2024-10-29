@@ -117,7 +117,7 @@ const test_fillbinder = () => {
   }
   if (
     content.includes(
-      '<tr><td><img src="img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png" title="sw.022.arcanine.jpg : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG01.flareon.png" title="brs.TG01.flareon.png : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG02.vaporeon.png" title="brs.TG02.vaporeon.png : water : basic" style="width:250px;"></td></tr>'
+      '<tr><td><img src="img/sw/sw.022.arcanine.jpg" title="sw.022.arcanine.jpg : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG01.flareon.png" title="brs.TG01.flareon.png : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG02.vaporeon.png" title="brs.TG02.vaporeon.png : water : basic" style="width:250px;"></td></tr>'
     )
   ) {
     console.log('pass');
