@@ -2,9 +2,11 @@ https://ria-l.github.io/card-binder/
 
 ## bug
 
-- on reload, shiny is loading instead of the default binder
+- on reload, shiny is loading instead of the default binder or selected binder
 - sometimes cards are a couple pixels off vertically which makes the tables float fucky
 - applying new binder doesn't work
+- last page of binder aligns to bottom instead of top
+- on reload, dropdown is cleared
 
 ## todo
 

@@ -62,5 +62,6 @@ const setInputsForGrid = (type, col, row) => {
  */
 const changeGrid = (type, col, row) => {
   setInputsForGrid(type, col, row);
+  createTags();
   fillBinder();
 };

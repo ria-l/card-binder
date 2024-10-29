@@ -13,7 +13,8 @@ button {
   padding-block: 5px;
 }
 
-input {
+input,
+select {
   border-radius: 6px;
   border: 1px #000 solid;
   fill: rgba(0, 0, 0, 0.15);
@@ -24,8 +25,13 @@ input {
   text-align: center;
 }
 
+select {
+  width: auto;
+}
+
 table {
   padding: 10px;
+  display: inline-block;
 }
 
 .header {

@@ -17,7 +17,7 @@ const test_setup = () => {
   localStorage.setItem(
     'test_data',
     `[["test_binder","file name","binder","name","caught","caught date","set","card type","pkmn type","card #","release date","dex #","pkmn type #","card type #"],
-    ["","sve.001.basic_g_energy.png","test_binder","basic_g_energy","","","SVE","energy","grass",1,"2023-3-31T04:00:00.000Z","basic_g_energy",1,21],
+["","sve.001.basic_g_energy.png","test_binder","basic_g_energy","","","SVE","energy","grass",1,"2023-3-31T04:00:00.000Z","basic_g_energy",1,21],
 ["","sve.002.basic_r_energy.png","test_binder","basic_r_energy","x","2024-10-28T04:00:00.000Z","SVE","energy","fire",2,"2023-3-31T04:00:00.000Z","basic_r_energy",2,21],
 ["","sw.022.arcanine.jpg","test_binder","arcanine","x","2024-10-28T04:00:00.000Z","SW","basic","fire",22,"2007-11-7T04:00:00.000Z",59,2,0],
 ["","brs.TG01.flareon.png","test_binder","flareon","x","2024-10-28T04:00:00.000Z","BRS","basic","fire",1,"2022-2-25T04:00:00.000Z",136,2,0],
