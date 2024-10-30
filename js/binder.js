@@ -28,7 +28,7 @@ const createTags = () => {
       );
     } else {
       tags.push(
-        `<img src='img/sword_shield_promos/sword_shield_promos.SWSH146.poke_ball.png' title='${binderData[i][jfilename]} : ${binderData[i][jpkmntype]} : ${binderData[i][jcardtype]}' style="width:${imgWidth}px;" />`
+        `<img src='img/sleeves/P8562_705-95325_01.jpg' title='${binderData[i][jfilename]} : ${binderData[i][jpkmntype]} : ${binderData[i][jcardtype]}' style="width:${imgWidth}px;" />`
       );
     }
   }
