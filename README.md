@@ -15,11 +15,14 @@ https://ria-l.github.io/card-binder/
 - finish tcg tests:
   - test_applying_drowndown
 - sorting tests
+- track collection progress
+- make consolidated functions for button clicks
 
 #### aesthetics
 
 - standardize var and func names
 - lock a card to the top of the screen
+- scroll to newest caught card
 - make the dropdown look nice
 
 ### v2
@@ -27,6 +30,5 @@ https://ria-l.github.io/card-binder/
 - sort by set/release & card number
 - sort by dex number
 - add all binder display
-- make consolidated functions for button clicks
 - add card flip functionality
 - add "catch next"
