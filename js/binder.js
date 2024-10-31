@@ -96,7 +96,11 @@ const storeBinders = (data) => {
     filtered = data.filter((row) => row[binderIndex] == name);
     // add back the header
     filtered.unshift(header);
-    toStore = sortByColor(filtered);
+    if (name == 'illust') {
+      toStore = sortByColorDex(filtered);
+    } else {
+      toStore = sortByColor(filtered);
+    }
     localStorage.setItem(name, JSON.stringify(toStore));
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));

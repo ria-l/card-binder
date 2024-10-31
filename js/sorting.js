@@ -13,8 +13,11 @@ const sortByColor = (data) => {
   index = header.indexOf('card #');
   byCardNum = unsorted.sort(sortMatrix);
 
+  index = header.indexOf('set');
+  bySet = byCardNum.sort(sortMatrix);
+
   index = header.indexOf('release date');
-  byRelease = byCardNum.sort(sortMatrix);
+  byRelease = bySet.sort(sortMatrix);
 
   index = header.indexOf('dex #');
   byDex = byRelease.sort(sortMatrix);
@@ -26,4 +29,26 @@ const sortByColor = (data) => {
   byCardType = byPkmnType.sort(sortMatrix);
 
   return byCardType;
+};
+
+const sortByColorDex = (data) => {
+  header = data[0];
+  unsorted = data.slice(1);
+
+  index = header.indexOf('card #');
+  byCardNum = unsorted.sort(sortMatrix);
+
+  index = header.indexOf('set');
+  bySet = byCardNum.sort(sortMatrix);
+
+  index = header.indexOf('release date');
+  byRelease = bySet.sort(sortMatrix);
+
+  index = header.indexOf('dex #');
+  byDex = byRelease.sort(sortMatrix);
+
+  index = header.indexOf('pkmn type #');
+  byPkmnType = byDex.sort(sortMatrix);
+
+  return byPkmnType;
 };
