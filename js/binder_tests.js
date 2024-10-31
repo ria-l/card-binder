@@ -95,7 +95,7 @@ const test_storebinders = () => {
 
 const test_fillbinder = () => {
   setInputForCardSize('absolute', 250);
-  setInputsForGrid('absolute', 3, 3);
+  setInputsForGrid('absolute', 4, 4);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
   storeBinders(data);
@@ -129,13 +129,13 @@ const test_fillbinder = () => {
   }
   if (
     content.includes(
-      '<tr><td><img src="img/sw/sw.022.arcanine.jpg" title="sw.022.arcanine.jpg : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG01.flareon.png" title="brs.TG01.flareon.png : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG02.vaporeon.png" title="brs.TG02.vaporeon.png : water : basic" style="width:250px;"></td></tr>'
+      '<tr><td><img src="img/sw/sw.022.arcanine.jpg" title="sw.022.arcanine.jpg : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG01.flareon.png" title="brs.TG01.flareon.png : fire : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG02.vaporeon.png" title="brs.TG02.vaporeon.png : water : basic" style="width:250px;"></td><td><img src="img/brs/brs.TG04.jolteon.png" title="brs.TG04.jolteon.png : lightning : basic" style="width:250px;"></td></tr>'
     )
   ) {
     console.log('✅ pass');
   } else {
     console.log('❌ fail');
-    console.log(`incorrect cols. input cols: ${cols}`);
+    console.log(`incorrect cols.\ninput cols: ${cols}\n`);
     console.log(content);
   }
 
@@ -144,9 +144,10 @@ const test_fillbinder = () => {
   } else {
     console.log('❌ fail');
     console.log(
-      `incorrect rows. input rows: ${rows}\ntr count: ${
+      `incorrect rows.\ninput rows: ${rows}\ntr count: ${
         content.match(new RegExp('<tr>', 'g')).length
       }`
     );
+    console.log(content);
   }
 };

@@ -34,6 +34,12 @@ table {
   display: inline-block;
 }
 
+td img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .header {
   position: sticky;
   top: 0;
@@ -44,4 +50,10 @@ table {
 
 .solid {
   border: 1px rgb(9, 88, 217) solid;
+}
+
+.placeholder {
+  box-sizing: border-box;
+  text-align: center;
+  vertical-align: middle;
 }

@@ -33,6 +33,7 @@ const test_setup = () => {
 };
 
 const test_all = () => {
+  localStorage.clear();
   console.log('** test_create_tags');
   test_create_tags();
   console.log('** test_storebinders');

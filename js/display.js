@@ -15,12 +15,16 @@ const setInputForCardSize = (type, input) => {
  * Updates cards with whatever value is in the input field.
  */
 const setCardSize = () => {
-  document
-    .querySelectorAll('img')
-    .forEach(
-      (e) =>
-        (e.style.width = `${document.getElementById('inputCardSize').value}px`)
-    );
+  w = document.getElementById('inputCardSize').value;
+  document.querySelectorAll('img').forEach((e) => (e.style.width = `${w}px`));
+
+  ph = document.getElementsByClassName('placeholder');
+  for (var i = 0, len = ph.length; i < len; i++) {
+    ph[i].style['width'] = `${w}px`;
+    ph[i].style['height'] = `${w * 1.395}px`;
+    ph[i].style['border-radius'] = `${w / 20}px`;
+    ph[i].style['border'] = `${w / 15}px solid transparent`;
+  }
 };
 
 /**

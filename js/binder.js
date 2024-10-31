@@ -16,6 +16,29 @@ const createTags = () => {
 
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
+  const pkmnTypeColors = {
+    grass: ['#c2d349', '#93bb4e'],
+    fire: ['#f78b46', '#f2674b'],
+    water: ['#93d9f5', '#11b6e6'],
+    lightning: ['#fff023', '#ffd126'],
+    psychic: ['#c992c0', '#9b6dad'],
+    fighting: ['#ecab2a', '#d6713d'],
+    dark: ['#0d7080', '#0d3236'],
+    metal: ['#c2e2f4', '#a6b3af'],
+    fairy: ['#e14690', '#b13870'],
+    dragon: ['#b0813a', '#acac42'],
+    colorless: ['#f5f4f0', '#d6d2cf'],
+  };
+  const cardTypeColors = {
+    ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
+    gold: ['#fef081', '#c69221', '#fef081'], // gold
+    gx: ['#00aeed', '#036697', '#00aeed'], // blue
+    support: ['#fcceac', '#ff8d00', '#fcceac'], // orange
+    v: ['#636566', '#000000', '#636566'], // black & grey
+    vmax: ['#fbcf4c', '#e61c75', '#3f3487'], // yellow & pink & purple
+    vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
+    energy: ['#dbdddf', '#969a9d', '#dbdddf'], // silver
+  };
 
   for (var i = 0; i < binderData.length; i++) {
     if (binderData[i][jcaught] == 'x') {
@@ -24,12 +47,29 @@ const createTags = () => {
           binderData[i][jfilename]
         }' title='${binderData[i][jfilename]} : ${binderData[i][jpkmntype]} : ${
           binderData[i][jcardtype]
-        }' style="width:${imgWidth}px;" />`
+        }' style='width:${imgWidth}px;' />zzz`
       );
     } else {
-      tags.push(
-        `<img src='img/sleeves/A11810_4.avif' title='${binderData[i][jfilename]} : ${binderData[i][jpkmntype]} : ${binderData[i][jcardtype]}' style="width:${imgWidth}px;" />`
-      );
+      light = pkmnTypeColors[binderData[i][jpkmntype]][0];
+      dark = pkmnTypeColors[binderData[i][jpkmntype]][1];
+
+      if (binderData[i][jcardtype] == 'basic') {
+        color_tag = `${dark},${light},${dark}`;
+      } else {
+        special = cardTypeColors[binderData[i][jcardtype]].join(',');
+        color_tag = `${dark},${light},#fff,${special}`;
+      }
+
+      // note that there are a couple other styles in the css file
+      s = `<div class='placeholder' title='${binderData[i][jfilename]} : ${
+        binderData[i][jpkmntype]
+      } : ${binderData[i][jcardtype]}' style='width:${imgWidth}px;height:${
+        imgWidth * 1.4
+      }px;background: linear-gradient(white, white) padding-box, linear-gradient(to bottom right, ${color_tag}) border-box;border-radius:${
+        imgWidth / 20
+      }px;border: ${imgWidth / 15}px solid transparent;'></div>zzz`;
+
+      tags.push(s);
     }
   }
   localStorage.setItem('tags', tags);
@@ -66,7 +106,7 @@ const storeBinders = (data) => {
  * Fills binder using data in localstorage.
  */
 const fillBinder = () => {
-  const cardTags = localStorage.getItem('tags').split(',');
+  const cardTags = localStorage.getItem('tags').split(/zzz,?/);
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);
   let newContent = '';
