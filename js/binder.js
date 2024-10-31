@@ -28,6 +28,7 @@ const createTags = () => {
     fairy: ['#e14690', '#b13870'],
     dragon: ['#b0813a', '#acac42'],
     colorless: ['#f5f4f0', '#d6d2cf'],
+    support: ['#fcceac', '#ff8d00'],
   };
   const cardTypeColors = {
     ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
@@ -39,7 +40,7 @@ const createTags = () => {
     vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
     energy: ['#dbdddf', '#969a9d', '#dbdddf'], // silver
   };
-  console.log('constants set');
+  console.log('createtags: constants set');
   for (var i = 0; i < binderData.length; i++) {
     if (binderData[i][jcaught] == 'x') {
       tags.push(
