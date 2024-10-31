@@ -42,13 +42,15 @@ const createTags = () => {
   };
   console.log('createtags: constants set');
   for (var i = 0; i < binderData.length; i++) {
+    dir = `img/${binderData[i][jset].toLowerCase()}`;
+    filename = binderData[i][jfilename];
+    pkmntype = binderData[i][jpkmntype];
+    cardtype = binderData[i][jcardtype];
+    title = `'${filename} : ${pkmntype} : ${cardtype}'`;
+    style_width = `width:${imgWidth}px;`;
     if (binderData[i][jcaught] == 'x') {
       tags.push(
-        `<img src='img/${binderData[i][jset].toLowerCase()}/${
-          binderData[i][jfilename]
-        }' title='${binderData[i][jfilename]} : ${binderData[i][jpkmntype]} : ${
-          binderData[i][jcardtype]
-        }' style='width:${imgWidth}px;' />zzz`
+        `<img src='${dir}/${filename}' title=${title} style='${style_width}' />zzz`
       );
     } else {
       light = pkmnTypeColors[binderData[i][jpkmntype]][0];
@@ -61,12 +63,7 @@ const createTags = () => {
       }
 
       // note that there are a couple other styles in the css file
-      filename = binderData[i][jfilename];
-      pkmntype = binderData[i][jpkmntype];
-      cardtype = binderData[i][jcardtype];
-      title = `'${filename} : ${pkmntype} : ${cardtype}'`;
 
-      style_width = `width:${imgWidth}px;`;
       style_height = `height:${imgWidth * 1.4}px;`;
       _fill = `linear-gradient(to bottom right, #eee,white, #eee) padding-box,`;
       _border = `linear-gradient(to bottom right, ${color_tag}) border-box`;
