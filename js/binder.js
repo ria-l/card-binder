@@ -49,6 +49,7 @@ const createTags = () => {
     title = `'${filename} : ${pkmntype} : ${cardtype}'`;
     style_width = `width:${imgWidth}px;`;
     if (binderData[i][jcaught] == 'x') {
+      // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
       tags.push(
         `<img src='${dir}/${filename}' title=${title} style='${style_width}' />zzz`
       );
@@ -79,9 +80,9 @@ const createTags = () => {
         style_border +
         `'`;
       // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
-      s = `<div class='placeholder' title=${title} style=${style}></div>zzz`;
-
-      tags.push(s);
+      tags.push(
+        `<div class='placeholder' title=${title} style=${style}></div>zzz`
+      );
     }
   }
   localStorage.setItem('tags', tags);
