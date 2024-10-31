@@ -1,3 +1,5 @@
+let sorted;
+
 const sortMatrix = (a, b) => {
   if (a[index] === b[index]) {
     return 0;
@@ -6,49 +8,51 @@ const sortMatrix = (a, b) => {
   }
 };
 
-const sortByColor = (data) => {
-  header = data[0];
-  unsorted = data.slice(1);
-
-  index = header.indexOf('card #');
-  byCardNum = unsorted.sort(sortMatrix);
-
-  index = header.indexOf('set');
-  bySet = byCardNum.sort(sortMatrix);
-
-  index = header.indexOf('release date');
-  byRelease = bySet.sort(sortMatrix);
-
-  index = header.indexOf('dex #');
-  byDex = byRelease.sort(sortMatrix);
-
-  index = header.indexOf('pkmn type #');
-  byPkmnType = byDex.sort(sortMatrix);
-
-  index = header.indexOf('card type #');
-  byCardType = byPkmnType.sort(sortMatrix);
-
-  return byCardType;
+const _sort = (header, col_name, data) => {
+  index = header.indexOf(col_name);
+  return data.sort(sortMatrix);
 };
 
-const sortByColorDex = (data) => {
+// const sortByColor = (data) => {
+//   header = data[0];
+//   sorted = data.slice(1);
+
+//   sorted = _sort(header, 'card #', sorted);
+//   sorted = _sort(header, 'set', sorted);
+//   sorted = _sort(header, 'release date', sorted);
+//   sorted = _sort(header, 'forme #', sorted);
+//   sorted = _sort(header, 'dex #', sorted);
+//   sorted = _sort(header, 'pkmn type #', sorted);
+//   sorted = _sort(header, 'card type #', sorted);
+
+//   return sorted;
+// };
+
+const sortByColor = (data) => {
   header = data[0];
-  unsorted = data.slice(1);
+  sorted = data.slice(1);
 
-  index = header.indexOf('card #');
-  byCardNum = unsorted.sort(sortMatrix);
+  sorted = _sort(header, 'card #', sorted);
+  sorted = _sort(header, 'set', sorted);
+  sorted = _sort(header, 'release date', sorted);
+  sorted = _sort(header, 'card type #', sorted);
+  sorted = _sort(header, 'forme #', sorted);
+  sorted = _sort(header, 'dex #', sorted);
+  sorted = _sort(header, 'pkmn type #', sorted);
 
-  index = header.indexOf('set');
-  bySet = byCardNum.sort(sortMatrix);
+  return sorted;
+};
 
-  index = header.indexOf('release date');
-  byRelease = bySet.sort(sortMatrix);
+const sortByDex = (data) => {
+  header = data[0];
+  sorted = data.slice(1);
 
-  index = header.indexOf('dex #');
-  byDex = byRelease.sort(sortMatrix);
+  sorted = _sort(header, 'card #', sorted);
+  sorted = _sort(header, 'set', sorted);
+  sorted = _sort(header, 'release date', sorted);
+  sorted = _sort(header, 'card type #', sorted);
+  sorted = _sort(header, 'forme #', sorted);
+  sorted = _sort(header, 'dex #', sorted);
 
-  index = header.indexOf('pkmn type #');
-  byPkmnType = byDex.sort(sortMatrix);
-
-  return byPkmnType;
+  return sorted;
 };

@@ -97,7 +97,7 @@ const storeBinders = (data) => {
     // add back the header
     filtered.unshift(header);
     if (name == 'illust') {
-      toStore = sortByColorDex(filtered);
+      toStore = sortByDex(filtered);
     } else {
       toStore = sortByColor(filtered);
     }
