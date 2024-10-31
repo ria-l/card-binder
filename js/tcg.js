@@ -14,11 +14,13 @@ const fetchAndFillBinder = () => {
     .then(({ data }) => {
       console.log(`fetched`);
       storeBinders(data);
-      createTags();
+      console.log('data stored');
     })
     .then(() => {
       createTags();
+      console.log('tags created');
       fillBinder();
+      console.log('binder filled');
       populateDropdown();
     })
     .catch((error) => (document.getElementById('content').innerHTML = error));

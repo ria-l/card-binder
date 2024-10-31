@@ -39,7 +39,7 @@ const createTags = () => {
     vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
     energy: ['#dbdddf', '#969a9d', '#dbdddf'], // silver
   };
-
+  console.log('constants set');
   for (var i = 0; i < binderData.length; i++) {
     if (binderData[i][jcaught] == 'x') {
       tags.push(
@@ -52,7 +52,6 @@ const createTags = () => {
     } else {
       light = pkmnTypeColors[binderData[i][jpkmntype]][0];
       dark = pkmnTypeColors[binderData[i][jpkmntype]][1];
-
       if (binderData[i][jcardtype] == 'basic') {
         color_tag = `${dark},${light},${dark}`;
       } else {
