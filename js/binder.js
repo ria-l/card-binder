@@ -61,13 +61,26 @@ const createTags = () => {
       }
 
       // note that there are a couple other styles in the css file
-      s = `<div class='placeholder' title='${binderData[i][jfilename]} : ${
-        binderData[i][jpkmntype]
-      } : ${binderData[i][jcardtype]}' style='width:${imgWidth}px;height:${
-        imgWidth * 1.4
-      }px;background: linear-gradient(white, white) padding-box, linear-gradient(to bottom right, ${color_tag}) border-box;border-radius:${
-        imgWidth / 20
-      }px;border: ${imgWidth / 15}px solid transparent;'></div>zzz`;
+      filename = binderData[i][jfilename];
+      pkmntype = binderData[i][jpkmntype];
+      cardtype = binderData[i][jcardtype];
+      title = `'${filename} : ${pkmntype} : ${cardtype}'`;
+
+      style_width = `width:${imgWidth}px;`;
+      style_height = `height:${imgWidth * 1.4}px;`;
+      style_background = `background:linear-gradient(to bottom right, #eee,white, #eee) padding-box, linear-gradient(to bottom right, ${color_tag}) border-box;`;
+      style_borderradius = `border-radius:${imgWidth / 20}px;`;
+      style_border = `border: ${imgWidth / 15}px solid transparent;`;
+      style =
+        `'` +
+        style_width +
+        style_height +
+        style_background +
+        style_borderradius +
+        style_border +
+        `'`;
+
+      s = `<div class='placeholder' title=${title} style=${style}></div>zzz`;
 
       tags.push(s);
     }
