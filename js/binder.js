@@ -68,7 +68,9 @@ const createTags = () => {
 
       style_width = `width:${imgWidth}px;`;
       style_height = `height:${imgWidth * 1.4}px;`;
-      style_background = `background:linear-gradient(to bottom right, #eee,white, #eee) padding-box, linear-gradient(to bottom right, ${color_tag}) border-box;`;
+      _fill = `linear-gradient(to bottom right, #eee,white, #eee) padding-box,`;
+      _border = `linear-gradient(to bottom right, ${color_tag}) border-box`;
+      style_background = `background:${_fill} ${_border};`;
       style_borderradius = `border-radius:${imgWidth / 20}px;`;
       style_border = `border: ${imgWidth / 15}px solid transparent;`;
       style =
@@ -79,7 +81,7 @@ const createTags = () => {
         style_borderradius +
         style_border +
         `'`;
-
+      // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
       s = `<div class='placeholder' title=${title} style=${style}></div>zzz`;
 
       tags.push(s);
