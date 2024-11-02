@@ -28,17 +28,27 @@ const createTags = () => {
     fairy: ['#e14690', '#b13870'],
     dragon: ['#b0813a', '#acac42'],
     colorless: ['#f5f4f0', '#d6d2cf'],
-    support: ['#fcceac', '#ff8d00'],
+    support: ['#eb028b', '#f14eae'], // hot pink
   };
   const cardTypeColors = {
     ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
     gold: ['#fef081', '#c69221', '#fef081'], // gold
     gx: ['#00aeed', '#036697', '#00aeed'], // blue
-    support: ['#fcceac', '#ff8d00', '#fcceac'], // orange
-    v: ['#636566', '#000000', '#636566'], // black & grey
+    v: ['#4d4d4d', '#000000', '#4d4d4d'], // black & grey
     vmax: ['#fbcf4c', '#e61c75', '#3f3487'], // yellow & pink & purple
     vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
-    energy: ['#dbdddf', '#969a9d', '#dbdddf'], // silver
+    item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
+    trainer: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
+    energy: [
+      '#f78b46', // fire
+      '#ecab2a', // fighting
+      '#fff023', // lightning
+      '#c2d349', // grass
+      '#93d9f5', // water
+      '#0d7080', // dark
+      '#c992c0', // psychic
+      '#f5f4f0', // colorless
+    ],
   };
   console.log('createtags: constants set');
   for (var i = 0; i < binderData.length; i++) {
@@ -59,8 +69,23 @@ const createTags = () => {
       if (binderData[i][jcardtype] == 'basic') {
         color_tag = `${dark},${light},${dark}`;
       } else {
-        special = cardTypeColors[binderData[i][jcardtype]].join(',');
-        color_tag = `${dark},${light},#fff,${special}`;
+        try {
+          special = cardTypeColors[binderData[i][jcardtype]].join(',');
+          color_tag = `${dark},${light},#fff,${special}`;
+        } catch (err) {
+          console.log('❌', err);
+          console.log(
+            'failed to join: ',
+            cardTypeColors[binderData[i][jcardtype]]
+          );
+          console.log({
+            cardTypeColors: cardTypeColors,
+            binderData: binderData,
+            i: i,
+            jcardtype: jcardtype,
+            'binderData[i][jcardtype]': binderData[i][jcardtype],
+          });
+        }
       }
 
       // note that there are a couple other styles in the css file
