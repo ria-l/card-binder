@@ -13,6 +13,7 @@ const createTags = () => {
   const jset = header.indexOf('set');
   const jcardtype = header.indexOf('card type');
   const jpkmntype = header.indexOf('pkmn type');
+  const jcardsubtype = header.indexOf('card subtype');
 
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
@@ -31,6 +32,7 @@ const createTags = () => {
     support: ['#eb028b', '#f14eae'], // hot pink
   };
   const cardTypeColors = {
+    basic: [],
     ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
     gold: ['#fef081', '#c69221', '#fef081'], // gold
     gx: ['#00aeed', '#036697', '#00aeed'], // blue
@@ -52,59 +54,59 @@ const createTags = () => {
   };
   console.log('createtags: constants set');
   for (var i = 0; i < binderData.length; i++) {
-    dir = `img/${binderData[i][jset].toLowerCase()}`;
-    filename = binderData[i][jfilename];
-    pkmntype = binderData[i][jpkmntype];
-    cardtype = binderData[i][jcardtype];
-    title = `'${filename} : ${pkmntype} : ${cardtype}'`;
-    style_width = `width:${imgWidth}px;`;
+    const dir = `img/${binderData[i][jset].toLowerCase()}`;
+    const filename = binderData[i][jfilename];
+    const pkmntype = binderData[i][jpkmntype];
+    const cardtype = binderData[i][jcardtype];
+    const cardsubtype = binderData[i][jcardsubtype];
+
+    const style_width = `width:${imgWidth}px;`;
+    const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
+
     if (binderData[i][jcaught] == 'x') {
       // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
       tags.push(
         `<img src='${dir}/${filename}' title=${title} style='${style_width}' />zzz`
       );
     } else {
-      light = pkmnTypeColors[binderData[i][jpkmntype]][0];
-      dark = pkmnTypeColors[binderData[i][jpkmntype]][1];
-      if (binderData[i][jcardtype] == 'basic') {
-        color_tag = `${dark},${light},${dark}`;
-      } else {
-        try {
-          special = cardTypeColors[binderData[i][jcardtype]].join(',');
-          color_tag = `${dark},${light},#fff,${special}`;
-        } catch (err) {
-          console.log('❌', err);
-          console.log(
-            'failed to join: ',
-            cardTypeColors[binderData[i][jcardtype]]
-          );
-          console.log({
-            cardTypeColors: cardTypeColors,
-            binderData: binderData,
-            i: i,
-            jcardtype: jcardtype,
-            'binderData[i][jcardtype]': binderData[i][jcardtype],
-          });
-        }
-      }
-
       // placeholder styles
       // note that there are a couple other styles in the css file
 
-      style_height = `height:${imgWidth * 1.4}px;`;
-      _fill = `linear-gradient(to bottom right, #eee,white, #eee) padding-box,`;
-      _border = `linear-gradient(to bottom right, ${color_tag}) border-box`;
-      style_background = `background:${_fill} ${_border};`;
-      style_borderradius = `border-radius:${imgWidth / 20}px;`;
-      style_border = `border: ${imgWidth / 15}px solid transparent;`;
-      style =
+      let special;
+      if (binderData[i][jcardtype] != 'basic') {
+        special = cardTypeColors[cardtype].join(',');
+      }
+
+      let border_colors;
+      const light = pkmnTypeColors[binderData[i][jpkmntype]][0];
+      const dark = pkmnTypeColors[binderData[i][jpkmntype]][1];
+      if (cardtype == 'basic') {
+        border_colors = `${dark},${light},${dark},${light},${dark}`;
+      } else {
+        border_colors = `${dark},${light},white,${special}`;
+      }
+
+      let fill_colors;
+      if (cardsubtype.includes('gold')) {
+        fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
+      } else {
+        fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
+      }
+
+      const background_fill_style = `linear-gradient(to bottom right, ${fill_colors}) padding-box,`;
+      const background_border_style = `linear-gradient(to bottom right, ${border_colors}) border-box;`;
+
+      const style =
         `'` +
         style_width +
-        style_height +
-        style_background +
-        style_borderradius +
-        style_border +
+        `height:${imgWidth * 1.4}px;` +
+        'background: ' +
+        background_fill_style +
+        background_border_style +
+        `border-radius:${imgWidth / 20}px;` +
+        `border: ${imgWidth / 15}px solid transparent;` +
         `'`;
+
       // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
       tags.push(
         `<span class='placeholder' title=${title} style=${style}></span>zzz`
@@ -113,7 +115,6 @@ const createTags = () => {
   }
   localStorage.setItem('tags', tags);
 };
-
 /**
  * stores card data for each binder into its own bucket in local storage.
  *

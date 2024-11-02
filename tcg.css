@@ -55,6 +55,5 @@ td img {
 .placeholder {
   box-sizing: border-box; /* border won't affect height/width */
   text-align: center;
-  /* vertical-align: middle; */
   display: inline-block;
 }
