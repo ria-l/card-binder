@@ -53,8 +53,8 @@ const storeNewBinder = () => {
  */
 window.onload = () => {
   document.getElementById('content').action = appscript;
-  setInputForCardSize('absolute', 50);
-  setInputsForGrid('absolute', 8, 4);
+  setInputForCardSize('absolute', 150);
+  setInputsForGrid('absolute', 3, 3);
 
   if (localStorage.getItem('bindername')) {
     console.log('loading from storage');
