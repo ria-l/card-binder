@@ -88,6 +88,7 @@ const createTags = () => {
         }
       }
 
+      // placeholder styles
       // note that there are a couple other styles in the css file
 
       style_height = `height:${imgWidth * 1.4}px;`;
@@ -106,7 +107,7 @@ const createTags = () => {
         `'`;
       // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
       tags.push(
-        `<div class='placeholder' title=${title} style=${style}></div>zzz`
+        `<span class='placeholder' title=${title} style=${style}></span>zzz`
       );
     }
   }
@@ -165,6 +166,7 @@ const fillBinder = () => {
       const pageIndex = (i + 1) % (rows * cols);
       const tdTag = `<td>${tag}</td>`;
       let fullTag = '';
+
       if (pageIndex == 1) {
         // first card on page
         fullTag += `<table>`;
