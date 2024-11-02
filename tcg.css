@@ -40,7 +40,8 @@ td img {
   margin-right: auto;
 }
 
-.header {
+.header,
+.status {
   position: sticky;
   top: 0;
   background-color: #fff;
