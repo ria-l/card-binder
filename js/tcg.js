@@ -53,11 +53,23 @@ const storeNewBinder = () => {
  */
 window.onload = () => {
   document.getElementById('content').action = appscript;
-  setInputForCardSize('absolute', 200);
-  setInputsForGrid('absolute', 2, 2);
 
   if (localStorage.getItem('bindername')) {
+    // debugger;
     console.log('loading from storage');
+    localStorage.getItem('imgWidth')
+      ? (imgWidth = parseInt(localStorage.getItem('imgWidth')))
+      : (imgWidth = 150);
+    localStorage.getItem('col')
+      ? (col = parseInt(localStorage.getItem('col')))
+      : (col = 3);
+    localStorage.getItem('row')
+      ? (row = parseInt(localStorage.getItem('row')))
+      : (row = 3);
+
+    setInputForCardSize('absolute', imgWidth);
+    setInputsForGrid('absolute', col, row);
+
     createTags();
     fillBinder();
   } else {

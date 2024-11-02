@@ -9,6 +9,7 @@ const setInputForCardSize = (type, input) => {
   type == 'relative'
     ? (w.value = (parseInt(w.value) + parseInt(input)).toString())
     : (w.value = input);
+  localStorage.setItem('imgWidth', input);
 };
 
 /**
@@ -50,11 +51,12 @@ const setInputsForGrid = (type, col, row) => {
   type == 'relative'
     ? (r.value = (parseInt(r.value) + row).toString())
     : (r.value = row.toString());
-
+  localStorage.setItem('row', row);
   const c = document.getElementById('inputCol');
   type == 'relative'
     ? (c.value = (parseInt(c.value) + col).toString())
     : (c.value = col.toString());
+  localStorage.setItem('col', col);
 };
 
 /**
