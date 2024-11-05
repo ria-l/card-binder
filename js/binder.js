@@ -61,12 +61,14 @@ const createTags = () => {
     const cardsubtype = binderData[i][jcardsubtype];
 
     const style_width = `width:${imgWidth}px;`;
+    // keeps cards that are a couple pixels off of standard size from breaking alignment
+    const style_height = `height:${imgWidth * 1.4}px;`;
     const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
 
     if (binderData[i][jcaught] == 'x') {
       // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
       tags.push(
-        `<img src='${dir}/${filename}' title=${title} style='${style_width}' />zzz`
+        `<img src='${dir}/${filename}' title=${title} style='${style_width}${style_height}' />zzz`
       );
     } else {
       // placeholder styles

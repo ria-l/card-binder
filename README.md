@@ -6,7 +6,6 @@ https://ria-l.github.io/card-binder/
 - applying new binder doesn't work
 - last page of binder aligns to bottom instead of top
 - on reload, dropdown is cleared
-- "none" cols is single file...
 
 ## todo
 

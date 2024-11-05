@@ -54,7 +54,14 @@ td img {
 }
 
 .placeholder {
-  box-sizing: border-box; /* border won't affect height/width */
+  /* makes it so border won't affect height/width */
+  box-sizing: border-box;
   text-align: center;
   display: inline-block;
+}
+
+/* this keeps cards and placeholders properly aligned */
+td .placeholder,
+td img {
+  vertical-align: middle;
 }

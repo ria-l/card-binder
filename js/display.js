@@ -18,11 +18,14 @@ const setInputForCardSize = (type, input) => {
 const setCardSize = () => {
   w = document.getElementById('inputCardSize').value;
   document.querySelectorAll('img').forEach((e) => (e.style.width = `${w}px`));
+  document
+    .querySelectorAll('img')
+    .forEach((e) => (e.style.height = `${w * 1.4}px`));
 
   ph = document.getElementsByClassName('placeholder');
   for (var i = 0, len = ph.length; i < len; i++) {
     ph[i].style['width'] = `${w}px`;
-    ph[i].style['height'] = `${w * 1.395}px`;
+    ph[i].style['height'] = `${w * 1.4}px`;
     ph[i].style['border-radius'] = `${w / 20}px`;
     ph[i].style['border'] = `${w / 15}px solid transparent`;
   }
