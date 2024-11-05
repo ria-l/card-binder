@@ -6,6 +6,7 @@ let index;
  * Initial data fetch and binder fill.
  */
 const fetchAndFillBinder = () => {
+  document.getElementById('status').className = 'status';
   document.getElementById('status').innerHTML = 'loading...';
 
   console.log('fetching...');
@@ -13,6 +14,7 @@ const fetchAndFillBinder = () => {
     .then((response) => response.json())
     .then(({ data }) => {
       console.log(`fetched`);
+      document.getElementById('status').className = 'hidestatus';
       storeBinders(data);
       console.log('data stored');
     })
