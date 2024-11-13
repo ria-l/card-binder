@@ -1,5 +1,3 @@
-const appscript =
-  'https://script.google.com/macros/s/AKfycbyaRyXFFKd-89QvMiyEg0TSxkuwZJ8Xt90lCFYqYszjTiGvYDn5OgFUBt31ALRsAYzykQ/exec';
 let index;
 
 /**
@@ -10,7 +8,7 @@ const fetchAndFillBinder = () => {
   document.getElementById('status').innerHTML = 'loading...';
 
   console.log('fetching...');
-  fetch(appscript)
+  fetch(appscript_url)
     .then((response) => response.json())
     .then(({ data }) => {
       console.log(`fetched`);
@@ -54,7 +52,7 @@ const storeNewBinder = () => {
  * update tests_setup if this changes.
  */
 window.onload = () => {
-  document.getElementById('content').action = appscript;
+  document.getElementById('content').action = appscript_url;
 
   if (localStorage.getItem('bindername')) {
     // debugger;

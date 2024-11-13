@@ -6,15 +6,8 @@
 const createTags = () => {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
-  const header = JSON.parse(localStorage.getItem('binder'))[0];
 
-  const jcaught = header.indexOf('caught');
-  const jfilename = header.indexOf('file name');
-  const jset = header.indexOf('set');
-  const jcardtype = header.indexOf('card type');
-  const jpkmntype = header.indexOf('pkmn type');
-  const jcardsubtype = header.indexOf('card subtype');
-
+  getConstantsFromStorage();
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
   const pkmnTypeColors = {
@@ -125,6 +118,7 @@ const createTags = () => {
 const storeBinders = (data) => {
   // loads binder names into var
   const header = data[0];
+  localStorage.setItem('header', header);
   localStorage.setItem('bindername', header[0]);
   const binderNames = new Set();
   const binderIndex = header.indexOf('binder');

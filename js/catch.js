@@ -1,6 +1,3 @@
-const url =
-  'https://script.google.com/macros/s/AKfycbyaRyXFFKd-89QvMiyEg0TSxkuwZJ8Xt90lCFYqYszjTiGvYDn5OgFUBt31ALRsAYzykQ/exec';
-
 const populateDatalists = (id, arr) => {
   let result = '';
   for (const item of arr) {
@@ -29,7 +26,7 @@ function fetchFilenames() {
   document.getElementById('status').className = 'status';
   document.getElementById('status').innerHTML = 'loading...';
   console.log('fetching file names...');
-  fetch(url)
+  fetch(appscript_url)
     .then((response) => response.json())
     .then(({ data }) => {
       console.log(`fetched`);
@@ -50,15 +47,7 @@ function fetchFilenames() {
 }
 
 const fillLotto = (binderData) => {
-  const header = localStorage.getItem('header').split(',');
-
-  const jcaught = header.indexOf('caught');
-  const jfilename = header.indexOf('file name');
-  const jset = header.indexOf('set');
-  const jcardtype = header.indexOf('card type');
-  const jpkmntype = header.indexOf('pkmn type');
-  const jcardsubtype = header.indexOf('card subtype');
-
+  getConstantsFromStorage();
   const imgWidth = 300;
   const tags = [];
   let newContent = '';
