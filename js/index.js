@@ -29,10 +29,10 @@ const fetchAndFillBinder = () => {
 };
 
 const populateDropdown = () => {
-  select = document.getElementById('selectBinder');
-  binders = JSON.parse(localStorage.getItem('bindernames'));
-  defaultbinder = localStorage.getItem('bindername');
-  s = '';
+  const select = document.getElementById('selectBinder');
+  const binders = JSON.parse(localStorage.getItem('bindernames'));
+  const defaultbinder = localStorage.getItem('bindername');
+  let s = '';
   for (e of binders) {
     if (e != 'binder' && e != defaultbinder) {
       s += `<option value="${e}">${e}</option>`;
