@@ -1,54 +1,6 @@
-* {
-  font-family: 'Roboto', 'Noto Sans', sans-serif;
-  font-size: 14px;
-}
-
-button {
-  background: linear-gradient(
-      to bottom right,
-      #009d82,
-      #60d8c6,
-      white,
-      #f9f9f9,
-      #60d8c6,
-      #009d82
-    )
-    border-box;
-  border: 5px solid transparent;
-  border-radius: 25%;
-  box-sizing: border-box;
-  font-weight: 400;
-  margin: 5px 2px 5px 2px;
-  vertical-align: middle;
-}
-
-.solid {
-  background: linear-gradient(
-      to bottom right,
-      #c69221,
-      #fef081,
-      white,
-      #f9f9f9,
-      #fef081,
-      #c69221
-    )
-    border-box;
-}
-
-input,
-select {
-  border-radius: 6px;
-  border: 1px #000 solid;
-  fill: rgba(0, 0, 0, 0.15);
-  font-weight: 400;
-  margin: 5px 2px 5px 2px;
+.header span {
   padding: 5px;
-  text-align: center;
-  width: 30px;
-}
-
-select {
-  width: auto;
+  display: inline-block;
 }
 
 table {
@@ -57,13 +9,13 @@ table {
 }
 
 td img {
+  /* the td is necessary for correct rendering with no grid */
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 
 .header {
-  background-color: #fff;
   position: sticky;
   text-align: center;
   top: 0;
@@ -77,9 +29,10 @@ td img {
   text-align: center;
 }
 
-/* this keeps cards and placeholders properly aligned */
-td .placeholder,
-td img {
+td img,
+td .placeholder {
+  /* Keeps cards and placeholders properly aligned. 
+  Doesn't work if it's separated into the individual elements. */
   vertical-align: middle;
 }
 
@@ -122,4 +75,35 @@ td img {
 
 .hidestatus {
   display: none;
+}
+
+button,
+select,
+input {
+  border-radius: 10px;
+  padding: 10px;
+  border-color: #dbdbde;
+  padding-block: 4px;
+}
+
+input {
+  width: 2em;
+  text-align: center;
+}
+
+button {
+  background: linear-gradient(
+      to bottom right,
+      #f9f9f9,
+      white,
+      #f9f9f9,
+      white,
+      #f9f9f9
+    )
+    padding-box;
+}
+
+.header-content {
+  border-radius: 10px;
+  padding-block: 4px;
 }

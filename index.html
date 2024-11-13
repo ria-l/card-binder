@@ -7,7 +7,6 @@
     <script type="text/javascript" src="js/sorting.js"></script>
     <script type="text/javascript" src="js/display.js"></script>
     <script type="text/javascript" src="js/binder.js"></script>
-
     <script type="text/javascript" src="js/tests_setup.js"></script>
     <script type="text/javascript" src="js/tcg_tests.js"></script>
     <script type="text/javascript" src="js/binder_tests.js"></script>
@@ -17,64 +16,74 @@
   </head>
   <body>
     <span id="status" class="hidestatus"></span>
+
     <div class="header">
-      <!-- Reload -->
-      <button
-        onclick="
+      <span class="header-content">
+        <button
+          onclick="
         localStorage.clear();
         console.log('cleared storage');
         fetchAndFillBinder();"
-      >
-        Reload
-      </button>
+        >
+          Refetch
+        </button>
+      </span>
 
-      <!-- Select -->
-      <select id="selectBinder"></select>
-      <button
-        onclick="
+      <span class="header-content">
+        Binder:
+        <select id="selectBinder"></select>
+        <button
+          onclick="
         storeNewBinder();
         fetchAndFillBinder();"
-      >
-        Apply
-      </button>
+        >
+          Apply
+        </button>
+      </span>
 
-      <!-- Rows and Cols -->
-      | Rows:
-      <button onclick="changeGrid('relative', 0, -1);">-</button>
-      <input type="text" id="inputRow" />
-      <button onclick="changeGrid('relative', 0, 1);">+</button>
-      Cols:
-      <button onclick="changeGrid('relative', -1, 0);">-</button>
-      <input type="text" id="inputCol" />
-      <button onclick="changeGrid('relative', 1, 0);">+</button>
-      <button
-        onclick="
-        createTags();
-        fillBinder()"
-      >
-        Apply
-      </button>
-      |
-      <button onclick="changeGrid('absolute', 0,0);" class="solid">None</button>
-      <button onclick="changeGrid('absolute', 3,3);" class="solid">3x3</button>
-      <button onclick="changeGrid('absolute', 4,4);" class="solid">4x4</button>
-      <button onclick="changeGrid('absolute', 8,4);" class="solid">8x4</button>
-      <br />
+      <span class="header-content">
+        <span class="header-content">
+          Rows:
+          <button onclick="changeGrid('relative', 0, -1);">-</button>
+          <input type="text" id="inputRow" />
+          <button onclick="changeGrid('relative', 0, 1);">+</button>
+        </span>
 
-      <!-- Card Size -->
-      Card size:
-      <button onclick="resizeCards('relative', -100);">-100</button>
-      <button onclick="resizeCards('relative', -10);">-10</button>
-      <input type="text" id="inputCardSize" />
-      <button onclick="resizeCards('relative', 10);">+10</button>
-      <button onclick="resizeCards('relative', 100);">+100</button>
-      <button onclick="setCardSize()">Apply</button>
-      |
-      <button onclick="resizeCards('absolute', 50);" class="solid">50</button>
-      <button onclick="resizeCards('absolute', 100);" class="solid">100</button>
-      <button onclick="resizeCards('absolute', 150);" class="solid">150</button>
-      <button onclick="resizeCards('absolute', 200);" class="solid">200</button>
-      <button onclick="resizeCards('absolute', 300);" class="solid">300</button>
+        <span class="header-content">
+          Cols:
+          <button onclick="changeGrid('relative', -1, 0);">-</button>
+          <input type="text" id="inputCol" />
+          <button onclick="changeGrid('relative', 1, 0);">+</button>
+        </span>
+
+        <span class="header-content">
+          <button onclick="changeGrid('absolute', 0,0);">None</button>
+          <button onclick="changeGrid('absolute', 3,3);">3x3</button>
+          <button onclick="changeGrid('absolute', 4,4);">4x4</button>
+          <button onclick="changeGrid('absolute', 8,4);">8x4</button>
+          <button onclick="createTags();fillBinder()">Apply</button>
+        </span>
+      </span>
+
+      <span class="header-content">
+        <span class="header-content">
+          Card size:
+          <button onclick="resizeCards('relative', -100);">-100</button>
+          <button onclick="resizeCards('relative', -10);">-10</button>
+          <input type="text" id="inputCardSize" />
+          <button onclick="resizeCards('relative', 10);">+10</button>
+          <button onclick="resizeCards('relative', 100);">+100</button>
+        </span>
+
+        <span class="header-content">
+          <button onclick="resizeCards('absolute', 50);">50</button>
+          <button onclick="resizeCards('absolute', 100);">100</button>
+          <button onclick="resizeCards('absolute', 150);">150</button>
+          <button onclick="resizeCards('absolute', 200);">200</button>
+          <button onclick="resizeCards('absolute', 300);">300</button>
+          <button onclick="setCardSize()">Apply</button>
+        </span>
+      </span>
     </div>
     <div id="content" class="content"></div>
   </body>
