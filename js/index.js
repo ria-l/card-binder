@@ -55,7 +55,6 @@ window.onload = () => {
   document.getElementById('content').action = appscript_url;
 
   if (localStorage.getItem('bindername')) {
-    // debugger;
     console.log('loading from storage');
     localStorage.getItem('imgWidth')
       ? (imgWidth = parseInt(localStorage.getItem('imgWidth')))

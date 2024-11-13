@@ -107,3 +107,7 @@ button {
   border-radius: 10px;
   padding-block: 4px;
 }
+
+.content {
+  text-align: center;
+}

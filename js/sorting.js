@@ -59,7 +59,7 @@ const sortByDex = (data) => {
   return sorted;
 };
 
-const subtype_values = {
+const _subtype_values = {
   shiny: 1,
   gold: 2,
   tera: 3,
