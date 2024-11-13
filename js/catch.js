@@ -10,13 +10,10 @@ const populateDatalists = (id, arr) => {
 };
 
 const lotto = (n) => {
-  // get eligible cards
   const cards = JSON.parse(localStorage.cards);
-  // pick random number of them
   let tag = [];
   for (let index = 0; index < n; index++) {
     picked = getRandomInt(0, cards.length);
-    // display
     tag.push(cards[picked]);
   }
   fillLotto(tag);
@@ -62,7 +59,7 @@ const fillLotto = (binderData) => {
   const jpkmntype = header.indexOf('pkmn type');
   const jcardsubtype = header.indexOf('card subtype');
 
-  const imgWidth = 100;
+  const imgWidth = 300;
   const tags = [];
   let newContent = '';
 
@@ -86,7 +83,6 @@ const fillLotto = (binderData) => {
   localStorage.setItem('tags', tags);
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
   cardTags.forEach((tag, i) => {
-    // don't create tables if grid is 0 or blank.
 
     newContent += ` ${tag} `;
 
