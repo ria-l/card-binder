@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="“UTF-8”" />
+    <title>Catch card remotely</title>
+  </head>
+  <body>
+    <form id="form" method="POST" target="_blank">
+      <!-- action= will be set by javascript -->
+      <div>
+        <label for="filename">File name:</label>
+        <input type="text" id="id-filename" name="filename" list="filenames" />
+        <datalist id="filenames">
+          <!-- javascript will add options here -->
+        </datalist>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      const url =
+        'https://script.google.com/macros/s/AKfycbyaRyXFFKd-89QvMiyEg0TSxkuwZJ8Xt90lCFYqYszjTiGvYDn5OgFUBt31ALRsAYzykQ/exec';
+      document.getElementById('form').action = url;
+
+      // Populates the dropdown
+      fetch(url)
+        .then((response) => response.json())
+        .then(({ data }) => {
+          const header = data[0];
+          const index = header.indexOf('file name');
+          const column = data.map((row) => row[index]);
+          column.shift();
+          populateDatalists('filenames', column);
+        })
+        .catch((error) =>
+          console.error('!!!!!!!!', error, header, index, column)
+        );
+
+      const populateDatalists = (id, arr) => {
+        let result = '';
+        for (const item of arr) {
+          result += `<option value="${item}">`;
+        }
+        document.getElementById(id).innerHTML = result;
+      };
+    </script>
+  </body>
+</html>
