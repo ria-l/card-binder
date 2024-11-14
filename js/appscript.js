@@ -41,15 +41,23 @@ const catchCard = (cardName) => {
   const sheet = doc.getSheetByName(sheetName);
 
   const card = sheet.createTextFinder(cardName).matchEntireCell(true).findAll();
-  const row = card[0].getRow();
+  const card_row = card[0].getRow();
 
   const caught = sheet
     .createTextFinder('caught')
     .matchEntireCell(true)
     .findAll();
-  const col = caught[0].getColumn();
+  const caught_col = caught[0].getColumn();
+  sheet.getRange(card_row, caught_col).setValue('x');
 
-  sheet.getRange(row, col).setValue('x');
+  const caught_date = sheet
+    .createTextFinder('caught date')
+    .matchEntireCell(true)
+    .findAll();
+  const date_col = caught_date[0].getColumn();
+  sheet
+    .getRange(card_row, date_col)
+    .setValue(Utilities.formatDate(new Date(), 'GMT-7', 'MM/dd/yyyy'));
 };
 
 const doPost = (e) => {
