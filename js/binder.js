@@ -4,7 +4,6 @@
  * @param {Array} values rows of data from the spreadsheet.
  */
 const createTags = () => {
-  
   getConstantsFromStorage();
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
@@ -24,7 +23,9 @@ const createTags = () => {
     if (binderData[i][jcaught] == 'x') {
       // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
       tags.push(
-        `<img src='${dir}/${filename}' title=${title} style='${style_width}${style_height}' />zzz`
+        `<img src='${dir}/${filename}' title=${title} style='${style_width}${style_height}border-radius:${
+          imgWidth / 20
+        }px;' />zzz`
       );
     } else {
       // placeholder styles
