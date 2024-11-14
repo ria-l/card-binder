@@ -34,6 +34,17 @@ function fetchFilenames() {
     .catch((error) => console.error('!!!!!!!!', error, header, index, column));
 }
 
+function addCardToList(filename, caught) {
+  const ol = document.getElementById('card-list');
+  const li = document.createElement('li');
+  let textnode = filename;
+  if (!caught) {
+    textnode = `✨NEW✨${filename}`;
+  }
+  li.appendChild(document.createTextNode(textnode));
+  ol.insertBefore(li, ol.firstChild);
+}
+
 const fillLotto = (cardData) => {
   getConstantsFromStorage();
 
@@ -41,10 +52,11 @@ const fillLotto = (cardData) => {
   const filename = cardData[0][jfilename];
   const pkmntype = cardData[0][jpkmntype];
   const cardtype = cardData[0][jcardtype];
+  const caught = cardData[0][jcaught];
   const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
 
   document.getElementById('id-filename').value = filename;
-
+  addCardToList(filename, caught);
   let special;
   if (cardData[0][jcardtype] != 'basic') {
     special = cardTypeColors[cardtype].join(',');

@@ -2,40 +2,33 @@
   padding: 5px;
   display: inline-block;
 }
-
 table {
   display: inline-block;
   margin: 10px;
 }
-
 td img {
   /* the td is necessary for correct rendering with no grid */
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
-
 .header {
   position: sticky;
   text-align: center;
   top: 0;
   width: 100%;
 }
-
 .placeholder {
   /* makes it so border won't affect height/width */
   box-sizing: border-box;
   display: inline-block;
   text-align: center;
 }
-
 td img,
 td .placeholder {
-  /* Keeps cards and placeholders properly aligned. 
-  Doesn't work if it's separated into the individual elements. */
+  /* Keeps cards and placeholders properly aligned. Doesn't work if it's separated into the individual elements. */
   vertical-align: middle;
 }
-
 .status {
   align-items: center;
   background: linear-gradient(
@@ -72,11 +65,9 @@ td .placeholder {
   position: fixed;
   width: 12rem;
 }
-
 .hidestatus {
   display: none;
 }
-
 button,
 select,
 input {
@@ -85,12 +76,10 @@ input {
   border-color: #dbdbde;
   padding-block: 4px;
 }
-
 input {
   width: 2em;
   text-align: center;
 }
-
 button {
   background: linear-gradient(
       to bottom right,
@@ -102,15 +91,28 @@ button {
     )
     padding-box;
 }
-
 .header-content {
   border-radius: 10px;
   padding-block: 4px;
 }
-
 .content {
   text-align: center;
 }
 body {
-  background-color: #333;
+  background-color: #aaa;
+}
+ol {
+  text-align: left;
+}
+#parent {
+  display: flex;
+}
+#card-list-div {
+  width: 200px;
+}
+.lotto {
+  flex: 1;
+}
+#id-filename {
+  width: auto;
 }

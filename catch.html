@@ -10,7 +10,7 @@
   </head>
   <body>
     <span id="status" class="hidestatus"></span>
-    <div class="header">
+    <div class="header catch-header">
       <span class="header-content">
         <form
           id="form"
@@ -32,6 +32,12 @@
         <button onclick="lotto();">Pull!</button>
       </span>
     </div>
-    <div id="content" class="content"></div>
+
+    <div id="parent">
+      <span class="header-content" id="card-list-div">
+        <ol reversed id="card-list"></ol>
+      </span>
+      <div id="content" class="content lotto"></div>
+    </div>
   </body>
 </html>
