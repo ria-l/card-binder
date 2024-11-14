@@ -34,7 +34,7 @@ function fetchFilenames() {
     .catch((error) => console.error('!!!!!!!!', error, header, index, column));
 }
 
-function addCardToList(filename, caught, dir) {
+function addCardToList(filename, caught, dir, title) {
   const ol = document.getElementById('card-list');
   const li = document.createElement('li');
   const img = document.createElement('img');
@@ -44,7 +44,7 @@ function addCardToList(filename, caught, dir) {
   img.style.height = '100px';
 
   if (!caught) {
-    textnode = `✨NEW✨${filename}`;
+    textnode = `✨NEW✨${title}`;
   } else {
     img.style.opacity = '50%';
   }
@@ -70,7 +70,7 @@ const fillLotto = (cardData) => {
   const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
 
   document.getElementById('id-filename').value = filename;
-  addCardToList(filename, caught, dir);
+  addCardToList(filename, caught, dir, title);
   if (!caught) {
     document.getElementById('form').submit();
   }
