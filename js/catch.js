@@ -63,6 +63,8 @@ const fillLotto = (cardData) => {
 
   document.getElementById('id-filename').value = filename;
   addCardToList(filename, caught);
+  document.getElementById('form').submit();
+
   let special;
   if (cardData[0][jcardtype] != 'basic') {
     special = cardTypeColors[cardtype].join(',');
