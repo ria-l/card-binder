@@ -71,7 +71,9 @@ const fillLotto = (cardData) => {
 
   document.getElementById('id-filename').value = filename;
   addCardToList(filename, caught, dir);
-  document.getElementById('form').submit();
+  if (!caught) {
+    document.getElementById('form').submit();
+  }
 
   let special;
   if (cardData[0][jcardtype] != 'basic') {
