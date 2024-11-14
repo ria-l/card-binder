@@ -1,29 +1,37 @@
 <!DOCTYPE html>
+<html>
   <head>
     <meta charset="“UTF-8”" />
     <link rel="stylesheet" href="css.css" />
     <script type="text/javascript" src="js/catch.js"></script>
     <script type="text/javascript" src="js/constants.js"></script>
+
     <title>Catch card remotely</title>
-    
   </head>
   <body>
     <span id="status" class="hidestatus"></span>
-    <form id="form" method="POST" target="_blank" action="https://script.google.com/macros/s/AKfycbyaRyXFFKd-89QvMiyEg0TSxkuwZJ8Xt90lCFYqYszjTiGvYDn5OgFUBt31ALRsAYzykQ/exec">
-      <!-- action= will be set by javascript -->
-      <div>
-        <label for="filename">File name:</label>
-        <input type="text" id="id-filename" name="filename" list="filenames" />
-        <datalist id="filenames">
-          <!-- javascript will add options here -->
-        </datalist>
-      </div>
-
-      <button type="submit">Catch</button>
-    </form>
-    <hr>
-    <button onclick="lotto();">Pull!</button>
-    <hr>
+    <div class="header">
+      <span class="header-content">
+        <form
+          id="form"
+          method="POST"
+          target="_blank"
+          action="https://script.google.com/macros/s/AKfycbyaRyXFFKd-89QvMiyEg0TSxkuwZJ8Xt90lCFYqYszjTiGvYDn5OgFUBt31ALRsAYzykQ/exec"
+        >
+          <label for="filename">File name:</label>
+          <input
+            type="text"
+            id="id-filename"
+            name="filename"
+            list="filenames"
+          />
+          <button type="submit">Catch</button>
+        </form>
+      </span>
+      <span class="header-content">
+        <button onclick="lotto();">Pull!</button>
+      </span>
+    </div>
     <div id="content" class="content"></div>
   </body>
 </html>

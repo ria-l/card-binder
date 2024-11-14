@@ -1,11 +1,3 @@
-const populateDatalists = (id, arr) => {
-  let result = '';
-  for (const item of arr) {
-    result += `<option value="${item}">`;
-  }
-  document.getElementById(id).innerHTML = result;
-};
-
 const lotto = () => {
   const all = JSON.parse(localStorage.cards);
   let picked = [];
@@ -17,7 +9,8 @@ const lotto = () => {
 function getRandomInt(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
-  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+  // The maximum is exclusive and the minimum is inclusive.
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
 
 function fetchFilenames() {
@@ -35,9 +28,6 @@ function fetchFilenames() {
       const index = header.indexOf('file name');
       const column = data.map((row) => row[index]);
       column.shift();
-      populateDatalists('filenames', column);
-      console.log('list populated');
-
       localStorage.setItem('cards', JSON.stringify([...data]));
       console.log('cards stored');
     })
@@ -51,8 +41,9 @@ const fillLotto = (cardData) => {
   const filename = cardData[0][jfilename];
   const pkmntype = cardData[0][jpkmntype];
   const cardtype = cardData[0][jcardtype];
-
   const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
+
+  document.getElementById('id-filename').value = filename;
 
   let special;
   if (cardData[0][jcardtype] != 'basic') {
