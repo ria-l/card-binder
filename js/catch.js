@@ -45,6 +45,12 @@ function addCardToList(filename, caught) {
   ol.insertBefore(li, ol.firstChild);
 }
 
+const clearList = () => {
+  const div = document.getElementById('card-list-div');
+  div.innerHTML = '';
+  div.innerHTML = '<ol reversed id="card-list"></ol>';
+};
+
 const fillLotto = (cardData) => {
   getConstantsFromStorage();
 
@@ -78,8 +84,6 @@ const fillLotto = (cardData) => {
   document.getElementsByTagName('body')[0].style.background = backgroundStyle;
   document.getElementsByTagName('body')[0].style.backgroundRepeat = 'no-repeat';
   document.getElementsByTagName('body')[0].style.minHeight = '100vh';
-
-  document.getElementById('content').style.border = '10px solid transparent';
 
   document.getElementById('status').innerHTML = '';
 };
