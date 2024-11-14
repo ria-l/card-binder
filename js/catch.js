@@ -6,14 +6,12 @@ const populateDatalists = (id, arr) => {
   document.getElementById(id).innerHTML = result;
 };
 
-const lotto = (n) => {
-  const cards = JSON.parse(localStorage.cards);
-  let tag = [];
-  for (let index = 0; index < n; index++) {
-    picked = getRandomInt(0, cards.length);
-    tag.push(cards[picked]);
-  }
-  fillLotto(tag);
+const lotto = () => {
+  const all = JSON.parse(localStorage.cards);
+  let picked = [];
+  x = getRandomInt(0, all.length);
+  picked.push(all[x]);
+  fillLotto(picked);
 };
 
 function getRandomInt(min, max) {
@@ -46,38 +44,41 @@ function fetchFilenames() {
     .catch((error) => console.error('!!!!!!!!', error, header, index, column));
 }
 
-const fillLotto = (binderData) => {
+const fillLotto = (cardData) => {
   getConstantsFromStorage();
-  const imgWidth = 300;
-  const tags = [];
-  let newContent = '';
 
-  for (var i = 0; i < binderData.length; i++) {
-    const dir = `img/${binderData[i][jset].toLowerCase()}`;
-    const filename = binderData[i][jfilename];
-    const pkmntype = binderData[i][jpkmntype];
-    const cardtype = binderData[i][jcardtype];
-    const cardsubtype = binderData[i][jcardsubtype];
+  const dir = `img/${cardData[0][jset].toLowerCase()}`;
+  const filename = cardData[0][jfilename];
+  const pkmntype = cardData[0][jpkmntype];
+  const cardtype = cardData[0][jcardtype];
 
-    const style_width = `width:${imgWidth}px;`;
-    // keeps cards that are a couple pixels off of standard size from breaking alignment
-    const style_height = `height:${imgWidth * 1.4}px;`;
-    const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
+  const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
 
-    // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
-    tags.push(
-      `<img src='${dir}/${filename}' title=${title} style='${style_width}${style_height}' />zzz`
-    );
+  let special;
+  if (cardData[0][jcardtype] != 'basic') {
+    special = cardTypeColors[cardtype].join(',');
   }
-  localStorage.setItem('tags', tags);
-  const cardTags = localStorage.getItem('tags').split(/zzz,?/);
-  cardTags.forEach((tag, i) => {
 
-    newContent += ` ${tag} `;
+  let border_colors;
+  const light = pkmnTypeColors[cardData[0][jpkmntype]][0];
+  const dark = pkmnTypeColors[cardData[0][jpkmntype]][1];
+  if (cardtype == 'basic') {
+    border_colors = `${dark},${light},${dark},${light},${dark}`;
+  } else {
+    border_colors = `${dark},${light},white,${special}`;
+  }
 
-    document.getElementById('content').innerHTML = newContent;
-    document.getElementById('status').innerHTML = '';
-  });
+  const newContent = `<img src='${dir}/${filename}' title=${title} style='height:500px;border-radius:15px' />`;
+  document.getElementById('content').innerHTML = newContent;
+
+  const backgroundStyle = `linear-gradient(to bottom right, ${border_colors}) border-box`;
+  document.getElementsByTagName('body')[0].style.background = backgroundStyle;
+  document.getElementsByTagName('body')[0].style.backgroundRepeat = 'no-repeat';
+  document.getElementsByTagName('body')[0].style.minHeight = '100vh';
+
+  document.getElementById('content').style.border = '10px solid transparent';
+
+  document.getElementById('status').innerHTML = '';
 };
 
 window.onload = () => {
