@@ -124,3 +124,7 @@ ol {
 .catch-header {
   text-align: left;
 }
+iframe {
+  opacity: 0;
+  height: 0;
+}
