@@ -3,9 +3,10 @@
  *
  * @param {Array} values rows of data from the spreadsheet.
  */
-const createTags = () => {
+function createTags() {
+  console.log('create tags');
   getConstantsFromStorage();
-  const imgWidth = localStorage.getItem('imgWidth');
+  const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
   for (var i = 0; i < binderData.length; i++) {
     const dir = `img/${binderData[i][jset].toLowerCase()}`;
@@ -72,16 +73,19 @@ const createTags = () => {
     }
   }
   localStorage.setItem('tags', tags);
-};
+  console.log('created tags');
+}
+
 /**
  * stores card data for each binder into its own bucket in local storage.
  *
  * @param {array} data data from sheets
  */
-const storeBinders = (data) => {
+function storeBinders(data) {
   // puts binder names into a set
   const header = data[0];
   localStorage.setItem('header', header);
+  localStorage.setItem('bindername', header[0]);
   const binderNames = new Set();
   const binderIndex = header.indexOf('binder');
   for (const row of data) {
@@ -102,26 +106,26 @@ const storeBinders = (data) => {
     localStorage.setItem(name, JSON.stringify(toStore));
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
-};
+}
+
+function storeNewBinder() {
+  select = document.getElementById('selectBinder');
+  localStorage.setItem('bindername', select.options[select.selectedIndex].text);
+}
 
 /**
  * Fills binder using data in localstorage.
  */
-const fillBinder = () => {
+function fillBinder() {
+  console.log('fill binder');
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
-  let rows = parseInt(localStorage.getItem('row'));
-  let cols = parseInt(localStorage.getItem('col'));
+  const rows = parseInt(document.getElementById('inputRow').value);
+  const cols = parseInt(document.getElementById('inputCol').value);
   let newContent = '';
 
-  if (isNaN(rows)) {
-    rows = 3;
-  }
-  if (isNaN(cols)) {
-    cols = 3;
-  }
   cardTags.forEach((tag, i) => {
     // don't create tables if grid is 0 or blank.
-    if (rows == 0 || cols == 0) {
+    if (!rows || !cols) {
       newContent += ` ${tag} `;
     } else {
       // make the tables.
@@ -156,5 +160,14 @@ const fillBinder = () => {
 
   document.getElementById('content').innerHTML = newContent;
   document.getElementById('status').innerHTML = '';
-  console.log('binder filled');
-};
+  console.log('filled binder');
+}
+
+async function fetchAndFillBinder() {
+  console.log('fetch and fill');
+  await fetchAndStore();
+  createTags();
+  fillBinder();
+  populateDropdown();
+  console.log('fetched and filled');
+}

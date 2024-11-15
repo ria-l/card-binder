@@ -1,17 +1,17 @@
-const getRandomInt = (min, max) => {
-  const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max);
-  // The maximum is exclusive and the minimum is inclusive.
-  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
-};
-
-const lotto = () => {
+function lotto() {
   const all = JSON.parse(localStorage.cards);
   let picked = [];
   x = getRandomInt(0, all.length);
   picked.push(all[x]);
   fillLotto(picked);
-};
+}
+
+function getRandomInt(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  // The maximum is exclusive and the minimum is inclusive.
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+}
 
 function fetchFilenames() {
   document.getElementById('status').className = 'status';
@@ -53,13 +53,13 @@ function addCardToList(filename, caught, dir, title) {
   ol.insertBefore(li, ol.firstChild);
 }
 
-const clearList = () => {
+function clearList() {
   const div = document.getElementById('card-list-div');
   div.innerHTML = '';
   div.innerHTML = '<ol reversed id="card-list"></ol>';
-};
+}
 
-const fillLotto = (cardData) => {
+function fillLotto() {
   getConstantsFromStorage();
 
   const dir = `img/${cardData[0][jset].toLowerCase()}`;
@@ -98,11 +98,12 @@ const fillLotto = (cardData) => {
   document.getElementsByTagName('body')[0].style.minHeight = '100vh';
 
   document.getElementById('status').innerHTML = '';
-};
+}
 
 window.onload = () => {
   document.getElementById('form').action = appscript_url;
   if (localStorage.getItem('cards')) {
+    console.log('already stored');
   } else {
     fetchFilenames();
   }

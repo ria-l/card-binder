@@ -10,7 +10,7 @@ let jcaught,
   binderName,
   binderData;
 
-const getConstantsFromStorage = () => {
+function getConstantsFromStorage() {
   const header = localStorage.getItem('header').split(',');
 
   jcaught = header.indexOf('caught');
@@ -21,7 +21,7 @@ const getConstantsFromStorage = () => {
   jcardsubtype = header.indexOf('card subtype');
   binderName = localStorage.getItem('bindername');
   binderData = JSON.parse(localStorage.getItem(binderName));
-};
+}
 
 const pkmnTypeColors = {
   grass: ['#c2d349', '#93bb4e'],
