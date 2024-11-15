@@ -1,16 +1,21 @@
 let index;
+/**
+ *  The maximum is exclusive and the minimum is inclusive.
 
-const getRandomInt = (min, max) => {
+ * @param {int} min 
+ * @param {int} max 
+ * @returns 
+ */
+function getRandomInt(min, max) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
-  // The maximum is exclusive and the minimum is inclusive.
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
-};
+}
 
 /**
  * Initial data fetch and binder fill.
  */
-const fetchAndFillBinder = () => {
+function fetchAndFillBinder() {
   document.getElementById('status').className = 'status';
   document.getElementById('status').innerHTML = 'loading...';
 
@@ -31,9 +36,12 @@ const fetchAndFillBinder = () => {
       populateDropdown();
     })
     .catch((error) => (document.getElementById('content').innerHTML = error));
-};
+}
 
-const populateDropdown = () => {
+
+
+
+function populateDropdown() {
   const select = document.getElementById('selectBinder');
   const binders = JSON.parse(localStorage.getItem('bindernames'));
   let defaultbinder = localStorage.getItem('bindername');
@@ -51,14 +59,14 @@ const populateDropdown = () => {
     }
   }
   select.innerHTML = s;
-};
+}
 
-const storeNewBinder = () => {
+function storeNewBinder() {
   select = document.getElementById('selectBinder');
   localStorage.setItem('bindername', select.options[select.selectedIndex].text);
-};
+}
 
-const populateSizeAndGrid = () => {
+function populateSizeAndGrid() {
   let imgWidth = parseInt(localStorage.getItem('imgWidth'));
   let col = parseInt(localStorage.getItem('col'));
   let row = parseInt(localStorage.getItem('row'));
@@ -78,7 +86,7 @@ const populateSizeAndGrid = () => {
 
   setInputForCardSize('absolute', imgWidth);
   setInputsForGrid('absolute', col, row);
-};
+}
 
 /**
  * main!

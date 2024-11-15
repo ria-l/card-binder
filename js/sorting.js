@@ -1,17 +1,17 @@
 let sorted;
 
-const sortMatrix = (a, b) => {
+function sortMatrix(a, b) {
   if (a[index] === b[index]) {
     return 0;
   } else {
     return a[index] < b[index] ? -1 : 1;
   }
-};
+}
 
-const _sort = (header, col_name, data) => {
+function _sort(header, col_name, data) {
   index = header.indexOf(col_name);
   return data.sort(sortMatrix);
-};
+}
 
 // const sortByColor = (data) => {
 //   header = data[0];
@@ -28,7 +28,7 @@ const _sort = (header, col_name, data) => {
 //   return sorted;
 // };
 
-const sortByColor = (data) => {
+function sortByColor(data) {
   header = data[0];
   sorted = data.slice(1);
 
@@ -42,9 +42,9 @@ const sortByColor = (data) => {
   sorted = _sort(header, 'pkmn type #', sorted);
 
   return sorted;
-};
+}
 
-const sortByDex = (data) => {
+function sortByDex(data) {
   header = data[0];
   sorted = data.slice(1);
 
@@ -57,7 +57,7 @@ const sortByDex = (data) => {
   sorted = _sort(header, 'dex #', sorted);
 
   return sorted;
-};
+}
 
 const _subtype_values = {
   shiny: 1,

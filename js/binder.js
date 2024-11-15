@@ -3,7 +3,7 @@
  *
  * @param {Array} values rows of data from the spreadsheet.
  */
-const createTags = () => {
+function createTags() {
   getConstantsFromStorage();
   const imgWidth = localStorage.getItem('imgWidth');
   const tags = [];
@@ -72,13 +72,13 @@ const createTags = () => {
     }
   }
   localStorage.setItem('tags', tags);
-};
+}
 /**
  * stores card data for each binder into its own bucket in local storage.
  *
  * @param {array} data data from sheets
  */
-const storeBinders = (data) => {
+function storeBinders(data) {
   // loads binder names into var
   const header = data[0];
   localStorage.setItem('header', header);
@@ -102,12 +102,12 @@ const storeBinders = (data) => {
     localStorage.setItem(name, JSON.stringify(toStore));
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
-};
+}
 
 /**
  * Fills binder using data in localstorage.
  */
-const fillBinder = () => {
+function fillBinder() {
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
   let rows = parseInt(localStorage.getItem('row'));
   let cols = parseInt(localStorage.getItem('col'));
@@ -156,4 +156,4 @@ const fillBinder = () => {
 
   document.getElementById('content').innerHTML = newContent;
   document.getElementById('status').innerHTML = '';
-};
+}

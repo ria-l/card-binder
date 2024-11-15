@@ -125,6 +125,5 @@ ol {
   text-align: left;
 }
 iframe {
-  opacity: 0;
-  height: 0;
+  display: none;
 }

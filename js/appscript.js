@@ -1,13 +1,13 @@
 const sheetName = 'all';
 const scriptProp = PropertiesService.getScriptProperties();
 
-const initialSetup = () => {
+function initialSetup() {
   const activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   scriptProp.setProperty('key', activeSpreadsheet.getId());
-};
+}
 
 // returns full spreadsheet
-const doGet = (e) => {
+function doGet(e) {
   const lock = LockService.getScriptLock();
   lock.tryLock(10000);
 
@@ -27,7 +27,7 @@ const doGet = (e) => {
   } finally {
     lock.releaseLock();
   }
-};
+}
 
 function fakeGet() {
   var eventObject = {
@@ -36,7 +36,7 @@ function fakeGet() {
   doGet(eventObject);
 }
 
-const catchCard = (cardName) => {
+function catchCard(cardName) {
   const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
   const sheet = doc.getSheetByName(sheetName);
 
@@ -58,9 +58,9 @@ const catchCard = (cardName) => {
   sheet
     .getRange(card_row, date_col)
     .setValue(Utilities.formatDate(new Date(), 'GMT-7', 'MM/dd/yyyy'));
-};
+}
 
-const doPost = (e) => {
+function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.tryLock(10000);
 
@@ -79,7 +79,7 @@ const doPost = (e) => {
   } finally {
     lock.releaseLock();
   }
-};
+}
 
 function fakePost() {
   var eventObject = {
