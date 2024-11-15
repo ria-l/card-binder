@@ -9,17 +9,12 @@
     <title>Catch card remotely</title>
   </head>
   <body>
-    <iframe src="_blank" name="_iframe"></iframe>
+    <iframe src="about:blank" name="_iframe"></iframe>
     <span id="status" class="hidestatus"></span>
     <div class="header catch-header">
       <a href="index.html">Binder</a>
       <span class="header-content">
-        <form
-          id="form"
-          method="POST"
-          target="_iframe"
-          action="https://script.google.com/macros/s/AKfycbzUilPwxpjOEBReqEYPF1PBRQCM3-wNxr9CV3SuwZs-kGlks-vOTOUmeAmVvAeyyyxAOA/exec"
-        >
+        <form id="form" method="POST" target="_iframe">
           <input
             type="text"
             id="id-filename"

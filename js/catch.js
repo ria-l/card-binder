@@ -101,8 +101,8 @@ const fillLotto = (cardData) => {
 
 window.onload = () => {
   if (localStorage.getItem('cards')) {
-    console.log('already stored');
   } else {
+    document.getElementById('form').action = appscript_url;
     fetchFilenames();
   }
 };
