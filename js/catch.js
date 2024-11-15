@@ -1,3 +1,9 @@
+const getRandomInt = (min, max) => {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  // The maximum is exclusive and the minimum is inclusive.
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+};
 const lotto = () => {
   const all = JSON.parse(localStorage.cards);
   let picked = [];
@@ -5,13 +11,6 @@ const lotto = () => {
   picked.push(all[x]);
   fillLotto(picked);
 };
-
-function getRandomInt(min, max) {
-  const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max);
-  // The maximum is exclusive and the minimum is inclusive.
-  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
-}
 
 function fetchFilenames() {
   document.getElementById('status').className = 'status';

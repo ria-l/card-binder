@@ -51,15 +51,16 @@ const resizeCards = (type, input) => {
  */
 const setInputsForGrid = (type, col, row) => {
   const r = document.getElementById('inputRow');
-  type == 'relative'
-    ? (r.value = (parseInt(r.value) + row).toString())
-    : (r.value = row.toString());
-  localStorage.setItem('row', row);
+  const rowString =
+    type == 'relative' ? (parseInt(r.value) + row).toString() : row.toString();
+  r.value = rowString;
+  localStorage.setItem('row', rowString);
+
   const c = document.getElementById('inputCol');
-  type == 'relative'
-    ? (c.value = (parseInt(c.value) + col).toString())
-    : (c.value = col.toString());
-  localStorage.setItem('col', col);
+  const colString =
+    type == 'relative' ? (parseInt(c.value) + col).toString() : col.toString();
+  c.value = colString;
+  localStorage.setItem('col', colString);
 };
 
 /**
@@ -73,4 +74,12 @@ const changeGrid = (type, col, row) => {
   setInputsForGrid(type, col, row);
   createTags();
   fillBinder();
+};
+
+const setGrid = () => {
+  const r = document.getElementById('inputRow');
+  const c = document.getElementById('inputCol');
+  localStorage.setItem('row', r.value);
+  localStorage.setItem('col', c.value);
+  changeGrid('absolute', parseInt(c.value), parseInt(r.value));
 };

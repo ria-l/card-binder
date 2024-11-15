@@ -5,9 +5,8 @@
  */
 const createTags = () => {
   getConstantsFromStorage();
-  const imgWidth = document.getElementById('inputCardSize').value;
+  const imgWidth = localStorage.getItem('imgWidth');
   const tags = [];
-  console.log('createtags: constants set');
   for (var i = 0; i < binderData.length; i++) {
     const dir = `img/${binderData[i][jset].toLowerCase()}`;
     const filename = binderData[i][jfilename];
@@ -111,10 +110,16 @@ const storeBinders = (data) => {
  */
 const fillBinder = () => {
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
-  const rows = parseInt(document.getElementById('inputRow').value);
-  const cols = parseInt(document.getElementById('inputCol').value);
+  let rows = parseInt(localStorage.getItem('row'));
+  let cols = parseInt(localStorage.getItem('col'));
   let newContent = '';
 
+  if (!rows) {
+    rows = 3;
+  }
+  if (!cols) {
+    cols = 3;
+  }
   cardTags.forEach((tag, i) => {
     // don't create tables if grid is 0 or blank.
     if (!rows || !cols) {

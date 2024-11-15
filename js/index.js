@@ -1,5 +1,12 @@
 let index;
 
+const getRandomInt = (min, max) => {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  // The maximum is exclusive and the minimum is inclusive.
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+};
+
 /**
  * Initial data fetch and binder fill.
  */
@@ -29,7 +36,11 @@ const fetchAndFillBinder = () => {
 const populateDropdown = () => {
   const select = document.getElementById('selectBinder');
   const binders = JSON.parse(localStorage.getItem('bindernames'));
-  const defaultbinder = localStorage.getItem('bindername');
+  let defaultbinder = localStorage.getItem('bindername');
+  if (!defaultbinder) {
+    defaultbinder = binders[getRandomInt(0, binders.length)];
+  }
+
   let s = '';
   for (e of binders) {
     if (e != 'binder' && e != defaultbinder) {
@@ -47,32 +58,43 @@ const storeNewBinder = () => {
   localStorage.setItem('bindername', select.options[select.selectedIndex].text);
 };
 
+const populateSizeAndGrid = () => {
+  let imgWidth = parseInt(localStorage.getItem('imgWidth'));
+  let col = parseInt(localStorage.getItem('col'));
+  let row = parseInt(localStorage.getItem('row'));
+
+  if (!imgWidth) {
+    imgWidth = 150;
+    localStorage.setItem('imgWidth', 150);
+  }
+  if (!col) {
+    col = 3;
+    localStorage.setItem('col', 3);
+  }
+  if (!row) {
+    row = 3;
+    localStorage.setItem('row', 3);
+  }
+
+  setInputForCardSize('absolute', imgWidth);
+  setInputsForGrid('absolute', col, row);
+};
+
 /**
  * main!
  * update tests_setup if this changes.
  */
 window.onload = () => {
-  document.getElementById('content').action = appscript_url;
-
-  if (localStorage.getItem('bindername')) {
+  if (localStorage.getItem('tags')) {
     console.log('loading from storage');
-    localStorage.getItem('imgWidth')
-      ? (imgWidth = parseInt(localStorage.getItem('imgWidth')))
-      : (imgWidth = 150);
-    localStorage.getItem('col')
-      ? (col = parseInt(localStorage.getItem('col')))
-      : (col = 3);
-    localStorage.getItem('row')
-      ? (row = parseInt(localStorage.getItem('row')))
-      : (row = 3);
-
-    setInputForCardSize('absolute', imgWidth);
-    setInputsForGrid('absolute', col, row);
-
+    populateDropdown();
+    populateSizeAndGrid();
     createTags();
     fillBinder();
-    populateDropdown();
   } else {
+    document.getElementById('content').action = appscript_url;
+    populateSizeAndGrid();
     fetchAndFillBinder();
+    populateDropdown();
   }
 };

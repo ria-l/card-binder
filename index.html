@@ -7,10 +7,6 @@
     <script type="text/javascript" src="js/sorting.js"></script>
     <script type="text/javascript" src="js/display.js"></script>
     <script type="text/javascript" src="js/binder.js"></script>
-    <script type="text/javascript" src="js/tests_setup.js"></script>
-    <script type="text/javascript" src="js/tcg_tests.js"></script>
-    <script type="text/javascript" src="js/binder_tests.js"></script>
-    <script type="text/javascript" src="js/display_tests.js"></script>
     <script type="text/javascript" src="js/constants.js"></script>
 
     <title>Card Binder</title>
@@ -56,6 +52,7 @@
           <button onclick="changeGrid('relative', -1, 0);">-</button>
           <input type="text" id="inputCol" />
           <button onclick="changeGrid('relative', 1, 0);">+</button>
+          <button onclick="setGrid()">Apply</button>
         </span>
 
         <span class="header-content">
@@ -63,7 +60,6 @@
           <button onclick="changeGrid('absolute', 3,3);">3x3</button>
           <button onclick="changeGrid('absolute', 4,4);">4x4</button>
           <button onclick="changeGrid('absolute', 8,4);">8x4</button>
-          <button onclick="createTags();fillBinder()">Apply</button>
         </span>
       </span>
 
@@ -75,6 +71,7 @@
           <input type="text" id="inputCardSize" />
           <button onclick="resizeCards('relative', 10);">+10</button>
           <button onclick="resizeCards('relative', 100);">+100</button>
+          <button onclick="setCardSize()">Apply</button>
         </span>
 
         <span class="header-content">
@@ -83,7 +80,6 @@
           <button onclick="resizeCards('absolute', 150);">150</button>
           <button onclick="resizeCards('absolute', 200);">200</button>
           <button onclick="resizeCards('absolute', 300);">300</button>
-          <button onclick="setCardSize()">Apply</button>
         </span>
       </span>
     </div>
