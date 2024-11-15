@@ -71,6 +71,7 @@ window.onload = () => {
 
     createTags();
     fillBinder();
+    populateDropdown();
   } else {
     fetchAndFillBinder();
   }
