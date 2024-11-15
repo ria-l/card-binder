@@ -1,42 +1,39 @@
 let index;
-/**
- *  The maximum is exclusive and the minimum is inclusive.
 
- * @param {int} min 
- * @param {int} max 
- * @returns 
- */
-function getRandomInt(min, max) {
+const getRandomInt = (min, max) => {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
+  // The maximum is exclusive and the minimum is inclusive.
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
-}
+};
 
 /**
  * Initial data fetch and binder fill.
  */
-async function fetchData() {
+const fetchAndFillBinder = () => {
   document.getElementById('status').className = 'status';
   document.getElementById('status').innerHTML = 'loading...';
+
   console.log('fetching...');
-  let res;
-  try {
-    res = await fetch(appscript_url);
-    if (res.ok) {
+  fetch(appscript_url)
+    .then((response) => response.json())
+    .then(({ data }) => {
       console.log(`fetched`);
       document.getElementById('status').className = 'hidestatus';
-      return res.json();
-    } else {
-      document.getElementById(
-        'content'
-      ).innerHTML = `Response status: ${res.status}`;
-    }
-  } catch (e) {
-    document.getElementById('content').innerHTML = `Error: ${e}`;
-  }
-}
+      storeBinders(data);
+      console.log('data stored');
+    })
+    .then(() => {
+      createTags();
+      console.log('tags created');
+      fillBinder();
+      console.log('binder filled');
+      populateDropdown();
+    })
+    .catch((error) => (document.getElementById('content').innerHTML = error));
+};
 
-function populateDropdown() {
+const populateDropdown = () => {
   const select = document.getElementById('selectBinder');
   const binders = JSON.parse(localStorage.getItem('bindernames'));
   let defaultbinder = localStorage.getItem('bindername');
@@ -54,14 +51,14 @@ function populateDropdown() {
     }
   }
   select.innerHTML = s;
-}
+};
 
-function storeNewBinder() {
+const storeNewBinder = () => {
   select = document.getElementById('selectBinder');
   localStorage.setItem('bindername', select.options[select.selectedIndex].text);
-}
+};
 
-function populateSizeAndGrid() {
+const populateSizeAndGrid = () => {
   let imgWidth = parseInt(localStorage.getItem('imgWidth'));
   let col = parseInt(localStorage.getItem('col'));
   let row = parseInt(localStorage.getItem('row'));
@@ -81,7 +78,7 @@ function populateSizeAndGrid() {
 
   setInputForCardSize('absolute', imgWidth);
   setInputsForGrid('absolute', col, row);
-}
+};
 
 /**
  * main!
@@ -97,19 +94,7 @@ window.onload = () => {
   } else {
     document.getElementById('content').action = appscript_url;
     populateSizeAndGrid();
-    refetch();
+    fetchAndFillBinder();
+    populateDropdown();
   }
 };
-
-async function refetch() {
-  const res = await fetchData();
-  storeHeader(res.data);
-  storeBinders(res.data);
-  createTags();
-  fillBinder();
-  populateDropdown();
-}
-
-function storeHeader(data) {
-  localStorage.setItem('header', data[0]);
-}

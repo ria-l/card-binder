@@ -3,7 +3,7 @@
  *
  * @param {Array} values rows of data from the spreadsheet.
  */
-function createTags() {
+const createTags = () => {
   getConstantsFromStorage();
   const imgWidth = localStorage.getItem('imgWidth');
   const tags = [];
@@ -72,43 +72,42 @@ function createTags() {
     }
   }
   localStorage.setItem('tags', tags);
-  console.log('tags created');
-}
+};
 /**
  * stores card data for each binder into its own bucket in local storage.
  *
  * @param {array} data data from sheets
  */
-function storeBinders(data) {
+const storeBinders = (data) => {
   // puts binder names into a set
   const header = data[0];
-  const binders = new Set();
-  const col = header.indexOf('binder');
+  localStorage.setItem('header', header);
+  const binderNames = new Set();
+  const binderIndex = header.indexOf('binder');
   for (const row of data) {
-    binders.add(row[col]);
+    binderNames.add(row[binderIndex]);
   }
 
   // parses and stores binder data
-  for (const binder of binders) {
+  for (const name of binderNames) {
     // only the cards that are in the given binder
-    filtered = data.filter((row) => row[col] == binder);
+    filtered = data.filter((row) => row[binderIndex] == name);
     // add back the header, since it would be removed during filtering
     filtered.unshift(header);
-    if (binder == 'illust') {
+    if (name == 'illust') {
       toStore = sortByDex(filtered);
     } else {
       toStore = sortByColor(filtered);
     }
-    localStorage.setItem(binder, JSON.stringify(toStore));
+    localStorage.setItem(name, JSON.stringify(toStore));
   }
-  localStorage.setItem('bindernames', JSON.stringify([...binders]));
-  console.log('binders stored');
-}
+  localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
+};
 
 /**
  * Fills binder using data in localstorage.
  */
-function fillBinder() {
+const fillBinder = () => {
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
   let rows = parseInt(localStorage.getItem('row'));
   let cols = parseInt(localStorage.getItem('col'));
@@ -158,4 +157,4 @@ function fillBinder() {
   document.getElementById('content').innerHTML = newContent;
   document.getElementById('status').innerHTML = '';
   console.log('binder filled');
-}
+};
