@@ -100,9 +100,9 @@ const fillLotto = (cardData) => {
 };
 
 window.onload = () => {
+  document.getElementById('form').action = appscript_url;
   if (localStorage.getItem('cards')) {
   } else {
-    document.getElementById('form').action = appscript_url;
     fetchFilenames();
   }
 };
