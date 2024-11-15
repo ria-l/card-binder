@@ -113,15 +113,15 @@ const fillBinder = () => {
   let cols = parseInt(localStorage.getItem('col'));
   let newContent = '';
 
-  if (!rows) {
+  if (isNaN(rows)) {
     rows = 3;
   }
-  if (!cols) {
+  if (isNaN(cols)) {
     cols = 3;
   }
   cardTags.forEach((tag, i) => {
     // don't create tables if grid is 0 or blank.
-    if (!rows || !cols) {
+    if (rows == 0 || cols == 0) {
       newContent += ` ${tag} `;
     } else {
       // make the tables.
