@@ -82,7 +82,6 @@ const storeBinders = (data) => {
   // loads binder names into var
   const header = data[0];
   localStorage.setItem('header', header);
-  localStorage.setItem('bindername', header[0]);
   const binderNames = new Set();
   const binderIndex = header.indexOf('binder');
   for (const row of data) {
