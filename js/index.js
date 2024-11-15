@@ -15,31 +15,26 @@ function getRandomInt(min, max) {
 /**
  * Initial data fetch and binder fill.
  */
-function fetchAndFillBinder() {
+async function fetchData() {
   document.getElementById('status').className = 'status';
   document.getElementById('status').innerHTML = 'loading...';
-
   console.log('fetching...');
-  fetch(appscript_url)
-    .then((response) => response.json())
-    .then(({ data }) => {
+  let res;
+  try {
+    res = await fetch(appscript_url);
+    if (res.ok) {
       console.log(`fetched`);
       document.getElementById('status').className = 'hidestatus';
-      storeBinders(data);
-      console.log('data stored');
-    })
-    .then(() => {
-      createTags();
-      console.log('tags created');
-      fillBinder();
-      console.log('binder filled');
-      populateDropdown();
-    })
-    .catch((error) => (document.getElementById('content').innerHTML = error));
+      return res.json();
+    } else {
+      document.getElementById(
+        'content'
+      ).innerHTML = `Response status: ${res.status}`;
+    }
+  } catch (e) {
+    document.getElementById('content').innerHTML = `Error: ${e}`;
+  }
 }
-
-
-
 
 function populateDropdown() {
   const select = document.getElementById('selectBinder');
@@ -102,7 +97,19 @@ window.onload = () => {
   } else {
     document.getElementById('content').action = appscript_url;
     populateSizeAndGrid();
-    fetchAndFillBinder();
-    populateDropdown();
+    refetch();
   }
 };
+
+async function refetch() {
+  const res = await fetchData();
+  storeHeader(res.data);
+  storeBinders(res.data);
+  createTags();
+  fillBinder();
+  populateDropdown();
+}
+
+function storeHeader(data) {
+  localStorage.setItem('header', data[0]);
+}

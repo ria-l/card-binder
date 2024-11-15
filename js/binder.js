@@ -72,6 +72,7 @@ function createTags() {
     }
   }
   localStorage.setItem('tags', tags);
+  console.log('tags created');
 }
 /**
  * stores card data for each binder into its own bucket in local storage.
@@ -79,29 +80,29 @@ function createTags() {
  * @param {array} data data from sheets
  */
 function storeBinders(data) {
-  // loads binder names into var
+  // puts binder names into a set
   const header = data[0];
-  localStorage.setItem('header', header);
-  const binderNames = new Set();
-  const binderIndex = header.indexOf('binder');
+  const binders = new Set();
+  const col = header.indexOf('binder');
   for (const row of data) {
-    binderNames.add(row[binderIndex]);
+    binders.add(row[col]);
   }
 
   // parses and stores binder data
-  for (const name of binderNames) {
-    // filter only the card rows
-    filtered = data.filter((row) => row[binderIndex] == name);
-    // add back the header
+  for (const binder of binders) {
+    // only the cards that are in the given binder
+    filtered = data.filter((row) => row[col] == binder);
+    // add back the header, since it would be removed during filtering
     filtered.unshift(header);
-    if (name == 'illust') {
+    if (binder == 'illust') {
       toStore = sortByDex(filtered);
     } else {
       toStore = sortByColor(filtered);
     }
-    localStorage.setItem(name, JSON.stringify(toStore));
+    localStorage.setItem(binder, JSON.stringify(toStore));
   }
-  localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
+  localStorage.setItem('bindernames', JSON.stringify([...binders]));
+  console.log('binders stored');
 }
 
 /**
@@ -156,4 +157,5 @@ function fillBinder() {
 
   document.getElementById('content').innerHTML = newContent;
   document.getElementById('status').innerHTML = '';
+  console.log('binder filled');
 }
