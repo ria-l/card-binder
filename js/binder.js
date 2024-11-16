@@ -3,7 +3,7 @@
  *
  * @param {Array} values rows of data from the spreadsheet.
  */
-function _createTags() {
+function _createImgTags() {
   getConstantsFromStorage();
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
@@ -113,20 +113,24 @@ function storeNewBinder() {
   localStorage.setItem('bindername', select.options[select.selectedIndex].text);
 }
 
-/**
- * Fills binder using data in localstorage.
- */
 function fillBinder() {
-  _createTags();
+  _createImgTags();
+  let binderContents = _createBinderContent();
+
+  document.getElementById('content').innerHTML = binderContents;
+  console.log('filled binder');
+}
+
+function _createBinderContent() {
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);
-  let newContent = '';
+  let fullTag = '';
 
   cardTags.forEach((tag, i) => {
     // don't create tables if grid is 0 or blank.
     if (!rows || !cols) {
-      newContent += ` ${tag} `;
+      fullTag += ` ${tag} `;
     } else {
       // make the tables.
       // this is putting each card into a row/col bucket by using
@@ -134,31 +138,28 @@ function fillBinder() {
       const rowIndex = (i + 1) % cols;
       const pageIndex = (i + 1) % (rows * cols);
       const tdTag = `<td>${tag}</td>`;
-      let fullTag = '';
+      let tableTag = '';
 
       if (pageIndex == 1) {
         // first card on page
-        fullTag += `<table>`;
+        tableTag += `<table>`;
       }
       if (rowIndex == 1) {
         // first card in row
-        fullTag += `<tr>${tdTag}`;
+        tableTag += `<tr>${tdTag}`;
       } else if (rowIndex == 0) {
         // last card in row
-        fullTag += `${tdTag}</tr>`;
+        tableTag += `${tdTag}</tr>`;
       } else {
         // middle card
-        fullTag += `${tdTag}`;
+        tableTag += `${tdTag}`;
       }
       if (pageIndex == 0) {
         // last card on page
-        fullTag += '</table>';
+        tableTag += '</table>';
       }
-      newContent += fullTag;
+      fullTag += tableTag;
     }
   });
-
-  document.getElementById('content').innerHTML = newContent;
-  document.getElementById('status').innerHTML = '';
-  console.log('filled binder');
+  return fullTag;
 }

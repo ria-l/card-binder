@@ -1,7 +1,7 @@
-// _createTags
+// _createImgs
 
 const subtest_create_tags_writes_to_storage = () => {
-  _createTags();
+  _createImgTags();
   tags = localStorage.getItem('tags');
   if (tags.includes('basic_g_energy')) {
     console.log('✅ pass');
@@ -99,7 +99,7 @@ const test_fillbinder = () => {
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
   storeBinders(data);
-  _createTags();
+  _createImgTags();
 
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);
