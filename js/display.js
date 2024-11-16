@@ -51,17 +51,19 @@ function _resizeCards() {
 
 function populateDropdown() {
   const select = document.getElementById('selectBinder');
-  const binders = JSON.parse(localStorage.getItem('bindernames'));
+  const bindernames = JSON.parse(localStorage.getItem('bindernames'));
   const defaultbinder = localStorage.getItem('bindername');
-  let s = '';
-  for (e of binders) {
-    if (e != 'binder' && e != defaultbinder) {
-      s += `<option value="${e}">${e}</option>`;
+  select.innerHTML = '';
+  for (binder of bindernames) {
+    const option = document.createElement('option');
+    if (binder != 'binder') {
+      option.value = binder;
+      option.textContent = binder;
     }
-    if (e == defaultbinder) {
-      s += `<option value="${e}" selected="selected">${e}</option>`;
+    if (binder == defaultbinder) {
+      option.selected = 'selected';
     }
+    select.appendChild(option);
   }
-  select.innerHTML = s;
   console.log('populated dropdown');
 }
