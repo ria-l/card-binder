@@ -1,6 +1,6 @@
 // for each test, need to add a variation of this to the beginning:
-// setInputForCardSize('absolute', 250);
-// setInputsForGrid('absolute', 3, 3);
+// setAndStoreCardSize('absolute', 250);
+// setAndStoreGrid('absolute', 3, 3);
 // test_setup();
 // data = JSON.parse(localStorage.getItem('test_data'));
 // storeBinders(data)

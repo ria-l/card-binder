@@ -24,8 +24,8 @@ const subtest_tags_width_matches_input = () => {
 };
 
 const test_create_tags = () => {
-  setInputForCardSize('absolute', 250);
-  setInputsForGrid('absolute', 3, 3);
+  setAndStoreCardSize('absolute', 250);
+  setAndStoreGrid('absolute', 3, 3);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
   storeBinders(data);
@@ -51,8 +51,8 @@ const test_create_tags = () => {
 // storeBinders
 
 const test_storebinders = () => {
-  setInputForCardSize('absolute', 250);
-  setInputsForGrid('absolute', 3, 3);
+  setAndStoreCardSize('absolute', 250);
+  setAndStoreGrid('absolute', 3, 3);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
 
@@ -94,8 +94,8 @@ const test_storebinders = () => {
 // fillBinder
 
 const test_fillbinder = () => {
-  setInputForCardSize('absolute', 250);
-  setInputsForGrid('absolute', 4, 4);
+  setAndStoreCardSize('absolute', 250);
+  setAndStoreGrid('absolute', 4, 4);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
   storeBinders(data);

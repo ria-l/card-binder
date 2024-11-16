@@ -44,8 +44,8 @@ function loadFromStorage() {
     gridRow = 3;
   }
 
-  setInputForCardSize('absolute', cardSize);
-  setInputsForGrid('absolute', gridCol, gridRow);
+  setAndStoreCardSize('absolute', cardSize);
+  setAndStoreGrid('absolute', gridCol, gridRow);
 
   fillBinder();
   populateDropdown();

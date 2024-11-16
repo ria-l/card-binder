@@ -1,7 +1,7 @@
 const test_fetchAndFillBinder = () => {
   try {
-    setInputForCardSize('absolute', 250);
-    setInputsForGrid('absolute', 3, 3);
+    setAndStoreCardSize('absolute', 250);
+    setAndStoreGrid('absolute', 3, 3);
     test_setup();
     data = JSON.parse(localStorage.getItem('test_data'));
     storeBinders(data);
@@ -15,8 +15,8 @@ const test_fetchAndFillBinder = () => {
 };
 
 const subtest_populateDropdown = () => {
-  setInputForCardSize('absolute', 250);
-  setInputsForGrid('absolute', 3, 3);
+  setAndStoreCardSize('absolute', 250);
+  setAndStoreGrid('absolute', 3, 3);
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
   storeBinders(data);

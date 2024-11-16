@@ -1,10 +1,4 @@
-/**
- * Updates the input fiels for the card size.
- *
- * @param {string} type absolute or relative change
- * @param {int} input card width in pixels
- */
-function setInputForCardSize(type, input) {
+function setAndStoreCardSize(type, input) {
   let sizeField = document.getElementById('inputCardSize');
   let newVal = input;
 
@@ -13,12 +7,11 @@ function setInputForCardSize(type, input) {
   }
   sizeField.value = newVal.toString();
   localStorage.setItem('imgWidth', newVal);
+
+  _resizeCards();
 }
 
-/**
- * Updates cards with whatever value is in the input field.
- */
-function setCardSize() {
+function _resizeCards() {
   w = document.getElementById('inputCardSize').value;
   document.querySelectorAll('img').forEach((e) => (e.style.width = `${w}px`));
   document
@@ -34,46 +27,22 @@ function setCardSize() {
   }
 }
 
-/**
- * Sets inputs and then applies changes. Used by the UI buttons and initial fill.
- *
- * @param {string} type absolute or relative change
- * @param {int} input card width in pixels
- */
-function resizeCards(type, input) {
-  setInputForCardSize(type, input);
-  setCardSize();
-}
+function setAndStoreGrid(type, col, row) {
+  let rowField = document.getElementById('inputRow');
+  let newRowVal = row;
+  if (type == 'relative') {
+    newRowVal = parseInt(rowField.value) + parseInt(row);
+  }
+  rowField.value = newRowVal.toString();
+  localStorage.setItem('row', newRowVal);
 
-/**
- * Updates the input fields for the grid size.
- *
- * @param {string} type absolute or relative change
- * @param {int} col number of cols
- * @param {int} row number of rows
- */
-function setInputsForGrid(type, col, row) {
-  const r = document.getElementById('inputRow');
-  type == 'relative'
-    ? (r.value = (parseInt(r.value) + row).toString())
-    : (r.value = row.toString());
-  localStorage.setItem('row', row);
-  const c = document.getElementById('inputCol');
-  type == 'relative'
-    ? (c.value = (parseInt(c.value) + col).toString())
-    : (c.value = col.toString());
-  localStorage.setItem('col', col);
-}
-
-/**
- * Sets inputs and then applies changes.
- *
- * @param {string} type absolute or relative change
- * @param {int} col number of cols
- * @param {int} row number of rows
- */
-function changeGrid(type, col, row) {
-  setInputsForGrid(type, col, row);
+  let colField = document.getElementById('inputCol');
+  let newColVal = col;
+  if (type == 'relative') {
+    newColVal = parseInt(colField.value) + parseInt(col);
+  }
+  colField.value = newColVal.toString();
+  localStorage.setItem('col', newColVal);
   fillBinder();
 }
 

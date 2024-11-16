@@ -35,44 +35,44 @@
       <span class="header-content">
         <span class="header-content">
           Rows:
-          <button onclick="changeGrid('relative', 0, -1);">-</button>
+          <button onclick="setAndStoreGrid('relative', 0, -1);">-</button>
           <input type="text" id="inputRow" />
-          <button onclick="changeGrid('relative', 0, 1);">+</button>
+          <button onclick="setAndStoreGrid('relative', 0, 1);">+</button>
         </span>
 
         <span class="header-content">
           Cols:
-          <button onclick="changeGrid('relative', -1, 0);">-</button>
+          <button onclick="setAndStoreGrid('relative', -1, 0);">-</button>
           <input type="text" id="inputCol" />
-          <button onclick="changeGrid('relative', 1, 0);">+</button>
+          <button onclick="setAndStoreGrid('relative', 1, 0);">+</button>
           <button onclick="setGrid()">Apply</button>
         </span>
 
         <span class="header-content">
-          <button onclick="changeGrid('absolute', 0,0);">None</button>
-          <button onclick="changeGrid('absolute', 3,3);">3x3</button>
-          <button onclick="changeGrid('absolute', 4,4);">4x4</button>
-          <button onclick="changeGrid('absolute', 8,4);">8x4</button>
+          <button onclick="setAndStoreGrid('absolute', 0,0);">None</button>
+          <button onclick="setAndStoreGrid('absolute', 3,3);">3x3</button>
+          <button onclick="setAndStoreGrid('absolute', 4,4);">4x4</button>
+          <button onclick="setAndStoreGrid('absolute', 8,4);">8x4</button>
         </span>
       </span>
 
       <span class="header-content">
         <span class="header-content">
           Card size:
-          <button onclick="resizeCards('relative', -100);">-100</button>
-          <button onclick="resizeCards('relative', -10);">-10</button>
+          <button onclick="setAndStoreCardSize('relative', -100);">-100</button>
+          <button onclick="setAndStoreCardSize('relative', -10);">-10</button>
           <input type="text" id="inputCardSize" />
-          <button onclick="resizeCards('relative', 10);">+10</button>
-          <button onclick="resizeCards('relative', 100);">+100</button>
-          <button onclick="setCardSize()">Apply</button>
+          <button onclick="setAndStoreCardSize('relative', 10);">+10</button>
+          <button onclick="setAndStoreCardSize('relative', 100);">+100</button>
+          <button onclick="_resizeCards()">Apply</button>
         </span>
 
         <span class="header-content">
-          <button onclick="resizeCards('absolute', 50);">50</button>
-          <button onclick="resizeCards('absolute', 100);">100</button>
-          <button onclick="resizeCards('absolute', 150);">150</button>
-          <button onclick="resizeCards('absolute', 200);">200</button>
-          <button onclick="resizeCards('absolute', 300);">300</button>
+          <button onclick="setAndStoreCardSize('absolute', 50);">50</button>
+          <button onclick="setAndStoreCardSize('absolute', 100);">100</button>
+          <button onclick="setAndStoreCardSize('absolute', 150);">150</button>
+          <button onclick="setAndStoreCardSize('absolute', 200);">200</button>
+          <button onclick="setAndStoreCardSize('absolute', 300);">300</button>
         </span>
       </span>
     </div>
