@@ -32,7 +32,7 @@ td .placeholder {
   /* Keeps cards and placeholders properly aligned. Doesn't work if it's separated into the individual elements. */
   vertical-align: middle;
 }
-.status {
+.showstatus {
   align-items: center;
   background: linear-gradient(
         to bottom right,

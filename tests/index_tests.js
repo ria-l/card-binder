@@ -5,7 +5,6 @@ const test_fetchAndFillBinder = () => {
     test_setup();
     data = JSON.parse(localStorage.getItem('test_data'));
     storeBinders(data);
-    createTags();
     fillBinder();
   } catch (err) {
     console.log(err);
@@ -21,7 +20,6 @@ const subtest_populateDropdown = () => {
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
   storeBinders(data);
-  createTags();
   fillBinder();
 
   try {

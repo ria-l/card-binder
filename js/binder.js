@@ -3,7 +3,7 @@
  *
  * @param {Array} values rows of data from the spreadsheet.
  */
-function createTags() {
+function _createTags() {
   console.log('create tags');
   getConstantsFromStorage();
   const imgWidth = document.getElementById('inputCardSize').value;
@@ -117,6 +117,7 @@ function storeNewBinder() {
  * Fills binder using data in localstorage.
  */
 function fillBinder() {
+  _createTags();
   console.log('fill binder');
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
   const rows = parseInt(document.getElementById('inputRow').value);
@@ -161,13 +162,4 @@ function fillBinder() {
   document.getElementById('content').innerHTML = newContent;
   document.getElementById('status').innerHTML = '';
   console.log('filled binder');
-}
-
-async function fetchAndFillBinder() {
-  console.log('fetch and fill');
-  await fetchAndStore();
-  createTags();
-  fillBinder();
-  populateDropdown();
-  console.log('fetched and filled');
 }

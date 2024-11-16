@@ -4,7 +4,7 @@
 // test_setup();
 // data = JSON.parse(localStorage.getItem('test_data'));
 // storeBinders(data)
-// createTags();
+// _createTags();
 // fillBinder(localStorage.getItem('bindername'));
 // populateDropdown();
 

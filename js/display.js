@@ -5,11 +5,14 @@
  * @param {int} input card width in pixels
  */
 function setInputForCardSize(type, input) {
-  const w = document.getElementById('inputCardSize');
-  type == 'relative'
-    ? (w.value = (parseInt(w.value) + parseInt(input)).toString())
-    : (w.value = input);
-  localStorage.setItem('imgWidth', input);
+  let sizeField = document.getElementById('inputCardSize');
+  let newVal = input;
+
+  if (type == 'relative') {
+    newVal = parseInt(sizeField.value) + parseInt(input);
+  }
+  sizeField.value = newVal.toString();
+  localStorage.setItem('imgWidth', newVal);
 }
 
 /**
@@ -71,7 +74,6 @@ function setInputsForGrid(type, col, row) {
  */
 function changeGrid(type, col, row) {
   setInputsForGrid(type, col, row);
-  createTags();
   fillBinder();
 }
 

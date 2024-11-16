@@ -2,42 +2,61 @@ window.onload = () => {
   document.getElementById('content').action = appscript_url;
 
   if (localStorage.getItem('bindername')) {
-    console.log('loading from storage');
-    localStorage.getItem('imgWidth')
-      ? (imgWidth = parseInt(localStorage.getItem('imgWidth')))
-      : (imgWidth = 150);
-    localStorage.getItem('col')
-      ? (col = parseInt(localStorage.getItem('col')))
-      : (col = 3);
-    localStorage.getItem('row')
-      ? (row = parseInt(localStorage.getItem('row')))
-      : (row = 3);
-
-    setInputForCardSize('absolute', imgWidth);
-    setInputsForGrid('absolute', col, row);
-
-    createTags();
-    fillBinder();
-    populateDropdown();
+    loadFromStorage();
   } else {
     fetchAndFillBinder();
   }
 };
 
+async function fetchAndFillBinder() {
+  console.log('fetch and fill');
+  await fetchAndStore();
+  fillBinder();
+  populateDropdown();
+  console.log('fetched and filled');
+}
+
 async function fetchAndStore() {
   console.log('fetch and store');
-  document.getElementById('status').className = 'status';
-  document.getElementById('status').innerHTML = 'loading...';
-  console.log('fetching...');
 
-  fetch(appscript_url)
-    .then((response) => response.json())
-    .then(({ data }) => {
-      console.log(`fetched`);
-      document.getElementById('status').className = 'hidestatus';
-      storeBinders(data);
-      console.log('data stored');
-    })
-    .catch((error) => (document.getElementById('content').innerHTML = error));
+  const status = document.getElementById('status');
+  status.innerHTML = 'loading...';
+  status.className = 'showstatus';
+
+  console.log('fetching...');
+  let response = await fetch(appscript_url);
+  let data = await response.json();
+  console.log('fetched');
+
+  storeBinders(data.data);
+  console.log('data stored');
+
+  status.className = 'hidestatus';
+
   console.log('fetched and stored');
+}
+
+function loadFromStorage() {
+  console.log('loading from storage');
+
+  let cardSize = parseInt(localStorage.getItem('imgWidth'));
+  let gridCol = parseInt(localStorage.getItem('col'));
+  let gridRow = parseInt(localStorage.getItem('row'));
+
+  if (!cardSize) {
+    cardSize = 150;
+  }
+  if (!gridCol) {
+    gridCol = 3;
+  }
+  if (!gridRow) {
+    gridRow = 3;
+  }
+
+  setInputForCardSize('absolute', cardSize);
+  setInputsForGrid('absolute', gridCol, gridRow);
+
+  fillBinder();
+  populateDropdown();
+  console.log('loaded from storage');
 }
