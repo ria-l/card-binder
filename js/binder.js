@@ -21,8 +21,8 @@ function _createCardTags() {
       _generatePlaceholder(card, cardtype, cardsubtype, imgWidth, tags, title);
     }
   }
-  localStorage.setItem('tags', tags);
   console.log('created tags');
+  return tags;
 }
 
 function _generateImgTag(tags, dir, filename, title, imgWidth) {
@@ -32,8 +32,7 @@ function _generateImgTag(tags, dir, filename, title, imgWidth) {
   element.style.width = `${imgWidth}px`;
   element.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
   element.style.borderRadius = `${imgWidth / 20}px`;
-
-  tags.push(element.outerHTML);
+  tags.push(element);
 }
 
 function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
@@ -67,14 +66,9 @@ function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
   element.style.background = `linear-gradient(to bottom right, ${fill_colors}) padding-box, linear-gradient(to bottom right, ${border_colors}) border-box`;
   element.style.borderRadius = `${imgWidth / 20}px`;
   element.style.border = `${imgWidth / 15}px solid transparent`;
-  tags.push(element.outerHTML);
+  tags.push(element);
 }
 
-/**
- * stores card data for each binder into its own bucket in local storage.
- *
- * @param {array} data data from sheets
- */
 function storeBinders(data) {
   // puts binder names into a set
   const header = data[0];
@@ -109,52 +103,75 @@ function storeNewBinder() {
 }
 
 function fillBinder() {
-  _createCardTags();
-  let binderContents = _createBinderContent();
+  let binderContent = _createBinderContent();
+  document.getElementById('content').innerHTML = '';
+  binderContent.forEach((item) => {
+    document.getElementById('content').appendChild(item);
+  });
 
-  document.getElementById('content').innerHTML = binderContents;
   console.log('filled binder');
 }
 
 function _createBinderContent() {
-  const cardTags = localStorage.getItem('tags').split('>,');
+  const cardTags = _createCardTags();
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);
-  let fullTag = '';
+
+  const allTables = [];
+  let currentTable;
+  let currentRow;
 
   cardTags.forEach((tag, i) => {
-    // don't create tables if grid is 0 or blank.
     if (!rows || !cols) {
-      fullTag += ` ${tag} `;
+      allTables.push(tag);
+      const spaceNode = document.createTextNode(' ');
+      allTables.push(spaceNode);
     } else {
-      // make the tables.
-      // this is putting each card into a row/col bucket by using
-      // the remainder value from the modulo function as a numbering system.
+      // Use the remainder value from the modulo function to put each card into a row/grid bucket.
       const rowIndex = (i + 1) % cols;
-      const pageIndex = (i + 1) % (rows * cols);
-      const tdTag = `<td>${tag}</td>`;
-      let tableTag = '';
+      const gridIndex = (i + 1) % (rows * cols);
 
-      if (pageIndex == 1) {
-        // first card on page
-        tableTag += `<table>`;
+      const table = document.createElement('table');
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.appendChild(tag);
+
+      // first card in grid
+      if (gridIndex == 1) {
+        currentTable = table;
       }
+
+      // middle cards
       if (rowIndex == 1) {
         // first card in row
-        tableTag += `<tr>${tdTag}`;
+        currentRow = tr;
+        currentRow.appendChild(td);
       } else if (rowIndex == 0) {
         // last card in row
-        tableTag += `${tdTag}</tr>`;
+        if (cols == 1) {
+          currentRow = tr;
+        }
+        if (rows == 1) {
+          currentTable = table;
+        }
+        currentRow.appendChild(td);
+        currentTable.appendChild(currentRow);
       } else {
-        // middle card
-        tableTag += `${tdTag}`;
+        currentRow.appendChild(td);
       }
-      if (pageIndex == 0) {
-        // last card on page
-        tableTag += '</table>';
+
+      // last card in grid
+      if (gridIndex == 0) {
+        if (cols == 1) {
+          currentRow = tr;
+        }
+        if (rows == 1) {
+          currentTable = table;
+        }
+        allTables.push(currentTable);
+        currentTable = table;
       }
-      fullTag += tableTag;
     }
   });
-  return fullTag;
+  return allTables;
 }

@@ -3,7 +3,6 @@ https://ria-l.github.io/card-binder/
 ## bug
 
 - last page of binder aligns to bottom instead of top
-- resizing and regridding sometimes lose the plot
 - it's possible to "catch" the header row
 
 ## todo
