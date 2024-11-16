@@ -1,7 +1,7 @@
 // _createImgs
 
 const subtest_create_tags_writes_to_storage = () => {
-  _createImgTags();
+  _createCardTags();
   tags = localStorage.getItem('tags');
   if (tags.includes('basic_g_energy')) {
     console.log('✅ pass');
@@ -32,7 +32,7 @@ const test_create_tags = () => {
 
   // dupe from function to help debug
   binderName = localStorage.getItem('bindername');
-  binderData = JSON.parse(localStorage.getItem(binderName));
+  BINDER_DATA = JSON.parse(localStorage.getItem(binderName));
   header = JSON.parse(localStorage.getItem('binder'))[0];
 
   // test functionality
@@ -42,7 +42,7 @@ const test_create_tags = () => {
     console.log('❌ fail');
     console.log(err);
     console.log(`binderName: ${binderName}`);
-    console.log(`binderData: ${binderData}`);
+    console.log(`BINDER_DATA: ${BINDER_DATA}`);
     console.log(`header: ${header}`);
   }
   subtest_tags_width_matches_input();
@@ -99,7 +99,7 @@ const test_fillbinder = () => {
   test_setup();
   data = JSON.parse(localStorage.getItem('test_data'));
   storeBinders(data);
-  _createImgTags();
+  _createCardTags();
 
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);

@@ -1,29 +1,29 @@
 const appscript_url =
   'https://script.google.com/macros/s/AKfycbzUilPwxpjOEBReqEYPF1PBRQCM3-wNxr9CV3SuwZs-kGlks-vOTOUmeAmVvAeyyyxAOA/exec';
 
-let jcaught,
-  jfilename,
+let CAUGHT_COL,
+  FILENAME_COL,
   jset,
-  jcardtype,
-  jpkmntype,
-  jcardsubtype,
+  CARDTYPE_COL,
+  PKMNTYPE_COL,
+  CARDSUBTYPE_COL,
   binderName,
-  binderData;
+  BINDER_DATA;
 
 function getConstantsFromStorage() {
   const header = localStorage.getItem('header').split(',');
 
-  jcaught = header.indexOf('caught');
-  jfilename = header.indexOf('file name');
+  CAUGHT_COL = header.indexOf('caught');
+  FILENAME_COL = header.indexOf('file name');
   jset = header.indexOf('set');
-  jcardtype = header.indexOf('card type');
-  jpkmntype = header.indexOf('pkmn type');
-  jcardsubtype = header.indexOf('card subtype');
+  CARDTYPE_COL = header.indexOf('card type');
+  PKMNTYPE_COL = header.indexOf('pkmn type');
+  CARDSUBTYPE_COL = header.indexOf('card subtype');
   binderName = localStorage.getItem('bindername');
-  binderData = JSON.parse(localStorage.getItem(binderName));
+  BINDER_DATA = JSON.parse(localStorage.getItem(binderName));
 }
 
-const pkmnTypeColors = {
+const PKMN_HEX_COLORS = {
   grass: ['#c2d349', '#93bb4e'],
   fire: ['#f78b46', '#f2674b'],
   water: ['#93d9f5', '#11b6e6'],
@@ -38,7 +38,7 @@ const pkmnTypeColors = {
   support: ['#eb028b', '#f14eae'], // hot pink
 };
 
-const cardTypeColors = {
+const CARD_HEX_COLORS = {
   basic: [],
   ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
   gold: ['#fef081', '#c69221', '#fef081'], // gold

@@ -3,76 +3,71 @@
  *
  * @param {Array} values rows of data from the spreadsheet.
  */
-function _createImgTags() {
+function _createCardTags() {
   getConstantsFromStorage();
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
-  for (var i = 0; i < binderData.length; i++) {
-    const dir = `img/${binderData[i][jset].toLowerCase()}`;
-    const filename = binderData[i][jfilename];
-    const pkmntype = binderData[i][jpkmntype];
-    const cardtype = binderData[i][jcardtype];
-    const cardsubtype = binderData[i][jcardsubtype];
+  for (var card = 0; card < BINDER_DATA.length; card++) {
+    const dir = `img/${BINDER_DATA[card][jset].toLowerCase()}`;
+    const filename = BINDER_DATA[card][FILENAME_COL];
+    const pkmntype = BINDER_DATA[card][PKMNTYPE_COL];
+    const cardtype = BINDER_DATA[card][CARDTYPE_COL];
+    const cardsubtype = BINDER_DATA[card][CARDSUBTYPE_COL];
 
-    const style_width = `width:${imgWidth}px;`;
-    // keeps cards that are a couple pixels off of standard size from breaking alignment
-    const style_height = `height:${imgWidth * 1.4}px;`;
-    const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
-
-    if (binderData[i][jcaught] == 'x') {
-      // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
-      tags.push(
-        `<img src='${dir}/${filename}' title=${title} style='${style_width}${style_height}border-radius:${
-          imgWidth / 20
-        }px;' />zzz`
-      );
+    const title = `${filename} : ${pkmntype} : ${cardtype}`;
+    if (BINDER_DATA[card][CAUGHT_COL] == 'x') {
+      _generateImgTag(tags, dir, filename, title, imgWidth);
     } else {
-      // placeholder styles
-      // note that there are a couple other styles in the css file
-
-      let special;
-      if (binderData[i][jcardtype] != 'basic') {
-        special = cardTypeColors[cardtype].join(',');
-      }
-
-      let border_colors;
-      const light = pkmnTypeColors[binderData[i][jpkmntype]][0];
-      const dark = pkmnTypeColors[binderData[i][jpkmntype]][1];
-      if (cardtype == 'basic') {
-        border_colors = `${dark},${light},${dark},${light},${dark}`;
-      } else {
-        border_colors = `${dark},${light},white,${special}`;
-      }
-
-      let fill_colors;
-      if (cardsubtype.includes('gold')) {
-        fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
-      } else {
-        fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
-      }
-
-      const background_fill_style = `linear-gradient(to bottom right, ${fill_colors}) padding-box,`;
-      const background_border_style = `linear-gradient(to bottom right, ${border_colors}) border-box;`;
-
-      const style =
-        `'` +
-        style_width +
-        `height:${imgWidth * 1.4}px;` +
-        'background: ' +
-        background_fill_style +
-        background_border_style +
-        `border-radius:${imgWidth / 20}px;` +
-        `border: ${imgWidth / 15}px solid transparent;` +
-        `'`;
-
-      // the 'zzz' is for easy splitting into an array later. the tag itself has commas so can't use them as delimiters.
-      tags.push(
-        `<span class='placeholder' title=${title} style=${style}></span>zzz`
-      );
+      _generatePlaceholder(card, cardtype, cardsubtype, imgWidth, tags, title);
     }
   }
   localStorage.setItem('tags', tags);
   console.log('created tags');
+}
+
+function _generateImgTag(tags, dir, filename, title, imgWidth) {
+  const element = document.createElement('img');
+  element.src = `${dir}/${filename}`;
+  element.title = title;
+  element.style.width = `${imgWidth}px`;
+  element.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+  element.style.borderRadius = `${imgWidth / 20}px`;
+
+  tags.push(element.outerHTML);
+}
+
+function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
+  // note that there are a couple other styles in the css file
+  let special;
+  if (BINDER_DATA[i][CARDTYPE_COL] != 'basic') {
+    special = CARD_HEX_COLORS[cardtype].join(',');
+  }
+
+  let border_colors;
+  const light = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][0];
+  const dark = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][1];
+  if (cardtype == 'basic') {
+    border_colors = `${dark},${light},${dark},${light},${dark}`;
+  } else {
+    border_colors = `${dark},${light},white,${special}`;
+  }
+
+  let fill_colors;
+  if (cardsubtype.includes('gold')) {
+    fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
+  } else {
+    fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
+  }
+
+  const element = document.createElement('span');
+  element.className = 'placeholder';
+  element.title = title;
+  element.style.width = `${imgWidth}px`;
+  element.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+  element.style.background = `linear-gradient(to bottom right, ${fill_colors}) padding-box, linear-gradient(to bottom right, ${border_colors}) border-box`;
+  element.style.borderRadius = `${imgWidth / 20}px`;
+  element.style.border = `${imgWidth / 15}px solid transparent`;
+  tags.push(element.outerHTML);
 }
 
 /**
@@ -114,7 +109,7 @@ function storeNewBinder() {
 }
 
 function fillBinder() {
-  _createImgTags();
+  _createCardTags();
   let binderContents = _createBinderContent();
 
   document.getElementById('content').innerHTML = binderContents;
@@ -122,7 +117,7 @@ function fillBinder() {
 }
 
 function _createBinderContent() {
-  const cardTags = localStorage.getItem('tags').split(/zzz,?/);
+  const cardTags = localStorage.getItem('tags').split('>,');
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);
   let fullTag = '';

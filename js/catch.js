@@ -62,10 +62,10 @@ function fillLotto() {
   getConstantsFromStorage();
 
   const dir = `img/${cardData[0][jset].toLowerCase()}`;
-  const filename = cardData[0][jfilename];
-  const pkmntype = cardData[0][jpkmntype];
-  const cardtype = cardData[0][jcardtype];
-  const caught = cardData[0][jcaught];
+  const filename = cardData[0][FILENAME_COL];
+  const pkmntype = cardData[0][PKMNTYPE_COL];
+  const cardtype = cardData[0][CARDTYPE_COL];
+  const caught = cardData[0][CAUGHT_COL];
   const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
 
   document.getElementById('id-filename').value = filename;
@@ -75,13 +75,13 @@ function fillLotto() {
   }
 
   let special;
-  if (cardData[0][jcardtype] != 'basic') {
-    special = cardTypeColors[cardtype].join(',');
+  if (cardData[0][CARDTYPE_COL] != 'basic') {
+    special = CARD_HEX_COLORS[cardtype].join(',');
   }
 
   let border_colors;
-  const light = pkmnTypeColors[cardData[0][jpkmntype]][0];
-  const dark = pkmnTypeColors[cardData[0][jpkmntype]][1];
+  const light = PKMN_HEX_COLORS[cardData[0][PKMNTYPE_COL]][0];
+  const dark = PKMN_HEX_COLORS[cardData[0][PKMNTYPE_COL]][1];
   if (cardtype == 'basic') {
     border_colors = `${dark},${light},${dark},${light},${dark}`;
   } else {
