@@ -1,74 +1,3 @@
-/**
- * Creates tags from  and stores them in localstorage.
- *
- * @param {Array} values rows of data from the spreadsheet.
- */
-function _createCardTags() {
-  getConstantsFromStorage();
-  const imgWidth = document.getElementById('inputCardSize').value;
-  const tags = [];
-  for (var card = 0; card < BINDER_DATA.length; card++) {
-    const dir = `img/${BINDER_DATA[card][jset].toLowerCase()}`;
-    const filename = BINDER_DATA[card][FILENAME_COL];
-    const pkmntype = BINDER_DATA[card][PKMNTYPE_COL];
-    const cardtype = BINDER_DATA[card][CARDTYPE_COL];
-    const cardsubtype = BINDER_DATA[card][CARDSUBTYPE_COL];
-
-    const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    if (BINDER_DATA[card][CAUGHT_COL] == 'x') {
-      _generateImgTag(tags, dir, filename, title, imgWidth);
-    } else {
-      _generatePlaceholder(card, cardtype, cardsubtype, imgWidth, tags, title);
-    }
-  }
-  console.log('created tags');
-  return tags;
-}
-
-function _generateImgTag(tags, dir, filename, title, imgWidth) {
-  const element = document.createElement('img');
-  element.src = `${dir}/${filename}`;
-  element.title = title;
-  element.style.width = `${imgWidth}px`;
-  element.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
-  element.style.borderRadius = `${imgWidth / 20}px`;
-  tags.push(element);
-}
-
-function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
-  // note that there are a couple other styles in the css file
-  let special;
-  if (BINDER_DATA[i][CARDTYPE_COL] != 'basic') {
-    special = CARD_HEX_COLORS[cardtype].join(',');
-  }
-
-  let border_colors;
-  const light = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][0];
-  const dark = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][1];
-  if (cardtype == 'basic') {
-    border_colors = `${dark},${light},${dark},${light},${dark}`;
-  } else {
-    border_colors = `${dark},${light},white,${special}`;
-  }
-
-  let fill_colors;
-  if (cardsubtype.includes('gold')) {
-    fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
-  } else {
-    fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
-  }
-
-  const element = document.createElement('span');
-  element.className = 'placeholder';
-  element.title = title;
-  element.style.width = `${imgWidth}px`;
-  element.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
-  element.style.background = `linear-gradient(to bottom right, ${fill_colors}) padding-box, linear-gradient(to bottom right, ${border_colors}) border-box`;
-  element.style.borderRadius = `${imgWidth / 20}px`;
-  element.style.border = `${imgWidth / 15}px solid transparent`;
-  tags.push(element);
-}
-
 function storeBinders(data) {
   // puts binder names into a set
   const header = data[0];
@@ -97,13 +26,14 @@ function storeBinders(data) {
   console.log('stored binders');
 }
 
-function storeNewBinder() {
+function selectNewBinder() {
   select = document.getElementById('selectBinder');
   localStorage.setItem('bindername', select.options[select.selectedIndex].text);
+  fillBinder();
 }
 
 function fillBinder() {
-  let binderContent = _createBinderContent();
+  const binderContent = _createBinderContent();
   document.getElementById('content').innerHTML = '';
   binderContent.forEach((item) => {
     document.getElementById('content').appendChild(item);
@@ -174,4 +104,72 @@ function _createBinderContent() {
     }
   });
   return allTables;
+}
+
+function _createCardTags() {
+  getConstantsFromStorage();
+  const imgWidth = document.getElementById('inputCardSize').value;
+  const tags = [];
+  for (var card = 0; card < BINDER_DATA.length; card++) {
+    const dir = `img/${BINDER_DATA[card][jset].toLowerCase()}`;
+    const filename = BINDER_DATA[card][FILENAME_COL];
+    const pkmntype = BINDER_DATA[card][PKMNTYPE_COL];
+    const cardtype = BINDER_DATA[card][CARDTYPE_COL];
+    const cardsubtype = BINDER_DATA[card][CARDSUBTYPE_COL];
+
+    const title = `${filename} : ${pkmntype} : ${cardtype}`;
+    if (BINDER_DATA[card][CAUGHT_COL] == 'x') {
+      _generateImgTag(tags, dir, filename, title, imgWidth);
+    } else {
+      _generatePlaceholder(card, cardtype, cardsubtype, imgWidth, tags, title);
+    }
+  }
+  console.log('created tags');
+  return tags;
+}
+
+function _generateImgTag(tags, dir, filename, title, imgWidth) {
+  const img = document.createElement('img');
+  img.src = `${dir}/${filename}`;
+  img.title = title;
+  img.style.width = `${imgWidth}px`;
+  img.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+  img.style.borderRadius = `${imgWidth / 20}px`;
+
+  tags.push(img);
+}
+
+function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
+  // note that there are a couple other styles in the css file
+  let special;
+  if (BINDER_DATA[i][CARDTYPE_COL] != 'basic') {
+    special = CARD_HEX_COLORS[cardtype].join(',');
+  }
+
+  let border_colors;
+  const light = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][0];
+  const dark = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][1];
+  if (cardtype == 'basic') {
+    border_colors = `${dark},${light},${dark},${light},${dark}`;
+  } else {
+    border_colors = `${dark},${light},white,${special}`;
+  }
+
+  let fill_colors;
+  if (cardsubtype.includes('gold')) {
+    fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
+  } else {
+    fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
+  }
+
+  const span = document.createElement('span');
+  span.className = 'placeholder';
+  span.title = title;
+  span.style.width = `${imgWidth}px`;
+  span.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+  span.style.background = `linear-gradient(to bottom right, ${fill_colors}) padding-box, linear-gradient(to bottom right, ${border_colors}) border-box`;
+  span.style.borderRadius = `${imgWidth / 20}px`;
+  span.style.border = `${imgWidth / 15}px solid transparent`;
+
+  tags.push(span);
 }

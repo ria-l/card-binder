@@ -3,28 +3,14 @@ window.onload = () => {
     loadFromStorage();
   } else {
     fetchAndFillBinder();
-    debugger;
   }
 };
 
 async function fetchAndFillBinder() {
-  const data = await fetchData();
+  const data = await _fetchData();
   storeBinders(data.data);
   fillBinder();
   populateDropdown();
-}
-
-async function fetchData() {
-  console.log('fetching...');
-
-  const status = document.getElementById('status');
-  status.innerHTML = 'loading...';
-  status.className = 'showstatus';
-
-  let response = await fetch(appscript_url);
-  let data = await response.json();
-  status.className = 'hidestatus';
-  return data;
 }
 
 function loadFromStorage() {
@@ -49,4 +35,17 @@ function loadFromStorage() {
 
   fillBinder();
   populateDropdown();
+}
+
+async function _fetchData() {
+  console.log('fetching...');
+
+  const status = document.getElementById('status');
+  status.innerHTML = 'loading...';
+  status.className = 'showstatus';
+
+  let response = await fetch(appscript_url);
+  let data = await response.json();
+  status.className = 'hidestatus';
+  return data;
 }
