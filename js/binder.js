@@ -4,7 +4,6 @@
  * @param {Array} values rows of data from the spreadsheet.
  */
 function _createTags() {
-  console.log('create tags');
   getConstantsFromStorage();
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
@@ -106,6 +105,7 @@ function storeBinders(data) {
     localStorage.setItem(name, JSON.stringify(toStore));
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
+  console.log('stored binders');
 }
 
 function storeNewBinder() {
@@ -118,7 +118,6 @@ function storeNewBinder() {
  */
 function fillBinder() {
   _createTags();
-  console.log('fill binder');
   const cardTags = localStorage.getItem('tags').split(/zzz,?/);
   const rows = parseInt(document.getElementById('inputRow').value);
   const cols = parseInt(document.getElementById('inputCol').value);

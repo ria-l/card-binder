@@ -16,11 +16,10 @@ function getRandomInt(min, max) {
 function fetchFilenames() {
   document.getElementById('status').className = 'status';
   document.getElementById('status').innerHTML = 'loading...';
-  console.log('fetching file names...');
   fetch(appscript_url)
     .then((response) => response.json())
     .then(({ data }) => {
-      console.log(`fetched`);
+      console.log('fetched');
       document.getElementById('status').className = 'hidestatus';
 
       const header = data[0];

@@ -3,35 +3,28 @@ window.onload = () => {
     loadFromStorage();
   } else {
     fetchAndFillBinder();
+    debugger;
   }
 };
 
 async function fetchAndFillBinder() {
-  console.log('fetch and fill');
-  await fetchAndStore();
+  const data = await fetchData();
+  storeBinders(data.data);
   fillBinder();
   populateDropdown();
-  console.log('fetched and filled');
 }
 
-async function fetchAndStore() {
-  console.log('fetch and store');
+async function fetchData() {
+  console.log('fetching...');
 
   const status = document.getElementById('status');
   status.innerHTML = 'loading...';
   status.className = 'showstatus';
 
-  console.log('fetching...');
   let response = await fetch(appscript_url);
   let data = await response.json();
-  console.log('fetched');
-
-  storeBinders(data.data);
-  console.log('data stored');
-
   status.className = 'hidestatus';
-
-  console.log('fetched and stored');
+  return data;
 }
 
 function loadFromStorage() {
@@ -56,5 +49,4 @@ function loadFromStorage() {
 
   fillBinder();
   populateDropdown();
-  console.log('loaded from storage');
 }

@@ -78,7 +78,6 @@ function changeGrid(type, col, row) {
 }
 
 function populateDropdown() {
-  console.log('populate dropdown');
   const select = document.getElementById('selectBinder');
   const binders = JSON.parse(localStorage.getItem('bindernames'));
   const defaultbinder = localStorage.getItem('bindername');
