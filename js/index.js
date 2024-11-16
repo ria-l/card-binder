@@ -1,6 +1,4 @@
 window.onload = () => {
-  document.getElementById('content').action = appscript_url;
-
   if (localStorage.getItem('bindername')) {
     loadFromStorage();
   } else {
