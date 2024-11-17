@@ -1,3 +1,47 @@
+window.onload = () => {
+  document.getElementById('form').action = appscript_url;
+  if (localStorage.length > 0) {
+    console.log('already stored');
+  } else {
+    fetchFilenames();
+  }
+};
+
+async function _storeFileNames(data) {
+  getConstantsFromStorage();
+  debugger;
+  const filenames = data.map((row) => row[FILENAME_COL]);
+  filenames.shift(); // remove header row
+  localStorage.setItem('all_filenames', JSON.stringify([...filenames]));
+  console.log('stored filenames filenames');
+}
+
+function _storeHeader(data) {
+  const header = data[0];
+  localStorage.setItem('header', header);
+  console.log('stored header');
+}
+
+async function _fetchData() {
+  console.log('fetching...');
+  const status = document.getElementById('status');
+  status.innerHTML = 'loading...';
+  status.className = 'showstatus';
+
+  const response = await fetch(appscript_url);
+  const data = await response.json();
+  status.className = 'hidestatus';
+  console.log('fetched');
+
+  return data;
+}
+
+async function fetchAndStoreFilenames() {
+  const data = await _fetchData();
+  _storeHeader(data.data);
+  _storeFileNames(data.data);
+}
+
 function lotto() {
   const all = JSON.parse(localStorage.cards);
   let picked = [];
@@ -11,26 +55,6 @@ function getRandomInt(min, max) {
   const maxFloored = Math.floor(max);
   // The maximum is exclusive and the minimum is inclusive.
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
-}
-
-function fetchFilenames() {
-  document.getElementById('status').className = 'status';
-  document.getElementById('status').innerHTML = 'loading...';
-  fetch(appscript_url)
-    .then((response) => response.json())
-    .then(({ data }) => {
-      console.log('fetched');
-      document.getElementById('status').className = 'hidestatus';
-
-      const header = data[0];
-      localStorage.setItem('header', header);
-      const index = header.indexOf('file name');
-      const column = data.map((row) => row[index]);
-      column.shift();
-      localStorage.setItem('cards', JSON.stringify([...data]));
-      console.log('cards stored');
-    })
-    .catch((error) => console.error('!!!!!!!!', error, header, index, column));
 }
 
 function addCardToList(filename, caught, dir, title) {
@@ -98,12 +122,3 @@ function fillLotto() {
 
   document.getElementById('status').innerHTML = '';
 }
-
-window.onload = () => {
-  document.getElementById('form').action = appscript_url;
-  if (localStorage.getItem('cards')) {
-    console.log('already stored');
-  } else {
-    fetchFilenames();
-  }
-};

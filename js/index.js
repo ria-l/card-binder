@@ -1,5 +1,5 @@
 window.onload = () => {
-  if (localStorage.getItem('bindername')) {
+  if (localStorage.length > 0) {
     loadFromStorage();
   } else {
     fetchAndFillBinder();
@@ -39,13 +39,14 @@ function loadFromStorage() {
 
 async function _fetchData() {
   console.log('fetching...');
-
   const status = document.getElementById('status');
   status.innerHTML = 'loading...';
   status.className = 'showstatus';
 
-  let response = await fetch(appscript_url);
-  let data = await response.json();
+  const response = await fetch(appscript_url);
+  const data = await response.json();
   status.className = 'hidestatus';
+  console.log('fetched');
+  
   return data;
 }
