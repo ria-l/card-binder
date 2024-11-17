@@ -28,7 +28,9 @@
         </form>
       </span>
       <span class="header-content">
-        <button onclick="lotto();">Pull!</button>
+        <button onclick="lotto(1);">Pull!</button>
+        <button onclick="lotto(5);">Pull 5!</button>
+        <button onclick="lotto(10);">Pull 10!</button>
         <button onclick="clearList();">Clear</button>
       </span>
       <span class="header-content">
@@ -40,7 +42,7 @@
 
     <div id="parent">
       <div id="content" class="content lotto">
-        <img id="winner"/>
+        <span id="winner"></span>
       </div>
       <span class="header-content" id="card-list-div">
         <ol reversed id="card-list"></ol>

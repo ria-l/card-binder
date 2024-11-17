@@ -126,7 +126,7 @@ function _createCardTags() {
   const imgWidth = document.getElementById('inputCardSize').value;
   const tags = [];
   for (var card = 0; card < BINDER_DATA.length; card++) {
-    const dir = `img/${BINDER_DATA[card][jset].toLowerCase()}`;
+    const dir = `img/${BINDER_DATA[card][SET_COL].toLowerCase()}`;
     const filename = BINDER_DATA[card][FILENAME_COL];
     const pkmntype = BINDER_DATA[card][PKMNTYPE_COL];
     const cardtype = BINDER_DATA[card][CARDTYPE_COL];

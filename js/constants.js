@@ -3,7 +3,7 @@ const appscript_url =
 
 let CAUGHT_COL,
   FILENAME_COL,
-  jset,
+  SET_COL,
   CARDTYPE_COL,
   PKMNTYPE_COL,
   CARDSUBTYPE_COL,
@@ -15,7 +15,7 @@ function getConstantsFromStorage() {
 
   CAUGHT_COL = header.indexOf('caught');
   FILENAME_COL = header.indexOf('file name');
-  jset = header.indexOf('set');
+  SET_COL = header.indexOf('set');
   CARDTYPE_COL = header.indexOf('card type');
   PKMNTYPE_COL = header.indexOf('pkmn type');
   CARDSUBTYPE_COL = header.indexOf('card subtype');
