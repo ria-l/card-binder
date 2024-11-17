@@ -46,7 +46,7 @@ function _fillLotto(picked_cards) {
       document.getElementById('form').submit();
     }
 
-    _addCardToWinnersList(filename, caught, dir, title);
+    _addCardToWinnersList(filename, caught, dir, title, cardRow, cardtype);
     _setBackgroundColors(cardRow);
     cardData.push({ filename: filename, dir: dir, title: title });
   });
@@ -99,7 +99,14 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
 
-function _addCardToWinnersList(filename, caught, dir, title) {
+function _addCardToWinnersList(
+  filename,
+  caught,
+  dir,
+  title,
+  cardRow,
+  cardtype
+) {
   const ol = document.getElementById('card-list');
   const li = document.createElement('li');
   const img = document.createElement('img');
@@ -107,6 +114,10 @@ function _addCardToWinnersList(filename, caught, dir, title) {
   let textnode = title;
   img.src = `${dir}/${filename}`;
   img.style.height = '100px';
+  const border_colors = generateBorderColors(cardRow, cardtype);
+  img.style.background = `linear-gradient(to bottom right, ${border_colors}) border-box`;
+  img.style.border = 'solid 5px transparent';
+  img.style.borderRadius = '5px';
 
   if (!caught) {
     textnode = `✨NEW✨${title}`;
