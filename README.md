@@ -30,7 +30,6 @@ https://ria-l.github.io/card-binder/
 
 ### catch
 
-- restrict pulls to select binders
 - show more col values on page when caught
 - track collection progress
 - zoom when clicking on cards caught so far
