@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="css.css" />
     <script type="text/javascript" src="js/catch.js"></script>
     <script type="text/javascript" src="js/constants.js"></script>
+    <script type="text/javascript" src="js/display.js"></script>
+    <script type="text/javascript" src="js/binder.js"></script>
+    <script type="text/javascript" src="js/sorting.js"></script>
 
     <title>Catch card remotely</title>
   </head>
@@ -27,6 +30,11 @@
       <span class="header-content">
         <button onclick="lotto();">Pull!</button>
         <button onclick="clearList();">Clear</button>
+      </span>
+      <span class="header-content">
+        Binder:
+        <select id="selectBinder"></select>
+        <button onclick="selectNewBinder('storefilenames');">Apply</button>
       </span>
     </div>
 

@@ -26,10 +26,25 @@ function storeBinders(data) {
   console.log('stored binders');
 }
 
-function selectNewBinder() {
-  select = document.getElementById('selectBinder');
-  localStorage.setItem('bindername', select.options[select.selectedIndex].text);
-  fillBinder();
+function _storeFileNames(binder) {
+  getConstantsFromStorage();
+  data = JSON.parse(localStorage.getItem(binder));
+  const filenames = data.map((row) => row[FILENAME_COL]);
+  filenames.shift(); // remove header row
+  localStorage.setItem('filenames', JSON.stringify([...filenames]));
+  console.log(`stored filenames for ${binder}`);
+}
+
+function selectNewBinder(action) {
+  const select = document.getElementById('selectBinder');
+  const bindername = select.options[select.selectedIndex].text;
+  localStorage.setItem('bindername', bindername);
+  if (action == 'fillbinder') {
+    fillBinder();
+  }
+  if (action == 'storefilenames') {
+    _storeFileNames(bindername);
+  }
 }
 
 function fillBinder() {
