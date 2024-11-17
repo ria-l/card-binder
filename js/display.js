@@ -67,3 +67,20 @@ function populateDropdown() {
   }
   console.log('populated dropdown');
 }
+
+function generateBorderColors(picked_card_row, cardtype) {
+  let special;
+  if (BINDER_DATA[picked_card_row][CARDTYPE_COL] != 'basic') {
+    special = CARD_HEX_COLORS[cardtype].join(',');
+  }
+
+  let border_colors;
+  const light = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][0];
+  const dark = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][1];
+  if (cardtype == 'basic') {
+    border_colors = `${dark},${light},${dark},${light},${dark}`;
+  } else {
+    border_colors = `${dark},${light},white,${special}`;
+  }
+  return border_colors;
+}

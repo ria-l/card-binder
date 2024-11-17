@@ -156,20 +156,8 @@ function _generateImgTag(tags, dir, filename, title, imgWidth) {
 
 function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
   // note that there are a couple other styles in the css file
-  let special;
-  if (BINDER_DATA[i][CARDTYPE_COL] != 'basic') {
-    special = CARD_HEX_COLORS[cardtype].join(',');
-  }
 
-  let border_colors;
-  const light = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][0];
-  const dark = PKMN_HEX_COLORS[BINDER_DATA[i][PKMNTYPE_COL]][1];
-  if (cardtype == 'basic') {
-    border_colors = `${dark},${light},${dark},${light},${dark}`;
-  } else {
-    border_colors = `${dark},${light},white,${special}`;
-  }
-
+  const border_colors = generateBorderColors(i, cardtype);
   let fill_colors;
   if (cardsubtype.includes('gold')) {
     fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;

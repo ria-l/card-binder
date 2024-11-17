@@ -38,35 +38,38 @@ function _fillLotto(picked_card_row) {
   const caught = BINDER_DATA[picked_card_row][CAUGHT_COL];
   const title = `'${filename} : ${pkmntype} : ${cardtype}'`;
 
-  document.getElementById('id-filename').value = filename;
-  addCardToList(filename, caught, dir, title);
   if (!caught) {
     document.getElementById('form').submit();
   }
 
-  let special;
-  if (BINDER_DATA[picked_card_row][CARDTYPE_COL] != 'basic') {
-    special = CARD_HEX_COLORS[cardtype].join(',');
-  }
+  _addCardToWinnersList(filename, caught, dir, title);
+  _setBackgroundColors(picked_card_row);
+  _displayWinner(filename, dir, title);
+}
 
-  let border_colors;
-  const light = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][0];
-  const dark = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][1];
-  if (cardtype == 'basic') {
-    border_colors = `${dark},${light},${dark},${light},${dark}`;
-  } else {
-    border_colors = `${dark},${light},white,${special}`;
-  }
+function _displayWinner(filename, dir, title) {
+  document.getElementById('id-filename').value = filename;
 
-  const newContent = `<img src='${dir}/${filename}' title=${title} style='height:500px;border-radius:15px' />`;
-  document.getElementById('content').innerHTML = newContent;
+  const img = document.createElement('img');
+  img.src = `${dir}/${filename}`;
+  img.title = title;
+  img.style.height = '500px';
+  img.style.borderRadius = '15px';
+  img.id = 'winner';
 
-  const backgroundStyle = `linear-gradient(to bottom right, ${border_colors}) border-box`;
-  document.getElementsByTagName('body')[0].style.background = backgroundStyle;
-  document.getElementsByTagName('body')[0].style.backgroundRepeat = 'no-repeat';
-  document.getElementsByTagName('body')[0].style.minHeight = '100vh';
+  const oldChild = document.getElementById('winner');
+  document.getElementById('content').replaceChild(img, oldChild);
+}
 
-  document.getElementById('status').innerHTML = '';
+function _setBackgroundColors(picked_card_row) {
+  const cardtype = BINDER_DATA[picked_card_row][CARDTYPE_COL];
+
+  const border_colors = generateBorderColors(picked_card_row, cardtype);
+
+  const body = document.getElementsByTagName('body')[0];
+  body.style.background = `linear-gradient(to bottom right, ${border_colors}) border-box`;
+  body.style.backgroundRepeat = 'no-repeat';
+  body.style.minHeight = '100vh';
 }
 
 function lotto() {
@@ -82,7 +85,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
 
-function addCardToList(filename, caught, dir, title) {
+function _addCardToWinnersList(filename, caught, dir, title) {
   const ol = document.getElementById('card-list');
   const li = document.createElement('li');
   const img = document.createElement('img');
