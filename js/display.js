@@ -19,13 +19,13 @@ function setAndStoreGrid(type, col, row) {
 
 function setAndStoreCardSize(type, input) {
   let sizeField = document.getElementById('inputCardSize');
-  let newVal = input;
+  let newSize = input;
 
   if (type == 'relative') {
-    newVal = parseInt(sizeField.value) + parseInt(input);
+    newSize = parseInt(sizeField.value) + parseInt(input);
   }
-  sizeField.value = newVal.toString();
-  localStorage.setItem('cardSize', newVal);
+  sizeField.value = newSize.toString();
+  localStorage.setItem('cardSize', newSize);
 
   _resizeCards();
 }
@@ -38,6 +38,9 @@ function _resizeCards() {
   document
     .querySelectorAll('img')
     .forEach((e) => (e.style.height = `${size * 1.4}px`));
+  document
+    .querySelectorAll('img')
+    .forEach((e) => (e.style.borderRadius = `${size / 20}px`));
 
   // HTMLCollection can't use foreach
   ph = document.getElementsByClassName('placeholder');

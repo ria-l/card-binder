@@ -62,8 +62,7 @@ function _displayWinner(cardData) {
     const img = document.createElement('img');
     img.src = `${card['dir']}/${card['filename']}`;
     img.title = card['title'];
-    img.style.height = '500px';
-    img.style.borderRadius = '15px';
+    img.className = 'caught-card';
     newSpan.appendChild(img);
   });
   const oldSpan = document.getElementById('winner');

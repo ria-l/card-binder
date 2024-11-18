@@ -27,10 +27,10 @@ https://ria-l.github.io/card-binder/
 - make preset sizes into dropdowns
 - list "today's catch" and jump to them
 - sort by recently caught
+- show recently caught
 
 ### catch
 
 - show more col values on page when caught
-- track collection progress
 - zoom when clicking on cards caught so far
 - allow resizing highlighted card

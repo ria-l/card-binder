@@ -126,3 +126,8 @@ ol {
 iframe {
   display: none;
 }
+
+.caught-card {
+  height: 500px;
+  border-radius: 16px;
+}
