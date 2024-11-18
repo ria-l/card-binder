@@ -16,7 +16,7 @@ async function fetchAndFillBinder() {
 function loadFromStorage() {
   console.log('loading from storage');
 
-  let cardSize = parseInt(localStorage.getItem('imgWidth'));
+  let cardSize = parseInt(localStorage.getItem('cardSize'));
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
 
@@ -47,6 +47,6 @@ async function _fetchData() {
   const data = await response.json();
   status.className = 'hidestatus';
   console.log('fetched');
-  
+
   return data;
 }

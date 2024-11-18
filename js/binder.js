@@ -123,7 +123,7 @@ function _createBinderContent() {
 
 function _createCardTags() {
   getConstantsFromStorage();
-  const imgWidth = document.getElementById('inputCardSize').value;
+  const cardSize = document.getElementById('inputCardSize').value;
   const tags = [];
   for (var card = 0; card < BINDER_DATA.length; card++) {
     const dir = `img/${BINDER_DATA[card][SET_COL].toLowerCase()}`;
@@ -134,27 +134,27 @@ function _createCardTags() {
 
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
     if (BINDER_DATA[card][CAUGHT_COL] == 'x') {
-      _generateImgTag(tags, dir, filename, title, imgWidth);
+      _generateImgTag(tags, dir, filename, title, cardSize);
     } else {
-      _generatePlaceholder(card, cardtype, cardsubtype, imgWidth, tags, title);
+      _generatePlaceholder(card, cardtype, cardsubtype, cardSize, tags, title);
     }
   }
   console.log('created tags');
   return tags;
 }
 
-function _generateImgTag(tags, dir, filename, title, imgWidth) {
+function _generateImgTag(tags, dir, filename, title, cardSize) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   img.title = title;
-  img.style.width = `${imgWidth}px`;
-  img.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
-  img.style.borderRadius = `${imgWidth / 20}px`;
+  img.style.width = `${cardSize}px`;
+  img.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+  img.style.borderRadius = `${cardSize / 20}px`;
 
   tags.push(img);
 }
 
-function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
+function _generatePlaceholder(i, cardtype, cardsubtype, cardSize, tags, title) {
   // note that there are a couple other styles in the css file
 
   const border_colors = generateBorderColors(i, cardtype);
@@ -168,11 +168,11 @@ function _generatePlaceholder(i, cardtype, cardsubtype, imgWidth, tags, title) {
   const span = document.createElement('span');
   span.className = 'placeholder';
   span.title = title;
-  span.style.width = `${imgWidth}px`;
-  span.style.height = `${imgWidth * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+  span.style.width = `${cardSize}px`;
+  span.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
   span.style.background = `linear-gradient(to bottom right, ${fill_colors}) padding-box, linear-gradient(to bottom right, ${border_colors}) border-box`;
-  span.style.borderRadius = `${imgWidth / 20}px`;
-  span.style.border = `${imgWidth / 15}px solid transparent`;
+  span.style.borderRadius = `${cardSize / 20}px`;
+  span.style.border = `${cardSize / 15}px solid transparent`;
 
   tags.push(span);
 }

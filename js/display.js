@@ -25,7 +25,7 @@ function setAndStoreCardSize(type, input) {
     newVal = parseInt(sizeField.value) + parseInt(input);
   }
   sizeField.value = newVal.toString();
-  localStorage.setItem('imgWidth', newVal);
+  localStorage.setItem('cardSize', newVal);
 
   _resizeCards();
 }
