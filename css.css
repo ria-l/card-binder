@@ -101,8 +101,17 @@ button {
 .content {
   text-align: center;
 }
-body {
-  background-color: #aaa;
+
+body::after {
+  content: '';
+  background: url('img/_bg/fall.jpeg');
+  opacity: 0.3;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 ol {
   text-align: left;
@@ -112,7 +121,9 @@ ol {
 }
 #card-list-div {
   flex: 1;
-  background-color: #fff5;
+  background-color: #fff;
+  opacity: 0.97;
+  padding: 10px;
 }
 .lotto {
   border: 10px solid transparent;
@@ -127,7 +138,11 @@ iframe {
   display: none;
 }
 
-.caught-card {
+#caught-card {
   height: 500px;
   border-radius: 16px;
+}
+
+button.link {
+  background: #6abaff;
 }
