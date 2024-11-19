@@ -47,13 +47,12 @@ function _fillLotto(picked_cards) {
     }
 
     _addCardToWinnersList(filename, caught, dir, title, cardRow, cardtype);
-    _setBackgroundColors(cardRow);
     cardData.push({ filename: filename, dir: dir, title: title });
+    _displayWinner(cardData, cardRow, cardtype);
   });
-  _displayWinner(cardData);
 }
 
-function _displayWinner(cardData) {
+function _displayWinner(cardData, cardRow, cardtype) {
   const newSpan = document.createElement('span');
   newSpan.id = 'winner';
   cardData.forEach((card, i) => {
@@ -62,22 +61,16 @@ function _displayWinner(cardData) {
     const img = document.createElement('img');
     img.src = `${card['dir']}/${card['filename']}`;
     img.title = card['title'];
-    img.className = 'caught-card';
+    img.id = 'caught-card';
+
+    const border_colors = generateBorderColors(cardRow, cardtype);
+    img.style.background = `linear-gradient(to bottom right, ${border_colors}) border-box`;
+    img.style.border = 'solid 20px transparent';
+    img.style.borderRadius = '16px';
     newSpan.appendChild(img);
   });
   const oldSpan = document.getElementById('winner');
   document.getElementById('content').replaceChild(newSpan, oldSpan);
-}
-
-function _setBackgroundColors(picked_card_row) {
-  const cardtype = BINDER_DATA[picked_card_row][CARDTYPE_COL];
-
-  const border_colors = generateBorderColors(picked_card_row, cardtype);
-
-  const body = document.getElementsByTagName('body')[0];
-  body.style.background = `linear-gradient(to bottom right, ${border_colors}) border-box`;
-  body.style.backgroundRepeat = 'no-repeat';
-  body.style.minHeight = '100vh';
 }
 
 function lotto(n) {
@@ -117,6 +110,7 @@ function _addCardToWinnersList(
   img.style.background = `linear-gradient(to bottom right, ${border_colors}) border-box`;
   img.style.border = 'solid 5px transparent';
   img.style.borderRadius = '5px';
+  img.style.margin = '3px';
 
   if (!caught) {
     textnode = `✨NEW✨${title}`;
