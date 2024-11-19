@@ -2,7 +2,9 @@ function storeBinders(data) {
   // puts binder names into a set
   const header = data[0];
   localStorage.setItem('header', header);
-  localStorage.setItem('bindername', header[0]);
+  if (!localStorage.getItem('bindername')) {
+    localStorage.setItem('bindername', header[0]);
+  }
   const binderNames = new Set();
   const binderIndex = header.indexOf('binder');
   for (const row of data) {

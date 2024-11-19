@@ -5,7 +5,6 @@ https://ria-l.github.io/card-binder/
 - last page of binder aligns to bottom instead of top
 - it's possible to "catch" the header row
 - multiple catches from pulls aren't registering
-- cardpool is wrong... way too short (showing only caught?)
 
 ## todo
 
@@ -14,7 +13,6 @@ https://ria-l.github.io/card-binder/
 - standardize var and func names
 - refactor, this is spaghetti
 - use pkmn card api instead of storing cards & data locally
-- make bg look better
 - nix the tests or update them
 - make text nicer looking
 
