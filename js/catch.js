@@ -98,22 +98,11 @@ function lotto(n) {
 
   let picked = [];
   for (let i = 0; i < n; i++) {
-    x = getRandomInt(0, cardPool.length);
+    // max val is length - 1
+    x = Math.floor(Math.random() * cardPool.length);
     picked.push(x);
   }
   _fillLotto(picked);
-}
-
-/**
- * Min and max are inclusive.
- * @param {int} min
- * @param {int} max
- * @returns {int}
- */
-function getRandomInt(min, max) {
-  const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max + 1);
-  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
 
 function _addCardToWinnersList(
