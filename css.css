@@ -104,7 +104,7 @@ button {
 
 body::after {
   content: '';
-  background: url('img/_bg/fall.jpeg');
+  background: url('img/0_bg/fall.jpeg');
   opacity: 0.3;
   top: 0;
   left: 0;
