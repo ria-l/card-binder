@@ -4,7 +4,6 @@ https://ria-l.github.io/card-binder/
 
 - last page of binder aligns to bottom instead of top
 - it's possible to "catch" the header row
-- multiple catches from pulls aren't registering
 
 ## todo
 

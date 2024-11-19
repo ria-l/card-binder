@@ -1,5 +1,5 @@
 const appscript_url =
-  'https://script.google.com/macros/s/AKfycbzUilPwxpjOEBReqEYPF1PBRQCM3-wNxr9CV3SuwZs-kGlks-vOTOUmeAmVvAeyyyxAOA/exec';
+  'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 
 let CAUGHT_COL,
   FILENAME_COL,

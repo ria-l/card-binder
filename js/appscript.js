@@ -36,28 +36,37 @@ function fakeGet() {
   doGet(eventObject);
 }
 
-function catchCard(cardName) {
+/**
+ * 
+ * @param {string} stringified stringified filename array
+ */
+function catchCard(stringified) {
   const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
   const sheet = doc.getSheetByName(sheetName);
+  const parsed = JSON.parse(stringified);
 
-  const card = sheet.createTextFinder(cardName).matchEntireCell(true).findAll();
-  const card_row = card[0].getRow();
+  parsed.forEach((filename) => {
+    const cardCell = sheet.createTextFinder(filename).matchEntireCell(true).findAll();
+    const cardRow = cardCell[0].getRow();
 
-  const caught = sheet
-    .createTextFinder('caught')
-    .matchEntireCell(true)
-    .findAll();
-  const caught_col = caught[0].getColumn();
-  sheet.getRange(card_row, caught_col).setValue('x');
+    // get the col #
+    const caught = sheet
+      .createTextFinder('caught')
+      .matchEntireCell(true)
+      .findAll();
+    const caughtCol = caught[0].getColumn();
 
-  const caught_date = sheet
-    .createTextFinder('caught date')
-    .matchEntireCell(true)
-    .findAll();
-  const date_col = caught_date[0].getColumn();
-  sheet
-    .getRange(card_row, date_col)
-    .setValue(Utilities.formatDate(new Date(), 'GMT-7', 'MM/dd/yyyy'));
+    // fill sheet
+    sheet.getRange(cardRow, caughtCol).setValue('x');
+    const caughtDate = sheet
+      .createTextFinder('caught date')
+      .matchEntireCell(true)
+      .findAll();
+    const dateCol = caughtDate[0].getColumn();
+    sheet
+      .getRange(cardRow, dateCol)
+      .setValue(Utilities.formatDate(new Date(), 'GMT-7', 'MM/dd/yyyy'));
+  });
 }
 
 function doPost(e) {
@@ -65,11 +74,11 @@ function doPost(e) {
   lock.tryLock(10000);
 
   try {
-    const card = e.parameter['filename'];
-    catchCard(card);
+    const cards = e.parameter['filenames'];
+    catchCard(cards);
 
     return ContentService.createTextOutput(
-      JSON.stringify({ result: 'success', card: card })
+      JSON.stringify({ result: 'success', cards: cards })
     ).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
     Logger.log(error);
@@ -81,10 +90,20 @@ function doPost(e) {
   }
 }
 
-function fakePost() {
+function testPostOne() {
   var eventObject = {
     parameter: {
-      filename: 'xyp.XY177.karen_.jpg',
+      filenames: '["xyp.XY177.karen_.jpg"]',
+    },
+  };
+  doPost(eventObject);
+}
+
+function testPostMult() {
+  var eventObject = {
+    parameter: {
+      filenames:
+        '["xyp.XY177.karen_.jpg","brs.TG22.umbreon_v.png","lor.TG17.pikachu_vmax.png"]',
     },
   };
   doPost(eventObject);

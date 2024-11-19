@@ -28,9 +28,14 @@ async function fetchAndStoreBinders() {
   populateDropdown();
 }
 
+/**
+ *
+ * @param {array of ints} picked_cards index numbers in the filenames array
+ */
 function _fillLotto(picked_cards) {
   getConstantsFromStorage();
   const cardData = [];
+  const toSubmit = [];
 
   picked_cards.forEach((cardRow) => {
     const dir = `img/${BINDER_DATA[cardRow][SET_COL].toLowerCase()}`;
@@ -40,22 +45,37 @@ function _fillLotto(picked_cards) {
     const caught = BINDER_DATA[cardRow][CAUGHT_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
 
-    // Needed for form submit
-    document.getElementById('id-filename').value = filename;
     if (!caught) {
-      document.getElementById('form').submit();
+      toSubmit.push(filename);
     }
-
     _addCardToWinnersList(filename, caught, dir, title, cardRow, cardtype);
     cardData.push({ filename: filename, dir: dir, title: title });
     _displayWinner(cardData, cardRow, cardtype);
   });
+  if (toSubmit.length) {
+    _submitForm(toSubmit);
+  }
 }
 
+/**
+ *
+ * @param {array of strings} filenames
+ */
+function _submitForm(filenames) {
+  document.getElementById('id-filename').value = JSON.stringify(filenames);
+  document.getElementById('form').submit();
+}
+
+/**
+ *
+ * @param {array of objects} cardData { filename: filename, dir: dir, title: title }
+ * @param {int} cardRow row number
+ * @param {string} cardtype
+ */
 function _displayWinner(cardData, cardRow, cardtype) {
   const newSpan = document.createElement('span');
   newSpan.id = 'winner';
-  cardData.forEach((card, i) => {
+  cardData.forEach((card) => {
     cardData[0]['filename'];
 
     const img = document.createElement('img');
@@ -78,16 +98,21 @@ function lotto(n) {
 
   let picked = [];
   for (let i = 0; i < n; i++) {
-    x = getRandomInt(0, cardPool.length + 1);
+    x = getRandomInt(0, cardPool.length);
     picked.push(x);
   }
   _fillLotto(picked);
 }
 
+/**
+ * Min and max are inclusive.
+ * @param {int} min
+ * @param {int} max
+ * @returns {int}
+ */
 function getRandomInt(min, max) {
   const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max);
-  // The maximum is exclusive and the minimum is inclusive.
+  const maxFloored = Math.floor(max + 1);
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
 
