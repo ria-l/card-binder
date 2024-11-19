@@ -78,7 +78,7 @@ function lotto(n) {
 
   let picked = [];
   for (let i = 0; i < n; i++) {
-    x = getRandomInt(0, cardPool.length);
+    x = getRandomInt(0, cardPool.length + 1);
     picked.push(x);
   }
   _fillLotto(picked);
