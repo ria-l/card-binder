@@ -35,14 +35,14 @@ function _storeFileNames(binder) {
   console.log(`stored filenames for ${binder}`);
 }
 
-function selectNewBinder(action) {
+function selectNewBinder(source) {
   const select = document.getElementById('selectBinder');
   const bindername = select.options[select.selectedIndex].text;
   localStorage.setItem('bindername', bindername);
-  if (action == 'fillbinder') {
+  if (source == 'fillbinder') {
     fillBinder();
   }
-  if (action == 'storefilenames') {
+  if (source == 'storefilenames') {
     _storeFileNames(bindername);
   }
 }

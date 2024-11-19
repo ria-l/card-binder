@@ -1,5 +1,5 @@
 window.onload = () => {
-  if (localStorage.length > 0) {
+  if (localStorage.getItem('bindername')) {
     loadFromStorage();
   } else {
     fetchAndFillBinder();

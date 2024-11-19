@@ -1,6 +1,6 @@
 window.onload = () => {
   document.getElementById('form').action = appscript_url;
-  if (localStorage.length > 0) {
+  if (localStorage.getItem('filenames')) {
     console.log('already stored');
     populateDropdown();
   } else {
