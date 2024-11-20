@@ -12,12 +12,14 @@ async function fetchAndFillBinder() {
   storeBinders(data.data);
   fillBinder();
   populateDropdown();
+  createProgressBar();
 }
 
 function loadFromStorage() {
   console.log('loading from storage');
   fillBinder();
   populateDropdown();
+  createProgressBar();
 }
 
 function _setSizeAndGrid() {
