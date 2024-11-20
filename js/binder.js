@@ -35,7 +35,6 @@ function _storeFileNames(binder) {
   getConstantsFromStorage();
   data = JSON.parse(localStorage.getItem(binder));
   const filenames = data.map((row) => row[FILENAME_COL]);
-  filenames.shift(); // remove header row
   localStorage.setItem('filenames', JSON.stringify([...filenames]));
   console.log(`stored filenames for ${binder}`);
 }

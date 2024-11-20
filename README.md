@@ -3,7 +3,6 @@ https://ria-l.github.io/card-binder/
 ## bug
 
 - last page of binder aligns to bottom instead of top
-- it's possible to "catch" the header row
 
 ## todo
 
@@ -16,7 +15,6 @@ https://ria-l.github.io/card-binder/
 - use document fragments
 - pick a random background image
 - don't use the sheet to select the default binder
-- progress bar is a bit wrong; seems somewhere along the line the a filename is getting left out
 - consolidate getConstantsFromStorage
 - mobile-friendly
 

@@ -28,6 +28,10 @@ async function _fetchData() {
   return data;
 }
 
+/**
+ * filenames is set in binder._storeFileNames
+ * @param {int} n number of cards pulled 
+ */
 function lotto(n) {
   const cardPool = JSON.parse(localStorage.filenames);
 
