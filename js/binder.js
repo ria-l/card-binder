@@ -48,9 +48,9 @@ function selectNewBinder(source) {
     fillBinder();
   }
   if (source == 'storefilenames') {
-    _storeFileNames(bindername);
     createProgressBar();
   }
+  _storeFileNames(bindername);
 }
 
 function fillBinder() {

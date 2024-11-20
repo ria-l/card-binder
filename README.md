@@ -19,6 +19,7 @@ https://ria-l.github.io/card-binder/
 - don't use the sheet to select the default binder
 - progress bar is a bit wrong; seems somewhere along the line the a filename is getting left out
 - consolidate getConstantsFromStorage
+- mobile-friendly
 
 ### binder
 
