@@ -10,6 +10,7 @@ async function initializeCatchPage(source) {
     const data = await _fetchData();
     storeBinders(data.data);
   }
+  populateDropdown();
 }
 
 async function _fetchData() {
@@ -26,10 +27,16 @@ async function _fetchData() {
   return data;
 }
 
-async function fetchAndStoreBinders() {
-  const data = await _fetchData();
-  storeBinders(data.data);
-  populateDropdown();
+function lotto(n) {
+  const cardPool = JSON.parse(localStorage.filenames);
+
+  let picked = [];
+  for (let i = 0; i < n; i++) {
+    // max val is length - 1
+    x = Math.floor(Math.random() * cardPool.length);
+    picked.push(x);
+  }
+  _fillLotto(picked);
 }
 
 /**
@@ -63,15 +70,6 @@ function _fillLotto(picked_cards) {
 
 /**
  *
- * @param {array of strings} filenames
- */
-function _submitForm(filenames) {
-  document.getElementById('id-filename').value = JSON.stringify(filenames);
-  document.getElementById('form').submit();
-}
-
-/**
- *
  * @param {array of objects} cardData { filename: filename, dir: dir, title: title }
  * @param {int} cardRow row number
  * @param {string} cardtype
@@ -95,18 +93,6 @@ function _displayWinner(cardData, cardRow, cardtype) {
   });
   const oldSpan = document.getElementById('winner');
   document.getElementById('content').replaceChild(newSpan, oldSpan);
-}
-
-function lotto(n) {
-  const cardPool = JSON.parse(localStorage.filenames);
-
-  let picked = [];
-  for (let i = 0; i < n; i++) {
-    // max val is length - 1
-    x = Math.floor(Math.random() * cardPool.length);
-    picked.push(x);
-  }
-  _fillLotto(picked);
 }
 
 function _addCardToWinnersList(
@@ -140,6 +126,18 @@ function _addCardToWinnersList(
   ol.insertBefore(li, ol.firstChild);
 }
 
+/**
+ *
+ * @param {array of strings} filenames
+ */
+function _submitForm(filenames) {
+  document.getElementById('id-filename').value = JSON.stringify(filenames);
+  document.getElementById('form').submit();
+}
+
+/**
+ * Used for button click
+ */
 function clearList() {
   const right = document.getElementById('card-list-div');
   right.innerHTML = '<ol reversed id="card-list"></ol>';
