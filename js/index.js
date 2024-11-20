@@ -25,14 +25,14 @@ function _setSizeAndGrid() {
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
 
-  if (!cardSize) {
+  if (isNaN(cardSize)) {
     cardSize = 150;
   }
-  if (!gridCol) {
-    gridCol = 3;
+  if (isNaN(gridCol)) {
+    gridCol = 0;
   }
-  if (!gridRow) {
-    gridRow = 3;
+  if (isNaN(gridRow)) {
+    gridRow = 0;
   }
 
   setAndStoreCardSize('absolute', cardSize);
