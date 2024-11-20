@@ -98,9 +98,6 @@ button {
   border-radius: 10px;
   padding-block: 4px;
 }
-.content {
-  text-align: center;
-}
 
 #bg {
   background-image: url('img/0_bg/water.jpeg');
@@ -119,16 +116,11 @@ ol {
   display: flex;
 }
 #card-list-div {
-  flex: 1;
-  background-color: #fff;
-  opacity: 0.8;
   padding: 10px;
-}
-.lotto {
-  border: 10px solid transparent;
-}
-#id-filename {
-  width: auto;
+  background-color: #fff;
+  border-radius: 14px;
+  margin: 10px;
+  flex-basis: 60%;
 }
 .catch-header {
   text-align: left;
@@ -137,12 +129,31 @@ iframe,
 #id-filename {
   display: none;
 }
-
-#caught-card {
-  height: 500px;
-  border-radius: 16px;
-}
-
 button.link {
   background: #6abaff;
+}
+.small-card {
+  border: solid 5px transparent;
+  border-radius: 8px;
+  margin: 3px;
+  height: 100px;
+}
+.small-card.caught {
+  opacity: 0.5;
+}
+.large-card {
+  border: solid 20px transparent;
+  border-radius: 36px;
+  margin: 5px;
+  height: auto;
+  max-width: 100vh;
+}
+
+#winner {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  overflow: scroll;
+  max-height: 90vh;
+  flex-basis: 40%;
 }

@@ -36,94 +36,90 @@ function lotto(n) {
     x = Math.floor(Math.random() * cardPool.length);
     picked.push(x);
   }
-  _fillLotto(picked);
+  processPicked(picked);
 }
 
 /**
  *
  * @param {array of ints} picked_cards index numbers in the filenames array
  */
-function _fillLotto(picked_cards) {
+function processPicked(picked_cards) {
   getConstantsFromStorage();
-  const cardData = [];
   const toSubmit = [];
-
+  const largeArr = [];
   picked_cards.forEach((cardRow) => {
-    const dir = `img/${BINDER_DATA[cardRow][SET_COL].toLowerCase()}`;
     const filename = BINDER_DATA[cardRow][FILENAME_COL];
-    const pkmntype = BINDER_DATA[cardRow][PKMNTYPE_COL];
-    const cardtype = BINDER_DATA[cardRow][CARDTYPE_COL];
     const caught = BINDER_DATA[cardRow][CAUGHT_COL];
+    const cardtype = BINDER_DATA[cardRow][CARDTYPE_COL];
+    const pkmntype = BINDER_DATA[cardRow][PKMNTYPE_COL];
+    const set = BINDER_DATA[cardRow][SET_COL];
+
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
+    const borderColors = generateBorderColors(cardRow, cardtype);
+    const dir = `img/${set.toLowerCase()}`;
+
+    _displaySmall(filename, title, caught, dir, borderColors);
+    largeArr.push(_createImg('large', dir, filename, caught, borderColors));
 
     if (!caught) {
       toSubmit.push(filename);
     }
-    _addCardToWinnersList(filename, caught, dir, title, cardRow, cardtype);
-    cardData.push({ filename: filename, dir: dir, title: title });
-    _displayWinner(cardData, cardRow, cardtype);
   });
+  _displayLarge(largeArr);
   if (toSubmit.length) {
     _submitForm(toSubmit);
   }
 }
 
-/**
- *
- * @param {array of objects} cardData { filename: filename, dir: dir, title: title }
- * @param {int} cardRow row number
- * @param {string} cardtype
- */
-function _displayWinner(cardData, cardRow, cardtype) {
-  const newSpan = document.createElement('span');
-  newSpan.id = 'winner';
-  cardData.forEach((card) => {
-    cardData[0]['filename'];
-
-    const img = document.createElement('img');
-    img.src = `${card['dir']}/${card['filename']}`;
-    img.title = card['title'];
-    img.id = 'caught-card';
-
-    const border_colors = generateBorderColors(cardRow, cardtype);
-    img.style.background = `linear-gradient(to bottom right, ${border_colors}) border-box`;
-    img.style.border = 'solid 20px transparent';
-    img.style.borderRadius = '16px';
-    newSpan.appendChild(img);
-  });
-  const oldSpan = document.getElementById('winner');
-  document.getElementById('content').replaceChild(newSpan, oldSpan);
+function _createImg(size, dir, filename, caught, borderColors) {
+  const img = document.createElement('img');
+  img.src = `${dir}/${filename}`;
+  if (size == 'small') {
+    img.classList.add('small-card');
+  } else if (size == 'large') {
+    img.classList.add('large-card');
+  }
+  if (caught) {
+    img.classList.add('caught');
+  }
+  img.style.setProperty(
+    'background',
+    `linear-gradient(to bottom right, ${borderColors}) border-box`
+  );
+  return img;
 }
 
-function _addCardToWinnersList(
-  filename,
-  caught,
-  dir,
-  title,
-  cardRow,
-  cardtype
-) {
+function _displaySmall(filename, title, caught, dir, borderColors) {
   const ol = document.getElementById('card-list');
-  const li = document.createElement('li');
-  const img = document.createElement('img');
-  const div = document.getElementById('card-list-div');
-  let textnode = title;
-  img.src = `${dir}/${filename}`;
-  img.style.height = '100px';
-  const border_colors = generateBorderColors(cardRow, cardtype);
-  img.style.background = `linear-gradient(to bottom right, ${border_colors}) border-box`;
-  img.style.border = 'solid 5px transparent';
-  img.style.borderRadius = '5px';
-  img.style.margin = '3px';
-
-  if (!caught) {
-    textnode = `✨NEW✨${title}`;
-  } else {
-    img.style.opacity = '50%';
-  }
-  div.insertBefore(img, ol);
-  li.appendChild(document.createTextNode(textnode));
+  const li = _createLi(title, caught);
   ol.insertBefore(li, ol.firstChild);
+
+  const right = document.getElementById('card-list-div');
+  const small = _createImg('small', dir, filename, caught, borderColors);
+  small.onclick = function () {
+    _displayLarge([_createImg('large', dir, filename, caught, borderColors)]);
+  };
+  right.insertBefore(small, ol);
+}
+
+function _displayLarge(arr) {
+  const left = document.getElementById('winner');
+  const newLeft = document.createElement('span');
+  newLeft.id = 'winner';
+  arr.forEach((element) => {
+    newLeft.appendChild(element);
+  });
+  left.replaceWith(newLeft);
+}
+
+function _createLi(title, caught) {
+  const li = document.createElement('li');
+  let textnode = title;
+  if (!caught) {
+    textnode += ` ✨NEW✨`;
+  }
+  li.appendChild(document.createTextNode(textnode));
+  return li;
 }
 
 /**
