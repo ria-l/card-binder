@@ -137,7 +137,8 @@ function _addCardToWinnersList(
 }
 
 function clearList() {
-  const div = document.getElementById('card-list-div');
-  div.innerHTML = '';
-  div.innerHTML = '<ol reversed id="card-list"></ol>';
+  const right = document.getElementById('card-list-div');
+  right.innerHTML = '<ol reversed id="card-list"></ol>';
+  const left = document.getElementById('winner');
+  left.innerHTML = '';
 }

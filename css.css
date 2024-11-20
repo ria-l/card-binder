@@ -134,7 +134,8 @@ ol {
 .catch-header {
   text-align: left;
 }
-iframe {
+iframe,
+#id-filename {
   display: none;
 }
 
