@@ -4,20 +4,21 @@ https://ria-l.github.io/card-binder/
 
 - last page of binder aligns to bottom instead of top
 - it's possible to "catch" the header row
+- binder view is not persisting grid
 
 ## todo
 
 ### both
 
-- show collection progress
 - standardize var and func names
-- refactor, this is spaghetti
 - use pkmn card api instead of storing cards & data locally
 - nix the tests or update them
 - make text nicer looking
 - use document fragments
 - pick a random background image
 - don't use the sheet to select the default binder
+- progress bar is a bit wrong; seems somewhere along the line the a filename is getting left out
+- consolidate getConstantsFromStorage
 
 ### binder
 
@@ -35,6 +36,4 @@ https://ria-l.github.io/card-binder/
 
 - show more col values on page when caught
 - zoom when clicking on cards caught so far
-- allow resizing highlighted card
-- for multiple pulls, display it so the large cards aren't overwhelming
-- show only the newest 10 cards? scroll?
+- announce new catches in header

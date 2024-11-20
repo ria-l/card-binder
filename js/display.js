@@ -87,3 +87,30 @@ function generateBorderColors(picked_card_row, cardtype) {
   }
   return border_colors;
 }
+
+function createProgressBar() {
+  getConstantsFromStorage();
+  const span = document.getElementById('progress');
+  const newBar = document.createElement('progress');
+  const max = BINDER_DATA.length;
+  const caught = _countCaught();
+  const ratio = document.createTextNode(`${caught}/${max} `);
+  const percent = document.createTextNode(
+    ` ${((caught / max) * 100).toFixed(2)}%`
+  );
+  const newspan = document.createElement('span');
+
+  newBar.max = max;
+  newBar.value = caught;
+  newspan.id = 'progress';
+  newspan.appendChild(ratio);
+  newspan.appendChild(newBar);
+  newspan.appendChild(percent);
+
+  span.replaceWith(newspan);
+}
+
+function _countCaught() {
+  filtered = BINDER_DATA.filter((row) => row[CAUGHT_COL] == 'x');
+  return filtered.length;
+}

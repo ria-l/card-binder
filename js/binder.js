@@ -49,6 +49,7 @@ function selectNewBinder(source) {
   }
   if (source == 'storefilenames') {
     _storeFileNames(bindername);
+    createProgressBar();
   }
 }
 
@@ -180,4 +181,21 @@ function _generatePlaceholder(i, cardtype, cardsubtype, cardSize, tags, title) {
   span.style.border = `${cardSize / 15}px solid transparent`;
 
   tags.push(span);
+}
+
+/**
+ *
+ * @param {array of strings} freshlyCaught filenames
+ */
+function _updateBinderData(freshlyCaught) {
+  freshlyCaught.forEach((filename) => {
+    for (let i = 0; i < BINDER_DATA.length; i++) {
+      if (BINDER_DATA[i][FILENAME_COL] == filename) {
+        BINDER_DATA[i][CAUGHT_COL] = 'x';
+        break;
+      }
+    }
+  });
+  localStorage.setItem(binderName, JSON.stringify(BINDER_DATA));
+  createProgressBar();
 }

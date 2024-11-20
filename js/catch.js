@@ -11,6 +11,7 @@ async function initializeCatchPage(source) {
     storeBinders(data.data);
   }
   populateDropdown();
+  createProgressBar();
 }
 
 async function _fetchData() {
@@ -45,7 +46,7 @@ function lotto(n) {
  */
 function processPicked(picked_cards) {
   getConstantsFromStorage();
-  const toSubmit = [];
+  const freshlyCaught = [];
   const largeArr = [];
   picked_cards.forEach((cardRow) => {
     const filename = BINDER_DATA[cardRow][FILENAME_COL];
@@ -62,12 +63,13 @@ function processPicked(picked_cards) {
     largeArr.push(_createImg('large', dir, filename, caught, borderColors));
 
     if (!caught) {
-      toSubmit.push(filename);
+      freshlyCaught.push(filename);
     }
   });
   _displayLarge(largeArr);
-  if (toSubmit.length) {
-    _submitForm(toSubmit);
+  if (freshlyCaught.length) {
+    _updateBinderData(freshlyCaught)
+    _submitForm(freshlyCaught);
   }
 }
 
