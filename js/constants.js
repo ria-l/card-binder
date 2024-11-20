@@ -1,4 +1,4 @@
-const appscript_url =
+const APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 
 let CAUGHT_COL,
@@ -62,7 +62,8 @@ const CARD_HEX_COLORS = {
 
 const BG_FILES = [
   'ace.jpeg',
-  'electric.jpeg ground.jpg',
+  'electric.jpeg',
+  'ground.jpg',
   'poison.jpg',
   'trans.jpeg',
   'applin.jpg',

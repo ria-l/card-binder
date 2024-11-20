@@ -1,5 +1,5 @@
 window.onload = () => {
-  document.getElementById('form').action = appscript_url;
+  document.getElementById('form').action = APPSCRIPT_URL;
   if (localStorage.getItem('filenames')) {
     console.log('already stored');
     populateDropdown();
@@ -14,7 +14,7 @@ async function _fetchData() {
   status.innerHTML = 'loading...';
   status.className = 'showstatus';
 
-  const response = await fetch(appscript_url);
+  const response = await fetch(APPSCRIPT_URL);
   const data = await response.json();
   status.className = 'hidestatus';
   console.log('fetched');
