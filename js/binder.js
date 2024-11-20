@@ -1,9 +1,11 @@
 function storeBinders(data) {
   // puts binder names into a set
   const header = data[0];
+  const bindername = localStorage.getItem('bindername');
   localStorage.setItem('header', header);
-  if (!localStorage.getItem('bindername')) {
-    localStorage.setItem('bindername', header[0]);
+  if (!bindername) {
+    bindername = header[0]; // TODO: make this random
+    localStorage.setItem('bindername', bindername);
   }
   const binderNames = new Set();
   const binderIndex = header.indexOf('binder');
@@ -25,6 +27,7 @@ function storeBinders(data) {
     localStorage.setItem(name, JSON.stringify(toStore));
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
+  _storeFileNames(bindername);
   console.log('stored binders');
 }
 

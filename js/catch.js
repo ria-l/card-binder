@@ -1,12 +1,16 @@
 window.onload = () => {
   document.getElementById('form').action = APPSCRIPT_URL;
-  if (localStorage.getItem('filenames')) {
-    console.log('already stored');
-    populateDropdown();
-  } else {
-    fetchAndStoreBinders();
-  }
+  initializeCatchPage('onload');
 };
+
+async function initializeCatchPage(source) {
+  if (localStorage.getItem('bindername') && source == 'onload') {
+    console.log('already stored');
+  } else {
+    const data = await _fetchData();
+    storeBinders(data.data);
+  }
+}
 
 async function _fetchData() {
   console.log('fetching...');
