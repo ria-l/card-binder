@@ -70,9 +70,6 @@ function _createBinderContent() {
   let currentRow;
 
   cardTags.forEach((tag, i) => {
-    if (i == 81) {
-      debugger;
-    }
     if (!rows || !cols) {
       allTables.push(tag);
       const spaceNode = document.createTextNode(' ');
