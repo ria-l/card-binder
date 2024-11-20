@@ -18,8 +18,14 @@
     <div class="header catch-header">
       <span class="header-content">
         <a href="index.html"><button class="link">Binder</button></a>
-        <button onclick="initializeCatchPage();">Refetch</button>
-        <button onclick="localStorage.clear();">Clear storage</button>
+        <button onclick="initializeCatchPage();">
+          <img src="img/0_icons/farfetchd.png" class="icon" />
+          Refetch
+        </button>
+        <button onclick="localStorage.clear();">
+          <img src="img/0_icons/slowpoke.png" class="icon" />
+          Clear storage
+        </button>
       </span>
       <span class="header-content">
         <form id="form" method="POST" target="_iframe">
@@ -33,11 +39,14 @@
         <button onclick="clearList();">Clear display</button>
       </span>
       <span class="header-content">
-        Binder:
-        <select id="selectBinder"></select>
+        <button>
+          <img src="img/0_icons/ditto.png" class="icon" />
+          Binder:
+          <select id="selectBinder"></select>
+        </button>
         <button onclick="selectNewBinder('storefilenames');">Apply</button>
       </span>
-      <span class="header-content" id="progress"><progress ></progress></span>
+      <span class="header-content" id="progress"><progress></progress></span>
     </div>
 
     <div id="parent">

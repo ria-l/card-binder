@@ -33,13 +33,13 @@ function setAndStoreCardSize(type, input) {
 function _resizeCards() {
   size = document.getElementById('inputCardSize').value;
   document
-    .querySelectorAll('img')
+    .querySelectorAll('.card')
     .forEach((e) => (e.style.width = `${size}px`));
   document
-    .querySelectorAll('img')
+    .querySelectorAll('.card')
     .forEach((e) => (e.style.height = `${size * 1.4}px`));
   document
-    .querySelectorAll('img')
+    .querySelectorAll('.card')
     .forEach((e) => (e.style.borderRadius = `${size / 20}px`));
 
   // HTMLCollection can't use foreach

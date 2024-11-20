@@ -157,3 +157,6 @@ button.link {
   max-height: 90vh;
   flex-basis: 40%;
 }
+.icon {
+  vertical-align: middle;
+}

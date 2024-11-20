@@ -153,6 +153,7 @@ function _generateImgTag(tags, dir, filename, title, cardSize) {
   img.style.width = `${cardSize}px`;
   img.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
   img.style.borderRadius = `${cardSize / 20}px`;
+  img.classList.add('card');
 
   tags.push(img);
 }

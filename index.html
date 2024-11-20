@@ -17,17 +17,32 @@
 
     <div class="header">
       <span class="header-content">
-        <a href="catch.html"><button class="link">Catch</button></a>
-        <button onclick="fetchAndFillBinder();">Refetch</button>
-        <button onclick="localStorage.clear();">Clear storage</button>
-      </span>
+        <a href="catch.html">
+          <button class="link">
+            <img src="img/0_icons/voltorb.png" class="icon" />
+            Catch
+          </button>
+        </a>
 
+        <button onclick="fetchAndFillBinder();">
+          <img src="img/0_icons/farfetchd.png" class="icon" />
+          Refetch
+        </button>
+
+        <button onclick="localStorage.clear();">
+          <img src="img/0_icons/slowpoke.png" class="icon" />
+          Clear storage
+        </button>
+      </span>
       <span class="header-content">
-        Binder:
-        <select id="selectBinder"></select>
+        <button>
+          <img src="img/0_icons/ditto.png" class="icon" />
+          Binder:
+          <select id="selectBinder"></select>
+        </button>
         <button onclick="selectNewBinder('fillbinder');">Apply</button>
       </span>
-      <span class="header-content" id="progress"><progress ></progress></span>
+      <span class="header-content" id="progress"><progress></progress></span>
 
       <span class="header-content">
         <span class="header-content">
