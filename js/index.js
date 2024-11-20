@@ -1,4 +1,5 @@
 window.onload = () => {
+  _setSizeAndGrid();
   if (localStorage.getItem('bindername')) {
     loadFromStorage();
   } else {
@@ -15,7 +16,11 @@ async function fetchAndFillBinder() {
 
 function loadFromStorage() {
   console.log('loading from storage');
+  fillBinder();
+  populateDropdown();
+}
 
+function _setSizeAndGrid() {
   let cardSize = parseInt(localStorage.getItem('cardSize'));
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
@@ -32,9 +37,6 @@ function loadFromStorage() {
 
   setAndStoreCardSize('absolute', cardSize);
   setAndStoreGrid('absolute', gridCol, gridRow);
-
-  fillBinder();
-  populateDropdown();
 }
 
 async function _fetchData() {

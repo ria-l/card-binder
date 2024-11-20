@@ -7,7 +7,7 @@ let CAUGHT_COL,
   CARDTYPE_COL,
   PKMNTYPE_COL,
   CARDSUBTYPE_COL,
-  binderName,
+  BINDER_NAME,
   BINDER_DATA;
 
 function getConstantsFromStorage() {
@@ -19,8 +19,8 @@ function getConstantsFromStorage() {
   CARDTYPE_COL = header.indexOf('card type');
   PKMNTYPE_COL = header.indexOf('pkmn type');
   CARDSUBTYPE_COL = header.indexOf('card subtype');
-  binderName = localStorage.getItem('bindername');
-  BINDER_DATA = JSON.parse(localStorage.getItem(binderName));
+  BINDER_NAME = localStorage.getItem('bindername');
+  BINDER_DATA = JSON.parse(localStorage.getItem(BINDER_NAME));
 }
 
 const PKMN_HEX_COLORS = {

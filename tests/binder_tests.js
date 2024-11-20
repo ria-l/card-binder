@@ -31,8 +31,8 @@ const test_create_tags = () => {
   storeBinders(data);
 
   // dupe from function to help debug
-  binderName = localStorage.getItem('bindername');
-  BINDER_DATA = JSON.parse(localStorage.getItem(binderName));
+  BINDER_NAME = localStorage.getItem('bindername');
+  BINDER_DATA = JSON.parse(localStorage.getItem(BINDER_NAME));
   header = JSON.parse(localStorage.getItem('binder'))[0];
 
   // test functionality
@@ -41,7 +41,7 @@ const test_create_tags = () => {
   } catch (err) {
     console.log('❌ fail');
     console.log(err);
-    console.log(`binderName: ${binderName}`);
+    console.log(`BINDER_NAME: ${BINDER_NAME}`);
     console.log(`BINDER_DATA: ${BINDER_DATA}`);
     console.log(`header: ${header}`);
   }

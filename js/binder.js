@@ -1,7 +1,7 @@
 function storeBinders(data) {
   // puts binder names into a set
   const header = data[0];
-  const bindername = localStorage.getItem('bindername');
+  let bindername = localStorage.getItem('bindername');
   localStorage.setItem('header', header);
   if (!bindername) {
     bindername = header[0]; // TODO: make this random
@@ -196,6 +196,6 @@ function _updateBinderData(freshlyCaught) {
       }
     }
   });
-  localStorage.setItem(binderName, JSON.stringify(BINDER_DATA));
+  localStorage.setItem(BINDER_NAME, JSON.stringify(BINDER_DATA));
   createProgressBar();
 }

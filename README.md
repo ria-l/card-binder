@@ -31,6 +31,7 @@ https://ria-l.github.io/card-binder/
 - list "today's catch" and jump to them
 - sort by recently caught
 - show recently caught
+- flexbox instead of tables?
 
 ### catch
 
