@@ -38,8 +38,7 @@ input,
   padding-block: 4px;
   background-color: #fff;
 }
-button,
-#progress {
+button {
   height: 60px;
   vertical-align: middle;
 }
