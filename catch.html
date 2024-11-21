@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css.css" />
     <script type="text/javascript" src="js/catch.js"></script>
     <script type="text/javascript" src="js/constants.js"></script>
@@ -16,44 +17,47 @@
     <iframe src="about:blank" name="_iframe"></iframe>
     <span id="status" class="hidestatus"></span>
     <div class="header catch-header">
-      <span class="header-content">
-        <a href="index.html"><button class="link">Binder</button></a>
-        <button onclick="initializeCatchPage();">
-          <img src="img/0_icons/farfetchd.png" class="icon" />
-          Refetch
+      <span id="top">
+        <button onclick="location.href='index.html';" class="link">
+          <img src="img/0_icons/ditto.png" class="icon" />Home
         </button>
+
+        <button onclick="initializeCatchPage();">
+          <img src="img/0_icons/farfetchd.png" class="icon" /> Sync
+        </button>
+
         <button onclick="localStorage.clear();">
           <img src="img/0_icons/slowpoke.png" class="icon" />
           Clear storage
         </button>
       </span>
-      <span class="header-content">
-        <form id="form" method="POST" target="_iframe">
-          <input type="text" id="id-filename" name="filenames" readonly />
-        </form>
-      </span>
-      <span class="header-content">
-        <button onclick="lotto(1);">Pull!</button>
-        <button onclick="lotto(5);">Pull 5!</button>
-        <button onclick="lotto(10);">Pull 10!</button>
-        <button onclick="clearList();">Clear display</button>
-      </span>
-      <span class="header-content">
+
+      <span id="binder-info">
         <button>
-          <img src="img/0_icons/ditto.png" class="icon" />
           Binder:
           <select id="selectBinder"></select>
         </button>
         <button onclick="selectNewBinder('storefilenames');">Apply</button>
       </span>
-      <span class="header-content" id="progress"><progress></progress></span>
+
+      <span id="progress"><progress>text</progress></span>
+
+      <span id="pull-buttons">
+        <button onclick="lotto(1);">Pull!</button>
+        <button onclick="lotto(5);">Pull 5!</button>
+        <button onclick="lotto(10);">Pull 10!</button>
+        <button onclick="clearList();">Clear display</button>
+      </span>
     </div>
 
     <div id="parent">
-      <span id="winner" class="header-content"></span>
-      <span class="header-content" id="card-list-div">
+      <span id="winner" class="chunk"></span>
+      <span id="card-list-div" class="chunk">
         <ol reversed id="card-list"></ol>
       </span>
     </div>
+    <form id="form" method="POST" target="_iframe">
+      <input type="text" id="id-filename" name="filenames" readonly />
+    </form>
   </body>
 </html>

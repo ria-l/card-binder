@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css.css" />
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/sorting.js"></script>
@@ -16,7 +17,7 @@
     <span id="status" class="hidestatus"></span>
 
     <div class="header">
-      <span class="header-content">
+      <span>
         <a href="catch.html">
           <button class="link">
             <img src="img/0_icons/voltorb.png" class="icon" />
@@ -26,7 +27,7 @@
 
         <button onclick="fetchAndFillBinder();">
           <img src="img/0_icons/farfetchd.png" class="icon" />
-          Refetch
+          Sync
         </button>
 
         <button onclick="localStorage.clear();">
@@ -34,7 +35,7 @@
           Clear storage
         </button>
       </span>
-      <span class="header-content">
+      <span>
         <button>
           <img src="img/0_icons/ditto.png" class="icon" />
           Binder:
@@ -42,17 +43,16 @@
         </button>
         <button onclick="selectNewBinder('fillbinder');">Apply</button>
       </span>
-      <span class="header-content" id="progress"><progress></progress></span>
-
-      <span class="header-content">
-        <span class="header-content">
+      <span id="progress"><progress></progress></span>
+      <span>
+        <span id="grid-size">
           Rows:
           <button onclick="setAndStoreGrid('relative', 0, -1);">-</button>
           <input type="text" id="inputRow" />
           <button onclick="setAndStoreGrid('relative', 0, 1);">+</button>
         </span>
 
-        <span class="header-content">
+        <span>
           Cols:
           <button onclick="setAndStoreGrid('relative', -1, 0);">-</button>
           <input type="text" id="inputCol" />
@@ -60,7 +60,7 @@
           <button onclick="setAndStoreGrid('relative', 0, 0)">Apply</button>
         </span>
 
-        <span class="header-content">
+        <span>
           <button onclick="setAndStoreGrid('absolute', 0,0);">None</button>
           <button onclick="setAndStoreGrid('absolute', 3,3);">3x3</button>
           <button onclick="setAndStoreGrid('absolute', 4,4);">4x4</button>
@@ -68,8 +68,8 @@
         </span>
       </span>
 
-      <span class="header-content">
-        <span class="header-content">
+      <span id="card-size">
+        <span>
           Card size:
           <button onclick="setAndStoreCardSize('relative', -100);">-100</button>
           <button onclick="setAndStoreCardSize('relative', -10);">-10</button>
@@ -79,7 +79,7 @@
           <button onclick="setAndStoreCardSize('relative', 0)">Apply</button>
         </span>
 
-        <span class="header-content">
+        <span>
           <button onclick="setAndStoreCardSize('absolute', 50);">50</button>
           <button onclick="setAndStoreCardSize('absolute', 100);">100</button>
           <button onclick="setAndStoreCardSize('absolute', 150);">150</button>

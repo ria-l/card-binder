@@ -1,36 +1,58 @@
 * {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+.hide {
+  display: none !important;
+}
+.show {
+  display: inline-block !important;
+}
+#bg {
+  background-image: url('img/0_bg/water.jpeg');
+  opacity: 0.3;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  z-index: -1;
+}
+span {
+  text-align: center;
 }
 .header span {
   padding: 5px;
   display: inline-block;
 }
-table {
-  display: inline-block;
-  margin: 10px;
+.icon {
+  vertical-align: middle;
 }
-td img {
-  /* the td is necessary for correct rendering with no grid */
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+button,
+select,
+input,
+#progress {
+  border-radius: 10px;
+  padding: 10px;
+  border-color: #dbdbde;
+  padding-block: 4px;
+  background-color: #fff;
+}
+button,
+#progress {
+  height: 60px;
+  vertical-align: middle;
+}
+button.link {
+  background: #6abaff;
 }
 .header {
   position: sticky;
   text-align: center;
   top: 0;
-  width: 100%;
 }
-.placeholder {
-  /* makes it so border won't affect height/width */
-  box-sizing: border-box;
-  display: inline-block;
-  text-align: center;
-}
-td img,
-td .placeholder {
-  /* Keeps cards and placeholders properly aligned. Doesn't work if it's separated into the individual elements. */
-  vertical-align: middle;
+.hidestatus {
+  display: none;
 }
 .showstatus {
   align-items: center;
@@ -68,69 +90,50 @@ td .placeholder {
   position: fixed;
   width: 12rem;
 }
-.hidestatus {
-  display: none;
+
+/* 🟣🟣🟣 BINDER 🟣🟣🟣 */
+
+table {
+  display: inline-block;
+  margin: 10px;
 }
-button,
-select,
-input {
-  border-radius: 10px;
-  padding: 10px;
-  border-color: #dbdbde;
-  padding-block: 4px;
+td img {
+  /* the td is necessary for correct rendering with no grid */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.placeholder {
+  /* makes it so border won't affect height/width */
+  display: inline-block;
+  text-align: center;
+}
+td img,
+td .placeholder {
+  /* Keeps cards and placeholders properly aligned. Doesn't work if it's separated into the individual elements. */
+  vertical-align: middle;
 }
 input {
   width: 2em;
   text-align: center;
 }
-button {
-  background: linear-gradient(
-      to bottom right,
-      #f9f9f9,
-      white,
-      #f9f9f9,
-      white,
-      #f9f9f9
-    )
-    padding-box;
-}
-.header-content {
-  border-radius: 10px;
-  padding-block: 4px;
-}
 
-#bg {
-  background-image: url('img/0_bg/water.jpeg');
-  opacity: 0.3;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: fixed;
-  z-index: -1;
-}
-ol {
-  text-align: left;
-}
+/* 🔴🔴🔴 CATCH 🔴🔴🔴 */
+
+/* 🟢 MISC 🟢 */
+
 #parent {
   display: flex;
-}
-#card-list-div {
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 14px;
-  margin: 10px;
-  flex-basis: 60%;
-}
-.catch-header {
-  text-align: left;
 }
 iframe,
 #id-filename {
   display: none;
 }
-button.link {
-  background: #6abaff;
+
+/* 🟠 RIGHT 🟠 */
+
+ol {
+  text-align: left;
 }
 .small-card {
   border: solid 5px transparent;
@@ -148,15 +151,47 @@ button.link {
   height: auto;
   max-width: 100vh;
 }
+#card-list-div {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 14px;
+  margin: 10px;
+  flex-basis: 60%;
+}
+
+/* 🟡 LEFT 🟡 */
 
 #winner {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  overflow: scroll;
+  overflow: auto;
   max-height: 90vh;
   flex-basis: 40%;
 }
-.icon {
-  vertical-align: middle;
+
+/* /////////////// */
+/* 🔵 MOBILE 🔵 */
+/* /////////////// */
+
+@media only screen and (max-width: 768px) {
+  #parent {
+    flex-direction: column;
+  }
+  #winner {
+    max-height: 55vh;
+  }
+  #pull-buttons > button,
+  #binder-info > button,
+  #admin > button {
+    width: 100%;
+  }
+  #pull-buttons > button {
+    height: 50px;
+  }
+  #binder-info,
+  #pull-buttons,
+  #admin {
+    display: flex;
+  }
 }

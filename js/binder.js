@@ -119,6 +119,7 @@ function _createBinderContent() {
         allTables.push(currentTable);
         currentTable = null;
       }
+      // Any cards that don't fit neatly into the grid
       if (currentTable) {
         currentTable.appendChild(currentRow);
         allTables.push(currentTable);
