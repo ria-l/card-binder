@@ -1,10 +1,9 @@
 function setAndStoreGrid(col, row) {
-  console.log(col, row);
   if (col == undefined) {
-    col = parseInt(document.getElementById('col-dropdown').selectedIndex);
+    col = document.getElementById('col-dropdown').selectedIndex;
   }
   if (row == undefined) {
-    row = parseInt(document.getElementById('row-dropdown').selectedIndex);
+    row = document.getElementById('row-dropdown').selectedIndex;
   }
   document.getElementById('col-dropdown').selectedIndex = col;
   document.getElementById('row-dropdown').selectedIndex = row;
@@ -13,21 +12,25 @@ function setAndStoreGrid(col, row) {
   fillBinder();
 }
 
-function setAndStoreCardSize(type, input) {
-  let sizeField = document.getElementById('inputCardSize');
-  let newSize = input;
-
-  if (type == 'relative') {
-    newSize = parseInt(sizeField.value) + parseInt(input);
+function setAndStoreCardSize(size) {
+  if (size == undefined) {
+    size = parseInt(document.getElementById('size-dropdown').selectedIndex);
   }
-  sizeField.value = newSize.toString();
-  localStorage.setItem('cardSize', newSize);
+  x = document.getElementById('size-dropdown');
+  for (var i = 0; i < x.options.length; i++) {
+    if (x.options[i].value == size.toString()) {
+      x.options[i].selected = true;
+      break;
+    }
+  }
+
+  localStorage.setItem('cardSize', size);
 
   _resizeCards();
 }
 
 function _resizeCards() {
-  size = document.getElementById('inputCardSize').value;
+  size = document.getElementById('size-dropdown').value;
   document
     .querySelectorAll('.card')
     .forEach((e) => (e.style.width = `${size}px`));
@@ -85,6 +88,23 @@ function populateGridDropdowns() {
     rowSelect.appendChild(option);
   }
   console.log('populated grid size dropdown');
+}
+
+function populateSizeDropdown() {
+  const colSelect = document.getElementById('size-dropdown');
+  for (let i = 1; i < 11; i++) {
+    const option = document.createElement('option');
+    option.value = i * 50;
+    option.textContent = i * 50;
+    colSelect.appendChild(option);
+  }
+  for (let i = 1; i < 20; i++) {
+    const option = document.createElement('option');
+    option.value = i * 10;
+    option.textContent = i * 10;
+    colSelect.appendChild(option);
+  }
+  console.log('populated card size dropdown');
 }
 
 function generateBorderColors(picked_card_row, cardtype) {

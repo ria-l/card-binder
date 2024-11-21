@@ -40,7 +40,11 @@ function _setSizeAndGrid() {
   if (rowselect.options.length == 0) {
     populateGridDropdowns();
   }
-  setAndStoreCardSize('absolute', cardSize);
+  const sizeselect = document.getElementById('size-dropdown');
+  if (sizeselect.options.length == 0) {
+    populateSizeDropdown();
+  }
+  setAndStoreCardSize(cardSize);
   setAndStoreGrid(gridCol, gridRow);
 }
 

@@ -132,7 +132,7 @@ function _createBinderContent() {
 
 function _createCardTags() {
   getConstantsFromStorage();
-  const cardSize = document.getElementById('inputCardSize').value;
+  const cardSize = document.getElementById('size-dropdown').value;
   const tags = [];
   for (var card = 0; card < BINDER_DATA.length; card++) {
     const dir = `img/${BINDER_DATA[card][SET_COL].toLowerCase()}`;

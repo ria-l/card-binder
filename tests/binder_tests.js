@@ -14,7 +14,7 @@ const subtest_create_tags_writes_to_storage = () => {
 const subtest_tags_width_matches_input = () => {
   tags = localStorage.getItem('tags');
 
-  width = document.getElementById('inputCardSize').value;
+  width = document.getElementById('size-dropdown').value;
   if (tags.includes(`${width}px`)) {
     console.log('✅ pass');
   } else {

@@ -53,23 +53,10 @@
       </span>
 
       <span id="card-size">
-        <span>
+        <button>
           Card size:
-          <button onclick="setAndStoreCardSize('relative', -100);">-100</button>
-          <button onclick="setAndStoreCardSize('relative', -10);">-10</button>
-          <input type="text" id="inputCardSize" />
-          <button onclick="setAndStoreCardSize('relative', 10);">+10</button>
-          <button onclick="setAndStoreCardSize('relative', 100);">+100</button>
-          <button onclick="setAndStoreCardSize('relative', 0)">Apply</button>
-        </span>
-
-        <span>
-          <button onclick="setAndStoreCardSize('absolute', 50);">50</button>
-          <button onclick="setAndStoreCardSize('absolute', 100);">100</button>
-          <button onclick="setAndStoreCardSize('absolute', 150);">150</button>
-          <button onclick="setAndStoreCardSize('absolute', 200);">200</button>
-          <button onclick="setAndStoreCardSize('absolute', 300);">300</button>
-        </span>
+          <select id="size-dropdown" onchange="setAndStoreCardSize()"></select>
+        </button>
       </span>
     </div>
     <div id="content" class="content"></div>

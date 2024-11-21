@@ -5,7 +5,7 @@ const test_setInputForCardSize = () => {
     console.log('❌ fail');
     console.log(err);
   }
-  let w = document.getElementById('inputCardSize').value;
+  let w = document.getElementById('size-dropdown').value;
   if (w == '365') {
     console.log('✅ pass');
   } else {
@@ -19,7 +19,7 @@ const test_setInputForCardSize = () => {
     console.log('❌ fail');
     console.log(err);
   }
-  w = document.getElementById('inputCardSize').value;
+  w = document.getElementById('size-dropdown').value;
   if (w == '65') {
     console.log('✅ pass');
   } else {
@@ -33,7 +33,7 @@ const test_setInputForCardSize = () => {
     console.log('❌ fail');
     console.log(err);
   }
-  w = document.getElementById('inputCardSize').value;
+  w = document.getElementById('size-dropdown').value;
   if (w == '165') {
     console.log('✅ pass');
   } else {
