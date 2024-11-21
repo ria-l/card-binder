@@ -1,9 +1,9 @@
 window.onload = () => {
   document.getElementById('form').action = APPSCRIPT_URL;
-  initializeCatchPage('onload');
+  initializePullPage('onload');
 };
 
-async function initializeCatchPage(source) {
+async function initializePullPage(source) {
   if (localStorage.getItem('bindername') && source == 'onload') {
     console.log('already stored');
   } else {

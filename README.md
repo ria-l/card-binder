@@ -24,12 +24,12 @@ https://ria-l.github.io/card-binder/
 - add set filter
 - add all binder display
 - show 'only caught'
-- list "today's catch" and jump to them
+- list "today's pulls" and jump to them
 - sort by recently caught
 - show recently caught
 - flexbox instead of tables?
 
-### catch
+### pull
 
 - show more col values on page when caught
-- announce new catches in header
+- announce new pulls in header

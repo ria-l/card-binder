@@ -37,16 +37,19 @@ function fakeGet() {
 }
 
 /**
- * 
+ *
  * @param {string} stringified stringified filename array
  */
-function catchCard(stringified) {
+function pullCard(stringified) {
   const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
   const sheet = doc.getSheetByName(sheetName);
   const parsed = JSON.parse(stringified);
 
   parsed.forEach((filename) => {
-    const cardCell = sheet.createTextFinder(filename).matchEntireCell(true).findAll();
+    const cardCell = sheet
+      .createTextFinder(filename)
+      .matchEntireCell(true)
+      .findAll();
     const cardRow = cardCell[0].getRow();
 
     // get the col #
@@ -75,7 +78,7 @@ function doPost(e) {
 
   try {
     const cards = e.parameter['filenames'];
-    catchCard(cards);
+    pullCard(cards);
 
     return ContentService.createTextOutput(
       JSON.stringify({ result: 'success', cards: cards })
