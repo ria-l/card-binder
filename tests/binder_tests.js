@@ -101,8 +101,8 @@ const test_fillbinder = () => {
   storeBinders(data);
   _createCardTags();
 
-  const rows = parseInt(document.getElementById('inputRow').value);
-  const cols = parseInt(document.getElementById('inputCol').value);
+  const rows = parseInt(document.getElementById('row-dropdown').selectedIndex);
+  const cols = parseInt(document.getElementById('col-dropdown').selectedIndex);
 
   try {
     fillBinder();

@@ -37,7 +37,6 @@
       </span>
       <span>
         <button>
-          <img src="img/0_icons/ditto.png" class="icon" />
           Binder:
           <select id="selectBinder"></select>
         </button>
@@ -45,34 +44,12 @@
       </span>
       <span id="progress"><progress></progress></span>
       <span>
-        <span id="grid-size">
-          Rows:
-          <button onclick="setAndStoreGrid('relative', 0, -1);">-</button>
-          <input type="text" id="inputRow" />
-          <button onclick="setAndStoreGrid('relative', 0, 1);">+</button>
-        </span>
-
-        <span>
+        <button>
           Cols:
-          <button onclick="setAndStoreGrid('relative', -1, 0);">-</button>
-          <input type="text" id="inputCol" />
-          <button onclick="setAndStoreGrid('relative', 1, 0);">+</button>
-          <button onclick="setAndStoreGrid('relative', 0, 0)">Apply</button>
-        </span>
-
-        <span>
-          <button>
-            <img src="img/0_icons/houndour.png" class="icon" />
-            Preset Grids
-            <select id="preset-grids">
-              <option value="none">None</option>
-              <option value="3x3">3x3</option>
-              <option value="4x4">4x4</option>
-              <option value="8x4">8x4</option>
-            </select>
-          </button>
-          <button onclick="setAndStoreGrid('absolute', 0, 0)">Apply</button>
-        </span>
+          <select id="col-dropdown" onchange="setAndStoreGrid()"></select>
+          Rows:
+          <select id="row-dropdown" onchange="setAndStoreGrid()"></select>
+        </button>
       </span>
 
       <span id="card-size">

@@ -10,7 +10,7 @@ async function initializeCatchPage(source) {
     const data = await _fetchData();
     storeBinders(data.data);
   }
-  populateDropdown();
+  populateBinderDropdown();
   createProgressBar();
 }
 
@@ -30,7 +30,7 @@ async function _fetchData() {
 
 /**
  * filenames is set in binder._storeFileNames
- * @param {int} n number of cards pulled 
+ * @param {int} n number of cards pulled
  */
 function lotto(n) {
   const cardPool = JSON.parse(localStorage.filenames);
@@ -72,7 +72,7 @@ function processPicked(picked_cards) {
   });
   _displayLarge(largeArr);
   if (freshlyCaught.length) {
-    _updateBinderData(freshlyCaught)
+    _updateBinderData(freshlyCaught);
     _submitForm(freshlyCaught);
   }
 }

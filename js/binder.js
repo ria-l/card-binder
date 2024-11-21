@@ -62,8 +62,9 @@ function fillBinder() {
 
 function _createBinderContent() {
   const cardTags = _createCardTags();
-  const rows = parseInt(document.getElementById('inputRow').value);
-  const cols = parseInt(document.getElementById('inputCol').value);
+  const rows = parseInt(document.getElementById('row-dropdown').selectedIndex);
+
+  const cols = parseInt(document.getElementById('col-dropdown').selectedIndex);
 
   const allTables = [];
   let currentTable;

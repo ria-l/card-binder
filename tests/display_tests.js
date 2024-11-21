@@ -48,8 +48,8 @@ const subtest_grid_abs = () => {
   } catch (err) {
     console.log(err);
   }
-  let r = document.getElementById('inputRow').value;
-  let c = document.getElementById('inputCol').value;
+  let r = document.getElementById('row-dropdown').selectedIndex;
+  let c = document.getElementById('col-dropdown').selectedIndex;
 
   if (r == '4') {
     console.log('✅ pass');
@@ -72,8 +72,8 @@ const subtest_grid_minus = () => {
   } catch (err) {
     console.log(err);
   }
-  c = document.getElementById('inputCol').value;
-  r = document.getElementById('inputRow').value;
+  c = document.getElementById('col-dropdown').selectedIndex;
+  r = document.getElementById('row-dropdown').selectedIndex;
   if (c == '0') {
     console.log('✅ pass');
   } else {
@@ -96,8 +96,8 @@ const subtest_grid_plus = () => {
     console.log('❌ fail');
     console.log(err);
   }
-  c = document.getElementById('inputCol').value;
-  r = document.getElementById('inputRow').value;
+  c = document.getElementById('col-dropdown').selectedIndex;
+  r = document.getElementById('row-dropdown').selectedIndex;
   if (c == '5') {
     console.log('✅ pass');
   } else {

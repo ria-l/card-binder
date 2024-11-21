@@ -11,14 +11,14 @@ async function fetchAndFillBinder() {
   const data = await _fetchData();
   storeBinders(data.data);
   fillBinder();
-  populateDropdown();
+  populateBinderDropdown();
   createProgressBar();
 }
 
 function loadFromStorage() {
   console.log('loading from storage');
   fillBinder();
-  populateDropdown();
+  populateBinderDropdown();
   createProgressBar();
 }
 
@@ -36,9 +36,12 @@ function _setSizeAndGrid() {
   if (isNaN(gridRow)) {
     gridRow = 0;
   }
-
+  const rowselect = document.getElementById('row-dropdown');
+  if (rowselect.options.length == 0) {
+    populateGridDropdowns();
+  }
   setAndStoreCardSize('absolute', cardSize);
-  setAndStoreGrid('absolute', gridCol, gridRow);
+  setAndStoreGrid(gridCol, gridRow);
 }
 
 async function _fetchData() {

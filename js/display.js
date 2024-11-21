@@ -1,34 +1,15 @@
-function setAndStoreGrid(type, col, row) {
-  if (type == 'absolute') {
-    const select = document.getElementById('preset-grids');
-    const option = select.options[select.selectedIndex].text;
-    if (option == '3x3') {
-      col = 3;
-      row = 3;
-    } else if (option == '4x4') {
-      col = 4;
-      row = 4;
-    } else if (option == '8x4') {
-      col = 8;
-      row = 4;
-    }
+function setAndStoreGrid(col, row) {
+  console.log(col, row);
+  if (col == undefined) {
+    col = parseInt(document.getElementById('col-dropdown').selectedIndex);
   }
-
-  let rowField = document.getElementById('inputRow');
-  let newRowVal = row;
-  if (type == 'relative') {
-    newRowVal = parseInt(rowField.value) + parseInt(row);
+  if (row == undefined) {
+    row = parseInt(document.getElementById('row-dropdown').selectedIndex);
   }
-  rowField.value = newRowVal.toString();
-  localStorage.setItem('row', newRowVal);
-
-  let colField = document.getElementById('inputCol');
-  let newColVal = col;
-  if (type == 'relative') {
-    newColVal = parseInt(colField.value) + parseInt(col);
-  }
-  colField.value = newColVal.toString();
-  localStorage.setItem('col', newColVal);
+  document.getElementById('col-dropdown').selectedIndex = col;
+  document.getElementById('row-dropdown').selectedIndex = row;
+  localStorage.setItem('row', row);
+  localStorage.setItem('col', col);
   fillBinder();
 }
 
@@ -67,7 +48,7 @@ function _resizeCards() {
   }
 }
 
-function populateDropdown() {
+function populateBinderDropdown() {
   const select = document.getElementById('selectBinder');
   const bindernames = JSON.parse(localStorage.getItem('bindernames'));
   const defaultbinder = localStorage.getItem('bindername');
@@ -83,7 +64,27 @@ function populateDropdown() {
     }
     select.appendChild(option);
   }
-  console.log('populated dropdown');
+  console.log('populated binder dropdown');
+}
+
+function populateGridDropdowns() {
+  const colSelect = document.getElementById('col-dropdown');
+  const rowSelect = document.getElementById('row-dropdown');
+
+  for (let i = 0; i < 13; i++) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    colSelect.appendChild(option);
+    option.selected = 0;
+  }
+  for (let i = 0; i < 13; i++) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    rowSelect.appendChild(option);
+  }
+  console.log('populated grid size dropdown');
 }
 
 function generateBorderColors(picked_card_row, cardtype) {
