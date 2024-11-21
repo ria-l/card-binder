@@ -54,9 +54,16 @@
       <span>
         <button>
           Cols:
-          <select id="col-dropdown" onchange="setAndStoreGrid()"></select>
+          <select
+            id="col-dropdown"
+            onchange="setAndStoreGrid();fillBinder();"
+          ></select>
           Rows:
-          <select id="row-dropdown" onchange="setAndStoreGrid()"></select>
+          <select
+            id="row-dropdown"
+            onchange="setAndStoreGrid();fillBinder();
+;"
+          ></select>
         </button>
       </span>
 

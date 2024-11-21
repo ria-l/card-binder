@@ -9,7 +9,6 @@ function setAndStoreGrid(col, row) {
   document.getElementById('row-dropdown').selectedIndex = row;
   localStorage.setItem('row', row);
   localStorage.setItem('col', col);
-  fillBinder();
 }
 
 function setAndStoreCardSize(size) {
