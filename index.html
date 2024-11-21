@@ -61,10 +61,17 @@
         </span>
 
         <span>
-          <button onclick="setAndStoreGrid('absolute', 0,0);">None</button>
-          <button onclick="setAndStoreGrid('absolute', 3,3);">3x3</button>
-          <button onclick="setAndStoreGrid('absolute', 4,4);">4x4</button>
-          <button onclick="setAndStoreGrid('absolute', 8,4);">8x4</button>
+          <button>
+            <img src="img/0_icons/houndour.png" class="icon" />
+            Preset Grids
+            <select id="preset-grids">
+              <option value="none">None</option>
+              <option value="3x3">3x3</option>
+              <option value="4x4">4x4</option>
+              <option value="8x4">8x4</option>
+            </select>
+          </button>
+          <button onclick="setAndStoreGrid('absolute', 0, 0)">Apply</button>
         </span>
       </span>
 

@@ -1,4 +1,19 @@
 function setAndStoreGrid(type, col, row) {
+  if (type == 'absolute') {
+    const select = document.getElementById('preset-grids');
+    const option = select.options[select.selectedIndex].text;
+    if (option == '3x3') {
+      col = 3;
+      row = 3;
+    } else if (option == '4x4') {
+      col = 4;
+      row = 4;
+    } else if (option == '8x4') {
+      col = 8;
+      row = 4;
+    }
+  }
+
   let rowField = document.getElementById('inputRow');
   let newRowVal = row;
   if (type == 'relative') {
