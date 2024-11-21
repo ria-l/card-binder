@@ -38,9 +38,11 @@
       <span>
         <button>
           Binder:
-          <select id="selectBinder"></select>
+          <select
+            id="selectBinder"
+            onchange="selectNewBinder('fillbinder');"
+          ></select>
         </button>
-        <button onclick="selectNewBinder('fillbinder');">Apply</button>
       </span>
       <span id="progress"><progress></progress></span>
       <span>

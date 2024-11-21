@@ -35,9 +35,11 @@
       <span id="binder-info">
         <button>
           Binder:
-          <select id="selectBinder"></select>
+          <select
+            id="selectBinder"
+            onchange="selectNewBinder('storefilenames');"
+          ></select>
         </button>
-        <button onclick="selectNewBinder('storefilenames');">Apply</button>
       </span>
 
       <span id="progress"><progress>text</progress></span>
