@@ -10,7 +10,6 @@ https://ria-l.github.io/card-binder/
 
 - standardize var and func names
 - use pkmn card api instead of storing cards & data locally
-- nix the tests or update them
 - make text nicer looking
 - use document fragments
 - pick a random background image
