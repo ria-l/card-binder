@@ -13,19 +13,17 @@ function setAndStoreGrid(col, row) {
 }
 
 function setAndStoreCardSize(size) {
+  const dropdown = document.getElementById('size-dropdown');
   if (size == undefined) {
-    size = parseInt(document.getElementById('size-dropdown').selectedIndex);
+    size = parseInt(dropdown.value);
   }
-  x = document.getElementById('size-dropdown');
-  for (var i = 0; i < x.options.length; i++) {
-    if (x.options[i].value == size.toString()) {
-      x.options[i].selected = true;
+  for (var i = 0; i < dropdown.options.length; i++) {
+    if (dropdown.options[i].value == size.toString()) {
+      dropdown.options[i].selected = true;
       break;
     }
   }
-
   localStorage.setItem('cardSize', size);
-
   _resizeCards();
 }
 

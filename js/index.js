@@ -1,5 +1,6 @@
 window.onload = () => {
   _setSizeAndGrid();
+
   if (localStorage.getItem('bindername')) {
     loadFromStorage();
   } else {
