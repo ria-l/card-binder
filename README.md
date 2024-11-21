@@ -16,7 +16,7 @@ https://ria-l.github.io/card-binder/
 - pick a random background image
 - don't use the sheet to select the default binder
 - consolidate getConstantsFromStorage
-- mobile-friendly
+- make it look less like garbage
 
 ### binder
 
@@ -24,8 +24,6 @@ https://ria-l.github.io/card-binder/
 - add set filter
 - add all binder display
 - show 'only caught'
-- make apply buttons & inputs more prominent
-- make preset sizes into dropdowns
 - list "today's catch" and jump to them
 - sort by recently caught
 - show recently caught
@@ -34,5 +32,4 @@ https://ria-l.github.io/card-binder/
 ### catch
 
 - show more col values on page when caught
-- zoom when clicking on cards caught so far
 - announce new catches in header
