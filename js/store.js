@@ -15,26 +15,32 @@ function STORE_storeBinders(header, data) {
   }
   // store binder names
   const binderNames = new Set();
-  const binderIndex = header.indexOf('binder');
+  const binderCol = header.indexOf('binder');
   for (const row of data) {
-    binderNames.add(row[binderIndex]);
+    binderNames.add(row[binderCol]);
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
   // store data for each binder
-  for (const name of binderNames) {
+  for (const bName of binderNames) {
     // only the cards that are in the given binder
-    filtered = data.filter((row) => row[binderIndex] == name);
-    // add back the header, since it would be removed during filtering
-    filtered.unshift(header);
-    if (name == 'illust') {
-      toStore = sortByDex(filtered);
-    } else {
-      toStore = sortByColor(filtered);
-    }
-    localStorage.setItem(name, JSON.stringify(toStore));
+    filterAndSort(data, binderCol, bName, header);
   }
   // store filenames for current binder
   STORE_storeFileNames('binder', bindername);
+}
+
+/**
+ * 
+ * @param {*} data 
+ * @param {int} col column number for set or binder
+ * @param {string} bsName binder or set name
+ * @param {array of strings} header from the gSheet
+ */
+function filterAndSort(data, col, bsName, header) {
+  filtered = data.filter((row) => row[col] == bsName);
+  // add back the header, since it would be removed during filtering
+  filtered.unshift(header);
+  localStorage.setItem(bsName, JSON.stringify(sortByColor(filtered)));
 }
 
 function STORE_storeSets(header, data) {
@@ -45,18 +51,14 @@ function STORE_storeSets(header, data) {
   }
   // store set names
   const setNames = new Set();
-  const setIndex = header.indexOf('set');
+  const setCol = header.indexOf('set');
   for (const row of data) {
-    setNames.add(row[setIndex]);
+    setNames.add(row[setCol]);
   }
   localStorage.setItem('setnames', JSON.stringify([...setNames]));
   // store data for each binder
-  for (const name of setNames) {
-    // only the cards that are in the given binder
-    filtered = data.filter((row) => row[setIndex] == name);
-    // add back the header, since it would be removed during filtering
-    filtered.unshift(header);
-    localStorage.setItem(name, JSON.stringify(sortByColor(filtered)));
+  for (const sName of setNames) {
+    filterAndSort(data, setCol, sName, header);
   }
   // store filenames for current binder
   STORE_storeFileNames('set', setname);
