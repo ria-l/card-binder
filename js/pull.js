@@ -1,20 +1,20 @@
 window.onload = () => {
   document.getElementById('form').action = APPSCRIPT_URL;
-  initializePullPage('onload');
+  PULL_initializePullPage('onload');
 };
 
-async function initializePullPage(source) {
+async function PULL_initializePullPage(source) {
   if (localStorage.getItem('bindername') && source == 'onload') {
     console.log('already stored');
   } else {
-    const data = await _fetchData();
-    storeBinders(data.data);
+    const data = await PULL_fetchData();
+    STORE_storeBinders(data.data);
   }
-  populateBinderDropdown();
-  createProgressBar();
+  UI_populateBinderDropdown();
+  UI_createProgressBar();
 }
 
-async function _fetchData() {
+async function PULL_fetchData() {
   console.log('fetching...');
   const status = document.getElementById('status');
   status.innerHTML = 'loading...';
@@ -29,30 +29,30 @@ async function _fetchData() {
 }
 
 /**
- * filenames is set in binder._storeFileNames
+ * filenames is set in binder.STORE_storeFileNames
  * @param {int} n number of cards pulled
  */
-function lotto(n) {
+function PULL_pull(n) {
   const cardPool = JSON.parse(localStorage.filenames);
 
-  let picked = [];
+  let pulled = [];
   for (let i = 0; i < n; i++) {
     // max val is length - 1
     x = Math.floor(Math.random() * cardPool.length);
-    picked.push(x);
+    pulled.push(x);
   }
-  processPicked(picked);
+  PULL_processPulled(pulled);
 }
 
 /**
  *
  * @param {array of ints} picked_cards index numbers in the filenames array
  */
-function processPicked(picked_cards) {
-  getConstantsFromStorage();
-  const freshlyCaught = [];
+function PULL_processPulled(pulled_cards) {
+  CONSTANTS_initialize();
+  const newCards = [];
   const largeArr = [];
-  picked_cards.forEach((cardRow) => {
+  pulled_cards.forEach((cardRow) => {
     const filename = BINDER_DATA[cardRow][FILENAME_COL];
     const caught = BINDER_DATA[cardRow][CAUGHT_COL];
     const cardtype = BINDER_DATA[cardRow][CARDTYPE_COL];
@@ -60,24 +60,24 @@ function processPicked(picked_cards) {
     const set = BINDER_DATA[cardRow][SET_COL];
 
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    const borderColors = generateBorderColors(cardRow, cardtype);
+    const borderColors = PAGE_generateBorderColors(cardRow, cardtype);
     const dir = `img/${set.toLowerCase()}`;
 
-    _displaySmall(filename, title, caught, dir, borderColors);
-    largeArr.push(_createImg('large', dir, filename, caught, borderColors));
+    PULL_displaySmall(filename, title, caught, dir, borderColors);
+    largeArr.push(PULL_createImg('large', dir, filename, caught, borderColors));
 
     if (!caught) {
-      freshlyCaught.push(filename);
+      newCards.push(filename);
     }
   });
-  _displayLarge(largeArr);
-  if (freshlyCaught.length) {
-    _updateBinderData(freshlyCaught);
-    _submitForm(freshlyCaught);
+  PULL_displayLarge(largeArr);
+  if (newCards.length) {
+    PULL_updateBinderData(newCards);
+    PULL_submitForm(newCards);
   }
 }
 
-function _createImg(size, dir, filename, caught, borderColors) {
+function PULL_createImg(size, dir, filename, caught, borderColors) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   if (size == 'small') {
@@ -95,20 +95,22 @@ function _createImg(size, dir, filename, caught, borderColors) {
   return img;
 }
 
-function _displaySmall(filename, title, caught, dir, borderColors) {
+function PULL_displaySmall(filename, title, caught, dir, borderColors) {
   const ol = document.getElementById('card-list');
-  const li = _createLi(title, caught);
+  const li = PULL_generateLi(title, caught);
   ol.insertBefore(li, ol.firstChild);
 
   const right = document.getElementById('card-list-div');
-  const small = _createImg('small', dir, filename, caught, borderColors);
+  const small = PULL_createImg('small', dir, filename, caught, borderColors);
   small.onclick = function () {
-    _displayLarge([_createImg('large', dir, filename, caught, borderColors)]);
+    PULL_displayLarge([
+      PULL_createImg('large', dir, filename, caught, borderColors),
+    ]);
   };
   right.insertBefore(small, ol);
 }
 
-function _displayLarge(arr) {
+function PULL_displayLarge(arr) {
   const left = document.getElementById('winner');
   const newLeft = document.createElement('span');
   newLeft.id = 'winner';
@@ -118,7 +120,7 @@ function _displayLarge(arr) {
   left.replaceWith(newLeft);
 }
 
-function _createLi(title, caught) {
+function PULL_generateLi(title, caught) {
   const li = document.createElement('li');
   let textnode = title;
   if (!caught) {
@@ -132,7 +134,7 @@ function _createLi(title, caught) {
  *
  * @param {array of strings} filenames
  */
-function _submitForm(filenames) {
+function PULL_submitForm(filenames) {
   document.getElementById('id-filename').value = JSON.stringify(filenames);
   document.getElementById('form').submit();
 }
@@ -140,9 +142,26 @@ function _submitForm(filenames) {
 /**
  * Used for button click
  */
-function clearList() {
+function PULL_clearPulledList() {
   const right = document.getElementById('card-list-div');
   right.innerHTML = '<ol reversed id="card-list"></ol>';
   const left = document.getElementById('winner');
   left.innerHTML = '';
+}
+
+/**
+ *
+ * @param {array of strings} newCards filenames
+ */
+function PULL_updateBinderData(newCards) {
+  newCards.forEach((filename) => {
+    for (let i = 0; i < BINDER_DATA.length; i++) {
+      if (BINDER_DATA[i][FILENAME_COL] == filename) {
+        BINDER_DATA[i][CAUGHT_COL] = 'x';
+        break;
+      }
+    }
+  });
+  localStorage.setItem(BINDER_NAME, JSON.stringify(BINDER_DATA));
+  UI_createProgressBar();
 }

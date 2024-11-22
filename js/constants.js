@@ -10,7 +10,7 @@ let CAUGHT_COL,
   BINDER_NAME,
   BINDER_DATA;
 
-function getConstantsFromStorage() {
+function CONSTANTS_initialize() {
   const header = localStorage.getItem('header').split(',');
 
   CAUGHT_COL = header.indexOf('caught');

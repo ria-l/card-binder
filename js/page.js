@@ -1,57 +1,5 @@
-function storeBinders(data) {
-  // puts binder names into a set
-  const header = data[0];
-  let bindername = localStorage.getItem('bindername');
-  localStorage.setItem('header', header);
-  if (!bindername) {
-    bindername = header[0]; // TODO: make this random
-    localStorage.setItem('bindername', bindername);
-  }
-  const binderNames = new Set();
-  const binderIndex = header.indexOf('binder');
-  for (const row of data) {
-    binderNames.add(row[binderIndex]);
-  }
-
-  // parses and stores binder data
-  for (const name of binderNames) {
-    // only the cards that are in the given binder
-    filtered = data.filter((row) => row[binderIndex] == name);
-    // add back the header, since it would be removed during filtering
-    filtered.unshift(header);
-    if (name == 'illust') {
-      toStore = sortByDex(filtered);
-    } else {
-      toStore = sortByColor(filtered);
-    }
-    localStorage.setItem(name, JSON.stringify(toStore));
-  }
-  localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
-  _storeFileNames(bindername);
-  console.log('stored binders');
-}
-
-function _storeFileNames(binder) {
-  getConstantsFromStorage();
-  data = JSON.parse(localStorage.getItem(binder));
-  const filenames = data.map((row) => row[FILENAME_COL]);
-  localStorage.setItem('filenames', JSON.stringify([...filenames]));
-  console.log(`stored filenames for ${binder}`);
-}
-
-function selectNewBinder(source) {
-  const select = document.getElementById('selectBinder');
-  const bindername = select.options[select.selectedIndex].text;
-  localStorage.setItem('bindername', bindername);
-  if (source == 'fillbinder') {
-    fillBinder();
-  }
-  createProgressBar();
-  _storeFileNames(bindername);
-}
-
-function fillBinder() {
-  const binderContent = _createBinderContent();
+function PAGE_fillBinder() {
+  const binderContent = PAGE_createBinderContent();
   document.getElementById('content').innerHTML = '';
   binderContent.forEach((item) => {
     document.getElementById('content').appendChild(item);
@@ -60,8 +8,8 @@ function fillBinder() {
   console.log('filled binder');
 }
 
-function _createBinderContent() {
-  const cardTags = _createCardTags();
+function PAGE_createBinderContent() {
+  const cardTags = PAGE_createCardTags();
   const rows = parseInt(document.getElementById('row-dropdown').selectedIndex);
 
   const cols = parseInt(document.getElementById('col-dropdown').selectedIndex);
@@ -130,8 +78,8 @@ function _createBinderContent() {
   return allTables;
 }
 
-function _createCardTags() {
-  getConstantsFromStorage();
+function PAGE_createCardTags() {
+  CONSTANTS_initialize();
   const cardSize = document.getElementById('size-dropdown').value;
   const tags = [];
   for (var card = 0; card < BINDER_DATA.length; card++) {
@@ -143,16 +91,23 @@ function _createCardTags() {
 
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
     if (BINDER_DATA[card][CAUGHT_COL] == 'x') {
-      _generateImgTag(tags, dir, filename, title, cardSize);
+      PAGE_generateImgTag(tags, dir, filename, title, cardSize);
     } else {
-      _generatePlaceholder(card, cardtype, cardsubtype, cardSize, tags, title);
+      PAGE_generatePlaceholder(
+        card,
+        cardtype,
+        cardsubtype,
+        cardSize,
+        tags,
+        title
+      );
     }
   }
   console.log('created tags');
   return tags;
 }
 
-function _generateImgTag(tags, dir, filename, title, cardSize) {
+function PAGE_generateImgTag(tags, dir, filename, title, cardSize) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   img.title = title;
@@ -164,10 +119,17 @@ function _generateImgTag(tags, dir, filename, title, cardSize) {
   tags.push(img);
 }
 
-function _generatePlaceholder(i, cardtype, cardsubtype, cardSize, tags, title) {
+function PAGE_generatePlaceholder(
+  i,
+  cardtype,
+  cardsubtype,
+  cardSize,
+  tags,
+  title
+) {
   // note that there are a couple other styles in the css file
 
-  const border_colors = generateBorderColors(i, cardtype);
+  const border_colors = PAGE_generateBorderColors(i, cardtype);
   let fill_colors;
   if (cardsubtype.includes('gold')) {
     fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
@@ -187,19 +149,19 @@ function _generatePlaceholder(i, cardtype, cardsubtype, cardSize, tags, title) {
   tags.push(span);
 }
 
-/**
- *
- * @param {array of strings} freshlyCaught filenames
- */
-function _updateBinderData(freshlyCaught) {
-  freshlyCaught.forEach((filename) => {
-    for (let i = 0; i < BINDER_DATA.length; i++) {
-      if (BINDER_DATA[i][FILENAME_COL] == filename) {
-        BINDER_DATA[i][CAUGHT_COL] = 'x';
-        break;
-      }
-    }
-  });
-  localStorage.setItem(BINDER_NAME, JSON.stringify(BINDER_DATA));
-  createProgressBar();
+function PAGE_generateBorderColors(picked_card_row, cardtype) {
+  let special;
+  if (BINDER_DATA[picked_card_row][CARDTYPE_COL] != 'basic') {
+    special = CARD_HEX_COLORS[cardtype].join(',');
+  }
+
+  let border_colors;
+  const light = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][0];
+  const dark = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][1];
+  if (cardtype == 'basic') {
+    border_colors = `${dark},${light},${dark},${light},${dark}`;
+  } else {
+    border_colors = `${dark},${light},white,${special}`;
+  }
+  return border_colors;
 }

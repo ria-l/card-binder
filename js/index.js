@@ -1,55 +1,29 @@
 window.onload = () => {
-  _setSizeAndGrid();
+  UI_setSizeAndGrid();
 
   if (localStorage.getItem('bindername')) {
-    loadFromStorage();
+    INDEX_loadFromStorage();
   } else {
-    fetchAndFillBinder();
+    INDEX_fetchAndFillPage();
   }
 };
 
-async function fetchAndFillBinder() {
-  const data = await _fetchData();
-  storeBinders(data.data);
-  fillBinder();
-  populateBinderDropdown();
-  createProgressBar();
+async function INDEX_fetchAndFillPage() {
+  const data = await INDEX_fetchData();
+  STORE_storeBinders(data.data);
+  PAGE_fillBinder();
+  UI_populateBinderDropdown();
+  UI_createProgressBar();
 }
 
-function loadFromStorage() {
+function INDEX_loadFromStorage() {
   console.log('loading from storage');
-  fillBinder();
-  populateBinderDropdown();
-  createProgressBar();
+  PAGE_fillBinder();
+  UI_populateBinderDropdown();
+  UI_createProgressBar();
 }
 
-function _setSizeAndGrid() {
-  let cardSize = parseInt(localStorage.getItem('cardSize'));
-  let gridCol = parseInt(localStorage.getItem('col'));
-  let gridRow = parseInt(localStorage.getItem('row'));
-
-  if (isNaN(cardSize)) {
-    cardSize = 150;
-  }
-  if (isNaN(gridCol)) {
-    gridCol = 0;
-  }
-  if (isNaN(gridRow)) {
-    gridRow = 0;
-  }
-  const rowselect = document.getElementById('row-dropdown');
-  if (rowselect.options.length == 0) {
-    populateGridDropdowns();
-  }
-  const sizeselect = document.getElementById('size-dropdown');
-  if (sizeselect.options.length == 0) {
-    populateSizeDropdown();
-  }
-  setAndStoreCardSize(cardSize);
-  setAndStoreGrid(gridCol, gridRow);
-}
-
-async function _fetchData() {
+async function INDEX_fetchData() {
   console.log('fetching...');
   const status = document.getElementById('status');
   status.innerHTML = 'loading...';

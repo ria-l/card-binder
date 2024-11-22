@@ -11,8 +11,9 @@
     />
     <script type="text/javascript" src="js/pull.js"></script>
     <script type="text/javascript" src="js/constants.js"></script>
-    <script type="text/javascript" src="js/display.js"></script>
-    <script type="text/javascript" src="js/binder.js"></script>
+    <script type="text/javascript" src="js/ui.js"></script>
+    <script type="text/javascript" src="js/page.js"></script>
+    <script type="text/javascript" src="js/store.js"></script>
     <script type="text/javascript" src="js/sorting.js"></script>
 
     <title>Pull card remotely</title>
@@ -27,7 +28,7 @@
           <img src="img/0_icons/ditto.png" class="icon" />Home
         </button>
 
-        <button onclick="initializePullPage();">
+        <button onclick="PULL_initializePullPage();">
           <img src="img/0_icons/farfetchd.png" class="icon" /> Sync
         </button>
 
@@ -42,7 +43,7 @@
           Binder:
           <select
             id="selectBinder"
-            onchange="selectNewBinder('storefilenames');"
+            onchange="UI_selectNewBinder('storefilenames');"
           ></select>
         </button>
       </span>
@@ -50,10 +51,10 @@
       <span id="progress"><progress>text</progress></span>
 
       <span id="pull-buttons">
-        <button onclick="lotto(1);">Pull!</button>
-        <button onclick="lotto(5);">Pull 5!</button>
-        <button onclick="lotto(10);">Pull 10!</button>
-        <button onclick="clearList();">Clear display</button>
+        <button onclick="PULL_pull(1);">Pull!</button>
+        <button onclick="PULL_pull(5);">Pull 5!</button>
+        <button onclick="PULL_pull(10);">Pull 10!</button>
+        <button onclick="PULL_clearPulledList();">Clear display</button>
       </span>
     </div>
 

@@ -12,8 +12,9 @@
 
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript" src="js/sorting.js"></script>
-    <script type="text/javascript" src="js/display.js"></script>
-    <script type="text/javascript" src="js/binder.js"></script>
+    <script type="text/javascript" src="js/ui.js"></script>
+    <script type="text/javascript" src="js/page.js"></script>
+    <script type="text/javascript" src="js/store.js"></script>
     <script type="text/javascript" src="js/constants.js"></script>
 
     <title>Card Binder</title>
@@ -31,7 +32,7 @@
           </button>
         </a>
 
-        <button onclick="fetchAndFillBinder();">
+        <button onclick="INDEX_fetchAndFillPage();">
           <img src="img/0_icons/farfetchd.png" class="icon" />
           Sync
         </button>
@@ -46,7 +47,7 @@
           Binder:
           <select
             id="selectBinder"
-            onchange="selectNewBinder('fillbinder');"
+            onchange="UI_selectNewBinder('fillbinder');"
           ></select>
         </button>
       </span>
@@ -56,12 +57,12 @@
           Cols:
           <select
             id="col-dropdown"
-            onchange="setAndStoreGrid();fillBinder();"
+            onchange="UI_setAndStoreGrid();PAGE_fillBinder();"
           ></select>
           Rows:
           <select
             id="row-dropdown"
-            onchange="setAndStoreGrid();fillBinder();
+            onchange="UI_setAndStoreGrid();PAGE_fillBinder();
 ;"
           ></select>
         </button>
@@ -70,7 +71,10 @@
       <span id="card-size">
         <button>
           Card size:
-          <select id="size-dropdown" onchange="setAndStoreCardSize()"></select>
+          <select
+            id="size-dropdown"
+            onchange="UI_setAndStoreCardSize()"
+          ></select>
         </button>
       </span>
     </div>

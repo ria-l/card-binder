@@ -1,4 +1,30 @@
-function setAndStoreGrid(col, row) {
+function UI_setSizeAndGrid() {
+  let cardSize = parseInt(localStorage.getItem('cardSize'));
+  let gridCol = parseInt(localStorage.getItem('col'));
+  let gridRow = parseInt(localStorage.getItem('row'));
+
+  if (isNaN(cardSize)) {
+    cardSize = 150;
+  }
+  if (isNaN(gridCol)) {
+    gridCol = 0;
+  }
+  if (isNaN(gridRow)) {
+    gridRow = 0;
+  }
+  const rowselect = document.getElementById('row-dropdown');
+  if (rowselect.options.length == 0) {
+    UI_populateGridDropdowns();
+  }
+  const sizeselect = document.getElementById('size-dropdown');
+  if (sizeselect.options.length == 0) {
+    UI_populateSizeDropdown();
+  }
+  UI_setAndStoreCardSize(cardSize);
+  UI_setAndStoreGrid(gridCol, gridRow);
+}
+
+function UI_setAndStoreGrid(col, row) {
   if (col == undefined) {
     col = document.getElementById('col-dropdown').selectedIndex;
   }
@@ -11,7 +37,7 @@ function setAndStoreGrid(col, row) {
   localStorage.setItem('col', col);
 }
 
-function setAndStoreCardSize(size) {
+function UI_setAndStoreCardSize(size) {
   const dropdown = document.getElementById('size-dropdown');
   if (size == undefined) {
     size = parseInt(dropdown.value);
@@ -23,10 +49,10 @@ function setAndStoreCardSize(size) {
     }
   }
   localStorage.setItem('cardSize', size);
-  _resizeCards();
+  UI_resizeCards();
 }
 
-function _resizeCards() {
+function UI_resizeCards() {
   size = document.getElementById('size-dropdown').value;
   document
     .querySelectorAll('.card')
@@ -48,7 +74,7 @@ function _resizeCards() {
   }
 }
 
-function populateBinderDropdown() {
+function UI_populateBinderDropdown() {
   const select = document.getElementById('selectBinder');
   const bindernames = JSON.parse(localStorage.getItem('bindernames'));
   const defaultbinder = localStorage.getItem('bindername');
@@ -67,7 +93,7 @@ function populateBinderDropdown() {
   console.log('populated binder dropdown');
 }
 
-function populateGridDropdowns() {
+function UI_populateGridDropdowns() {
   const colSelect = document.getElementById('col-dropdown');
   const rowSelect = document.getElementById('row-dropdown');
 
@@ -87,7 +113,7 @@ function populateGridDropdowns() {
   console.log('populated grid size dropdown');
 }
 
-function populateSizeDropdown() {
+function UI_populateSizeDropdown() {
   const colSelect = document.getElementById('size-dropdown');
   for (let i = 1; i < 11; i++) {
     const option = document.createElement('option');
@@ -104,29 +130,12 @@ function populateSizeDropdown() {
   console.log('populated card size dropdown');
 }
 
-function generateBorderColors(picked_card_row, cardtype) {
-  let special;
-  if (BINDER_DATA[picked_card_row][CARDTYPE_COL] != 'basic') {
-    special = CARD_HEX_COLORS[cardtype].join(',');
-  }
-
-  let border_colors;
-  const light = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][0];
-  const dark = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][1];
-  if (cardtype == 'basic') {
-    border_colors = `${dark},${light},${dark},${light},${dark}`;
-  } else {
-    border_colors = `${dark},${light},white,${special}`;
-  }
-  return border_colors;
-}
-
-function createProgressBar() {
-  getConstantsFromStorage();
+function UI_createProgressBar() {
+  CONSTANTS_initialize();
   const span = document.getElementById('progress');
   const newBar = document.createElement('progress');
   const max = BINDER_DATA.length;
-  const caught = _countCaught();
+  const caught = UI_countCaught();
   const ratio = document.createTextNode(`${caught}/${max} `);
   const percent = document.createTextNode(
     ` ${((caught / max) * 100).toFixed(2)}%`
@@ -143,7 +152,18 @@ function createProgressBar() {
   span.replaceWith(newspan);
 }
 
-function _countCaught() {
+function UI_countCaught() {
   filtered = BINDER_DATA.filter((row) => row[CAUGHT_COL] == 'x');
   return filtered.length;
+}
+
+function UI_selectNewBinder(source) {
+  const select = document.getElementById('selectBinder');
+  const bindername = select.options[select.selectedIndex].text;
+  localStorage.setItem('bindername', bindername);
+  if (source == 'fillbinder') {
+    PAGE_fillBinder();
+  }
+  UI_createProgressBar();
+  STORE_storeFileNames(bindername);
 }
