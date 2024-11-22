@@ -11,7 +11,6 @@ async function PULL_initialize(source) {
     STORE_storeData(data.data);
   }
   UI_populateBinderDropdown();
-  UI_populateSetDropdown();
   UI_createProgressBar();
 }
 
@@ -33,7 +32,7 @@ async function PULL_fetchData() {
  * @param {int} n number of cards pulled
  */
 function PULL_pull(n) {
-  const cardPool = JSON.parse(localStorage.binder_filenames);
+  const cardPool = JSON.parse(localStorage.getItem('binder_filenames'));
   let pulled = [];
   for (let i = 0; i < n; i++) {
     // max val is length - 1
