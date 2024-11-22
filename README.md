@@ -8,7 +8,6 @@ https://ria-l.github.io/card-binder/
 
 ### both
 
-- standardize var and func names
 - use pkmn card api instead of storing cards & data locally
 - make text nicer looking
 - use document fragments
@@ -20,7 +19,6 @@ https://ria-l.github.io/card-binder/
 ### binder
 
 - add sorting dropdown
-- add set filter
 - add all binder display
 - show 'only caught'
 - list "today's pulls" and jump to them

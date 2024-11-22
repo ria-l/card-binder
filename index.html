@@ -36,18 +36,22 @@
           <img src="img/0_icons/farfetchd.png" class="icon" />
           Sync
         </button>
-
-        <button onclick="localStorage.clear();">
-          <img src="img/0_icons/slowpoke.png" class="icon" />
-          Clear storage
-        </button>
       </span>
       <span>
         <button>
           Binder:
           <select
             id="selectBinder"
-            onchange="UI_selectNewBinder('fillbinder');"
+            onchange="UI_selectNewBinder('fillpage');"
+          ></select>
+        </button>
+      </span>
+      <span>
+        <button>
+          Set:
+          <select
+            id="selectSet"
+            onchange="UI_selectNewSet('fillpage');"
           ></select>
         </button>
       </span>
@@ -57,13 +61,14 @@
           Cols:
           <select
             id="col-dropdown"
-            onchange="UI_setAndStoreGrid();PAGE_fillBinder();"
+            onchange="UI_setAndStoreGrid();
+            PAGE_fillPage();"
           ></select>
           Rows:
           <select
             id="row-dropdown"
-            onchange="UI_setAndStoreGrid();PAGE_fillBinder();
-;"
+            onchange="UI_setAndStoreGrid();
+            PAGE_fillPage();"
           ></select>
         </button>
       </span>

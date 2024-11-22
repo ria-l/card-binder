@@ -8,7 +8,10 @@ let CAUGHT_COL,
   PKMNTYPE_COL,
   CARDSUBTYPE_COL,
   BINDER_NAME,
-  BINDER_DATA;
+  BINDER_DATA,
+  SET_NAME,
+  SET_DATA,
+  FILL_DATA;
 
 function CONSTANTS_initialize() {
   const header = localStorage.getItem('header').split(',');
@@ -21,6 +24,14 @@ function CONSTANTS_initialize() {
   CARDSUBTYPE_COL = header.indexOf('card subtype');
   BINDER_NAME = localStorage.getItem('bindername');
   BINDER_DATA = JSON.parse(localStorage.getItem(BINDER_NAME));
+  SET_NAME = localStorage.getItem('setname');
+  SET_DATA = JSON.parse(localStorage.getItem(SET_NAME));
+  BINDER_OR_SET = localStorage.getItem('binder_or_set');
+  if (!BINDER_OR_SET || BINDER_OR_SET == 'binder') {
+    FILL_DATA = BINDER_DATA;
+  } else if (BINDER_OR_SET == 'set') {
+    FILL_DATA = SET_DATA;
+  }
 }
 
 const PKMN_HEX_COLORS = {

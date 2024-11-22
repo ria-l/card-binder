@@ -1,19 +1,15 @@
-function PAGE_fillBinder() {
-  const binderContent = PAGE_createBinderContent();
+function PAGE_fillPage() {
+  const binderContent = PAGE_createPageContent();
   document.getElementById('content').innerHTML = '';
   binderContent.forEach((item) => {
     document.getElementById('content').appendChild(item);
   });
-
-  console.log('filled binder');
 }
 
-function PAGE_createBinderContent() {
+function PAGE_createPageContent() {
   const cardTags = PAGE_createCardTags();
   const rows = parseInt(document.getElementById('row-dropdown').selectedIndex);
-
   const cols = parseInt(document.getElementById('col-dropdown').selectedIndex);
-
   const allTables = [];
   let currentTable;
   let currentRow;
@@ -27,17 +23,14 @@ function PAGE_createBinderContent() {
       // Use the remainder value from the modulo function to put each card into a row/grid bucket.
       const rowIndex = (i + 1) % cols;
       const gridIndex = (i + 1) % (rows * cols);
-
       const table = document.createElement('table');
       const tr = document.createElement('tr');
       const td = document.createElement('td');
       td.appendChild(tag);
-
       // first card in grid
       if (gridIndex == 1) {
         currentTable = table;
       }
-
       // middle cards
       if (rowIndex == 1) {
         // first card in row
@@ -56,7 +49,6 @@ function PAGE_createBinderContent() {
       } else {
         currentRow.appendChild(td);
       }
-
       // last card in grid
       if (gridIndex == 0) {
         if (cols == 1) {
@@ -82,15 +74,14 @@ function PAGE_createCardTags() {
   CONSTANTS_initialize();
   const cardSize = document.getElementById('size-dropdown').value;
   const tags = [];
-  for (var card = 0; card < BINDER_DATA.length; card++) {
-    const dir = `img/${BINDER_DATA[card][SET_COL].toLowerCase()}`;
-    const filename = BINDER_DATA[card][FILENAME_COL];
-    const pkmntype = BINDER_DATA[card][PKMNTYPE_COL];
-    const cardtype = BINDER_DATA[card][CARDTYPE_COL];
-    const cardsubtype = BINDER_DATA[card][CARDSUBTYPE_COL];
-
+  for (var card = 0; card < FILL_DATA.length; card++) {
+    const dir = `img/${FILL_DATA[card][SET_COL].toLowerCase()}`;
+    const filename = FILL_DATA[card][FILENAME_COL];
+    const pkmntype = FILL_DATA[card][PKMNTYPE_COL];
+    const cardtype = FILL_DATA[card][CARDTYPE_COL];
+    const cardsubtype = FILL_DATA[card][CARDSUBTYPE_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    if (BINDER_DATA[card][CAUGHT_COL] == 'x') {
+    if (FILL_DATA[card][CAUGHT_COL] == 'x') {
       PAGE_generateImgTag(tags, dir, filename, title, cardSize);
     } else {
       PAGE_generatePlaceholder(
@@ -103,7 +94,6 @@ function PAGE_createCardTags() {
       );
     }
   }
-  console.log('created tags');
   return tags;
 }
 
@@ -115,7 +105,6 @@ function PAGE_generateImgTag(tags, dir, filename, title, cardSize) {
   img.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
   img.style.borderRadius = `${cardSize / 20}px`;
   img.classList.add('card');
-
   tags.push(img);
 }
 
@@ -151,13 +140,12 @@ function PAGE_generatePlaceholder(
 
 function PAGE_generateBorderColors(picked_card_row, cardtype) {
   let special;
-  if (BINDER_DATA[picked_card_row][CARDTYPE_COL] != 'basic') {
+  if (cardtype != 'basic') {
     special = CARD_HEX_COLORS[cardtype].join(',');
   }
-
   let border_colors;
-  const light = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][0];
-  const dark = PKMN_HEX_COLORS[BINDER_DATA[picked_card_row][PKMNTYPE_COL]][1];
+  const light = PKMN_HEX_COLORS[FILL_DATA[picked_card_row][PKMNTYPE_COL]][0];
+  const dark = PKMN_HEX_COLORS[FILL_DATA[picked_card_row][PKMNTYPE_COL]][1];
   if (cardtype == 'basic') {
     border_colors = `${dark},${light},${dark},${light},${dark}`;
   } else {

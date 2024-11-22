@@ -1,16 +1,17 @@
 window.onload = () => {
   document.getElementById('form').action = APPSCRIPT_URL;
-  PULL_initializePullPage('onload');
+  PULL_initialize('onload');
 };
 
-async function PULL_initializePullPage(source) {
+async function PULL_initialize(source) {
   if (localStorage.getItem('bindername') && source == 'onload') {
     console.log('already stored');
   } else {
     const data = await PULL_fetchData();
-    STORE_storeBinders(data.data);
+    STORE_storeData(data.data);
   }
   UI_populateBinderDropdown();
+  UI_populateSetDropdown();
   UI_createProgressBar();
 }
 
@@ -19,7 +20,6 @@ async function PULL_fetchData() {
   const status = document.getElementById('status');
   status.innerHTML = 'loading...';
   status.className = 'showstatus';
-
   const response = await fetch(APPSCRIPT_URL);
   const data = await response.json();
   status.className = 'hidestatus';
@@ -33,8 +33,7 @@ async function PULL_fetchData() {
  * @param {int} n number of cards pulled
  */
 function PULL_pull(n) {
-  const cardPool = JSON.parse(localStorage.filenames);
-
+  const cardPool = JSON.parse(localStorage.binder_filenames);
   let pulled = [];
   for (let i = 0; i < n; i++) {
     // max val is length - 1
@@ -58,14 +57,14 @@ function PULL_processPulled(pulled_cards) {
     const cardtype = BINDER_DATA[cardRow][CARDTYPE_COL];
     const pkmntype = BINDER_DATA[cardRow][PKMNTYPE_COL];
     const set = BINDER_DATA[cardRow][SET_COL];
-
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
     const borderColors = PAGE_generateBorderColors(cardRow, cardtype);
     const dir = `img/${set.toLowerCase()}`;
 
     PULL_displaySmall(filename, title, caught, dir, borderColors);
-    largeArr.push(PULL_createImg('large', dir, filename, caught, borderColors));
-
+    largeArr.push(
+      PULL_generateImg('large', dir, filename, caught, borderColors)
+    );
     if (!caught) {
       newCards.push(filename);
     }
@@ -77,7 +76,7 @@ function PULL_processPulled(pulled_cards) {
   }
 }
 
-function PULL_createImg(size, dir, filename, caught, borderColors) {
+function PULL_generateImg(size, dir, filename, caught, borderColors) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   if (size == 'small') {
@@ -99,12 +98,11 @@ function PULL_displaySmall(filename, title, caught, dir, borderColors) {
   const ol = document.getElementById('card-list');
   const li = PULL_generateLi(title, caught);
   ol.insertBefore(li, ol.firstChild);
-
   const right = document.getElementById('card-list-div');
-  const small = PULL_createImg('small', dir, filename, caught, borderColors);
+  const small = PULL_generateImg('small', dir, filename, caught, borderColors);
   small.onclick = function () {
     PULL_displayLarge([
-      PULL_createImg('large', dir, filename, caught, borderColors),
+      PULL_generateImg('large', dir, filename, caught, borderColors),
     ]);
   };
   right.insertBefore(small, ol);

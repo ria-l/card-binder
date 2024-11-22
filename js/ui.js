@@ -2,7 +2,6 @@ function UI_setSizeAndGrid() {
   let cardSize = parseInt(localStorage.getItem('cardSize'));
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
-
   if (isNaN(cardSize)) {
     cardSize = 150;
   }
@@ -90,13 +89,29 @@ function UI_populateBinderDropdown() {
     }
     select.appendChild(option);
   }
-  console.log('populated binder dropdown');
+}
+
+function UI_populateSetDropdown() {
+  const select = document.getElementById('selectSet');
+  const setnames = JSON.parse(localStorage.getItem('setnames'));
+  const defaultset = localStorage.getItem('setname');
+  select.innerHTML = '';
+  for (const set of setnames) {
+    const option = document.createElement('option');
+    if (set != 'set') {
+      option.value = set;
+      option.textContent = set;
+    }
+    if (set == defaultset) {
+      option.selected = 'selected';
+    }
+    select.appendChild(option);
+  }
 }
 
 function UI_populateGridDropdowns() {
   const colSelect = document.getElementById('col-dropdown');
   const rowSelect = document.getElementById('row-dropdown');
-
   for (let i = 0; i < 13; i++) {
     const option = document.createElement('option');
     option.value = i;
@@ -110,7 +125,6 @@ function UI_populateGridDropdowns() {
     option.textContent = i;
     rowSelect.appendChild(option);
   }
-  console.log('populated grid size dropdown');
 }
 
 function UI_populateSizeDropdown() {
@@ -127,14 +141,13 @@ function UI_populateSizeDropdown() {
     option.textContent = i * 10;
     colSelect.appendChild(option);
   }
-  console.log('populated card size dropdown');
 }
 
 function UI_createProgressBar() {
   CONSTANTS_initialize();
   const span = document.getElementById('progress');
   const newBar = document.createElement('progress');
-  const max = BINDER_DATA.length;
+  const max = FILL_DATA.length;
   const caught = UI_countCaught();
   const ratio = document.createTextNode(`${caught}/${max} `);
   const percent = document.createTextNode(
@@ -148,22 +161,34 @@ function UI_createProgressBar() {
   newspan.appendChild(ratio);
   newspan.appendChild(newBar);
   newspan.appendChild(percent);
-
   span.replaceWith(newspan);
 }
 
 function UI_countCaught() {
-  filtered = BINDER_DATA.filter((row) => row[CAUGHT_COL] == 'x');
+  filtered = FILL_DATA.filter((row) => row[CAUGHT_COL] == 'x');
   return filtered.length;
 }
 
 function UI_selectNewBinder(source) {
+  localStorage.setItem('binder_or_set', 'binder');
   const select = document.getElementById('selectBinder');
   const bindername = select.options[select.selectedIndex].text;
   localStorage.setItem('bindername', bindername);
-  if (source == 'fillbinder') {
-    PAGE_fillBinder();
+  if (source == 'fillpage') {
+    PAGE_fillPage();
   }
   UI_createProgressBar();
-  STORE_storeFileNames(bindername);
+  STORE_storeFileNames('binder', bindername);
+}
+
+function UI_selectNewSet(source) {
+  localStorage.setItem('binder_or_set', 'set');
+  const select = document.getElementById('selectSet');
+  const setname = select.options[select.selectedIndex].text;
+  localStorage.setItem('setname', setname);
+  if (source == 'fillpage') {
+    PAGE_fillPage();
+  }
+  UI_createProgressBar();
+  STORE_storeFileNames('set', setname);
 }
