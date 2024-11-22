@@ -50,6 +50,9 @@ button.link {
   text-align: center;
   top: 0;
 }
+.content {
+  text-align: center;
+}
 .hidestatus {
   display: none;
 }
