@@ -2,12 +2,10 @@ import * as constants from './constants.js';
 import * as sorting from './sorting.js';
 
 export function storeData(data) {
-  // store header
   const header = data[0];
   localStorage.setItem('header', header);
   storeBinders(header, data);
   storeSets(header, data);
-  constants.initialize();
 }
 
 function storeBinders(header, data) {
@@ -73,7 +71,6 @@ function storeSets(header, data) {
  * @param {string} _name name of binder or set
  */
 export function storeFileNames(type, _name) {
-  constants.initialize();
   const data = JSON.parse(localStorage.getItem(_name));
   const filenames = data.map((row) => row[constants.FILENAME_COL]);
   localStorage.setItem(`${type}_filenames`, JSON.stringify([...filenames]));

@@ -149,17 +149,16 @@ export function populateSizeDropdown() {
 }
 
 export function createProgressBar() {
-  constants.initialize();
+  const data = page.getBinderOrSetData();
   const span = document.getElementById('progressSpan');
   const newBar = document.createElement('progress');
-  const max = constants.FILL_DATA.length;
+  const max = data.length;
   const numPulled = countPulled();
   const ratio = document.createTextNode(`${numPulled}/${max} `);
   const percent = document.createTextNode(
     ` ${((numPulled / max) * 100).toFixed(2)}%`
   );
   const newSpan = document.createElement('span');
-
   newBar.max = max;
   newBar.value = numPulled;
   newSpan.id = 'progressSpan';
@@ -170,9 +169,8 @@ export function createProgressBar() {
 }
 
 function countPulled() {
-  const filtered = constants.FILL_DATA.filter(
-    (row) => row[constants.CAUGHT_COL] == 'x'
-  );
+  const data = page.getBinderOrSetData();
+  const filtered = data.filter((row) => row[constants.CAUGHT_COL] == 'x');
   return filtered.length;
 }
 

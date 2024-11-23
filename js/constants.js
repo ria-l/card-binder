@@ -1,38 +1,22 @@
 export const APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 
-export let CAUGHT_COL,
+export let HEADER,
+  CAUGHT_COL,
   FILENAME_COL,
   SET_COL,
   CARDTYPE_COL,
   PKMNTYPE_COL,
-  CARDSUBTYPE_COL,
-  BINDER_NAME,
-  BINDER_DATA,
-  SET_NAME,
-  SET_DATA,
-  FILL_DATA;
+  CARDSUBTYPE_COL;
 
 export function initialize() {
-  const header = localStorage.getItem('header').split(',');
-
-  CAUGHT_COL = header.indexOf('caught');
-  FILENAME_COL = header.indexOf('file name');
-  SET_COL = header.indexOf('set');
-  CARDTYPE_COL = header.indexOf('card type');
-  PKMNTYPE_COL = header.indexOf('pkmn type');
-  CARDSUBTYPE_COL = header.indexOf('card subtype');
-  BINDER_NAME = localStorage.getItem('bindername');
-  BINDER_DATA = JSON.parse(localStorage.getItem(BINDER_NAME));
-  SET_NAME = localStorage.getItem('setname');
-  SET_DATA = JSON.parse(localStorage.getItem(SET_NAME));
-  const BINDER_OR_SET = localStorage.getItem('binder_or_set');
-
-  if (!BINDER_OR_SET || BINDER_OR_SET === 'binder') {
-    FILL_DATA = BINDER_DATA;
-  } else if (BINDER_OR_SET === 'set') {
-    FILL_DATA = SET_DATA;
-  }
+  HEADER = localStorage.getItem('header').split(',');
+  CAUGHT_COL = HEADER.indexOf('caught');
+  FILENAME_COL = HEADER.indexOf('file name');
+  SET_COL = HEADER.indexOf('set');
+  CARDTYPE_COL = HEADER.indexOf('card type');
+  PKMNTYPE_COL = HEADER.indexOf('pkmn type');
+  CARDSUBTYPE_COL = HEADER.indexOf('card subtype');
 }
 
 export const PKMN_HEX_COLORS = {

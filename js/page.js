@@ -73,19 +73,17 @@ function createPageContent() {
 }
 
 function createCardTags() {
-  constants.initialize();
+  const data = getBinderOrSetData();
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
-  for (var card = 0; card < constants.FILL_DATA.length; card++) {
-    const dir = `img/${constants.FILL_DATA[card][
-      constants.SET_COL
-    ].toLowerCase()}`;
-    const filename = constants.FILL_DATA[card][constants.FILENAME_COL];
-    const pkmntype = constants.FILL_DATA[card][constants.PKMNTYPE_COL];
-    const cardtype = constants.FILL_DATA[card][constants.CARDTYPE_COL];
-    const cardsubtype = constants.FILL_DATA[card][constants.CARDSUBTYPE_COL];
+  for (var card = 0; card < data.length; card++) {
+    const dir = `img/${data[card][constants.SET_COL].toLowerCase()}`;
+    const filename = data[card][constants.FILENAME_COL];
+    const pkmntype = data[card][constants.PKMNTYPE_COL];
+    const cardtype = data[card][constants.CARDTYPE_COL];
+    const cardsubtype = data[card][constants.CARDSUBTYPE_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    if (constants.FILL_DATA[card][constants.CAUGHT_COL] == 'x') {
+    if (data[card][constants.CAUGHT_COL] == 'x') {
       generateImgTag(tags, dir, filename, title, cardSize);
     } else {
       generatePlaceholder(card, cardtype, cardsubtype, cardSize, tags, title);
@@ -130,22 +128,32 @@ function generatePlaceholder(i, cardtype, cardsubtype, cardSize, tags, title) {
 
 export function generateBorderColors(picked_card_row, cardtype) {
   let special;
+  const data = getBinderOrSetData();
   if (cardtype != 'basic') {
     special = constants.CARD_HEX_COLORS[cardtype].join(',');
   }
   let border_colors;
   const light =
-    constants.PKMN_HEX_COLORS[
-      constants.FILL_DATA[picked_card_row][constants.PKMNTYPE_COL]
-    ][0];
+    constants.PKMN_HEX_COLORS[data[picked_card_row][constants.PKMNTYPE_COL]][0];
   const dark =
-    constants.PKMN_HEX_COLORS[
-      constants.FILL_DATA[picked_card_row][constants.PKMNTYPE_COL]
-    ][1];
+    constants.PKMN_HEX_COLORS[data[picked_card_row][constants.PKMNTYPE_COL]][1];
   if (cardtype == 'basic') {
     border_colors = `${dark},${light},${dark},${light},${dark}`;
   } else {
     border_colors = `${dark},${light},white,${special}`;
   }
   return border_colors;
+}
+
+export function getBinderOrSetData() {
+  let data;
+  const binderName = localStorage.getItem('bindername');
+  const setName = localStorage.getItem('setname');
+  const binderOrSet = localStorage.getItem('binder_or_set');
+  if (!binderOrSet || binderOrSet === 'binder') {
+    data = JSON.parse(localStorage.getItem(binderName));
+  } else if (binderOrSet === 'set') {
+    data = JSON.parse(localStorage.getItem(setName));
+  }
+  return data;
 }

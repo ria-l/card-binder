@@ -1,5 +1,7 @@
-const sort = (header, col_name, data) => {
-  const column = header.indexOf(col_name);
+import * as constants from './constants.js';
+
+const sort = (col_name, data) => {
+  const column = constants.HEADER.indexOf(col_name);
   return data.sort((a, b) => {
     if (a[column] === b[column]) {
       return 0;
@@ -10,47 +12,44 @@ const sort = (header, col_name, data) => {
 };
 
 export const sortByCardType = (data) => {
-  const header = data[0];
-  let sorted = data.slice(1);
+  let sorted = data.slice(1); // TODO: get rid of the need for slicing
 
-  sorted = sort(header, 'card #', sorted);
-  sorted = sort(header, 'set', sorted);
-  sorted = sort(header, 'release date', sorted);
-  sorted = sort(header, 'forme #', sorted);
-  sorted = sort(header, 'dex #', sorted);
-  sorted = sort(header, 'pkmn type #', sorted);
-  sorted = sort(header, 'card type #', sorted);
+  sorted = sort('card #', sorted);
+  sorted = sort('set', sorted);
+  sorted = sort('release date', sorted);
+  sorted = sort('forme #', sorted);
+  sorted = sort('dex #', sorted);
+  sorted = sort('pkmn type #', sorted);
+  sorted = sort('card type #', sorted);
 
   return sorted;
 };
 
 export const sortByColor = (data) => {
-  const header = data[0];
   let sorted = data.slice(1);
 
-  sorted = sort(header, 'card #', sorted);
-  sorted = sort(header, 'set', sorted);
-  sorted = sort(header, 'release date', sorted);
-  sorted = sort(header, 'card subtype bonus', sorted);
-  sorted = sort(header, 'card type #', sorted);
-  sorted = sort(header, 'forme #', sorted);
-  sorted = sort(header, 'dex #', sorted);
-  sorted = sort(header, 'pkmn type #', sorted);
+  sorted = sort('card #', sorted);
+  sorted = sort('set', sorted);
+  sorted = sort('release date', sorted);
+  sorted = sort('card subtype bonus', sorted);
+  sorted = sort('card type #', sorted);
+  sorted = sort('forme #', sorted);
+  sorted = sort('dex #', sorted);
+  sorted = sort('pkmn type #', sorted);
 
   return sorted;
 };
 
 export const sortByDex = (data) => {
-  const header = data[0];
   let sorted = data.slice(1);
 
-  sorted = sort(header, 'card #', sorted);
-  sorted = sort(header, 'set', sorted);
-  sorted = sort(header, 'release date', sorted);
-  sorted = sort(header, 'card subtype bonus', sorted);
-  sorted = sort(header, 'card type #', sorted);
-  sorted = sort(header, 'forme #', sorted);
-  sorted = sort(header, 'dex #', sorted);
+  sorted = sort('card #', sorted);
+  sorted = sort('set', sorted);
+  sorted = sort('release date', sorted);
+  sorted = sort('card subtype bonus', sorted);
+  sorted = sort('card type #', sorted);
+  sorted = sort('forme #', sorted);
+  sorted = sort('dex #', sorted);
 
   return sorted;
 };

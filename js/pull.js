@@ -81,15 +81,16 @@ function pullCards(n) {
  * @param {array of ints} picked_cards index numbers in the filenames array
  */
 function processPulled(pulled_cards) {
-  constants.initialize();
+  const binderName = localStorage.getItem('bindername');
+  const binderData = JSON.parse(localStorage.getItem(binderName));
   const newCards = [];
   const largeArr = [];
   pulled_cards.forEach((cardRow) => {
-    const filename = constants.BINDER_DATA[cardRow][constants.FILENAME_COL];
-    const caught = constants.BINDER_DATA[cardRow][constants.CAUGHT_COL];
-    const cardtype = constants.BINDER_DATA[cardRow][constants.CARDTYPE_COL];
-    const pkmntype = constants.BINDER_DATA[cardRow][constants.PKMNTYPE_COL];
-    const set = constants.BINDER_DATA[cardRow][constants.SET_COL];
+    const filename = binderData[cardRow][constants.FILENAME_COL];
+    const caught = binderData[cardRow][constants.CAUGHT_COL];
+    const cardtype = binderData[cardRow][constants.CARDTYPE_COL];
+    const pkmntype = binderData[cardRow][constants.PKMNTYPE_COL];
+    const set = binderData[cardRow][constants.SET_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
     const borderColors = page.generateBorderColors(cardRow, cardtype);
     const dir = `img/${set.toLowerCase()}`;
@@ -102,7 +103,7 @@ function processPulled(pulled_cards) {
   });
   displayLarge(largeArr);
   if (newCards.length) {
-    updateBinderData(newCards);
+    markCardAsPulled(newCards);
     submitForm(newCards);
   }
 }
@@ -180,18 +181,19 @@ function clearPulledList() {
  *
  * @param {array of strings} newCards filenames
  */
-function updateBinderData(newCards) {
+function markCardAsPulled(newCards) {
+  const binderName = localStorage.getItem('bindername');
+  const binderData = JSON.parse(localStorage.getItem(binderName));
+
   newCards.forEach((filename) => {
-    for (let i = 0; i < constants.BINDER_DATA.length; i++) {
-      if (constants.BINDER_DATA[i][constants.FILENAME_COL] == filename) {
-        constants.BINDER_DATA[i][constants.CAUGHT_COL] = 'x';
+    for (let i = 0; i < binderData.length; i++) {
+      if (binderData[i][constants.FILENAME_COL] == filename) {
+        binderData[i][constants.CAUGHT_COL] = 'x';
         break;
       }
     }
   });
-  localStorage.setItem(
-    constants.BINDER_NAME,
-    JSON.stringify(constants.BINDER_DATA)
-  );
+
+  localStorage.setItem(binderName, JSON.stringify(binderData));
   ui.createProgressBar();
 }
