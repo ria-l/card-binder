@@ -82,7 +82,7 @@ function createCardTags() {
     const filename = data[card][constants.FILENAME_COL];
     const pkmntype = data[card][constants.PKMNTYPE_COL];
     const cardtype = data[card][constants.CARDTYPE_COL];
-    const cardsubtype = data[card][constants.CARDSUBTYPE_COL];
+    const cardsubtype = data[card][constants.VISUALS_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
     if (data[card][constants.CAUGHT_COL] == 'x') {
       generateImgTag(tags, dir, filename, title, cardSize);

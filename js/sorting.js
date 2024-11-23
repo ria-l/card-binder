@@ -30,8 +30,8 @@ export const sortByColor = (data) => {
   sorted = sort('card #', sorted);
   sorted = sort('set', sorted);
   sorted = sort('release date', sorted);
-  sorted = sort('card subtype bonus', sorted);
   sorted = sort('card type #', sorted);
+  sorted = sort('visuals #', sorted);
   sorted = sort('forme #', sorted);
   sorted = sort('dex #', sorted);
   sorted = sort('pkmn type #', sorted);
@@ -45,8 +45,8 @@ export const sortByDex = (data) => {
   sorted = sort('card #', sorted);
   sorted = sort('set', sorted);
   sorted = sort('release date', sorted);
-  sorted = sort('card subtype bonus', sorted);
   sorted = sort('card type #', sorted);
+  sorted = sort('visuals #', sorted);
   sorted = sort('forme #', sorted);
   sorted = sort('dex #', sorted);
 

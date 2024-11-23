@@ -7,7 +7,7 @@ export let HEADER,
   SET_COL,
   CARDTYPE_COL,
   PKMNTYPE_COL,
-  CARDSUBTYPE_COL;
+  VISUALS_COL;
 
 export function initialize() {
   HEADER = localStorage.getItem('header').split(',');
@@ -16,7 +16,7 @@ export function initialize() {
   SET_COL = HEADER.indexOf('set');
   CARDTYPE_COL = HEADER.indexOf('card type');
   PKMNTYPE_COL = HEADER.indexOf('pkmn type');
-  CARDSUBTYPE_COL = HEADER.indexOf('card subtype');
+  VISUALS_COL = HEADER.indexOf('visuals');
 }
 
 export const PKMN_HEX_COLORS = {
@@ -31,7 +31,7 @@ export const PKMN_HEX_COLORS = {
   fairy: ['#e14690', '#b13870'],
   dragon: ['#b0813a', '#acac42'],
   colorless: ['#f5f4f0', '#d6d2cf'],
-  support: ['#eb028b', '#f14eae'], // hot pink
+  trainer: ['#eb028b', '#f14eae'], // hot pink
 };
 
 export const CARD_HEX_COLORS = {
@@ -43,7 +43,7 @@ export const CARD_HEX_COLORS = {
   vmax: ['#fbcf4c', '#e61c75', '#3f3487'], // yellow & pink & purple
   vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
   item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
-  trainer: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
+  supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
   energy: [
     '#f78b46', // fire
     '#ecab2a', // fighting
