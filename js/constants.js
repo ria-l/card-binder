@@ -7,7 +7,8 @@ export let HEADER,
   SET_COL,
   CARDTYPE_COL,
   PKMNTYPE_COL,
-  VISUALS_COL;
+  VISUALS_COL,
+  DEX_COL;
 
 export function initialize() {
   HEADER = localStorage.getItem('header').split(',');
@@ -17,6 +18,7 @@ export function initialize() {
   CARDTYPE_COL = HEADER.indexOf('card type');
   PKMNTYPE_COL = HEADER.indexOf('pkmn type');
   VISUALS_COL = HEADER.indexOf('visuals');
+  DEX_COL = HEADER.indexOf('dex #');
 }
 
 export const PKMN_HEX_COLORS = {

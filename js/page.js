@@ -82,12 +82,13 @@ function createCardTags() {
     const filename = data[card][constants.FILENAME_COL];
     const pkmntype = data[card][constants.PKMNTYPE_COL];
     const cardtype = data[card][constants.CARDTYPE_COL];
-    const cardsubtype = data[card][constants.VISUALS_COL];
-    const title = `${filename} : ${pkmntype} : ${cardtype}`;
+    const visuals = data[card][constants.VISUALS_COL];
+    const dex = data[card][constants.DEX_COL];
+    const title = `${filename} : ${pkmntype} : ${cardtype} : ${visuals} : ${dex}`;
     if (data[card][constants.CAUGHT_COL] == 'x') {
       generateImgTag(tags, dir, filename, title, cardSize);
     } else {
-      generatePlaceholder(card, cardtype, cardsubtype, cardSize, tags, title);
+      generatePlaceholder(card, cardtype, visuals, cardSize, tags, title);
     }
   }
   return tags;
@@ -104,12 +105,12 @@ function generateImgTag(tags, dir, filename, title, cardSize) {
   tags.push(img);
 }
 
-function generatePlaceholder(i, cardtype, cardsubtype, cardSize, tags, title) {
+function generatePlaceholder(i, cardtype, visuals, cardSize, tags, title) {
   // note that there are a couple other styles in the css file
 
   const border_colors = generateBorderColors(i, cardtype);
   let fill_colors;
-  if (cardsubtype.includes('gold')) {
+  if (visuals.includes('gold')) {
     fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
   } else {
     fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
