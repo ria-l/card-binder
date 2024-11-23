@@ -18,7 +18,9 @@ function storeBinders(header, data) {
   const binderNames = new Set();
   const binderCol = header.indexOf('binder');
   for (const row of data) {
-    binderNames.add(row[binderCol]);
+    if (row[binderCol] != 'binder') {
+      binderNames.add(row[binderCol]);
+    }
   }
   localStorage.setItem('bindernames', JSON.stringify([...binderNames]));
   // store data for each binder

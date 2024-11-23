@@ -84,10 +84,8 @@ export function populateBinderDropdown() {
   binderDropdown.innerHTML = '';
   for (let binder of bindernames) {
     const option = document.createElement('option');
-    if (binder != 'binder') {
-      option.value = binder;
-      option.textContent = binder;
-    }
+    option.value = binder;
+    option.textContent = binder;
     if (binder == defaultbinder) {
       option.selected = 'selected';
     }
