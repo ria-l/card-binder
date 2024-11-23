@@ -1,4 +1,8 @@
-function UI_setSizeAndGrid() {
+import * as constants from './constants.js';
+import * as store from './store.js';
+import * as page from './page.js';
+
+export function setSizeAndGrid() {
   let cardSize = parseInt(localStorage.getItem('cardSize'));
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
@@ -11,33 +15,33 @@ function UI_setSizeAndGrid() {
   if (isNaN(gridRow)) {
     gridRow = 0;
   }
-  const rowselect = document.getElementById('row-dropdown');
+  const rowselect = document.getElementById('rowDropdown');
   if (rowselect.options.length == 0) {
-    UI_populateGridDropdowns();
+    populateGridDropdowns();
   }
-  const sizeselect = document.getElementById('size-dropdown');
+  const sizeselect = document.getElementById('sizeDropdown');
   if (sizeselect.options.length == 0) {
-    UI_populateSizeDropdown();
+    populateSizeDropdown();
   }
-  UI_setAndStoreCardSize(cardSize);
-  UI_setAndStoreGrid(gridCol, gridRow);
+  setAndStoreCardSize(cardSize);
+  setAndStoreGrid(gridCol, gridRow);
 }
 
-function UI_setAndStoreGrid(col, row) {
+export function setAndStoreGrid(col, row) {
   if (col == undefined) {
-    col = document.getElementById('col-dropdown').selectedIndex;
+    col = document.getElementById('colDropdown').selectedIndex;
   }
   if (row == undefined) {
-    row = document.getElementById('row-dropdown').selectedIndex;
+    row = document.getElementById('rowDropdown').selectedIndex;
   }
-  document.getElementById('col-dropdown').selectedIndex = col;
-  document.getElementById('row-dropdown').selectedIndex = row;
+  document.getElementById('colDropdown').selectedIndex = col;
+  document.getElementById('rowDropdown').selectedIndex = row;
   localStorage.setItem('row', row);
   localStorage.setItem('col', col);
 }
 
-function UI_setAndStoreCardSize(size) {
-  const dropdown = document.getElementById('size-dropdown');
+export function setAndStoreCardSize(size) {
+  const dropdown = document.getElementById('sizeDropdown');
   if (size == undefined) {
     size = parseInt(dropdown.value);
   }
@@ -48,11 +52,11 @@ function UI_setAndStoreCardSize(size) {
     }
   }
   localStorage.setItem('cardSize', size);
-  UI_resizeCards();
+  resizeCards();
 }
 
-function UI_resizeCards() {
-  size = document.getElementById('size-dropdown').value;
+function resizeCards() {
+  const size = document.getElementById('sizeDropdown').value;
   document
     .querySelectorAll('.card')
     .forEach((e) => (e.style.width = `${size}px`));
@@ -64,7 +68,7 @@ function UI_resizeCards() {
     .forEach((e) => (e.style.borderRadius = `${size / 20}px`));
 
   // HTMLCollection can't use foreach
-  ph = document.getElementsByClassName('placeholder');
+  const ph = document.getElementsByClassName('placeholder');
   for (var i = 0, len = ph.length; i < len; i++) {
     ph[i].style.width = `${size}px`;
     ph[i].style.height = `${size * 1.4}px`;
@@ -73,12 +77,12 @@ function UI_resizeCards() {
   }
 }
 
-function UI_populateBinderDropdown() {
-  const select = document.getElementById('selectBinder');
+export function populateBinderDropdown() {
+  const binderDropdown = document.getElementById('binderDropdown');
   const bindernames = JSON.parse(localStorage.getItem('bindernames'));
   const defaultbinder = localStorage.getItem('bindername');
-  select.innerHTML = '';
-  for (binder of bindernames) {
+  binderDropdown.innerHTML = '';
+  for (let binder of bindernames) {
     const option = document.createElement('option');
     if (binder != 'binder') {
       option.value = binder;
@@ -87,16 +91,17 @@ function UI_populateBinderDropdown() {
     if (binder == defaultbinder) {
       option.selected = 'selected';
     }
-    select.appendChild(option);
+    binderDropdown.appendChild(option);
   }
 }
 
-function UI_populateSetDropdown() {
-  const select = document.getElementById('selectSet');
+export function populateSetDropdown() {
+  const setDropdown = document.getElementById('setDropdown');
   const setnames = JSON.parse(localStorage.getItem('setnames'));
+
   const defaultset = localStorage.getItem('setname');
-  select.innerHTML = '';
-  for (const set of setnames) {
+  setDropdown.innerHTML = '';
+  for (let set of setnames) {
     const option = document.createElement('option');
     if (set != 'set') {
       option.value = set;
@@ -105,90 +110,92 @@ function UI_populateSetDropdown() {
     if (set == defaultset) {
       option.selected = 'selected';
     }
-    select.appendChild(option);
+    setDropdown.appendChild(option);
   }
 }
 
-function UI_populateGridDropdowns() {
-  const colSelect = document.getElementById('col-dropdown');
-  const rowSelect = document.getElementById('row-dropdown');
+export function populateGridDropdowns() {
+  const colDropdown = document.getElementById('colDropdown');
+  const rowDropdown = document.getElementById('rowDropdown');
   for (let i = 0; i < 13; i++) {
     const option = document.createElement('option');
     option.value = i;
     option.textContent = i;
-    colSelect.appendChild(option);
+    colDropdown.appendChild(option);
     option.selected = 0;
   }
   for (let i = 0; i < 13; i++) {
     const option = document.createElement('option');
     option.value = i;
     option.textContent = i;
-    rowSelect.appendChild(option);
+    rowDropdown.appendChild(option);
   }
 }
 
-function UI_populateSizeDropdown() {
-  const colSelect = document.getElementById('size-dropdown');
+export function populateSizeDropdown() {
+  const sizeDropdown = document.getElementById('sizeDropdown');
   for (let i = 1; i < 11; i++) {
     const option = document.createElement('option');
     option.value = i * 50;
     option.textContent = i * 50;
-    colSelect.appendChild(option);
+    sizeDropdown.appendChild(option);
   }
   for (let i = 1; i < 20; i++) {
     const option = document.createElement('option');
     option.value = i * 10;
     option.textContent = i * 10;
-    colSelect.appendChild(option);
+    sizeDropdown.appendChild(option);
   }
 }
 
-function UI_createProgressBar() {
-  CONSTANTS_initialize();
-  const span = document.getElementById('progress');
+export function createProgressBar() {
+  constants.initialize();
+  const span = document.getElementById('progressSpan');
   const newBar = document.createElement('progress');
-  const max = FILL_DATA.length;
-  const caught = UI_countCaught();
-  const ratio = document.createTextNode(`${caught}/${max} `);
+  const max = constants.FILL_DATA.length;
+  const numPulled = countPulled();
+  const ratio = document.createTextNode(`${numPulled}/${max} `);
   const percent = document.createTextNode(
-    ` ${((caught / max) * 100).toFixed(2)}%`
+    ` ${((numPulled / max) * 100).toFixed(2)}%`
   );
-  const newspan = document.createElement('span');
+  const newSpan = document.createElement('span');
 
   newBar.max = max;
-  newBar.value = caught;
-  newspan.id = 'progress';
-  newspan.appendChild(ratio);
-  newspan.appendChild(newBar);
-  newspan.appendChild(percent);
-  span.replaceWith(newspan);
+  newBar.value = numPulled;
+  newSpan.id = 'progressSpan';
+  newSpan.appendChild(ratio);
+  newSpan.appendChild(newBar);
+  newSpan.appendChild(percent);
+  span.replaceWith(newSpan);
 }
 
-function UI_countCaught() {
-  filtered = FILL_DATA.filter((row) => row[CAUGHT_COL] == 'x');
+function countPulled() {
+  const filtered = constants.FILL_DATA.filter(
+    (row) => row[constants.CAUGHT_COL] == 'x'
+  );
   return filtered.length;
 }
 
-function UI_selectNewBinder(source) {
+export function selectNewBinder(source) {
   localStorage.setItem('binder_or_set', 'binder');
-  const select = document.getElementById('selectBinder');
-  const bindername = select.options[select.selectedIndex].text;
+  const binderDropdown = document.getElementById('binderDropdown');
+  const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
   localStorage.setItem('bindername', bindername);
   if (source == 'fillpage') {
-    PAGE_fillPage();
+    page.fillPage();
   }
-  UI_createProgressBar();
-  STORE_storeFileNames('binder', bindername);
+  createProgressBar();
+  store.storeFileNames('binder', bindername);
 }
 
-function UI_selectNewSet(source) {
+export function selectNewSet(source) {
   localStorage.setItem('binder_or_set', 'set');
-  const select = document.getElementById('selectSet');
-  const setname = select.options[select.selectedIndex].text;
+  const setDropdown = document.getElementById('setDropdown');
+  const setname = setDropdown.options[setDropdown.selectedIndex].text;
   localStorage.setItem('setname', setname);
   if (source == 'fillpage') {
-    PAGE_fillPage();
+    page.fillPage();
   }
-  UI_createProgressBar();
-  STORE_storeFileNames('set', setname);
+  createProgressBar();
+  store.storeFileNames('set', setname);
 }

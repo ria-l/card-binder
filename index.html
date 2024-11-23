@@ -10,18 +10,18 @@
       href="img/0_icons/hisui_pokeball.png"
     />
 
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/sorting.js"></script>
-    <script type="text/javascript" src="js/ui.js"></script>
-    <script type="text/javascript" src="js/page.js"></script>
-    <script type="text/javascript" src="js/store.js"></script>
-    <script type="text/javascript" src="js/constants.js"></script>
+    <script type="module" src="js/index.js"></script>
+    <script type="module" src="js/sorting.js"></script>
+    <script type="module" src="js/ui.js"></script>
+    <script type="module" src="js/page.js"></script>
+    <script type="module" src="js/store.js"></script>
+    <script type="module" src="js/constants.js"></script>
 
     <title>Card Binder</title>
   </head>
   <body>
-    <span id="bg"></span>
-    <span id="status" class="hidestatus"></span>
+    <span id="bgSpan"></span>
+    <span id="statusSpan" class="hidestatus"></span>
 
     <div class="header">
       <span>
@@ -32,7 +32,7 @@
           </button>
         </a>
 
-        <button onclick="INDEX_fetchAndFillPage();">
+        <button id="syncButton">
           <img src="img/0_icons/farfetchd.png" class="icon" />
           Sync
         </button>
@@ -40,49 +40,32 @@
       <span>
         <button>
           Binder:
-          <select
-            id="selectBinder"
-            onchange="UI_selectNewBinder('fillpage');"
-          ></select>
+          <select id="binderDropdown"></select>
         </button>
       </span>
       <span>
         <button>
           Set:
-          <select
-            id="selectSet"
-            onchange="UI_selectNewSet('fillpage');"
-          ></select>
+          <select id="setDropdown"></select>
         </button>
       </span>
-      <span id="progress"><progress></progress></span>
+      <span id="progressSpan"><progress></progress></span>
       <span>
         <button>
           Cols:
-          <select
-            id="col-dropdown"
-            onchange="UI_setAndStoreGrid();
-            PAGE_fillPage();"
-          ></select>
+          <select id="colDropdown"></select>
           Rows:
-          <select
-            id="row-dropdown"
-            onchange="UI_setAndStoreGrid();
-            PAGE_fillPage();"
-          ></select>
+          <select id="rowDropdown"></select>
         </button>
       </span>
 
-      <span id="card-size">
+      <span id="cardSizeSpan">
         <button>
           Card size:
-          <select
-            id="size-dropdown"
-            onchange="UI_setAndStoreCardSize()"
-          ></select>
+          <select id="sizeDropdown"></select>
         </button>
       </span>
     </div>
-    <div id="content" class="content"></div>
+    <div id="contentDiv" class="contentDiv"></div>
   </body>
 </html>

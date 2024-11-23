@@ -9,54 +9,51 @@
       type="image/x-icon"
       href="img/0_icons/hisui_pokeball.png"
     />
-    <script type="text/javascript" src="js/pull.js"></script>
-    <script type="text/javascript" src="js/constants.js"></script>
-    <script type="text/javascript" src="js/ui.js"></script>
-    <script type="text/javascript" src="js/page.js"></script>
-    <script type="text/javascript" src="js/store.js"></script>
-    <script type="text/javascript" src="js/sorting.js"></script>
+    <script type="module" src="js/pull.js"></script>
+    <script type="module" src="js/constants.js"></script>
+    <script type="module" src="js/ui.js"></script>
+    <script type="module" src="js/page.js"></script>
+    <script type="module" src="js/store.js"></script>
+    <script type="module" src="js/sorting.js"></script>
 
     <title>Pull card remotely</title>
   </head>
   <body>
-    <span id="bg"></span>
+    <span id="bgSpan"></span>
     <iframe src="about:blank" name="_iframe"></iframe>
-    <span id="status" class="hidestatus"></span>
+    <span id="statusSpan" class="hidestatus"></span>
     <div class="header pull-header">
-      <span id="top">
+      <span>
         <button onclick="location.href='index.html';" class="link">
           <img src="img/0_icons/ditto.png" class="icon" />Home
         </button>
 
-        <button onclick="PULL_initialize();">
+        <button id="syncButton">
           <img src="img/0_icons/farfetchd.png" class="icon" /> Sync
         </button>
       </span>
 
-      <span id="binder-info">
+      <span id="binderSpan">
         <button>
           Binder:
-          <select
-            id="selectBinder"
-            onchange="UI_selectNewBinder('storefilenames');"
-          ></select>
+          <select id="binderDropdown"></select>
         </button>
       </span>
 
-      <span id="progress"><progress>text</progress></span>
+      <span id="progressSpan"><progress>text</progress></span>
 
-      <span id="pull-buttons">
-        <button onclick="PULL_pull(1);">Pull!</button>
-        <button onclick="PULL_pull(5);">Pull 5!</button>
-        <button onclick="PULL_pull(10);">Pull 10!</button>
-        <button onclick="PULL_clearPulledList();">Clear display</button>
+      <span id="pullSpan">
+        <button id="pullOneButton">Pull!</button>
+        <button id="pullFiveButton">Pull 5!</button>
+        <button id="pullTenButton">Pull 10!</button>
+        <button id="clearPullsButton">Clear display</button>
       </span>
     </div>
 
     <div id="parent">
-      <span id="winner" class="chunk"></span>
-      <span id="card-list-div" class="chunk">
-        <ol reversed id="card-list"></ol>
+      <span id="largeCardSpan" class="chunk"></span>
+      <span id="smallCardSpan" class="chunk">
+        <ol reversed id="cardList"></ol>
       </span>
     </div>
     <form id="form" method="POST" target="_iframe">

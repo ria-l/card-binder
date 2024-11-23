@@ -1,13 +1,16 @@
-function STORE_storeData(data) {
+import * as constants from './constants.js';
+import * as sorting from './sorting.js';
+
+export function storeData(data) {
   // store header
   const header = data[0];
   localStorage.setItem('header', header);
-  STORE_storeBinders(header, data);
-  STORE_storeSets(header, data);
-  CONSTANTS_initialize();
+  storeBinders(header, data);
+  storeSets(header, data);
+  constants.initialize();
 }
 
-function STORE_storeBinders(header, data) {
+function storeBinders(header, data) {
   let bindername = localStorage.getItem('bindername');
   if (!bindername) {
     bindername = header[0]; // TODO: make this random
@@ -26,24 +29,24 @@ function STORE_storeBinders(header, data) {
     filterAndSort(data, binderCol, bName, header);
   }
   // store filenames for current binder
-  STORE_storeFileNames('binder', bindername);
+  storeFileNames('binder', bindername);
 }
 
 /**
- * 
- * @param {*} data 
+ *
+ * @param {*} data
  * @param {int} col column number for set or binder
  * @param {string} bsName binder or set name
  * @param {array of strings} header from the gSheet
  */
-function filterAndSort(data, col, bsName, header) {
-  filtered = data.filter((row) => row[col] == bsName);
+export function filterAndSort(data, col, bsName, header) {
+  let filtered = data.filter((row) => row[col] == bsName);
   // add back the header, since it would be removed during filtering
   filtered.unshift(header);
-  localStorage.setItem(bsName, JSON.stringify(sortByColor(filtered)));
+  localStorage.setItem(bsName, JSON.stringify(sorting.sortByColor(filtered)));
 }
 
-function STORE_storeSets(header, data) {
+function storeSets(header, data) {
   let setname = localStorage.getItem('setname');
   if (!setname) {
     setname = 'PAL'; // TODO: make this random
@@ -61,7 +64,7 @@ function STORE_storeSets(header, data) {
     filterAndSort(data, setCol, sName, header);
   }
   // store filenames for current binder
-  STORE_storeFileNames('set', setname);
+  storeFileNames('set', setname);
 }
 
 /**
@@ -69,9 +72,9 @@ function STORE_storeSets(header, data) {
  * @param {string} type binder or set
  * @param {string} _name name of binder or set
  */
-function STORE_storeFileNames(type, _name) {
-  CONSTANTS_initialize();
-  data = JSON.parse(localStorage.getItem(_name));
-  const filenames = data.map((row) => row[FILENAME_COL]);
+export function storeFileNames(type, _name) {
+  constants.initialize();
+  const data = JSON.parse(localStorage.getItem(_name));
+  const filenames = data.map((row) => row[constants.FILENAME_COL]);
   localStorage.setItem(`${type}_filenames`, JSON.stringify([...filenames]));
 }

@@ -1,15 +1,17 @@
-function PAGE_fillPage() {
-  const binderContent = PAGE_createPageContent();
-  document.getElementById('content').innerHTML = '';
+import * as constants from './constants.js';
+
+export function fillPage() {
+  const binderContent = createPageContent();
+  document.getElementById('contentDiv').innerHTML = '';
   binderContent.forEach((item) => {
-    document.getElementById('content').appendChild(item);
+    document.getElementById('contentDiv').appendChild(item);
   });
 }
 
-function PAGE_createPageContent() {
-  const cardTags = PAGE_createCardTags();
-  const rows = parseInt(document.getElementById('row-dropdown').selectedIndex);
-  const cols = parseInt(document.getElementById('col-dropdown').selectedIndex);
+function createPageContent() {
+  const cardTags = createCardTags();
+  const rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
+  const cols = parseInt(document.getElementById('colDropdown').selectedIndex);
   const allTables = [];
   let currentTable;
   let currentRow;
@@ -70,34 +72,29 @@ function PAGE_createPageContent() {
   return allTables;
 }
 
-function PAGE_createCardTags() {
-  CONSTANTS_initialize();
-  const cardSize = document.getElementById('size-dropdown').value;
+function createCardTags() {
+  constants.initialize();
+  const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
-  for (var card = 0; card < FILL_DATA.length; card++) {
-    const dir = `img/${FILL_DATA[card][SET_COL].toLowerCase()}`;
-    const filename = FILL_DATA[card][FILENAME_COL];
-    const pkmntype = FILL_DATA[card][PKMNTYPE_COL];
-    const cardtype = FILL_DATA[card][CARDTYPE_COL];
-    const cardsubtype = FILL_DATA[card][CARDSUBTYPE_COL];
+  for (var card = 0; card < constants.FILL_DATA.length; card++) {
+    const dir = `img/${constants.FILL_DATA[card][
+      constants.SET_COL
+    ].toLowerCase()}`;
+    const filename = constants.FILL_DATA[card][constants.FILENAME_COL];
+    const pkmntype = constants.FILL_DATA[card][constants.PKMNTYPE_COL];
+    const cardtype = constants.FILL_DATA[card][constants.CARDTYPE_COL];
+    const cardsubtype = constants.FILL_DATA[card][constants.CARDSUBTYPE_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    if (FILL_DATA[card][CAUGHT_COL] == 'x') {
-      PAGE_generateImgTag(tags, dir, filename, title, cardSize);
+    if (constants.FILL_DATA[card][constants.CAUGHT_COL] == 'x') {
+      generateImgTag(tags, dir, filename, title, cardSize);
     } else {
-      PAGE_generatePlaceholder(
-        card,
-        cardtype,
-        cardsubtype,
-        cardSize,
-        tags,
-        title
-      );
+      generatePlaceholder(card, cardtype, cardsubtype, cardSize, tags, title);
     }
   }
   return tags;
 }
 
-function PAGE_generateImgTag(tags, dir, filename, title, cardSize) {
+function generateImgTag(tags, dir, filename, title, cardSize) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   img.title = title;
@@ -108,17 +105,10 @@ function PAGE_generateImgTag(tags, dir, filename, title, cardSize) {
   tags.push(img);
 }
 
-function PAGE_generatePlaceholder(
-  i,
-  cardtype,
-  cardsubtype,
-  cardSize,
-  tags,
-  title
-) {
+function generatePlaceholder(i, cardtype, cardsubtype, cardSize, tags, title) {
   // note that there are a couple other styles in the css file
 
-  const border_colors = PAGE_generateBorderColors(i, cardtype);
+  const border_colors = generateBorderColors(i, cardtype);
   let fill_colors;
   if (cardsubtype.includes('gold')) {
     fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
@@ -138,14 +128,20 @@ function PAGE_generatePlaceholder(
   tags.push(span);
 }
 
-function PAGE_generateBorderColors(picked_card_row, cardtype) {
+export function generateBorderColors(picked_card_row, cardtype) {
   let special;
   if (cardtype != 'basic') {
-    special = CARD_HEX_COLORS[cardtype].join(',');
+    special = constants.CARD_HEX_COLORS[cardtype].join(',');
   }
   let border_colors;
-  const light = PKMN_HEX_COLORS[FILL_DATA[picked_card_row][PKMNTYPE_COL]][0];
-  const dark = PKMN_HEX_COLORS[FILL_DATA[picked_card_row][PKMNTYPE_COL]][1];
+  const light =
+    constants.PKMN_HEX_COLORS[
+      constants.FILL_DATA[picked_card_row][constants.PKMNTYPE_COL]
+    ][0];
+  const dark =
+    constants.PKMN_HEX_COLORS[
+      constants.FILL_DATA[picked_card_row][constants.PKMNTYPE_COL]
+    ][1];
   if (cardtype == 'basic') {
     border_colors = `${dark},${light},${dark},${light},${dark}`;
   } else {

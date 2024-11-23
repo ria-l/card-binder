@@ -1,81 +1,113 @@
+import * as constants from './constants.js';
+import * as store from './store.js';
+import * as ui from './ui.js';
+import * as page from './page.js';
+
 window.onload = () => {
-  document.getElementById('form').action = APPSCRIPT_URL;
-  PULL_initialize('onload');
+  document.getElementById('form').action = constants.APPSCRIPT_URL;
+  initializePullPage('onload');
 };
 
-async function PULL_initialize(source) {
-  if (localStorage.getItem('bindername') && source == 'onload') {
+async function initializePullPage(source) {
+  if (source == 'onload' && localStorage.getItem('pull_status') == 'SUCCESS') {
     console.log('already stored');
   } else {
-    const data = await PULL_fetchData();
-    STORE_storeData(data.data);
+    const data = await fetchData();
+    store.storeData(data.data);
   }
-  UI_populateBinderDropdown();
-  UI_createProgressBar();
+  ui.populateBinderDropdown();
+  ui.createProgressBar();
+  setEventListeners();
+  localStorage.setItem('pull_status', 'SUCCESS');
 }
 
-async function PULL_fetchData() {
+async function fetchData() {
   console.log('fetching...');
-  const status = document.getElementById('status');
-  status.innerHTML = 'loading...';
-  status.className = 'showstatus';
-  const response = await fetch(APPSCRIPT_URL);
+  const statusSpan = document.getElementById('statusSpan');
+  statusSpan.innerHTML = 'loading...';
+  statusSpan.className = 'showstatus';
+  const response = await fetch(constants.APPSCRIPT_URL);
   const data = await response.json();
-  status.className = 'hidestatus';
+  statusSpan.className = 'hidestatus';
   console.log('fetched');
 
   return data;
 }
 
+function setEventListeners() {
+  const binderDropdown = document.getElementById('binderDropdown');
+  binderDropdown.addEventListener('change', function () {
+    ui.selectNewBinder('storefilenames');
+  });
+  const pullOneButton = document.getElementById('pullOneButton');
+  pullOneButton.addEventListener('click', function () {
+    pullCards(1);
+  });
+  const pullFiveButton = document.getElementById('pullFiveButton');
+  pullFiveButton.addEventListener('click', function () {
+    pullCards(5);
+  });
+  const pullTenButton = document.getElementById('pullTenButton');
+  pullTenButton.addEventListener('click', function () {
+    pullCards(10);
+  });
+  const clearPullsButton = document.getElementById('clearPullsButton');
+  clearPullsButton.addEventListener('click', function () {
+    clearPulledList();
+  });
+  const syncButton = document.getElementById('syncButton');
+  syncButton.addEventListener('click', function () {
+    initializePullPage();
+  });
+}
+
 /**
- * filenames is set in binder.STORE_storeFileNames
+ * filenames is set in binder.storeFileNames
  * @param {int} n number of cards pulled
  */
-function PULL_pull(n) {
+function pullCards(n) {
   const cardPool = JSON.parse(localStorage.getItem('binder_filenames'));
   let pulled = [];
   for (let i = 0; i < n; i++) {
     // max val is length - 1
-    x = Math.floor(Math.random() * cardPool.length);
+    const x = Math.floor(Math.random() * cardPool.length);
     pulled.push(x);
   }
-  PULL_processPulled(pulled);
+  processPulled(pulled);
 }
 
 /**
  *
  * @param {array of ints} picked_cards index numbers in the filenames array
  */
-function PULL_processPulled(pulled_cards) {
-  CONSTANTS_initialize();
+function processPulled(pulled_cards) {
+  constants.initialize();
   const newCards = [];
   const largeArr = [];
   pulled_cards.forEach((cardRow) => {
-    const filename = BINDER_DATA[cardRow][FILENAME_COL];
-    const caught = BINDER_DATA[cardRow][CAUGHT_COL];
-    const cardtype = BINDER_DATA[cardRow][CARDTYPE_COL];
-    const pkmntype = BINDER_DATA[cardRow][PKMNTYPE_COL];
-    const set = BINDER_DATA[cardRow][SET_COL];
+    const filename = constants.BINDER_DATA[cardRow][constants.FILENAME_COL];
+    const caught = constants.BINDER_DATA[cardRow][constants.CAUGHT_COL];
+    const cardtype = constants.BINDER_DATA[cardRow][constants.CARDTYPE_COL];
+    const pkmntype = constants.BINDER_DATA[cardRow][constants.PKMNTYPE_COL];
+    const set = constants.BINDER_DATA[cardRow][constants.SET_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    const borderColors = PAGE_generateBorderColors(cardRow, cardtype);
+    const borderColors = page.generateBorderColors(cardRow, cardtype);
     const dir = `img/${set.toLowerCase()}`;
 
-    PULL_displaySmall(filename, title, caught, dir, borderColors);
-    largeArr.push(
-      PULL_generateImg('large', dir, filename, caught, borderColors)
-    );
+    displaySmall(filename, title, caught, dir, borderColors);
+    largeArr.push(generateImg('large', dir, filename, caught, borderColors));
     if (!caught) {
       newCards.push(filename);
     }
   });
-  PULL_displayLarge(largeArr);
+  displayLarge(largeArr);
   if (newCards.length) {
-    PULL_updateBinderData(newCards);
-    PULL_submitForm(newCards);
+    updateBinderData(newCards);
+    submitForm(newCards);
   }
 }
 
-function PULL_generateImg(size, dir, filename, caught, borderColors) {
+function generateImg(size, dir, filename, caught, borderColors) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   if (size == 'small') {
@@ -93,31 +125,29 @@ function PULL_generateImg(size, dir, filename, caught, borderColors) {
   return img;
 }
 
-function PULL_displaySmall(filename, title, caught, dir, borderColors) {
-  const ol = document.getElementById('card-list');
-  const li = PULL_generateLi(title, caught);
+function displaySmall(filename, title, caught, dir, borderColors) {
+  const ol = document.getElementById('cardList');
+  const li = generateLi(title, caught);
   ol.insertBefore(li, ol.firstChild);
-  const right = document.getElementById('card-list-div');
-  const small = PULL_generateImg('small', dir, filename, caught, borderColors);
+  const right = document.getElementById('smallCardSpan');
+  const small = generateImg('small', dir, filename, caught, borderColors);
   small.onclick = function () {
-    PULL_displayLarge([
-      PULL_generateImg('large', dir, filename, caught, borderColors),
-    ]);
+    displayLarge([generateImg('large', dir, filename, caught, borderColors)]);
   };
   right.insertBefore(small, ol);
 }
 
-function PULL_displayLarge(arr) {
-  const left = document.getElementById('winner');
+function displayLarge(arr) {
+  const left = document.getElementById('largeCardSpan');
   const newLeft = document.createElement('span');
-  newLeft.id = 'winner';
+  newLeft.id = 'largeCardSpan';
   arr.forEach((element) => {
     newLeft.appendChild(element);
   });
   left.replaceWith(newLeft);
 }
 
-function PULL_generateLi(title, caught) {
+function generateLi(title, caught) {
   const li = document.createElement('li');
   let textnode = title;
   if (!caught) {
@@ -131,7 +161,7 @@ function PULL_generateLi(title, caught) {
  *
  * @param {array of strings} filenames
  */
-function PULL_submitForm(filenames) {
+function submitForm(filenames) {
   document.getElementById('id-filename').value = JSON.stringify(filenames);
   document.getElementById('form').submit();
 }
@@ -139,10 +169,10 @@ function PULL_submitForm(filenames) {
 /**
  * Used for button click
  */
-function PULL_clearPulledList() {
-  const right = document.getElementById('card-list-div');
-  right.innerHTML = '<ol reversed id="card-list"></ol>';
-  const left = document.getElementById('winner');
+function clearPulledList() {
+  const right = document.getElementById('smallCardSpan');
+  right.innerHTML = '<ol reversed id="cardList"></ol>';
+  const left = document.getElementById('largeCardSpan');
   left.innerHTML = '';
 }
 
@@ -150,15 +180,18 @@ function PULL_clearPulledList() {
  *
  * @param {array of strings} newCards filenames
  */
-function PULL_updateBinderData(newCards) {
+function updateBinderData(newCards) {
   newCards.forEach((filename) => {
-    for (let i = 0; i < BINDER_DATA.length; i++) {
-      if (BINDER_DATA[i][FILENAME_COL] == filename) {
-        BINDER_DATA[i][CAUGHT_COL] = 'x';
+    for (let i = 0; i < constants.BINDER_DATA.length; i++) {
+      if (constants.BINDER_DATA[i][constants.FILENAME_COL] == filename) {
+        constants.BINDER_DATA[i][constants.CAUGHT_COL] = 'x';
         break;
       }
     }
   });
-  localStorage.setItem(BINDER_NAME, JSON.stringify(BINDER_DATA));
-  UI_createProgressBar();
+  localStorage.setItem(
+    constants.BINDER_NAME,
+    JSON.stringify(constants.BINDER_DATA)
+  );
+  ui.createProgressBar();
 }

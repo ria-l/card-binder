@@ -1,39 +1,76 @@
+import * as constants from './constants.js';
+import * as page from './page.js';
+import * as ui from './ui.js';
+import * as store from './store.js';
+
 window.onload = () => {
-  UI_setSizeAndGrid();
-  if (localStorage.getItem('bindername')) {
-    CONSTANTS_initialize();
-    INDEX_loadFromStorage();
+  ui.setSizeAndGrid();
+  if (localStorage.getItem('page_status') == 'SUCCESS') {
+    constants.initialize();
+    loadFromStorage();
   } else {
-    INDEX_fetchAndFillPage();
+    fetchAndFillPage();
   }
 };
 
-async function INDEX_fetchAndFillPage() {
-  const data = await INDEX_fetchData();
-  STORE_storeData(data.data);
-  PAGE_fillPage();
-  UI_populateBinderDropdown();
-  UI_populateSetDropdown();
-  UI_createProgressBar();
+async function fetchAndFillPage() {
+  const data = await fetchData();
+  store.storeData(data.data);
+  page.fillPage();
+  ui.populateBinderDropdown();
+  ui.populateSetDropdown();
+  ui.createProgressBar();
+  setEventListeners();
+  localStorage.setItem('page_status', 'SUCCESS');
 }
 
-function INDEX_loadFromStorage() {
+function loadFromStorage() {
   console.log('loading from storage');
-  PAGE_fillPage();
-  UI_populateBinderDropdown();
-  UI_populateSetDropdown();
-  UI_createProgressBar();
+  page.fillPage();
+  ui.populateBinderDropdown();
+  ui.populateSetDropdown();
+  ui.createProgressBar();
+  setEventListeners();
 }
 
-async function INDEX_fetchData() {
+async function fetchData() {
   console.log('fetching...');
-  const status = document.getElementById('status');
-  status.innerHTML = 'loading...';
-  status.className = 'showstatus';
-  const response = await fetch(APPSCRIPT_URL);
+  const statusSpan = document.getElementById('statusSpan');
+  statusSpan.innerHTML = 'loading...';
+  statusSpan.className = 'showstatus';
+  const response = await fetch(constants.APPSCRIPT_URL);
   const data = await response.json();
-  status.className = 'hidestatus';
+  statusSpan.className = 'hidestatus';
   console.log('fetched');
 
   return data;
+}
+
+function setEventListeners() {
+  const binderDropdown = document.getElementById('binderDropdown');
+  binderDropdown.addEventListener('change', function () {
+    ui.selectNewBinder('fillpage');
+  });
+  const setDropdown = document.getElementById('setDropdown');
+  setDropdown.addEventListener('change', function () {
+    ui.selectNewSet('fillpage');
+  });
+  const colDropdown = document.getElementById('colDropdown');
+  colDropdown.addEventListener('change', function () {
+    ui.setAndStoreGrid();
+    page.fillPage();
+  });
+  const rowDropdown = document.getElementById('rowDropdown');
+  rowDropdown.addEventListener('change', function () {
+    ui.setAndStoreGrid();
+    page.fillPage();
+  });
+  const sizeDropdown = document.getElementById('sizeDropdown');
+  sizeDropdown.addEventListener('change', function () {
+    ui.setAndStoreCardSize();
+  });
+  const syncButton = document.getElementById('syncButton');
+  syncButton.addEventListener('click', function () {
+    fetchAndFillPage();
+  });
 }

@@ -13,7 +13,7 @@ https://ria-l.github.io/card-binder/
 - use document fragments
 - pick a random background image
 - don't use the sheet to select the default binder
-- consolidate CONSTANTS_initialize
+- make constants actual constants
 - make it look less like garbage
 
 ### binder

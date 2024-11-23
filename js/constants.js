@@ -1,7 +1,7 @@
-const APPSCRIPT_URL =
+export const APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 
-let CAUGHT_COL,
+export let CAUGHT_COL,
   FILENAME_COL,
   SET_COL,
   CARDTYPE_COL,
@@ -13,7 +13,7 @@ let CAUGHT_COL,
   SET_DATA,
   FILL_DATA;
 
-function CONSTANTS_initialize() {
+export function initialize() {
   const header = localStorage.getItem('header').split(',');
 
   CAUGHT_COL = header.indexOf('caught');
@@ -26,15 +26,16 @@ function CONSTANTS_initialize() {
   BINDER_DATA = JSON.parse(localStorage.getItem(BINDER_NAME));
   SET_NAME = localStorage.getItem('setname');
   SET_DATA = JSON.parse(localStorage.getItem(SET_NAME));
-  BINDER_OR_SET = localStorage.getItem('binder_or_set');
-  if (!BINDER_OR_SET || BINDER_OR_SET == 'binder') {
+  const BINDER_OR_SET = localStorage.getItem('binder_or_set');
+
+  if (!BINDER_OR_SET || BINDER_OR_SET === 'binder') {
     FILL_DATA = BINDER_DATA;
-  } else if (BINDER_OR_SET == 'set') {
+  } else if (BINDER_OR_SET === 'set') {
     FILL_DATA = SET_DATA;
   }
 }
 
-const PKMN_HEX_COLORS = {
+export const PKMN_HEX_COLORS = {
   grass: ['#c2d349', '#93bb4e'],
   fire: ['#f78b46', '#f2674b'],
   water: ['#93d9f5', '#11b6e6'],
@@ -49,7 +50,7 @@ const PKMN_HEX_COLORS = {
   support: ['#eb028b', '#f14eae'], // hot pink
 };
 
-const CARD_HEX_COLORS = {
+export const CARD_HEX_COLORS = {
   basic: [],
   ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
   gold: ['#fef081', '#c69221', '#fef081'], // gold
@@ -71,7 +72,7 @@ const CARD_HEX_COLORS = {
   ],
 };
 
-const BG_FILES = [
+export const BG_FILES = [
   'ace.jpeg',
   'electric.jpeg',
   'ground.jpg',

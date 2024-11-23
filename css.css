@@ -8,7 +8,7 @@
 .show {
   display: inline-block !important;
 }
-#bg {
+#bgSpan {
   background-image: url('img/0_bg/water.jpeg');
   opacity: 0.3;
   top: 0;
@@ -31,7 +31,7 @@ span {
 button,
 select,
 input,
-#progress {
+#progressSpan {
   border-radius: 10px;
   padding: 10px;
   border-color: #dbdbde;
@@ -50,7 +50,7 @@ button.link {
   text-align: center;
   top: 0;
 }
-.content {
+.contentDiv {
   text-align: center;
 }
 .hidestatus {
@@ -153,7 +153,7 @@ ol {
   height: auto;
   max-width: 100vh;
 }
-#card-list-div {
+#smallCardSpan {
   padding: 10px;
   background-color: #fff;
   border-radius: 14px;
@@ -163,7 +163,7 @@ ol {
 
 /* 🟡 LEFT 🟡 */
 
-#winner {
+#largeCardSpan {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
@@ -180,19 +180,19 @@ ol {
   #parent {
     flex-direction: column;
   }
-  #winner {
+  #largeCardSpan {
     max-height: 55vh;
   }
-  #pull-buttons > button,
-  #binder-info > button,
+  #pullSpan > button,
+  #binderSpan > button,
   #admin > button {
     width: 100%;
   }
-  #pull-buttons > button {
+  #pullSpan > button {
     height: 50px;
   }
-  #binder-info,
-  #pull-buttons,
+  #binderSpan,
+  #pullSpan,
   #admin {
     display: flex;
   }
