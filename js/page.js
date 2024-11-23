@@ -1,6 +1,7 @@
 import * as constants from './constants.js';
 
 export function fillPage() {
+  constants.initialize();
   const binderContent = createPageContent();
   document.getElementById('contentDiv').innerHTML = '';
   binderContent.forEach((item) => {

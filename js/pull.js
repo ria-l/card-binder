@@ -11,9 +11,11 @@ window.onload = () => {
 async function initializePullPage(source) {
   if (source == 'onload' && localStorage.getItem('pull_status') == 'SUCCESS') {
     console.log('already stored');
+    constants.initialize();
   } else {
     const data = await fetchData();
     store.storeData(data.data);
+    constants.initialize();
   }
   ui.populateBinderDropdown();
   ui.createProgressBar();

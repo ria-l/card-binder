@@ -1,7 +1,6 @@
-import * as constants from './constants.js';
-
 const sort = (col_name, data) => {
-  const column = constants.HEADER.indexOf(col_name);
+  const header = localStorage.getItem('header').split(',');
+  const column = header.indexOf(col_name);
   return data.sort((a, b) => {
     if (a[column] === b[column]) {
       return 0;
