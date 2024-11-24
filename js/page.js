@@ -1,7 +1,7 @@
 import * as constants from './constants.js';
 
 export function fillPage() {
-  constants.initialize();
+  constants.initializeConsts();
   const cardTags = createCardTags();
   const tables = createTables(cardTags);
   document.getElementById('contentDiv').innerHTML = '';

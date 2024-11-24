@@ -15,7 +15,7 @@ window.onload = () => {
 };
 
 function initializePull() {
-  constants.initialize();
+  constants.initializeConsts();
   console.log('loading from storage');
   ui.generateBinderDropdown();
   ui.createProgressBar();

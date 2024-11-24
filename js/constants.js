@@ -10,7 +10,7 @@ export let HEADER,
   VISUALS_COL,
   DEX_COL;
 
-export function initialize() {
+export function initializeConsts() {
   HEADER = localStorage.getItem('header').split(',');
   CAUGHT_COL = HEADER.indexOf('caught');
   FILENAME_COL = HEADER.indexOf('file name');
