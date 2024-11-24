@@ -159,10 +159,9 @@ export function generateSetDropdown() {
 }
 
 export function createProgressBar() {
-  const data = page.getSelectedData();
   const span = document.getElementById('progressSpan');
   const newBar = document.createElement('progress');
-  const max = data.length;
+  const max = page.getDataToDisplay().length;
   const numPulled = countPulled();
   const ratio = document.createTextNode(`${numPulled}/${max} `);
   const percent = document.createTextNode(
@@ -179,13 +178,13 @@ export function createProgressBar() {
 }
 
 function countPulled() {
-  const data = page.getSelectedData();
+  const data = page.getDataToDisplay();
   const filtered = data.filter((row) => row[constants.CAUGHT_COL] == 'x');
   return filtered.length;
 }
 
 export function selectNewBinder(source) {
-  localStorage.setItem('binder_or_set', 'binder');
+  localStorage.setItem('container', 'binder');
   const binderDropdown = document.getElementById('binderDropdown');
   const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
   localStorage.setItem('bindername', bindername);
@@ -197,7 +196,7 @@ export function selectNewBinder(source) {
 }
 
 export function selectNewSet(source) {
-  localStorage.setItem('binder_or_set', 'set');
+  localStorage.setItem('container', 'set');
   const setDropdown = document.getElementById('setDropdown');
   const setname = setDropdown.options[setDropdown.selectedIndex].text;
   localStorage.setItem('setname', setname);

@@ -2,15 +2,15 @@ import * as constants from './constants.js';
 
 export function fillPage() {
   constants.initialize();
-  const binderContent = createPageContent();
+  const cardTags = createCardTags();
+  const tables = createTables(cardTags);
   document.getElementById('contentDiv').innerHTML = '';
-  binderContent.forEach((item) => {
-    document.getElementById('contentDiv').appendChild(item);
+  tables.forEach((table) => {
+    document.getElementById('contentDiv').appendChild(table);
   });
 }
 
-function createPageContent() {
-  const cardTags = createCardTags();
+function createTables(cardTags) {
   const rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
   const cols = parseInt(document.getElementById('colDropdown').selectedIndex);
   const allTables = [];
@@ -74,7 +74,7 @@ function createPageContent() {
 }
 
 function createCardTags() {
-  const data = getSelectedData();
+  const data = getDataToDisplay();
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
   for (var card = 0; card < data.length; card++) {
@@ -86,15 +86,23 @@ function createCardTags() {
     const dex = data[card][constants.DEX_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype} : ${visuals} : ${dex}`;
     if (data[card][constants.CAUGHT_COL] == 'x') {
-      generateImgTag(tags, dir, filename, title, cardSize);
+      const img = generateImgTag(dir, filename, title, cardSize);
+      tags.push(img);
     } else {
-      generatePlaceholder(card, cardtype, visuals, cardSize, tags, title);
+      const span = generatePlaceholder(
+        cardtype,
+        visuals,
+        cardSize,
+        title,
+        pkmntype
+      );
+      tags.push(span);
     }
   }
   return tags;
 }
 
-function generateImgTag(tags, dir, filename, title, cardSize) {
+function generateImgTag(dir, filename, title, cardSize) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   img.title = title;
@@ -102,20 +110,18 @@ function generateImgTag(tags, dir, filename, title, cardSize) {
   img.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
   img.style.borderRadius = `${cardSize / 20}px`;
   img.classList.add('card');
-  tags.push(img);
+  return img;
 }
 
-function generatePlaceholder(i, cardtype, visuals, cardSize, tags, title) {
+function generatePlaceholder(cardtype, visuals, cardSize, title, pkmntype) {
   // note that there are a couple other styles in the css file
-
-  const border_colors = generateBorderColors(i, cardtype);
+  const border_colors = generateBorderColors(cardtype, pkmntype);
   let fill_colors;
   if (visuals.includes('gold')) {
     fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
   } else {
     fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
   }
-
   const span = document.createElement('span');
   span.className = 'placeholder';
   span.title = title;
@@ -124,37 +130,33 @@ function generatePlaceholder(i, cardtype, visuals, cardSize, tags, title) {
   span.style.background = `linear-gradient(to bottom right, ${fill_colors}) padding-box, linear-gradient(to bottom right, ${border_colors}) border-box`;
   span.style.borderRadius = `${cardSize / 20}px`;
   span.style.border = `${cardSize / 15}px solid transparent`;
-
-  tags.push(span);
+  return span;
 }
 
-export function generateBorderColors(picked_card_row, cardtype) {
+export function generateBorderColors(cardtype, pkmntype) {
   let special;
-  const data = getSelectedData();
   if (cardtype != 'basic') {
     special = constants.CARD_HEX_COLORS[cardtype].join(',');
   }
   let border_colors;
-  const light =
-    constants.PKMN_HEX_COLORS[data[picked_card_row][constants.PKMNTYPE_COL]][0];
-  const dark =
-    constants.PKMN_HEX_COLORS[data[picked_card_row][constants.PKMNTYPE_COL]][1];
-  if (cardtype == 'basic') {
-    border_colors = `${dark},${light},${dark},${light},${dark}`;
-  } else {
+  const light = constants.PKMN_HEX_COLORS[pkmntype][0];
+  const dark = constants.PKMN_HEX_COLORS[pkmntype][1];
+  if (cardtype != 'basic') {
     border_colors = `${dark},${light},white,${special}`;
+  } else if (cardtype == 'basic') {
+    border_colors = `${dark},${light},${dark},${light},${dark}`;
   }
   return border_colors;
 }
 
-export function getSelectedData() {
+export function getDataToDisplay() {
   let data;
   const binderName = localStorage.getItem('bindername');
   const setName = localStorage.getItem('setname');
-  const binderOrSet = localStorage.getItem('binder_or_set');
-  if (!binderOrSet || binderOrSet === 'binder') {
+  const container = localStorage.getItem('container');
+  if (!container || container === 'binder') {
     data = JSON.parse(localStorage.getItem(binderName));
-  } else if (binderOrSet === 'set') {
+  } else if (container === 'set') {
     data = JSON.parse(localStorage.getItem(setName));
   }
   return data;

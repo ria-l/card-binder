@@ -86,7 +86,7 @@ function processPulled(pulled_cards) {
     const pkmntype = binderData[cardRow][constants.PKMNTYPE_COL];
     const set = binderData[cardRow][constants.SET_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    const borderColors = page.generateBorderColors(cardRow, cardtype);
+    const borderColors = page.generateBorderColors(cardtype, pkmntype);
     const dir = `img/${set.toLowerCase()}`;
 
     displaySmall(filename, title, caught, dir, borderColors);
