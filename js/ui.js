@@ -2,7 +2,14 @@ import * as constants from './constants.js';
 import * as store from './store.js';
 import * as page from './page.js';
 
-export function initializeGridValues() {
+export function initializeUi() {
+  const cardSize = initializeSizeValue();
+  generateSizeDropdown(cardSize);
+  let { gridCol, gridRow } = initializeGridValues();
+  generateGridDropdown(gridCol, gridRow);
+}
+
+function initializeGridValues() {
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
   // sets defaults if not in storage
@@ -17,11 +24,10 @@ export function initializeGridValues() {
   return { gridCol, gridRow };
 }
 
-export function generateGridDropdown(gridCol, gridRow) {
+function generateGridDropdown(gridCol, gridRow) {
   const colDropdown = document.getElementById('colDropdown');
   const rowDropdown = document.getElementById('rowDropdown');
   if (rowDropdown.options.length == 0) {
-    // creates dropdown if not
     for (let i = 0; i < 13; i++) {
       const option = document.createElement('option');
       option.value = i;
@@ -40,59 +46,81 @@ export function generateGridDropdown(gridCol, gridRow) {
   document.getElementById('rowDropdown').selectedIndex = gridRow;
 }
 
-export function updateAndStoreGrid() {
-  // get vals from dropdowns
-  const gridCol = document.getElementById('colDropdown').selectedIndex;
-  const gridRow = document.getElementById('rowDropdown').selectedIndex;
-  localStorage.setItem('row', gridRow);
-  localStorage.setItem('col', gridCol);
+/**
+ * saves new grid and refills page
+ */
+export function updateGrid() {
+  localStorage.setItem(
+    'row',
+    document.getElementById('rowDropdown').selectedIndex
+  );
+  localStorage.setItem(
+    'col',
+    document.getElementById('colDropdown').selectedIndex
+  );
+  page.fillPage();
 }
 
-export function setAndStoreCardSize(size) {
-  const dropdown = document.getElementById('sizeDropdown');
-  if (size == undefined) {
-    size = parseInt(dropdown.value);
-  }
-  for (var i = 0; i < dropdown.options.length; i++) {
-    if (dropdown.options[i].value == size.toString()) {
-      dropdown.options[i].selected = true;
-      break;
-    }
-  }
-  localStorage.setItem('cardSize', size);
-  resizeCards();
-}
-
-export function initializeSizeValue() {
+function initializeSizeValue() {
   let cardSize = parseInt(localStorage.getItem('cardSize'));
+  // sets default if not in storage
   if (isNaN(cardSize)) {
     cardSize = 150;
   }
-  const sizeselect = document.getElementById('sizeDropdown');
-  if (sizeselect.options.length == 0) {
-    populateSizeDropdown();
-  }
-  setAndStoreCardSize(cardSize);
+  // set the dropdown value to the specified size.
+  localStorage.setItem('cardSize', cardSize);
+  return cardSize;
 }
-function resizeCards() {
-  const size = document.getElementById('sizeDropdown').value;
+
+export function generateSizeDropdown(cardSize) {
+  const sizeDropdown = document.getElementById('sizeDropdown');
+  if (sizeDropdown.options.length == 0) {
+    const sizeDropdown = document.getElementById('sizeDropdown');
+    for (let i = 1; i < 11; i++) {
+      const option = document.createElement('option');
+      option.value = i * 50;
+      option.textContent = i * 50;
+      sizeDropdown.appendChild(option);
+    }
+    for (let i = 1; i < 20; i++) {
+      const option = document.createElement('option');
+      option.value = i * 10;
+      option.textContent = i * 10;
+      sizeDropdown.appendChild(option);
+    }
+  }
+  // sets value
+  for (let i = 0; i < sizeDropdown.options.length; i++) {
+    if (sizeDropdown.options[i].value == cardSize.toString()) {
+      sizeDropdown.options[i].selected = true;
+      break;
+    }
+  }
+}
+
+/**
+ * saves new size and resizes cards
+ */
+export function resizeCards() {
+  const cardSize = parseInt(document.getElementById('sizeDropdown').value);
+  localStorage.setItem('cardSize', cardSize);
   document
     .querySelectorAll('.card')
-    .forEach((e) => (e.style.width = `${size}px`));
+    .forEach((e) => (e.style.width = `${cardSize}px`));
   document
     .querySelectorAll('.card')
-    .forEach((e) => (e.style.height = `${size * 1.4}px`));
+    .forEach((e) => (e.style.height = `${cardSize * 1.4}px`));
   document
     .querySelectorAll('.card')
-    .forEach((e) => (e.style.borderRadius = `${size / 20}px`));
+    .forEach((e) => (e.style.borderRadius = `${cardSize / 20}px`));
 
   // HTMLCollection can't use foreach
   const ph = document.getElementsByClassName('placeholder');
-  for (var i = 0, len = ph.length; i < len; i++) {
-    ph[i].style.width = `${size}px`;
-    ph[i].style.height = `${size * 1.4}px`;
-    ph[i].style.borderRadius = `${size / 20}px`;
-    ph[i].style.border = `${size / 15}px solid transparent`;
+  for (let i = 0, len = ph.length; i < len; i++) {
+    ph[i].style.width = `${cardSize}px`;
+    ph[i].style.height = `${cardSize * 1.4}px`;
+    ph[i].style.borderRadius = `${cardSize / 20}px`;
+    ph[i].style.border = `${cardSize / 15}px solid transparent`;
   }
 }
 
@@ -128,22 +156,6 @@ export function populateSetDropdown() {
       option.selected = 'selected';
     }
     setDropdown.appendChild(option);
-  }
-}
-
-export function populateSizeDropdown() {
-  const sizeDropdown = document.getElementById('sizeDropdown');
-  for (let i = 1; i < 11; i++) {
-    const option = document.createElement('option');
-    option.value = i * 50;
-    option.textContent = i * 50;
-    sizeDropdown.appendChild(option);
-  }
-  for (let i = 1; i < 20; i++) {
-    const option = document.createElement('option');
-    option.value = i * 10;
-    option.textContent = i * 10;
-    sizeDropdown.appendChild(option);
   }
 }
 
