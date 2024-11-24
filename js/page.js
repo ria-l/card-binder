@@ -84,19 +84,14 @@ function createCardTags() {
     const cardtype = data[card][constants.CARDTYPE_COL];
     const visuals = data[card][constants.VISUALS_COL];
     const dex = data[card][constants.DEX_COL];
+    const caught = data[card][constants.CAUGHT_COL];
     const title = `${filename} : ${pkmntype} : ${cardtype} : ${visuals} : ${dex}`;
-    if (data[card][constants.CAUGHT_COL] == 'x') {
-      const img = generateImgTag(dir, filename, title, cardSize);
-      tags.push(img);
+    if (caught == 'x') {
+      tags.push(generateImgTag(dir, filename, title, cardSize));
     } else {
-      const span = generatePlaceholder(
-        cardtype,
-        visuals,
-        cardSize,
-        title,
-        pkmntype
-      );
-      tags.push(span);
+      const borderColors = generateBorderColors(cardtype, pkmntype);
+      const fillColors = constants.FILL_COLORS(visuals, pkmntype);
+      tags.push(generatePlaceholder(cardSize, title, borderColors, fillColors));
     }
   }
   return tags;
@@ -113,40 +108,27 @@ function generateImgTag(dir, filename, title, cardSize) {
   return img;
 }
 
-function generatePlaceholder(cardtype, visuals, cardSize, title, pkmntype) {
+function generatePlaceholder(cardSize, title, borderColors, fillColors) {
   // note that there are a couple other styles in the css file
-  const border_colors = generateBorderColors(cardtype, pkmntype);
-  let fill_colors;
-  if (visuals.includes('gold')) {
-    fill_colors = `#fef081,#c69221,#fef081,white 25%,#f9f9f9,white,#f9f9f9`;
-  } else {
-    fill_colors = `#f9f9f9,white,#f9f9f9,white,#f9f9f9`;
-  }
-  const span = document.createElement('span');
-  span.className = 'placeholder';
-  span.title = title;
-  span.style.width = `${cardSize}px`;
-  span.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
-  span.style.background = `linear-gradient(to bottom right, ${fill_colors}) padding-box, linear-gradient(to bottom right, ${border_colors}) border-box`;
-  span.style.borderRadius = `${cardSize / 20}px`;
-  span.style.border = `${cardSize / 15}px solid transparent`;
-  return span;
+  const ph = document.createElement('span');
+  ph.className = 'placeholder';
+  ph.title = title;
+  ph.style.width = `${cardSize}px`;
+  ph.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+  ph.style.background = `linear-gradient(to bottom right, ${fillColors}) padding-box, linear-gradient(to bottom right, ${borderColors}) border-box`;
+  ph.style.borderRadius = `${cardSize / 20}px`;
+  ph.style.border = `${cardSize / 15}px solid transparent`;
+  return ph;
 }
 
 export function generateBorderColors(cardtype, pkmntype) {
-  let special;
-  if (cardtype != 'basic') {
-    special = constants.CARD_HEX_COLORS[cardtype].join(',');
+  const pkmnColors = constants.PKMN_COLORS[pkmntype];
+  const cardColors = constants.CARD_COLORS[cardtype];
+  if (cardtype == 'basic') {
+    return `${pkmnColors},${pkmnColors},${pkmnColors[1]}`;
+  } else if (cardtype != 'basic') {
+    return `${pkmnColors},white,${cardColors}`;
   }
-  let border_colors;
-  const light = constants.PKMN_HEX_COLORS[pkmntype][0];
-  const dark = constants.PKMN_HEX_COLORS[pkmntype][1];
-  if (cardtype != 'basic') {
-    border_colors = `${dark},${light},white,${special}`;
-  } else if (cardtype == 'basic') {
-    border_colors = `${dark},${light},${dark},${light},${dark}`;
-  }
-  return border_colors;
 }
 
 export function getDataToDisplay() {

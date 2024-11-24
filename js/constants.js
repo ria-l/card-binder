@@ -21,7 +21,7 @@ export function initializeConsts() {
   VISUALS_COL = HEADER.indexOf('visuals');
 }
 
-export const PKMN_HEX_COLORS = {
+export const PKMN_COLORS = {
   grass: ['#c2d349', '#93bb4e'],
   fire: ['#f78b46', '#f2674b'],
   water: ['#93d9f5', '#11b6e6'],
@@ -36,10 +36,9 @@ export const PKMN_HEX_COLORS = {
   trainer: ['#eb028b', '#f14eae'], // hot pink
 };
 
-export const CARD_HEX_COLORS = {
+export const CARD_COLORS = {
   basic: [],
   ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
-  gold: ['#fef081', '#c69221', '#fef081'], // gold
   gx: ['#00aeed', '#036697', '#00aeed'], // blue
   v: ['#4d4d4d', '#000000', '#4d4d4d'], // black & grey
   vmax: ['#fbcf4c', '#e61c75', '#3f3487'], // yellow & pink & purple
@@ -57,6 +56,18 @@ export const CARD_HEX_COLORS = {
     '#f5f4f0', // colorless
   ],
 };
+
+export function FILL_COLORS(visuals, pkmntype) {
+  const pkmnColors = PKMN_COLORS[pkmntype];
+  const gradients = {
+    normal: `#f9f9f9,white,#f9f9f9,white,#f9f9f9`,
+    gold: '#fef081,#c69221,#fef081,#c69221,#fef081,#c69221',
+    '3d': `${pkmnColors},${pkmnColors[0]},white 30%,#f9f9f9,white,#f9f9f9`,
+    'full art': `${pkmnColors},${pkmnColors[0]},white 75%,#f9f9f9,white,#f9f9f9`,
+    illust: `${pkmnColors},${pkmnColors},${pkmnColors}`,
+  };
+  return gradients[visuals];
+}
 
 export const BG_FILES = [
   'ace.jpeg',
