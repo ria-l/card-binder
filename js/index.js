@@ -7,16 +7,15 @@ import * as app from './app.js';
 window.onload = () => {
   ui.setSizeAndGrid();
   if (localStorage.getItem('page_status') == 'SUCCESS') {
-    constants.initialize();
-    loadFromStorage();
+    initializeIndex();
   } else {
-    fetchAndFillPage();
+    fetchAndInitializeIndex();
   }
 };
 
-async function fetchAndFillPage() {
-  const data = await app.fetchData();
-  store.storeData(data.data);
+function initializeIndex() {
+  constants.initialize();
+  console.log('loading from storage');
   page.fillPage();
   ui.populateBinderDropdown();
   ui.populateSetDropdown();
@@ -25,13 +24,10 @@ async function fetchAndFillPage() {
   localStorage.setItem('page_status', 'SUCCESS');
 }
 
-function loadFromStorage() {
-  console.log('loading from storage');
-  page.fillPage();
-  ui.populateBinderDropdown();
-  ui.populateSetDropdown();
-  ui.createProgressBar();
-  setEventListeners();
+async function fetchAndInitializeIndex() {
+  const data = await app.fetchData();
+  store.storeData(data.data);
+  initializeIndex();
 }
 
 function setEventListeners() {
@@ -59,6 +55,6 @@ function setEventListeners() {
   });
   const syncButton = document.getElementById('syncButton');
   syncButton.addEventListener('click', function () {
-    fetchAndFillPage();
+    fetchAndInitializeIndex();
   });
 }

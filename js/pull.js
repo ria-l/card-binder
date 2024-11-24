@@ -6,22 +6,26 @@ import * as app from './app.js';
 
 window.onload = () => {
   document.getElementById('form').action = constants.APPSCRIPT_URL;
-  initializePullPage('onload');
+  if (localStorage.getItem('pull_status') == 'SUCCESS') {
+    initializePull();
+  } else {
+    fetchAndInitializePull();
+  }
 };
 
-async function initializePullPage(source) {
-  if (source == 'onload' && localStorage.getItem('pull_status') == 'SUCCESS') {
-    console.log('already stored');
-    constants.initialize();
-  } else {
-    const data = await app.fetchData();
-    store.storeData(data.data);
-    constants.initialize();
-  }
+function initializePull() {
+  constants.initialize();
+  console.log('loading from storage');
   ui.populateBinderDropdown();
   ui.createProgressBar();
   setEventListeners();
   localStorage.setItem('pull_status', 'SUCCESS');
+}
+
+async function fetchAndInitializePull() {
+  const data = await app.fetchData();
+  store.storeData(data.data);
+  initializePull();
 }
 
 function setEventListeners() {
