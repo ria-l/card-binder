@@ -5,7 +5,9 @@ import * as store from './store.js';
 import * as app from './app.js';
 
 window.onload = () => {
-  ui.setSizeAndGrid();
+  ui.initializeSizeValue();
+  let { gridCol, gridRow } = ui.initializeGridValues();
+  ui.generateGridDropdown(gridCol, gridRow);
   if (localStorage.getItem('page_status') == 'SUCCESS') {
     initializeIndex();
   } else {
@@ -41,12 +43,12 @@ function setEventListeners() {
   });
   const colDropdown = document.getElementById('colDropdown');
   colDropdown.addEventListener('change', function () {
-    ui.setAndStoreGrid();
+    ui.updateAndStoreGrid();
     page.fillPage();
   });
   const rowDropdown = document.getElementById('rowDropdown');
   rowDropdown.addEventListener('change', function () {
-    ui.setAndStoreGrid();
+    ui.updateAndStoreGrid();
     page.fillPage();
   });
   const sizeDropdown = document.getElementById('sizeDropdown');

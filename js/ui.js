@@ -2,42 +2,50 @@ import * as constants from './constants.js';
 import * as store from './store.js';
 import * as page from './page.js';
 
-export function setSizeAndGrid() {
-  let cardSize = parseInt(localStorage.getItem('cardSize'));
+export function initializeGridValues() {
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
-  if (isNaN(cardSize)) {
-    cardSize = 150;
-  }
+  // sets defaults if not in storage
   if (isNaN(gridCol)) {
     gridCol = 0;
   }
   if (isNaN(gridRow)) {
     gridRow = 0;
   }
-  const rowselect = document.getElementById('rowDropdown');
-  if (rowselect.options.length == 0) {
-    populateGridDropdowns();
-  }
-  const sizeselect = document.getElementById('sizeDropdown');
-  if (sizeselect.options.length == 0) {
-    populateSizeDropdown();
-  }
-  setAndStoreCardSize(cardSize);
-  setAndStoreGrid(gridCol, gridRow);
+  localStorage.setItem('row', gridRow);
+  localStorage.setItem('col', gridCol);
+  return { gridCol, gridRow };
 }
 
-export function setAndStoreGrid(col, row) {
-  if (col == undefined) {
-    col = document.getElementById('colDropdown').selectedIndex;
+export function generateGridDropdown(gridCol, gridRow) {
+  const colDropdown = document.getElementById('colDropdown');
+  const rowDropdown = document.getElementById('rowDropdown');
+  if (rowDropdown.options.length == 0) {
+    // creates dropdown if not
+    for (let i = 0; i < 13; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      colDropdown.appendChild(option);
+    }
+    for (let i = 0; i < 13; i++) {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      rowDropdown.appendChild(option);
+    }
   }
-  if (row == undefined) {
-    row = document.getElementById('rowDropdown').selectedIndex;
-  }
-  document.getElementById('colDropdown').selectedIndex = col;
-  document.getElementById('rowDropdown').selectedIndex = row;
-  localStorage.setItem('row', row);
-  localStorage.setItem('col', col);
+  // sets new values
+  document.getElementById('colDropdown').selectedIndex = gridCol;
+  document.getElementById('rowDropdown').selectedIndex = gridRow;
+}
+
+export function updateAndStoreGrid() {
+  // get vals from dropdowns
+  const gridCol = document.getElementById('colDropdown').selectedIndex;
+  const gridRow = document.getElementById('rowDropdown').selectedIndex;
+  localStorage.setItem('row', gridRow);
+  localStorage.setItem('col', gridCol);
 }
 
 export function setAndStoreCardSize(size) {
@@ -55,6 +63,17 @@ export function setAndStoreCardSize(size) {
   resizeCards();
 }
 
+export function initializeSizeValue() {
+  let cardSize = parseInt(localStorage.getItem('cardSize'));
+  if (isNaN(cardSize)) {
+    cardSize = 150;
+  }
+  const sizeselect = document.getElementById('sizeDropdown');
+  if (sizeselect.options.length == 0) {
+    populateSizeDropdown();
+  }
+  setAndStoreCardSize(cardSize);
+}
 function resizeCards() {
   const size = document.getElementById('sizeDropdown').value;
   document
@@ -109,24 +128,6 @@ export function populateSetDropdown() {
       option.selected = 'selected';
     }
     setDropdown.appendChild(option);
-  }
-}
-
-export function populateGridDropdowns() {
-  const colDropdown = document.getElementById('colDropdown');
-  const rowDropdown = document.getElementById('rowDropdown');
-  for (let i = 0; i < 13; i++) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
-    colDropdown.appendChild(option);
-    option.selected = 0;
-  }
-  for (let i = 0; i < 13; i++) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
-    rowDropdown.appendChild(option);
   }
 }
 
