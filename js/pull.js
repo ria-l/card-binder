@@ -107,7 +107,9 @@ function processPulled(pulled) {
     addToList(title);
   });
   displayLarge(currentPulls);
-  processNewCards(newCards);
+  if (newCards.length) {
+    processNewCards(newCards);
+  }
 }
 
 function getCardMetadata(binderRow) {
@@ -164,15 +166,13 @@ function addToList(title) {
 }
 
 function processNewCards(newCards) {
-  if (newCards.length) {
-    markAsPulled(newCards);
-    ui.createProgressBar();
-    document.getElementById('filenamesInput').value = JSON.stringify(newCards);
-    document.getElementById('form').submit();
-  }
+  updateNewCardsInCache(newCards);
+  ui.createProgressBar();
+  document.getElementById('filenamesInput').value = JSON.stringify(newCards);
+  document.getElementById('form').submit();
 }
 
-function markAsPulled(newCards) {
+function updateNewCardsInCache(newCards) {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
   newCards.forEach((filename) => {
@@ -182,6 +182,17 @@ function markAsPulled(newCards) {
         break;
       }
     }
+    // each card may have a different set, so need to handle storage individually
+    const setName = filename.match(/^[^\.]*/)[0].toUpperCase();
+    const setData = JSON.parse(localStorage.getItem(setName));
+    for (let i = 0; i < setData.length; i++) {
+      if (setData[i][constants.FILENAME_COL] == filename) {
+        setData[i][constants.CAUGHT_COL] = 'x';
+        localStorage.setItem(setName, JSON.stringify(setData));
+        break;
+      }
+    }
   });
+  // only set after all cards are updated
   localStorage.setItem(binderName, JSON.stringify(binderData));
 }
