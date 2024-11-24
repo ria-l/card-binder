@@ -45,9 +45,9 @@ function setEventListeners() {
   pullTenButton.addEventListener('click', function () {
     pullCards(10);
   });
-  const clearPullsButton = document.getElementById('clearPullsButton');
-  clearPullsButton.addEventListener('click', function () {
-    clearPulledList();
+  const clearDisplayButton = document.getElementById('clearDisplayButton');
+  clearDisplayButton.addEventListener('click', function () {
+    clearDisplay();
   });
   const syncButton = document.getElementById('syncButton');
   syncButton.addEventListener('click', function () {
@@ -55,14 +55,15 @@ function setEventListeners() {
   });
 }
 
-/**
- * Used for button click
- */
-function clearPulledList() {
-  const right = document.getElementById('smallCardSpan');
-  right.innerHTML = '<ol reversed id="cardList"></ol>';
-  const left = document.getElementById('largeCardSpan');
-  left.innerHTML = '';
+function clearDisplay() {
+  document.getElementById('largeCardSpan').innerHTML = '';
+  document.getElementById('smallCardSpan').innerHTML = '';
+  const listSpan = document.getElementById('listSpan');
+  listSpan.innerHTML = '';
+  const ol = document.createElement('ol');
+  ol.id = 'cardList';
+  ol.reversed = true;
+  listSpan.appendChild(ol);
 }
 
 /**
@@ -88,35 +89,50 @@ function processPulled(pulled) {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
   const newCards = [];
-  const largeArr = [];
-  pulled.forEach((cardRow) => {
-    const filename = binderData[cardRow][constants.FILENAME_COL];
-    const caught = binderData[cardRow][constants.CAUGHT_COL];
-    const cardtype = binderData[cardRow][constants.CARDTYPE_COL];
-    const pkmntype = binderData[cardRow][constants.PKMNTYPE_COL];
-    const set = binderData[cardRow][constants.SET_COL];
-    const title = `${filename} : ${pkmntype} : ${cardtype}`;
-    const borderColors = page.generateBorderColors(cardtype, pkmntype);
-    const dir = `img/${set.toLowerCase()}`;
-
-    _displaySmall(filename, title, caught, dir, borderColors);
-    largeArr.push(_generateImg('large', dir, filename, caught, borderColors));
+  const currentPulls = [];
+  pulled.forEach((card) => {
+    const binderRow = binderData[card];
+    const { title, dir, filename, caught, borderColors } =
+      getCardMetadata(binderRow);
+    const small = generateImg('small', dir, filename, caught, borderColors);
+    document
+      .getElementById('smallCardSpan')
+      .insertBefore(small, smallCardSpan.firstChild);
+    currentPulls.push(
+      generateImg('large', dir, filename, caught, borderColors)
+    );
     if (!caught) {
       newCards.push(filename);
     }
+    addToList(title);
   });
-  _displayLarge(largeArr);
-  if (newCards.length) {
-    _markCardAsPulled(newCards);
-    _submitForm(newCards);
-  }
+  displayLarge(currentPulls);
+  processNewCards(newCards);
 }
 
-function _generateImg(size, dir, filename, caught, borderColors) {
+function getCardMetadata(binderRow) {
+  const filename = binderRow[constants.FILENAME_COL];
+  const caught = binderRow[constants.CAUGHT_COL];
+  const cardtype = binderRow[constants.CARDTYPE_COL];
+  const pkmntype = binderRow[constants.PKMNTYPE_COL];
+  const set = binderRow[constants.SET_COL];
+  let title = `${filename} : ${pkmntype} : ${cardtype}`;
+  if (!caught) {
+    title += ` ✨NEW✨`;
+  }
+  const borderColors = page.generateBorderColors(cardtype, pkmntype);
+  const dir = `img/${set.toLowerCase()}`;
+  return { title, dir, filename, caught, borderColors };
+}
+
+function generateImg(size, dir, filename, caught, borderColors) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   if (size == 'small') {
     img.classList.add('small-card');
+    img.onclick = function () {
+      displayLarge([generateImg('large', dir, filename, caught, borderColors)]);
+    };
   } else if (size == 'large') {
     img.classList.add('large-card');
   }
@@ -130,40 +146,35 @@ function _generateImg(size, dir, filename, caught, borderColors) {
   return img;
 }
 
-function _displaySmall(filename, title, caught, dir, borderColors) {
-  const ol = document.getElementById('cardList');
-  const li = document.createElement('li');
-  if (!caught) {
-    title += ` ✨NEW✨`;
-  }
-  li.appendChild(document.createTextNode(title));
-  ol.insertBefore(li, ol.firstChild);
-  const smallCardSpan = document.getElementById('smallCardSpan');
-  const small = _generateImg('small', dir, filename, caught, borderColors);
-  small.onclick = function () {
-    _displayLarge([_generateImg('large', dir, filename, caught, borderColors)]);
-  };
-  smallCardSpan.insertBefore(small, ol);
-}
-
-function _displayLarge(imgs) {
+function displayLarge(imgs) {
   const largeCardSpan = document.getElementById('largeCardSpan');
   const newSpan = document.createElement('span');
   newSpan.id = 'largeCardSpan';
   imgs.forEach((img) => {
-    newSpan.appendChild(img);
+    newSpan.insertBefore(img, newSpan.firstChild);
   });
   largeCardSpan.replaceWith(newSpan);
 }
 
-/**
- *
- * @param {array of strings} newCards filenames
- */
-function _markCardAsPulled(newCards) {
+function addToList(title) {
+  const ol = document.getElementById('cardList');
+  const li = document.createElement('li');
+  li.appendChild(document.createTextNode(title));
+  ol.insertBefore(li, ol.firstChild);
+}
+
+function processNewCards(newCards) {
+  if (newCards.length) {
+    markAsPulled(newCards);
+    ui.createProgressBar();
+    document.getElementById('filenamesInput').value = JSON.stringify(newCards);
+    document.getElementById('form').submit();
+  }
+}
+
+function markAsPulled(newCards) {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
-
   newCards.forEach((filename) => {
     for (let i = 0; i < binderData.length; i++) {
       if (binderData[i][constants.FILENAME_COL] == filename) {
@@ -172,16 +183,5 @@ function _markCardAsPulled(newCards) {
       }
     }
   });
-
   localStorage.setItem(binderName, JSON.stringify(binderData));
-  ui.createProgressBar();
-}
-
-/**
- *
- * @param {array of strings} filenames
- */
-function _submitForm(filenames) {
-  document.getElementById('id-filename').value = JSON.stringify(filenames);
-  document.getElementById('form').submit();
 }

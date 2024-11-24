@@ -128,7 +128,7 @@ input {
   display: flex;
 }
 iframe,
-#id-filename {
+#filenamesInput {
   display: none;
 }
 
@@ -153,7 +153,8 @@ ol {
   height: auto;
   max-width: 100vh;
 }
-#smallCardSpan {
+#smallCardSpan,
+#listSpan {
   padding: 10px;
   background-color: #fff;
   border-radius: 14px;

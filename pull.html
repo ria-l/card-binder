@@ -47,18 +47,17 @@
         <button id="pullOneButton">Pull!</button>
         <button id="pullFiveButton">Pull 5!</button>
         <button id="pullTenButton">Pull 10!</button>
-        <button id="clearPullsButton">Clear display</button>
+        <button id="clearDisplayButton">Clear display</button>
       </span>
     </div>
 
     <div id="parent">
-      <span id="largeCardSpan" class="chunk"></span>
-      <span id="smallCardSpan" class="chunk">
-        <ol reversed id="cardList"></ol>
-      </span>
+      <span id="largeCardSpan"></span>
+      <span id="smallCardSpan"></span>
+      <span id="listSpan"> <ol reversed id="cardList"></ol></span>
     </div>
     <form id="form" method="POST" target="_iframe">
-      <input type="text" id="id-filename" name="filenames" readonly />
+      <input type="text" id="filenamesInput" name="filenames" readonly />
     </form>
   </body>
 </html>
