@@ -5,6 +5,7 @@ import * as store from './store.js';
 import * as ui from './ui.js';
 
 window.onload = () => {
+  ui.setBg();
   document.getElementById('form').action = constants.APPSCRIPT_URL;
   if (localStorage.getItem('pull_status') == 'SUCCESS') {
     initializePull();

@@ -2,6 +2,12 @@ import * as constants from './constants.js';
 import * as page from './page.js';
 import * as store from './store.js';
 
+export function setBg() {
+  const bgSpan = document.getElementById('bgSpan');
+  const x = Math.floor(Math.random() * constants.BG_FILES.length);
+  bgSpan.style.backgroundImage = `url('img/0_bg/${constants.BG_FILES[x]}')`;
+}
+
 export function initializeGridAndSize() {
   const cardSize = initializeSizeValue();
   generateSizeDropdown(cardSize);
