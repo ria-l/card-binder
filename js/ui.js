@@ -2,7 +2,7 @@ import * as constants from './constants.js';
 import * as store from './store.js';
 import * as page from './page.js';
 
-export function initializeUi() {
+export function initializeGridAndSize() {
   const cardSize = initializeSizeValue();
   generateSizeDropdown(cardSize);
   let { gridCol, gridRow } = initializeGridValues();
@@ -124,7 +124,7 @@ export function resizeCards() {
   }
 }
 
-export function populateBinderDropdown() {
+export function generateBinderDropdown() {
   const binderDropdown = document.getElementById('binderDropdown');
   const bindernames = JSON.parse(localStorage.getItem('bindernames'));
   const defaultbinder = localStorage.getItem('bindername');
@@ -140,10 +140,9 @@ export function populateBinderDropdown() {
   }
 }
 
-export function populateSetDropdown() {
+export function generateSetDropdown() {
   const setDropdown = document.getElementById('setDropdown');
   const setnames = JSON.parse(localStorage.getItem('setnames'));
-
   const defaultset = localStorage.getItem('setname');
   setDropdown.innerHTML = '';
   for (let set of setnames) {
@@ -160,7 +159,7 @@ export function populateSetDropdown() {
 }
 
 export function createProgressBar() {
-  const data = page.getBinderOrSetData();
+  const data = page.getSelectedData();
   const span = document.getElementById('progressSpan');
   const newBar = document.createElement('progress');
   const max = data.length;
@@ -180,7 +179,7 @@ export function createProgressBar() {
 }
 
 function countPulled() {
-  const data = page.getBinderOrSetData();
+  const data = page.getSelectedData();
   const filtered = data.filter((row) => row[constants.CAUGHT_COL] == 'x');
   return filtered.length;
 }

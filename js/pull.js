@@ -17,7 +17,7 @@ window.onload = () => {
 function initializePull() {
   constants.initialize();
   console.log('loading from storage');
-  ui.populateBinderDropdown();
+  ui.generateBinderDropdown();
   ui.createProgressBar();
   localStorage.setItem('pull_status', 'SUCCESS');
 }

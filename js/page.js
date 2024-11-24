@@ -74,7 +74,7 @@ function createPageContent() {
 }
 
 function createCardTags() {
-  const data = getBinderOrSetData();
+  const data = getSelectedData();
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
   for (var card = 0; card < data.length; card++) {
@@ -130,7 +130,7 @@ function generatePlaceholder(i, cardtype, visuals, cardSize, tags, title) {
 
 export function generateBorderColors(picked_card_row, cardtype) {
   let special;
-  const data = getBinderOrSetData();
+  const data = getSelectedData();
   if (cardtype != 'basic') {
     special = constants.CARD_HEX_COLORS[cardtype].join(',');
   }
@@ -147,7 +147,7 @@ export function generateBorderColors(picked_card_row, cardtype) {
   return border_colors;
 }
 
-export function getBinderOrSetData() {
+export function getSelectedData() {
   let data;
   const binderName = localStorage.getItem('bindername');
   const setName = localStorage.getItem('setname');

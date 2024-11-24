@@ -5,7 +5,7 @@ import * as store from './store.js';
 import * as app from './app.js';
 
 window.onload = () => {
-  ui.initializeUi();
+  ui.initializeGridAndSize();
   if (localStorage.getItem('page_status') == 'SUCCESS') {
     initializeIndex();
   } else {
@@ -18,8 +18,8 @@ function initializeIndex() {
   constants.initialize();
   console.log('loading from storage');
   page.fillPage();
-  ui.populateBinderDropdown();
-  ui.populateSetDropdown();
+  ui.generateBinderDropdown();
+  ui.generateSetDropdown();
   ui.createProgressBar();
   localStorage.setItem('page_status', 'SUCCESS');
 }
