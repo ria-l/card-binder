@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "https://ria-l.github.io/card-binder/",
   "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ria-l/rewarder.git"
@@ -17,14 +14,5 @@
     "url": "https://github.com/ria-l/rewarder/issues"
   },
   "homepage": "https://github.com/ria-l/rewarder#readme",
-  "devDependencies": {
-    "jest": "^29.7.0"
-  },
-  "jest": {
-    "testEnvironment": "jsdom"
-  },
-  "dependencies": {
-    "jest-environment-jsdom": "^29.7.0"
-  },
   "type": "module"
 }
