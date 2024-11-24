@@ -1,24 +1,24 @@
 export const APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 
-export let HEADER,
+export let CARDTYPE_COL,
   CAUGHT_COL,
+  DEX_COL,
   FILENAME_COL,
-  SET_COL,
-  CARDTYPE_COL,
+  HEADER,
   PKMNTYPE_COL,
-  VISUALS_COL,
-  DEX_COL;
+  SET_COL,
+  VISUALS_COL;
 
 export function initializeConsts() {
-  HEADER = localStorage.getItem('header').split(',');
-  CAUGHT_COL = HEADER.indexOf('caught');
-  FILENAME_COL = HEADER.indexOf('file name');
-  SET_COL = HEADER.indexOf('set');
+  HEADER = localStorage.getItem('header').split(','); // must be first
   CARDTYPE_COL = HEADER.indexOf('card type');
-  PKMNTYPE_COL = HEADER.indexOf('pkmn type');
-  VISUALS_COL = HEADER.indexOf('visuals');
+  CAUGHT_COL = HEADER.indexOf('caught');
   DEX_COL = HEADER.indexOf('dex #');
+  FILENAME_COL = HEADER.indexOf('file name');
+  PKMNTYPE_COL = HEADER.indexOf('pkmn type');
+  SET_COL = HEADER.indexOf('set');
+  VISUALS_COL = HEADER.indexOf('visuals');
 }
 
 export const PKMN_HEX_COLORS = {

@@ -1,6 +1,6 @@
 import * as constants from './constants.js';
-import * as store from './store.js';
 import * as page from './page.js';
+import * as store from './store.js';
 
 export function initializeGridAndSize() {
   const cardSize = initializeSizeValue();

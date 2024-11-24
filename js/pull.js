@@ -1,8 +1,8 @@
+import * as app from './app.js';
 import * as constants from './constants.js';
+import * as page from './page.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
-import * as page from './page.js';
-import * as app from './app.js';
 
 window.onload = () => {
   document.getElementById('form').action = constants.APPSCRIPT_URL;
@@ -56,7 +56,17 @@ function setEventListeners() {
 }
 
 /**
- * filenames is set in binder.storeFileNames
+ * Used for button click
+ */
+function clearPulledList() {
+  const right = document.getElementById('smallCardSpan');
+  right.innerHTML = '<ol reversed id="cardList"></ol>';
+  const left = document.getElementById('largeCardSpan');
+  left.innerHTML = '';
+}
+
+/**
+ * filenames is set in storeFileNames
  * @param {int} n number of cards pulled
  */
 function pullCards(n) {
@@ -72,14 +82,14 @@ function pullCards(n) {
 
 /**
  *
- * @param {array of ints} picked_cards index numbers in the filenames array
+ * @param {array of ints} pulled index numbers in the filenames array
  */
-function processPulled(pulled_cards) {
+function processPulled(pulled) {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
   const newCards = [];
   const largeArr = [];
-  pulled_cards.forEach((cardRow) => {
+  pulled.forEach((cardRow) => {
     const filename = binderData[cardRow][constants.FILENAME_COL];
     const caught = binderData[cardRow][constants.CAUGHT_COL];
     const cardtype = binderData[cardRow][constants.CARDTYPE_COL];
@@ -89,20 +99,20 @@ function processPulled(pulled_cards) {
     const borderColors = page.generateBorderColors(cardtype, pkmntype);
     const dir = `img/${set.toLowerCase()}`;
 
-    displaySmall(filename, title, caught, dir, borderColors);
-    largeArr.push(generateImg('large', dir, filename, caught, borderColors));
+    _displaySmall(filename, title, caught, dir, borderColors);
+    largeArr.push(_generateImg('large', dir, filename, caught, borderColors));
     if (!caught) {
       newCards.push(filename);
     }
   });
-  displayLarge(largeArr);
+  _displayLarge(largeArr);
   if (newCards.length) {
-    markCardAsPulled(newCards);
-    submitForm(newCards);
+    _markCardAsPulled(newCards);
+    _submitForm(newCards);
   }
 }
 
-function generateImg(size, dir, filename, caught, borderColors) {
+function _generateImg(size, dir, filename, caught, borderColors) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   if (size == 'small') {
@@ -120,62 +130,37 @@ function generateImg(size, dir, filename, caught, borderColors) {
   return img;
 }
 
-function displaySmall(filename, title, caught, dir, borderColors) {
+function _displaySmall(filename, title, caught, dir, borderColors) {
   const ol = document.getElementById('cardList');
-  const li = generateLi(title, caught);
-  ol.insertBefore(li, ol.firstChild);
-  const right = document.getElementById('smallCardSpan');
-  const small = generateImg('small', dir, filename, caught, borderColors);
-  small.onclick = function () {
-    displayLarge([generateImg('large', dir, filename, caught, borderColors)]);
-  };
-  right.insertBefore(small, ol);
-}
-
-function displayLarge(arr) {
-  const left = document.getElementById('largeCardSpan');
-  const newLeft = document.createElement('span');
-  newLeft.id = 'largeCardSpan';
-  arr.forEach((element) => {
-    newLeft.appendChild(element);
-  });
-  left.replaceWith(newLeft);
-}
-
-function generateLi(title, caught) {
   const li = document.createElement('li');
-  let textnode = title;
   if (!caught) {
-    textnode += ` ✨NEW✨`;
+    title += ` ✨NEW✨`;
   }
-  li.appendChild(document.createTextNode(textnode));
-  return li;
+  li.appendChild(document.createTextNode(title));
+  ol.insertBefore(li, ol.firstChild);
+  const smallCardSpan = document.getElementById('smallCardSpan');
+  const small = _generateImg('small', dir, filename, caught, borderColors);
+  small.onclick = function () {
+    _displayLarge([_generateImg('large', dir, filename, caught, borderColors)]);
+  };
+  smallCardSpan.insertBefore(small, ol);
 }
 
-/**
- *
- * @param {array of strings} filenames
- */
-function submitForm(filenames) {
-  document.getElementById('id-filename').value = JSON.stringify(filenames);
-  document.getElementById('form').submit();
-}
-
-/**
- * Used for button click
- */
-function clearPulledList() {
-  const right = document.getElementById('smallCardSpan');
-  right.innerHTML = '<ol reversed id="cardList"></ol>';
-  const left = document.getElementById('largeCardSpan');
-  left.innerHTML = '';
+function _displayLarge(imgs) {
+  const largeCardSpan = document.getElementById('largeCardSpan');
+  const newSpan = document.createElement('span');
+  newSpan.id = 'largeCardSpan';
+  imgs.forEach((img) => {
+    newSpan.appendChild(img);
+  });
+  largeCardSpan.replaceWith(newSpan);
 }
 
 /**
  *
  * @param {array of strings} newCards filenames
  */
-function markCardAsPulled(newCards) {
+function _markCardAsPulled(newCards) {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
 
@@ -190,4 +175,13 @@ function markCardAsPulled(newCards) {
 
   localStorage.setItem(binderName, JSON.stringify(binderData));
   ui.createProgressBar();
+}
+
+/**
+ *
+ * @param {array of strings} filenames
+ */
+function _submitForm(filenames) {
+  document.getElementById('id-filename').value = JSON.stringify(filenames);
+  document.getElementById('form').submit();
 }

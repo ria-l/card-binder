@@ -1,8 +1,8 @@
+import * as app from './app.js';
 import * as constants from './constants.js';
 import * as page from './page.js';
-import * as ui from './ui.js';
 import * as store from './store.js';
-import * as app from './app.js';
+import * as ui from './ui.js';
 
 window.onload = () => {
   ui.initializeGridAndSize();
