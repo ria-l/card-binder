@@ -2,6 +2,7 @@ import * as constants from './constants.js';
 import * as page from './page.js';
 import * as ui from './ui.js';
 import * as store from './store.js';
+import * as app from './app.js';
 
 window.onload = () => {
   ui.setSizeAndGrid();
@@ -14,7 +15,7 @@ window.onload = () => {
 };
 
 async function fetchAndFillPage() {
-  const data = await fetchData();
+  const data = await app.fetchData();
   store.storeData(data.data);
   page.fillPage();
   ui.populateBinderDropdown();
@@ -31,19 +32,6 @@ function loadFromStorage() {
   ui.populateSetDropdown();
   ui.createProgressBar();
   setEventListeners();
-}
-
-async function fetchData() {
-  console.log('fetching...');
-  const statusSpan = document.getElementById('statusSpan');
-  statusSpan.innerHTML = 'loading...';
-  statusSpan.className = 'showstatus';
-  const response = await fetch(constants.APPSCRIPT_URL);
-  const data = await response.json();
-  statusSpan.className = 'hidestatus';
-  console.log('fetched');
-
-  return data;
 }
 
 function setEventListeners() {

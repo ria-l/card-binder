@@ -2,6 +2,7 @@ import * as constants from './constants.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
 import * as page from './page.js';
+import * as app from './app.js';
 
 window.onload = () => {
   document.getElementById('form').action = constants.APPSCRIPT_URL;
@@ -13,7 +14,7 @@ async function initializePullPage(source) {
     console.log('already stored');
     constants.initialize();
   } else {
-    const data = await fetchData();
+    const data = await app.fetchData();
     store.storeData(data.data);
     constants.initialize();
   }
@@ -21,19 +22,6 @@ async function initializePullPage(source) {
   ui.createProgressBar();
   setEventListeners();
   localStorage.setItem('pull_status', 'SUCCESS');
-}
-
-async function fetchData() {
-  console.log('fetching...');
-  const statusSpan = document.getElementById('statusSpan');
-  statusSpan.innerHTML = 'loading...';
-  statusSpan.className = 'showstatus';
-  const response = await fetch(constants.APPSCRIPT_URL);
-  const data = await response.json();
-  statusSpan.className = 'hidestatus';
-  console.log('fetched');
-
-  return data;
 }
 
 function setEventListeners() {
