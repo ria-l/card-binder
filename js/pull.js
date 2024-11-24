@@ -11,6 +11,7 @@ window.onload = () => {
   } else {
     fetchAndInitializePull();
   }
+  setEventListeners();
 };
 
 function initializePull() {
@@ -18,7 +19,6 @@ function initializePull() {
   console.log('loading from storage');
   ui.populateBinderDropdown();
   ui.createProgressBar();
-  setEventListeners();
   localStorage.setItem('pull_status', 'SUCCESS');
 }
 
@@ -51,7 +51,7 @@ function setEventListeners() {
   });
   const syncButton = document.getElementById('syncButton');
   syncButton.addEventListener('click', function () {
-    initializePullPage();
+    fetchAndInitializePull();
   });
 }
 

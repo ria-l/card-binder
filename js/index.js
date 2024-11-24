@@ -11,6 +11,7 @@ window.onload = () => {
   } else {
     fetchAndInitializeIndex();
   }
+  setEventListeners();
 };
 
 function initializeIndex() {
@@ -20,7 +21,6 @@ function initializeIndex() {
   ui.populateBinderDropdown();
   ui.populateSetDropdown();
   ui.createProgressBar();
-  setEventListeners();
   localStorage.setItem('page_status', 'SUCCESS');
 }
 
