@@ -211,3 +211,47 @@ export function selectNewSet(fillpage) {
   }
   createProgressBar();
 }
+
+export function toggleHeader(source) {
+  const toggleHeaderBtn = document.getElementById('toggleHeaderBtn');
+  const action = toggleHeaderBtn.getAttribute('todo');
+  if (action == 'hide') {
+    if (source == 'index') {
+      document.getElementById('binderSpan').classList.add('hide');
+      document.getElementById('setSpan').classList.add('hide');
+      document.getElementById('progressSpan').classList.add('hide');
+      document.getElementById('gridDropdowns').classList.add('hide');
+      document.getElementById('cardSizeSpan').classList.add('hide');
+      document.getElementById('sort').classList.add('hide');
+      toggleHeaderBtn.addEventListener('click', function () {
+        ui.toggleHeader('index', 'show');
+      });
+    } else if (source == 'pull') {
+      document.getElementById('binderSpan').classList.add('hide');
+      document.getElementById('progressSpan').classList.add('hide');
+      document.getElementById('pullFiveButton').classList.add('hide');
+      document.getElementById('pullTenButton').classList.add('hide');
+      document.getElementById('clearDisplayButton').classList.add('hide');
+    }
+    toggleHeaderBtn.setAttribute('todo', 'show');
+  } else if (action == 'show') {
+    if (source == 'index') {
+      document.getElementById('binderSpan').classList.remove('hide');
+      document.getElementById('setSpan').classList.remove('hide');
+      document.getElementById('progressSpan').classList.remove('hide');
+      document.getElementById('gridDropdowns').classList.remove('hide');
+      document.getElementById('cardSizeSpan').classList.remove('hide');
+      document.getElementById('sort').classList.remove('hide');
+      toggleHeaderBtn.addEventListener('click', function () {
+        ui.toggleHeader('index', 'show');
+      });
+    } else if (source == 'pull') {
+      document.getElementById('binderSpan').classList.remove('hide');
+      document.getElementById('progressSpan').classList.remove('hide');
+      document.getElementById('pullFiveButton').classList.remove('hide');
+      document.getElementById('pullTenButton').classList.remove('hide');
+      document.getElementById('clearDisplayButton').classList.remove('hide');
+    }
+    toggleHeaderBtn.setAttribute('todo', 'hide');
+  }
+}

@@ -60,4 +60,9 @@ function setEventListeners() {
   syncButton.addEventListener('click', function () {
     fetchAndInitializeIndex();
   });
+  const toggleHeaderBtn = document.getElementById('toggleHeaderBtn');
+  toggleHeaderBtn.addEventListener('click', function () {
+    ui.toggleHeader('index');
+  });
+  toggleHeaderBtn.setAttribute('todo', 'hide');
 }
