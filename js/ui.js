@@ -185,6 +185,7 @@ export function createProgressBar() {
 
 function countPulled() {
   const data = page.getDataToDisplay();
+  const header = localStorage.getItem('header').split(',');
   const filtered = data.filter((row) => row[header.indexOf('caught')] == 'x');
   return filtered.length;
 }
