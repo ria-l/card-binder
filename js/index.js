@@ -17,7 +17,6 @@ window.onload = () => {
 };
 
 function initializeIndex() {
-  constants.initializeConsts();
   console.log('loading from storage');
   page.fillPage();
   ui.generateBinderDropdown();

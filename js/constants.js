@@ -1,27 +1,24 @@
 export const APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 
-export let CARDTYPE_COL,
-  CAUGHT_COL,
-  DEX_COL,
-  FILENAME_COL,
-  HEADER,
-  PKMNTYPE_COL,
-  SET_COL,
-  VISUALS_COL,
-  BINDER_COL;
-
-export function initializeConsts() {
-  HEADER = localStorage.getItem('header').split(','); // must be first
-  CARDTYPE_COL = HEADER.indexOf('card type');
-  CAUGHT_COL = HEADER.indexOf('caught');
-  DEX_COL = HEADER.indexOf('dex #');
-  FILENAME_COL = HEADER.indexOf('file name');
-  PKMNTYPE_COL = HEADER.indexOf('pkmn type');
-  SET_COL = HEADER.indexOf('set');
-  BINDER_COL = HEADER.indexOf('binder');
-  VISUALS_COL = HEADER.indexOf('visuals');
+export function getMetadatum(columnTitle, row, header) {
+  if (!header) {
+    header = localStorage.getItem('header').split(',');
+  }
+  let index = header.indexOf(_headerTextMap[columnTitle]);
+  return row[index];
 }
+
+const _headerTextMap = {
+  cardtype: 'card type',
+  caught: 'caught',
+  dex: 'dex #',
+  filename: 'file name',
+  pkmntype: 'pkmn type',
+  set: 'set',
+  binder: 'binder',
+  visuals: 'visuals',
+};
 
 export const PKMN_COLORS = {
   grass: ['#c2d349', '#93bb4e'],

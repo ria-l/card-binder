@@ -9,10 +9,10 @@ export function newSort() {
   let col;
   let name;
   if (container == 'binder') {
-    col = constants.BINDER_COL;
+    col = header.indexOf('binder');
     name = localStorage.bindername;
   } else {
-    col = constants.SET_COL;
+    col = header.indexOf('set');
     name = localStorage.setname;
   }
   let filtered = data.filter((row) => row[col] == name);

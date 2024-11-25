@@ -16,7 +16,6 @@ window.onload = () => {
 };
 
 function initializePull() {
-  constants.initializeConsts();
   console.log('loading from storage');
   ui.generateBinderDropdown();
   ui.createProgressBar();
@@ -74,7 +73,7 @@ function clearDisplay() {
 function pullCards(n) {
   const bindername = localStorage.getItem(`bindername`);
   const data = JSON.parse(localStorage.getItem(bindername));
-  const cardPool = data.map((row) => row[constants.FILENAME_COL]);
+  const cardPool = data.map((row) => constants.getMetadatum('filename', row));
   let pulled = [];
   for (let i = 0; i < n; i++) {
     // max val is length - 1
@@ -116,11 +115,12 @@ function processPulled(pulled) {
 }
 
 function getCardMetadata(binderRow) {
-  const filename = binderRow[constants.FILENAME_COL];
-  const caught = binderRow[constants.CAUGHT_COL];
-  const cardtype = binderRow[constants.CARDTYPE_COL];
-  const pkmntype = binderRow[constants.PKMNTYPE_COL];
-  const set = binderRow[constants.SET_COL];
+  const header = localStorage.getItem('header').split(',');
+  const filename = constants.getMetadatum('filename', binderRow, header);
+  const caught = constants.getMetadatum('caught', binderRow, header);
+  const cardtype = constants.getMetadatum('cardtype', binderRow, header);
+  const pkmntype = constants.getMetadatum('pkmntype', binderRow, header);
+  const set = constants.getMetadatum('set', binderRow, header);
   let title = `${filename} : ${pkmntype} : ${cardtype}`;
   if (!caught) {
     title += ` ✨NEW✨`;
@@ -178,19 +178,25 @@ function processNewCards(newCards) {
 function updateNewCardsInCache(newCards) {
   const binderName = localStorage.getItem('bindername');
   const binderData = JSON.parse(localStorage.getItem(binderName));
+  const header = localStorage.getItem('header').split(',');
   newCards.forEach((filename) => {
-    for (let i = 0; i < binderData.length; i++) {
-      if (binderData[i][constants.FILENAME_COL] == filename) {
-        binderData[i][constants.CAUGHT_COL] = 'x';
+    for (let rowNum = 0; rowNum < binderData.length; rowNum++) {
+      if (
+        constants.getMetadatum('filename', binderData[rowNum], header) ==
+        filename
+      ) {
+        binderData[rowNum][header.indexOf('caught')] = 'x';
         break;
       }
     }
     // each card may have a different set, so need to handle storage individually
     const setName = filename.match(/^[^\.]*/)[0].toUpperCase();
     const setData = JSON.parse(localStorage.getItem(setName));
-    for (let i = 0; i < setData.length; i++) {
-      if (setData[i][constants.FILENAME_COL] == filename) {
-        setData[i][constants.CAUGHT_COL] = 'x';
+    for (let rowNum = 0; rowNum < setData.length; rowNum++) {
+      if (
+        constants.getMetadatum('filename', setData[rowNum], header) == filename
+      ) {
+        setData[rowNum][header.indexOf('caught')] = 'x';
         localStorage.setItem(setName, JSON.stringify(setData));
         break;
       }

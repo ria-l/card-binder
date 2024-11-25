@@ -1,7 +1,6 @@
 import * as constants from './constants.js';
 
 export function fillPage() {
-  constants.initializeConsts();
   const cardTags = createCardTags();
   const tables = createTables(cardTags);
   document.getElementById('contentDiv').innerHTML = '';
@@ -77,14 +76,18 @@ function createCardTags() {
   const data = getDataToDisplay();
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
-  for (var card = 0; card < data.length; card++) {
-    const dir = `img/${data[card][constants.SET_COL].toLowerCase()}`;
-    const filename = data[card][constants.FILENAME_COL];
-    const pkmntype = data[card][constants.PKMNTYPE_COL];
-    const cardtype = data[card][constants.CARDTYPE_COL];
-    const visuals = data[card][constants.VISUALS_COL];
-    const dex = data[card][constants.DEX_COL];
-    const caught = data[card][constants.CAUGHT_COL];
+  const header = localStorage.getItem('header').split(',');
+  for (let rowNum = 0; rowNum < data.length; rowNum++) {
+    const set = constants
+      .getMetadatum('set', data[rowNum], header)
+      .toLowerCase();
+    const dir = `img/${set}`;
+    const filename = constants.getMetadatum('filename', data[rowNum], header);
+    const pkmntype = constants.getMetadatum('pkmntype', data[rowNum], header);
+    const cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
+    const visuals = constants.getMetadatum('visuals', data[rowNum], header);
+    const dex = constants.getMetadatum('dex', data[rowNum], header);
+    const caught = constants.getMetadatum('caught', data[rowNum], header);
     const title = `${filename} : ${pkmntype} : ${cardtype} : ${visuals} : ${dex}`;
     if (caught == 'x') {
       tags.push(generateImgTag(dir, filename, title, cardSize));
