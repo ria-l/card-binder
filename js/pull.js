@@ -32,7 +32,7 @@ async function fetchAndInitializePull() {
 function setEventListeners() {
   const binderDropdown = document.getElementById('binderDropdown');
   binderDropdown.addEventListener('change', function () {
-    ui.selectNewBinder('storefilenames');
+    ui.selectNewBinder();
   });
   const pullOneButton = document.getElementById('pullOneButton');
   pullOneButton.addEventListener('click', function () {
@@ -68,11 +68,13 @@ function clearDisplay() {
 }
 
 /**
- * filenames is set in storeFileNames
+ *
  * @param {int} n number of cards pulled
  */
 function pullCards(n) {
-  const cardPool = JSON.parse(localStorage.getItem('binder_filenames'));
+  const bindername = localStorage.getItem(`bindername`);
+  const data = JSON.parse(localStorage.getItem(bindername));
+  const cardPool = data.map((row) => row[constants.FILENAME_COL]);
   let pulled = [];
   for (let i = 0; i < n; i++) {
     // max val is length - 1

@@ -1,3 +1,35 @@
+import * as page from './page.js';
+import * as constants from './constants.js';
+
+export function newSort() {
+  const sortBy = document.getElementById('sortDropdown').value;
+  const data = page.getDataToDisplay();
+  const container = localStorage.getItem('container');
+  const header = localStorage.getItem('header').split(',');
+  let col;
+  let name;
+  if (container == 'binder') {
+    col = constants.BINDER_COL;
+    name = localStorage.bindername;
+  } else {
+    col = constants.SET_COL;
+    name = localStorage.setname;
+  }
+  let filtered = data.filter((row) => row[col] == name);
+  filtered.unshift(header);
+
+  if (sortBy == 'Dex #') {
+    localStorage.setItem(name, JSON.stringify(sortByDex(filtered)));
+  } else if (sortBy == 'Pokemon Type') {
+    localStorage.setItem(name, JSON.stringify(sortByColor(filtered)));
+  } else if (sortBy == 'Card Type') {
+    localStorage.setItem(name, JSON.stringify(sortByCardType(filtered)));
+  } else if (sortBy == 'Set Number') {
+    localStorage.setItem(name, JSON.stringify(sortBySetNum(filtered)));
+  }
+  page.fillPage();
+}
+
 const sort = (col_name, data) => {
   const header = localStorage.getItem('header').split(',');
   const column = header.indexOf(col_name);
@@ -49,6 +81,15 @@ export const sortByDex = (data) => {
   sorted = sort('visuals #', sorted);
   sorted = sort('forme #', sorted);
   sorted = sort('dex #', sorted);
+
+  return sorted;
+};
+
+export const sortBySetNum = (data) => {
+  let sorted = data.slice(1);
+
+  sorted = sort('card #', sorted);
+  sorted = sort('set', sorted);
 
   return sorted;
 };

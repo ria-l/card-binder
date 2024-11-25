@@ -8,7 +8,8 @@ export let CARDTYPE_COL,
   HEADER,
   PKMNTYPE_COL,
   SET_COL,
-  VISUALS_COL;
+  VISUALS_COL,
+  BINDER_COL;
 
 export function initializeConsts() {
   HEADER = localStorage.getItem('header').split(','); // must be first
@@ -18,6 +19,7 @@ export function initializeConsts() {
   FILENAME_COL = HEADER.indexOf('file name');
   PKMNTYPE_COL = HEADER.indexOf('pkmn type');
   SET_COL = HEADER.indexOf('set');
+  BINDER_COL = HEADER.indexOf('binder');
   VISUALS_COL = HEADER.indexOf('visuals');
 }
 

@@ -189,26 +189,24 @@ function countPulled() {
   return filtered.length;
 }
 
-export function selectNewBinder(source) {
+export function selectNewBinder(fillpage) {
   localStorage.setItem('container', 'binder');
   const binderDropdown = document.getElementById('binderDropdown');
   const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
   localStorage.setItem('bindername', bindername);
-  if (source == 'fillpage') {
+  if (fillpage) {
     page.fillPage();
   }
   createProgressBar();
-  store.storeFileNames('binder', bindername);
 }
 
-export function selectNewSet(source) {
+export function selectNewSet(fillpage) {
   localStorage.setItem('container', 'set');
   const setDropdown = document.getElementById('setDropdown');
   const setname = setDropdown.options[setDropdown.selectedIndex].text;
   localStorage.setItem('setname', setname);
-  if (source == 'fillpage') {
+  if (fillpage) {
     page.fillPage();
   }
   createProgressBar();
-  store.storeFileNames('set', setname);
 }

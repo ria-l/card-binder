@@ -1,6 +1,7 @@
 import * as app from './app.js';
 import * as constants from './constants.js';
 import * as page from './page.js';
+import * as sorting from './sorting.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
 
@@ -51,6 +52,10 @@ function setEventListeners() {
   const sizeDropdown = document.getElementById('sizeDropdown');
   sizeDropdown.addEventListener('change', function () {
     ui.resizeCards();
+  });
+  const sortDropdown = document.getElementById('sortDropdown');
+  sortDropdown.addEventListener('change', function () {
+    sorting.newSort();
   });
   const syncButton = document.getElementById('syncButton');
   syncButton.addEventListener('click', function () {

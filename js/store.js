@@ -1,58 +1,51 @@
 import * as constants from './constants.js';
 import * as sorting from './sorting.js';
 
+/**
+ *
+ * @param {json obj} data all data from sheet
+ */
 export function storeData(data) {
   const header = data[0];
   localStorage.setItem('header', header);
-  const binderName = storeCardData(header, data, 'binder');
-  const setName = storeCardData(header, data, 'set');
-  storeFileNames('binder', binderName);
-  storeFileNames('set', setName);
-}
 
-function storeCardData(header, data, container) {
-  let containerName = localStorage.getItem(`${container}name`);
-  if (!containerName) {
-    if (container == 'binder') {
-      containerName = header[0]; // TODO: make this random
-    } else if (container == 'set') {
-      containerName = 'PAL'; // TODO: make this random
-    }
-    localStorage.setItem(`${container}name`, containerName);
+  // store binder name
+  let bindername = localStorage.getItem(`bindername`);
+  if (!bindername) {
+    bindername = header[0]; // TODO: make this random
+    localStorage.setItem(`bindername`, bindername);
   }
+  let setname = localStorage.getItem(`setname`);
+  if (!setname) {
+    setname = 'PAL'; // TODO: make this random
+    localStorage.setItem(`setname`, setname);
+  }
+
   // store container names
-  const containerNames = new Set();
-  const containerCol = header.indexOf(container);
-  for (const row of data) {
-    if (row[containerCol] != container) {
-      containerNames.add(row[containerCol]);
-    }
-  }
-  localStorage.setItem(
-    `${container}names`,
-    JSON.stringify([...containerNames])
-  );
+  const binderCol = header.indexOf('binder');
+  let bindernames = data.filter((row) => row[binderCol] != 'binder');
+  bindernames = new Set(bindernames.map((row) => row[binderCol]));
+
+  const setCol = header.indexOf('set');
+  let setnames = data.filter((row) => row[setCol] != 'set');
+  setnames = new Set(setnames.map((row) => row[setCol]));
+
+  localStorage.setItem(`bindernames`, JSON.stringify([...bindernames]));
+  localStorage.setItem(`setnames`, JSON.stringify([...setnames]));
+
   // store data for each container
-  for (const name of containerNames) {
+  for (const name of bindernames) {
     // only the cards that are in the given binder
-    let filtered = data.filter((row) => row[containerCol] == name);
+    let filtered = data.filter((row) => row[binderCol] == name);
     // add back the header, since it would be removed during filtering
     filtered.unshift(header);
     localStorage.setItem(name, JSON.stringify(sorting.sortByColor(filtered)));
   }
-  return containerName;
-}
-
-/**
- *
- * @param {string} container binder or set
- * @param {string} containerName name of binder or set
- */
-export function storeFileNames(container, containerName) {
-  const data = JSON.parse(localStorage.getItem(containerName));
-  const filenames = data.map((row) => row[constants.FILENAME_COL]);
-  localStorage.setItem(
-    `${container}_filenames`,
-    JSON.stringify([...filenames])
-  );
+  for (const name of setnames) {
+    // only the cards that are in the given binder
+    let filtered = data.filter((row) => row[setCol] == name);
+    // add back the header, since it would be removed during filtering
+    filtered.unshift(header);
+    localStorage.setItem(name, JSON.stringify(sorting.sortByColor(filtered)));
+  }
 }

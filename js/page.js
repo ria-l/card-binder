@@ -132,14 +132,12 @@ export function generateBorderColors(cardtype, pkmntype) {
 }
 
 export function getDataToDisplay() {
-  let data;
   const binderName = localStorage.getItem('bindername');
   const setName = localStorage.getItem('setname');
   const container = localStorage.getItem('container');
   if (!container || container === 'binder') {
-    data = JSON.parse(localStorage.getItem(binderName));
+    return JSON.parse(localStorage.getItem(binderName));
   } else if (container === 'set') {
-    data = JSON.parse(localStorage.getItem(setName));
+    return JSON.parse(localStorage.getItem(setName));
   }
-  return data;
 }
