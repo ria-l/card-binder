@@ -26,6 +26,8 @@ export function newSort() {
     localStorage.setItem(name, JSON.stringify(sortByCardType(filtered)));
   } else if (sortBy == 'Set Number') {
     localStorage.setItem(name, JSON.stringify(sortBySetNum(filtered)));
+  } else if (sortBy == 'Visuals') {
+    localStorage.setItem(name, JSON.stringify(sortByVisuals(filtered)));
   }
   page.fillPage();
 }
@@ -56,6 +58,20 @@ export const sortByCardType = (data) => {
   return sorted;
 };
 
+export const sortByVisuals = (data) => {
+  let sorted = data.slice(1);
+
+  sorted = sort('card #', sorted);
+  sorted = sort('set', sorted);
+  sorted = sort('release date', sorted);
+  sorted = sort('forme #', sorted);
+  sorted = sort('dex #', sorted);
+  sorted = sort('pkmn type #', sorted);
+  sorted = sort('card type #', sorted);
+  sorted = sort('visuals #', sorted);
+
+  return sorted;
+};
 export const sortByColor = (data) => {
   let sorted = data.slice(1);
 
