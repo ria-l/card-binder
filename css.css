@@ -26,6 +26,7 @@ span {
 }
 .icon {
   vertical-align: middle;
+  height: 50px;
 }
 button,
 select,
