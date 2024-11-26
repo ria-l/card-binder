@@ -1,7 +1,6 @@
 import * as app from './app.js';
-import * as constants from './constants.js';
 import * as page from './page.js';
-import * as sorting from './sorting.js';
+import * as sort from './sort.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
 
@@ -54,7 +53,7 @@ function setEventListeners() {
   });
   const sortDropdown = document.getElementById('sortDropdown');
   sortDropdown.addEventListener('change', function () {
-    sorting.newSort();
+    sort.newSort();
   });
   const syncButton = document.getElementById('syncButton');
   syncButton.addEventListener('click', function () {

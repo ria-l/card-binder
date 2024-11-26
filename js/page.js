@@ -88,7 +88,12 @@ function createCardTags() {
     const visuals = constants.getMetadatum('visuals', data[rowNum], header);
     const dex = constants.getMetadatum('dex', data[rowNum], header);
     const caught = constants.getMetadatum('caught', data[rowNum], header);
-    const title = `${filename} : ${pkmntype} : ${cardtype} : ${visuals} : ${dex}`;
+    const caughtdate = constants.getMetadatum(
+      'caughtdate',
+      data[rowNum],
+      header
+    );
+    const title = `${filename} : ${pkmntype} : ${cardtype} : ${visuals} : ${dex} : ${caughtdate}`;
     if (caught == 'x') {
       tags.push(generateImgTag(dir, filename, title, cardSize));
     } else {

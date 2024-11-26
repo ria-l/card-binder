@@ -1,5 +1,4 @@
 import * as page from './page.js';
-import * as constants from './constants.js';
 
 export function newSort() {
   const sortBy = document.getElementById('sortDropdown').value;
@@ -28,6 +27,8 @@ export function newSort() {
     localStorage.setItem(name, JSON.stringify(sortBySetNum(filtered)));
   } else if (sortBy == 'Visuals') {
     localStorage.setItem(name, JSON.stringify(sortByVisuals(filtered)));
+  } else if (sortBy == 'recent') {
+    localStorage.setItem(name, JSON.stringify(sortByRecent(filtered)));
   }
   page.fillPage();
 }
@@ -107,5 +108,13 @@ export const sortBySetNum = (data) => {
   sorted = sort('card #', sorted);
   sorted = sort('set', sorted);
 
+  return sorted;
+};
+
+export const sortByRecent = (data) => {
+  let sorted = data.slice(1);
+
+  sorted = sort('caught date', sorted);
+  sorted.reverse();
   return sorted;
 };

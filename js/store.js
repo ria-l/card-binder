@@ -1,5 +1,4 @@
-import * as constants from './constants.js';
-import * as sorting from './sorting.js';
+import * as sort from './sort.js';
 
 /**
  *
@@ -39,13 +38,13 @@ export function storeData(data) {
     let filtered = data.filter((row) => row[binderCol] == name);
     // add back the header, since it would be removed during filtering
     filtered.unshift(header);
-    localStorage.setItem(name, JSON.stringify(sorting.sortByColor(filtered)));
+    localStorage.setItem(name, JSON.stringify(sort.sortByColor(filtered)));
   }
   for (const name of setnames) {
     // only the cards that are in the given binder
     let filtered = data.filter((row) => row[setCol] == name);
     // add back the header, since it would be removed during filtering
     filtered.unshift(header);
-    localStorage.setItem(name, JSON.stringify(sorting.sortByColor(filtered)));
+    localStorage.setItem(name, JSON.stringify(sort.sortByColor(filtered)));
   }
 }

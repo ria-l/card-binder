@@ -18,6 +18,7 @@ const _headerTextMap = {
   set: 'set',
   binder: 'binder',
   visuals: 'visuals',
+  caughtdate: 'caught date',
 };
 
 export const PKMN_COLORS = {
