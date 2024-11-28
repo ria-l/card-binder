@@ -1,9 +1,13 @@
+* {
+  /* necessary to get cards and placeholders to be the same size */
+  box-sizing: border-box;
+}
 :root {
   font-size: 16px;
   font-family: 'Open Sans';
-  --text-primary: #220076;
+  --text-primary: #b6b6b6;
   --text-secondary: #ececec;
-  --bg-primary: #f7f7f7;
+  --bg-primary: #23232e;
   --bg-secondary: #141418;
   --transition-speed: 600ms;
 }
