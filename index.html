@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css.css" />
+    <link rel="icon" type="image/x-icon" href="img/0_icons/coin_meowth.png" />
     <link
-      rel="icon"
-      type="image/x-icon"
-      href="img/0_icons/hisui_pokeball.png"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap"
+      rel="stylesheet"
     />
     <script type="module" src="js/app.js"></script>
     <script type="module" src="js/index.js"></script>
@@ -21,67 +21,55 @@
   </head>
   <body>
     <span id="bgSpan"></span>
-    <span id="statusSpan" class="hidestatus"></span>
-
-    <div class="header">
-      <span>
-        <a href="pull.html">
-          <button id="pullButton" class="link">
-            <img src="img/0_icons/meowth_coin.png" class="icon" />
-            Pull
-          </button>
-        </a>
-
-        <button id="syncButton">
-          <img src="img/0_icons/yamper_coin.png" class="icon" />
-          Fetch
-        </button>
-        <button id="toggleHeaderBtn">
-          <img src="img/0_icons/kecleon.png" class="icon" />
-        </button>
-      </span>
+    <nav class="navbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a href="pull.html" class="nav-link">
+            <span class="link-text">Pull cards</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="syncButton">
+            <span class="link-text">Sync</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <main>
+      <span id="statusSpan" class="hide"></span>
       <span id="binderSpan">
-        <button>
-          Binder:
-          <select id="binderDropdown"></select>
-        </button>
+        Binder:
+        <select id="binderDropdown"></select>
       </span>
       <span id="setSpan">
-        <button>
-          Set:
-          <select id="setDropdown"></select>
-        </button>
+        Set:
+        <select id="setDropdown"></select>
       </span>
-      <span id="progressSpan"><progress></progress></span>
+      <span id="progressSpan">
+        <progress></progress>
+      </span>
       <span id="gridDropdowns">
-        <button>
-          Cols:
-          <select id="colDropdown"></select>
-          Rows:
-          <select id="rowDropdown"></select>
-        </button>
+        Cols:
+        <select id="colDropdown"></select>
+        Rows:
+        <select id="rowDropdown"></select>
       </span>
-
       <span id="cardSizeSpan">
-        <button>
-          Card size:
-          <select id="sizeDropdown"></select>
-        </button>
+        Card size:
+        <select id="sizeDropdown"></select>
       </span>
       <span id="sort">
-        <button>
-          Sort by:
-          <select id="sortDropdown">
-            <option value="Pokemon Type">Pokemon Type</option>
-            <option value="Dex #">Dex #</option>
-            <option value="Set Number">Set Number</option>
-            <option value="Card Type">Card Type</option>
-            <option value="Visuals">Visuals</option>
-            <option value="recent">Recent</option>
-          </select>
-        </button>
+        Sort by:
+        <select id="sortDropdown">
+          <option value="Pokemon Type">Pokemon Type</option>
+          <option value="Dex #">Dex #</option>
+          <option value="Set Number">Set Number</option>
+          <option value="Card Type">Card Type</option>
+          <option value="Visuals">Visuals</option>
+          <option value="recent">Recent</option>
+        </select>
       </span>
-    </div>
-    <div id="contentDiv" class="contentDiv"></div>
+      <div id="contentDiv" class="contentDiv"></div>
+    </main>
   </body>
 </html>

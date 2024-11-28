@@ -7,7 +7,7 @@ export async function fetchData() {
   statusSpan.className = 'showstatus';
   const response = await fetch(constants.APPSCRIPT_URL);
   const data = await response.json();
-  statusSpan.className = 'hidestatus';
+  statusSpan.className = 'hide';
   console.log('fetched');
   return data;
 }

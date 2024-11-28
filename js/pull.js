@@ -53,18 +53,13 @@ function setEventListeners() {
   syncButton.addEventListener('click', function () {
     fetchAndInitializePull();
   });
-  const toggleHeaderBtn = document.getElementById('toggleHeaderBtn');
-  toggleHeaderBtn.addEventListener('click', function () {
-    ui.toggleHeader('pull');
-  });
-  toggleHeaderBtn.setAttribute('todo', 'hide');
 }
 
 function clearDisplay() {
   document.getElementById('largeCardSpan').innerHTML = '';
   document.getElementById('smallCardSpan').innerHTML = '';
+  document.getElementById('listSpan').innerHTML = '';
   const listSpan = document.getElementById('listSpan');
-  listSpan.innerHTML = '';
   const ol = document.createElement('ol');
   ol.id = 'cardList';
   ol.reversed = true;
