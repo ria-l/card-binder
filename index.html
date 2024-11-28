@@ -29,6 +29,76 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="#" class="nav-link" id="display-btn">
+            <span class="link-text">Display</span>
+          </a>
+          <ul class="dropdown-container" id="display-dropdown">
+            <li>
+              <a href="#" class="dropdown-item">
+                Binder
+                <select id="binderDropdown"></select
+              ></a>
+            </li>
+            <li>
+              <a href="#" class="dropdown-item">
+                Set
+                <select id="setDropdown"></select
+              ></a>
+            </li>
+            <li>
+              <a href="#" class="dropdown-item">
+                <span id="progressSpan"> <progress></progress> </span
+              ></a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="grid-btn">
+            <span class="link-text">Grid</span>
+          </a>
+          <ul class="dropdown-container" id="grid-dropdown">
+            <li>
+              <a href="#" class="dropdown-item">
+                Cols
+                <select id="colDropdown" size="4"></select
+              ></a>
+            </li>
+            <li>
+              <a href="#" class="dropdown-item">
+                Rows
+                <select id="rowDropdown" size="4"></select
+              ></a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="size-btn">
+            <span class="link-text">Card size</span>
+          </a>
+          <ul class="dropdown-container" id="size-dropdown">
+            <li>
+              <select id="sizeDropdown" size="5"></select>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="sort-btn">
+            <span class="link-text">Sort</span>
+          </a>
+          <ul class="dropdown-container" id="sort-dropdown">
+            <li>
+              <select id="sortDropdown">
+                <option value="Pokemon Type">Pokemon Type</option>
+                <option value="Dex #">Dex #</option>
+                <option value="Set Number">Set Number</option>
+                <option value="Card Type">Card Type</option>
+                <option value="Visuals">Visuals</option>
+                <option value="recent">Recent</option>
+              </select>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
           <a href="#" class="nav-link" id="syncButton">
             <span class="link-text">Sync</span>
           </a>
@@ -37,38 +107,6 @@
     </nav>
     <main>
       <span id="statusSpan" class="hide"></span>
-      <span id="binderSpan">
-        Binder:
-        <select id="binderDropdown"></select>
-      </span>
-      <span id="setSpan">
-        Set:
-        <select id="setDropdown"></select>
-      </span>
-      <span id="progressSpan">
-        <progress></progress>
-      </span>
-      <span id="gridDropdowns">
-        Cols:
-        <select id="colDropdown"></select>
-        Rows:
-        <select id="rowDropdown"></select>
-      </span>
-      <span id="cardSizeSpan">
-        Card size:
-        <select id="sizeDropdown"></select>
-      </span>
-      <span id="sort">
-        Sort by:
-        <select id="sortDropdown">
-          <option value="Pokemon Type">Pokemon Type</option>
-          <option value="Dex #">Dex #</option>
-          <option value="Set Number">Set Number</option>
-          <option value="Card Type">Card Type</option>
-          <option value="Visuals">Visuals</option>
-          <option value="recent">Recent</option>
-        </select>
-      </span>
       <div id="contentDiv" class="contentDiv"></div>
     </main>
   </body>

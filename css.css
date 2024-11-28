@@ -9,6 +9,7 @@
   --text-secondary: #ececec;
   --bg-primary: #23232e;
   --bg-secondary: #141418;
+  --bg-dropdown: #343a40;
   --transition-speed: 300ms;
 }
 body {
@@ -67,6 +68,31 @@ main {
   font-size: 1.5rem;
   letter-spacing: 0.1ch;
   width: 100%;
+}
+.dropdown-container {
+  background-color: var(--bg-dropdown);
+  border-radius: 1rem;
+  width: 10rem;
+  padding: 1rem;
+  list-style: none;
+  margin-left: 1rem;
+}
+.dropdown-item {
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 0.1ch;
+  width: 100%;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+select,
+progress {
+  width: 8rem;
+}
+
+select {
+  padding: 0.5rem;
+  border-radius: 0.4rem;
 }
 .hide {
   display: none !important;
@@ -203,5 +229,14 @@ ol {
   main {
     margin-left: 0;
     margin-bottom: 6rem;
+  }
+  .dropdown-container {
+    position: absolute;
+    bottom: 4rem;
+    display: none;
+    margin-left: -0.4rem;
+  }
+  .link-text {
+    font-size: 1rem;
   }
 }
