@@ -63,17 +63,10 @@ main {
   color: var(--text-secondary);
 }
 .link-text {
-  margin-left: 1rem;
   text-align: center;
   font-size: 1.5rem;
   letter-spacing: 0.1ch;
   width: 100%;
-}
-.nav-link img {
-  width: 5rem;
-  min-width: 5rem;
-  /* margin: 0 1.5rem;
-  */
 }
 .hide {
   display: none !important;
@@ -93,38 +86,24 @@ main {
 .showstatus {
   align-items: center;
   background: linear-gradient(
-        to bottom right,
-        #f9f9f9,
-        white,
-        #f9f9f9,
-        white,
-        #f9f9f9,
-        white
-      )
-      padding-box,
-    linear-gradient(
-        to bottom right,
-        #fde0ec,
-        #bad5ed,
-        #d2ece3,
-        #fff,
-        #fff,
-        #d2ece3,
-        #bad5ed,
-        #fde0ec
-      )
-      border-box;
+    to bottom right,
+    #fde0ec,
+    #bad5ed,
+    #d2ece3,
+    #fff,
+    #fff,
+    #d2ece3,
+    #bad5ed,
+    #fde0ec
+  );
   border-radius: 10px;
-  border: 15px solid transparent;
   display: flex;
-  height: 5rem;
   inset: 0px;
   justify-content: center;
   margin: auto;
-  max-height: 100dvh;
-  max-width: 100vw;
+  height: 20dvh;
+  width: 30dvw;
   position: fixed;
-  width: 12rem;
 }
 table {
   display: inline-block;
