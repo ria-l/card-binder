@@ -216,13 +216,24 @@ export function selectNewSet(fillpage) {
 
 export function highlightBinder() {
   const binderDrop = document.getElementById('binderDropdown');
-  binderDrop.style.boxShadow = '0 0 10px #dbcdff';
+  binderDrop.classList.add('highlight');
   const setDrop = document.getElementById('setDropdown');
-  setDrop.style.boxShadow = 'none';
+  setDrop.classList.remove('highlight');
 }
 export function highlightSet() {
   const setDrop = document.getElementById('setDropdown');
-  setDrop.style.boxShadow = '0 0 10px #dbcdff';
+  setDrop.classList.add('highlight');
   const binderDrop = document.getElementById('binderDropdown');
-  binderDrop.style.boxShadow = 'none';
+  binderDrop.classList.remove('highlight');
+}
+export function addShowHideToggle(btnId, dropdownId) {
+  document.getElementById(btnId).addEventListener('click', function () {
+    const arr = document.getElementsByClassName('dropdown-container');
+    for (let item of arr) {
+      if (item.classList.contains('show') && item.id != dropdownId) {
+        item.classList.toggle('show');
+      }
+    }
+    document.getElementById(dropdownId).classList.toggle('show');
+  });
 }

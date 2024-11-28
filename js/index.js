@@ -65,19 +65,8 @@ function setEventListeners() {
   syncButton.addEventListener('click', function () {
     fetchAndInitializeIndex();
   });
-  addShowHideToggle('display-btn', 'display-dropdown');
-  addShowHideToggle('grid-btn', 'grid-dropdown');
-  addShowHideToggle('size-btn', 'size-dropdown');
-  addShowHideToggle('sort-btn', 'sort-dropdown');
-}
-function addShowHideToggle(btnId, dropdownId) {
-  document.getElementById(btnId).addEventListener('click', function () {
-    const arr = document.getElementsByClassName('dropdown-container');
-    for (let item of arr) {
-      if (item.classList.contains('show') && item.id != dropdownId) {
-        item.classList.toggle('show');
-      }
-    }
-    document.getElementById(dropdownId).classList.toggle('show');
-  });
+  ui.addShowHideToggle('display-btn', 'display-dropdown');
+  ui.addShowHideToggle('grid-btn', 'grid-dropdown');
+  ui.addShowHideToggle('size-btn', 'size-dropdown');
+  ui.addShowHideToggle('sort-btn', 'sort-dropdown');
 }

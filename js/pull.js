@@ -18,6 +18,13 @@ window.onload = () => {
 function initializePull() {
   console.log('loading from storage');
   ui.generateBinderDropdown();
+  ui.generateSetDropdown();
+  const container = localStorage.getItem('container');
+  if (container == 'binder') {
+    ui.highlightBinder();
+  } else if (container == 'set') {
+    ui.highlightSet();
+  }
   ui.createProgressBar();
   localStorage.setItem('pull_status', 'SUCCESS');
 }
@@ -32,6 +39,10 @@ function setEventListeners() {
   const binderDropdown = document.getElementById('binderDropdown');
   binderDropdown.addEventListener('change', function () {
     ui.selectNewBinder();
+  });
+  const setDropdown = document.getElementById('setDropdown');
+  setDropdown.addEventListener('change', function () {
+    ui.selectNewSet();
   });
   const pullOneButton = document.getElementById('pullOneButton');
   pullOneButton.addEventListener('click', function () {
@@ -53,6 +64,7 @@ function setEventListeners() {
   syncButton.addEventListener('click', function () {
     fetchAndInitializePull();
   });
+  ui.addShowHideToggle('display-btn', 'display-dropdown');
 }
 
 function clearDisplay() {
@@ -71,8 +83,15 @@ function clearDisplay() {
  * @param {int} n number of cards pulled
  */
 function pullCards(n) {
-  const bindername = localStorage.getItem(`bindername`);
-  const data = JSON.parse(localStorage.getItem(bindername));
+  const container = localStorage.getItem('container');
+  let data;
+  if (container == 'binder' || !container) {
+    const bindername = localStorage.getItem('bindername');
+    data = JSON.parse(localStorage.getItem(bindername));
+  } else {
+    const setname = localStorage.getItem('setname');
+    data = JSON.parse(localStorage.getItem(setname));
+  }
   const cardPool = data.map((row) => constants.getMetadatum('filename', row));
   let pulled = [];
   for (let i = 0; i < n; i++) {
@@ -80,20 +99,18 @@ function pullCards(n) {
     const x = Math.floor(Math.random() * cardPool.length);
     pulled.push(x);
   }
-  processPulled(pulled);
+  processPulled(pulled, data);
 }
 
 /**
  *
  * @param {array of ints} pulled index numbers in the filenames array
  */
-function processPulled(pulled) {
-  const binderName = localStorage.getItem('bindername');
-  const binderData = JSON.parse(localStorage.getItem(binderName));
+function processPulled(pulled, data) {
   const newCards = [];
   const currentPulls = [];
   pulled.forEach((card) => {
-    const binderRow = binderData[card];
+    const binderRow = data[card];
     const { title, dir, filename, caught, borderColors } =
       getCardMetadata(binderRow);
     const small = generateImg('small', dir, filename, caught, borderColors);

@@ -102,6 +102,9 @@ select {
 .show {
   display: inline-block !important;
 }
+.highlight {
+  border: solid 5px #96e3ff;
+}
 #bgSpan {
   opacity: 0.3;
   top: 0;
