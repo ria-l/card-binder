@@ -9,7 +9,7 @@
   --text-secondary: #ececec;
   --bg-primary: #23232e;
   --bg-secondary: #141418;
-  --transition-speed: 600ms;
+  --transition-speed: 300ms;
 }
 body {
   margin: 0;
@@ -32,7 +32,7 @@ main {
 .navbar {
   position: fixed;
   background-color: var(--bg-primary);
-  transition: width 600ms ease;
+  transition: width 300ms ease;
 }
 .navbar-nav {
   list-style: none;
@@ -190,6 +190,7 @@ ol {
   max-height: 98vh;
   flex-basis: 70%;
 }
+/* desktop */
 @media only screen and (min-width: 777px) {
   .navbar {
     top: 0;
@@ -197,6 +198,7 @@ ol {
     height: 100vh;
   }
 }
+/* mobile */
 @media only screen and (max-width: 777px) {
   #parent {
     flex-direction: column;
@@ -220,6 +222,7 @@ ol {
     justify-content: center;
   }
   main {
-    margin: 0;
+    margin-left: 0;
+    margin-bottom: 6rem;
   }
 }
