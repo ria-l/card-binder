@@ -20,6 +20,12 @@ function initializeIndex() {
   page.fillPage();
   ui.generateBinderDropdown();
   ui.generateSetDropdown();
+  const container = localStorage.getItem('container');
+  if (container == 'binder') {
+    ui.highlightBinder();
+  } else if (container == 'set') {
+    ui.highlightSet();
+  }
   ui.createProgressBar();
   localStorage.setItem('page_status', 'SUCCESS');
 }

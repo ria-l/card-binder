@@ -195,6 +195,7 @@ export function selectNewBinder(fillpage) {
   const binderDropdown = document.getElementById('binderDropdown');
   const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
   localStorage.setItem('bindername', bindername);
+  highlightBinder();
   if (fillpage) {
     page.fillPage();
   }
@@ -206,8 +207,22 @@ export function selectNewSet(fillpage) {
   const setDropdown = document.getElementById('setDropdown');
   const setname = setDropdown.options[setDropdown.selectedIndex].text;
   localStorage.setItem('setname', setname);
+  highlightSet();
   if (fillpage) {
     page.fillPage();
   }
   createProgressBar();
+}
+
+export function highlightBinder() {
+  const binderDrop = document.getElementById('binderDropdown');
+  binderDrop.style.boxShadow = '0 0 10px #dbcdff';
+  const setDrop = document.getElementById('setDropdown');
+  setDrop.style.boxShadow = 'none';
+}
+export function highlightSet() {
+  const setDrop = document.getElementById('setDropdown');
+  setDrop.style.boxShadow = '0 0 10px #dbcdff';
+  const binderDrop = document.getElementById('binderDropdown');
+  binderDrop.style.boxShadow = 'none';
 }

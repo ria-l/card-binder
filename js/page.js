@@ -1,7 +1,8 @@
 import * as constants from './constants.js';
 
 export function fillPage() {
-  const cardTags = createCardTags();
+  const data = getDataToDisplay();
+  const cardTags = createCardTags(data);
   const tables = createTables(cardTags);
   document.getElementById('contentDiv').innerHTML = '';
   tables.forEach((table) => {
@@ -72,8 +73,7 @@ function createTables(cardTags) {
   return allTables;
 }
 
-function createCardTags() {
-  const data = getDataToDisplay();
+function createCardTags(data) {
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
   const header = localStorage.getItem('header').split(',');
