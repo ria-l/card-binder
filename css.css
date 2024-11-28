@@ -183,7 +183,7 @@ ol {
     flex-direction: column;
   }
   #largeCardSpan {
-    max-height: 55vh;
+    max-height: none;
   }
   .navbar {
     bottom: 0;
