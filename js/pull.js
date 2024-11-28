@@ -119,13 +119,13 @@ function getCardMetadata(binderRow) {
   const filename = constants.getMetadatum('filename', binderRow, header);
   const caught = constants.getMetadatum('caught', binderRow, header);
   const cardtype = constants.getMetadatum('cardtype', binderRow, header);
-  const pkmntype = constants.getMetadatum('pkmntype', binderRow, header);
+  const energytype = constants.getMetadatum('energytype', binderRow, header);
   const set = constants.getMetadatum('set', binderRow, header);
-  let title = `${filename} : ${pkmntype} : ${cardtype}`;
+  let title = `${filename} : ${energytype} : ${cardtype}`;
   if (!caught) {
     title += ` ✨NEW✨`;
   }
-  const borderColors = page.generateBorderColors(cardtype, pkmntype);
+  const borderColors = page.generateBorderColors(cardtype, energytype);
   const dir = `img/${set.toLowerCase()}`;
   return { title, dir, filename, caught, borderColors };
 }

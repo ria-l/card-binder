@@ -53,7 +53,7 @@ export const sortByCardType = (data) => {
   sorted = sort('release date', sorted);
   sorted = sort('forme #', sorted);
   sorted = sort('dex #', sorted);
-  sorted = sort('pkmn type #', sorted);
+  sorted = sort('energy type #', sorted);
   sorted = sort('card type #', sorted);
 
   return sorted;
@@ -67,9 +67,9 @@ export const sortByVisuals = (data) => {
   sorted = sort('release date', sorted);
   sorted = sort('forme #', sorted);
   sorted = sort('dex #', sorted);
-  sorted = sort('pkmn type #', sorted);
-  sorted = sort('card type #', sorted);
+  sorted = sort('energy type #', sorted);
   sorted = sort('visuals #', sorted);
+  sorted = sort('card type #', sorted);
 
   return sorted;
 };
@@ -83,7 +83,7 @@ export const sortByColor = (data) => {
   sorted = sort('visuals #', sorted);
   sorted = sort('forme #', sorted);
   sorted = sort('dex #', sorted);
-  sorted = sort('pkmn type #', sorted);
+  sorted = sort('energy type #', sorted);
 
   return sorted;
 };

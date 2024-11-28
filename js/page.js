@@ -83,7 +83,11 @@ function createCardTags() {
       .toLowerCase();
     const dir = `img/${set}`;
     const filename = constants.getMetadatum('filename', data[rowNum], header);
-    const pkmntype = constants.getMetadatum('pkmntype', data[rowNum], header);
+    const energytype = constants.getMetadatum(
+      'energytype',
+      data[rowNum],
+      header
+    );
     const cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
     const visuals = constants.getMetadatum('visuals', data[rowNum], header);
     const dex = constants.getMetadatum('dex', data[rowNum], header);
@@ -93,12 +97,12 @@ function createCardTags() {
       data[rowNum],
       header
     );
-    const title = `${filename} : ${pkmntype} : ${cardtype} : ${visuals} : ${dex} : ${caughtdate}`;
+    const title = `${filename} : ${energytype} : ${cardtype} : ${visuals} : ${dex} : ${caughtdate}`;
     if (caught == 'x') {
       tags.push(generateImgTag(dir, filename, title, cardSize));
     } else {
-      const borderColors = generateBorderColors(cardtype, pkmntype);
-      const fillColors = constants.FILL_COLORS(visuals, pkmntype);
+      const borderColors = generateBorderColors(cardtype, energytype);
+      const fillColors = constants.FILL_COLORS(visuals, energytype);
       tags.push(generatePlaceholder(cardSize, title, borderColors, fillColors));
     }
   }
@@ -129,13 +133,13 @@ function generatePlaceholder(cardSize, title, borderColors, fillColors) {
   return ph;
 }
 
-export function generateBorderColors(cardtype, pkmntype) {
-  const pkmnColors = constants.PKMN_COLORS[pkmntype];
+export function generateBorderColors(cardtype, energytype) {
+  const energyColors = constants.ENERGY_COLORS[energytype];
   const cardColors = constants.CARD_COLORS[cardtype];
   if (cardtype == 'basic') {
-    return `${pkmnColors},${pkmnColors},${pkmnColors[1]}`;
+    return `${energyColors},${energyColors},${energyColors[1]}`;
   } else if (cardtype != 'basic') {
-    return `${pkmnColors},white,${cardColors}`;
+    return `${energyColors},white,${cardColors}`;
   }
 }
 

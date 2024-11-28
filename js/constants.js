@@ -14,14 +14,14 @@ const _headerTextMap = {
   caught: 'caught',
   dex: 'dex #',
   filename: 'file name',
-  pkmntype: 'pkmn type',
+  energytype: 'energy type',
   set: 'set',
   binder: 'binder',
   visuals: 'visuals',
   caughtdate: 'caught date',
 };
 
-export const PKMN_COLORS = {
+export const ENERGY_COLORS = {
   grass: ['#c2d349', '#93bb4e'],
   fire: ['#f78b46', '#f2674b'],
   water: ['#93d9f5', '#11b6e6'],
@@ -57,14 +57,14 @@ export const CARD_COLORS = {
   ],
 };
 
-export function FILL_COLORS(visuals, pkmntype) {
-  const pkmnColors = PKMN_COLORS[pkmntype];
+export function FILL_COLORS(visuals, energytype) {
+  const energyColors = ENERGY_COLORS[energytype];
   const gradients = {
     normal: `#f9f9f9,white,#f9f9f9,white,#f9f9f9`,
     gold: '#fef081,#c69221,#fef081,#c69221,#fef081,#c69221',
-    '3d': `${pkmnColors},${pkmnColors[0]},white 30%,#f9f9f9,white,#f9f9f9`,
-    'full art': `${pkmnColors},${pkmnColors[0]},white 75%,#f9f9f9,white,#f9f9f9`,
-    illust: `${pkmnColors},${pkmnColors},${pkmnColors}`,
+    '3d': `${energyColors},${energyColors[0]},white 30%,#f9f9f9,white,#f9f9f9`,
+    'full art': `${energyColors},${energyColors[0]},white 75%,#f9f9f9,white,#f9f9f9`,
+    illust: `${energyColors},${energyColors},${energyColors}`,
   };
   return gradients[visuals];
 }
