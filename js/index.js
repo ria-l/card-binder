@@ -68,7 +68,7 @@ function addShowHideToggle(btnId, dropdownId) {
   document.getElementById(btnId).addEventListener('click', function () {
     const arr = document.getElementsByClassName('dropdown-container');
     for (let item of arr) {
-      if (item.classList.contains('show')) {
+      if (item.classList.contains('show') && item.id != dropdownId) {
         item.classList.toggle('show');
       }
     }
