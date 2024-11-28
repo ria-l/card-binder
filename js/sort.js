@@ -19,7 +19,7 @@ export function newSort() {
 
   if (sortBy == 'Dex #') {
     localStorage.setItem(name, JSON.stringify(sortByDex(filtered)));
-  } else if (sortBy == 'Pokemon Type') {
+  } else if (sortBy == 'Energy Type') {
     localStorage.setItem(name, JSON.stringify(sortByColor(filtered)));
   } else if (sortBy == 'Card Type') {
     localStorage.setItem(name, JSON.stringify(sortByCardType(filtered)));

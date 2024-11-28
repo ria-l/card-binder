@@ -8,18 +8,6 @@ export function storeData(data) {
   const header = data[0];
   localStorage.setItem('header', header);
 
-  // store binder name
-  let bindername = localStorage.getItem(`bindername`);
-  if (!bindername) {
-    bindername = header[0]; // TODO: make this random
-    localStorage.setItem(`bindername`, bindername);
-  }
-  let setname = localStorage.getItem(`setname`);
-  if (!setname) {
-    setname = 'PAL'; // TODO: make this random
-    localStorage.setItem(`setname`, setname);
-  }
-
   // store container names
   const binderCol = header.indexOf('binder');
   let bindernames = data.filter((row) => row[binderCol] != 'binder');
@@ -31,6 +19,20 @@ export function storeData(data) {
 
   localStorage.setItem(`bindernames`, JSON.stringify([...bindernames]));
   localStorage.setItem(`setnames`, JSON.stringify([...setnames]));
+
+  // store set and binder names
+  let bindername = localStorage.getItem('bindername');
+  if (!bindername) {
+    const x = Math.floor(Math.random() * bindernames.size);
+    bindername = Array.from(bindernames)[x];
+    localStorage.setItem('bindername', bindername);
+  }
+  let setname = localStorage.getItem('setname');
+  if (!setname) {
+    const y = Math.floor(Math.random() * setnames.size);
+    setname = Array.from(setnames)[y];
+    localStorage.setItem('setname', setname);
+  }
 
   // store data for each container
   for (const name of bindernames) {
