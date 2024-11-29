@@ -139,6 +139,14 @@ select {
   width: 30dvw;
   position: fixed;
 }
+.zoomed-card {
+  align-items: center;
+  display: flex;
+  inset: 0px;
+  justify-content: center;
+  margin: auto;
+  position: fixed;
+}
 table {
   display: inline-block;
   margin: 10px;

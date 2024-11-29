@@ -120,7 +120,27 @@ function generateImgTag(dir, filename, title, cardSize, cardtype, energytype) {
     img.style.background = `linear-gradient(to bottom right, ${borderColors}) border-box`;
     img.style.setProperty('border', `${cardSize / 15}px solid transparent`);
   }
+  img.onclick = function () {
+    displayZoom(dir, filename);
+  };
   return img;
+}
+
+function displayZoom(dir, filename) {
+  const img = document.createElement('img');
+  img.src = `${dir}/${filename}`;
+  img.style.height = '90dvh';
+  const zoomSpan = document.getElementById('zoom-span');
+  img.onclick = function () {
+    // close zoomed card
+    zoomSpan.innerHTML = '';
+  };
+  // clear any already zoomed cards
+  if (zoomSpan.innerHTML) {
+    zoomSpan.innerHTML = '';
+  }
+  img.className = 'zoomed-card';
+  zoomSpan.appendChild(img);
 }
 
 function generatePlaceholder(cardSize, title, borderColors, fillColors) {
