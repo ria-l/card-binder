@@ -91,12 +91,7 @@ function createCardTags(data) {
     const cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
     const visuals = constants.getMetadatum('visuals', data[rowNum], header);
     const caught = constants.getMetadatum('caught', data[rowNum], header);
-    const caughtdate = constants.getMetadatum(
-      'caughtdate',
-      data[rowNum],
-      header
-    );
-    const title = `${filename} : ${energytype} : ${cardtype} : ${visuals} : ${caughtdate}`;
+    const title = `${filename} : ${energytype} : ${cardtype} : ${visuals}`;
     if (caught == 'x') {
       tags.push(
         generateImgTag(dir, filename, title, cardSize, cardtype, energytype)

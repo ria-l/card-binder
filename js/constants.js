@@ -33,7 +33,24 @@ export const ENERGY_COLORS = {
   fairy: ['#e14690', '#b13870'],
   dragon: ['#b0813a', '#acac42'],
   colorless: ['#f5f4f0', '#d6d2cf'],
-  trainer: ['#eb028b', '#f14eae'], // hot pink
+  item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
+  supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
+};
+
+export const ENERGY_FILL_COLORS = {
+  grass: ['#f3f6db', '#e9f1dc'],
+  fire: ['#fde8da', '#fce1db'],
+  water: ['#e9f7fd', '#cff0fa'],
+  lightning: ['#fffcd3', '#fff6d4'],
+  psychic: ['#f4e9f2', '#ebe2ef'],
+  fighting: ['#fbeed4', '#f7e3d8'],
+  dark: ['#cfe2e6', '#cfd6d7'],
+  metal: ['#f3f9fd', '#edf0ef'],
+  fairy: ['#f9dae9', '#efd7e2'],
+  dragon: ['#efe6d8', '#eeeed9'],
+  colorless: ['#fdfdfc', '#f7f6f5'],
+  item: ['#ddecf5', '#cee4f0', '#ddecf5'], // blue
+  supporter: ['#ffefdb', '#ffe8cc', '#ffefdb'], // orange
 };
 
 export const CARD_COLORS = {
@@ -45,6 +62,7 @@ export const CARD_COLORS = {
   vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
   item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
   supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
+  trainer: ['#808186', '#696569'], // gray
   energy: [
     '#f78b46', // fire
     '#ecab2a', // fighting
@@ -58,7 +76,7 @@ export const CARD_COLORS = {
 };
 
 export function FILL_COLORS(visuals, energytype) {
-  const energyColors = ENERGY_COLORS[energytype];
+  const energyColors = ENERGY_FILL_COLORS[energytype];
   const gradients = {
     normal: `#f9f9f9,white,#f9f9f9,white,#f9f9f9`,
     gold: '#fef081,#c69221,#fef081,#c69221,#fef081,#c69221',
