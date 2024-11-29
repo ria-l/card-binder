@@ -1,6 +1,5 @@
 import * as constants from './constants.js';
 import * as page from './page.js';
-import * as store from './store.js';
 
 export function setBg() {
   const bgSpan = document.getElementById('bgSpan');
@@ -236,4 +235,25 @@ export function addShowHideToggle(btnId, dropdownId) {
     }
     document.getElementById(dropdownId).classList.toggle('show');
   });
+}
+
+export function toggleBorders() {
+  if (document.getElementById('toggle-borders').checked) {
+    document.querySelectorAll('.card').forEach((e) => {
+      const en = e.getAttribute('energy-type');
+      const ca = e.getAttribute('card-type');
+      const borderColors = page.generateBorderColors(ca, en);
+      e.style.setProperty(
+        'background',
+        `linear-gradient(to bottom right, ${borderColors}) border-box`
+      );
+      const cardSize = parseInt(document.getElementById('sizeDropdown').value);
+      e.style.setProperty('border', `${cardSize / 15}px solid transparent`);
+    });
+  } else {
+    document.querySelectorAll('.card').forEach((e) => {
+      e.style.removeProperty('background');
+      e.style.removeProperty('border');
+    });
+  }
 }

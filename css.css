@@ -91,7 +91,10 @@ select,
 progress {
   width: 8rem;
 }
-
+#toggle-borders {
+  height: 20px;
+  width: 20px;
+}
 select {
   padding: 0.5rem;
   border-radius: 0.4rem;

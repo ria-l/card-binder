@@ -90,16 +90,17 @@ function createCardTags(data) {
     );
     const cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
     const visuals = constants.getMetadatum('visuals', data[rowNum], header);
-    const dex = constants.getMetadatum('dex', data[rowNum], header);
     const caught = constants.getMetadatum('caught', data[rowNum], header);
     const caughtdate = constants.getMetadatum(
       'caughtdate',
       data[rowNum],
       header
     );
-    const title = `${filename} : ${energytype} : ${cardtype} : ${visuals} : ${dex} : ${caughtdate}`;
+    const title = `${filename} : ${energytype} : ${cardtype} : ${visuals} : ${caughtdate}`;
     if (caught == 'x') {
-      tags.push(generateImgTag(dir, filename, title, cardSize));
+      tags.push(
+        generateImgTag(dir, filename, title, cardSize, cardtype, energytype)
+      );
     } else {
       const borderColors = generateBorderColors(cardtype, energytype);
       const fillColors = constants.FILL_COLORS(visuals, energytype);
@@ -109,7 +110,7 @@ function createCardTags(data) {
   return tags;
 }
 
-function generateImgTag(dir, filename, title, cardSize) {
+function generateImgTag(dir, filename, title, cardSize, cardtype, energytype) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   img.title = title;
@@ -117,6 +118,13 @@ function generateImgTag(dir, filename, title, cardSize) {
   img.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
   img.style.borderRadius = `${cardSize / 20}px`;
   img.classList.add('card');
+  img.setAttribute('card-type', cardtype);
+  img.setAttribute('energy-type', energytype);
+  if (document.getElementById('toggle-borders').checked) {
+    const borderColors = generateBorderColors(cardtype, energytype);
+    img.style.background = `linear-gradient(to bottom right, ${borderColors}) border-box`;
+    img.style.setProperty('border', `${cardSize / 15}px solid transparent`);
+  }
   return img;
 }
 

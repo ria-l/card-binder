@@ -69,4 +69,8 @@ function setEventListeners() {
   ui.addShowHideToggle('grid-btn', 'grid-dropdown');
   ui.addShowHideToggle('size-btn', 'size-dropdown');
   ui.addShowHideToggle('sort-btn', 'sort-dropdown');
+  const borderCheckbox = document.getElementById('toggle-borders');
+  borderCheckbox.addEventListener('change', function () {
+    ui.toggleBorders();
+  });
 }
