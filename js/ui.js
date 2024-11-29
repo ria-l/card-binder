@@ -248,7 +248,7 @@ export function toggleBorders() {
         `linear-gradient(to bottom right, ${borderColors}) border-box`
       );
       const cardSize = parseInt(document.getElementById('sizeDropdown').value);
-      e.style.setProperty('border', `${cardSize / 15}px solid transparent`);
+      e.style.setProperty('border', `${cardSize / 20}px solid transparent`);
     });
   } else {
     document.querySelectorAll('.card').forEach((e) => {
