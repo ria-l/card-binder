@@ -6,7 +6,7 @@ import * as sort from './sort.js';
  * stores binder, set, and header gsheet data in localstorage
  * @param data all data from sheet
  */
-export function storeData(data) {
+export function storeData(data: string[]) {
   const header = data[0];
   localStorage.setItem('header', header);
 

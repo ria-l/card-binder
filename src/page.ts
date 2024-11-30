@@ -23,9 +23,9 @@ function createTables(
 ): HTMLTableElement[] | HTMLImageElement[] | Text[] {
   const rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
   const cols = parseInt(document.getElementById('colDropdown').selectedIndex);
-  const allTables = [];
-  let currentTable;
-  let currentRow;
+  const allTables: HTMLTableElement[] | HTMLImageElement[] | Text = [];
+  let currentTable: HTMLTableElement;
+  let currentRow: HTMLTableRowElement;
 
   cardTags.forEach((tag, i) => {
     if (!rows || !cols) {
@@ -215,8 +215,8 @@ export function generateBorderColors(
   cardtype: string,
   energytype: string
 ): string {
-  const energyColors = constants.ENERGY_COLORS[energytype];
-  const cardColors = constants.CARD_COLORS[cardtype];
+  const energyColors = constants.ENERGY_COLORS[energytype as keyof typeof constants.ENERGY_COLORS];
+  const cardColors = constants.CARD_COLORS[cardtype as keyof typeof constants.CARD_COLORS];
   if (cardtype == 'basic') {
     return `${energyColors},${energyColors},${energyColors[1]}`;
   } else if (cardtype != 'basic') {

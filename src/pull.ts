@@ -95,7 +95,7 @@ function clearDisplay() {
  * TODO: can refactor this more
  * @param n number of cards to pull
  */
-function pullCards(n) {
+function pullCards(n: number) {
   const container = localStorage.getItem('container');
   let data;
   if (container == 'binder' || !container) {
@@ -105,7 +105,9 @@ function pullCards(n) {
     const setname = localStorage.getItem('setname');
     data = JSON.parse(localStorage.getItem(setname));
   }
-  const cardPool = data.map((row) => constants.getMetadatum('filename', row));
+  const cardPool = data.map((row: string[]) =>
+    constants.getMetadatum('filename', row)
+  );
   let pulled = [];
   for (let i = 0; i < n; i++) {
     // max val is length - 1
@@ -121,9 +123,9 @@ function pullCards(n) {
  * @param data data for the current binder/set
  */
 function processPulled(pulled: number, data: string[]) {
-  const newCards = [];
-  const currentPulls = [];
-  pulled.forEach((card) => {
+  const newCards: string[] = [];
+  const currentPulls: string[] = [];
+  pulled.forEach((card: number) => {
     const binderRow = data[card];
     const { title, dir, filename, caught, borderColors } =
       getCardMetadata(binderRow);

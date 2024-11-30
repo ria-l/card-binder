@@ -1,7 +1,7 @@
 // TODO: move functions to utils?
 export const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 /**
- * Gets cell value for a given row and column
+ * gets cell value for a given row and column
  * @param columnTitle just the title
  * @param row full row
  * @param header full header
@@ -62,7 +62,7 @@ export const CARD_COLORS = {
     ],
 };
 /**
- *
+ * generates fill gradient hex colors
  * @param visuals eg illust, full art
  * @param energytype eg grass, water
  * @returns hex codes for applicable gradient

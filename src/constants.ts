@@ -18,7 +18,9 @@ export function getMetadatum(
   if (!header) {
     header = localStorage.getItem('header').split(',');
   }
-  let index = header.indexOf(_headerTextMap[columnTitle]);
+  let index = header.indexOf(
+    _headerTextMap[columnTitle as keyof typeof _headerTextMap]
+  );
   return row[index];
 }
 
@@ -79,7 +81,7 @@ export const CARD_COLORS = {
  * @returns hex codes for applicable gradient
  */
 export function FILL_COLORS(visuals: string, energytype: string): string {
-  const energyColors = ENERGY_COLORS[energytype];
+  const energyColors = ENERGY_COLORS[energytype as keyof typeof ENERGY_COLORS];
   const gradients = {
     normal: `#f9f9f9,white,#f9f9f9,white,#f9f9f9`,
     gold: '#fef081,#c69221,#fef081,#c69221,#fef081,#c69221',
@@ -87,7 +89,7 @@ export function FILL_COLORS(visuals: string, energytype: string): string {
     'full art': `${energyColors},${energyColors[0]},white 75%,#f9f9f9,white,#f9f9f9`,
     illust: `${energyColors},${energyColors},${energyColors}`,
   };
-  return gradients[visuals];
+  return gradients[visuals as keyof typeof gradients];
 }
 
 export const BG_FILES = [
