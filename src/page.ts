@@ -21,8 +21,12 @@ export function fillPage() {
 function createTables(
   cardTags: HTMLImageElement[]
 ): HTMLTableElement[] | HTMLImageElement[] | Text[] {
-  const rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
-  const cols = parseInt(document.getElementById('colDropdown').selectedIndex);
+  const rows = parseInt(
+    (document.getElementById('rowDropdown') as HTMLSelectElement).selectedIndex
+  );
+  const cols = parseInt(
+    (document.getElementById('colDropdown') as HTMLSelectElement).selectedIndex
+  );
   const allTables: HTMLTableElement[] | HTMLImageElement[] | Text = [];
   let currentTable: HTMLTableElement;
   let currentRow: HTMLTableRowElement;
@@ -89,7 +93,9 @@ function createTables(
  * @returns img elements for owned cards in the data
  */
 function createCardTags(data: string[]): HTMLImageElement[] {
-  const cardSize = document.getElementById('sizeDropdown').value;
+  const cardSize = (
+    document.getElementById('sizeDropdown') as HTMLSelectElement
+  ).value;
   const tags = [];
   const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   for (let rowNum = 0; rowNum < data.length; rowNum++) {
@@ -147,7 +153,7 @@ function generateImgTag(
   img.classList.add('card');
   img.setAttribute('card-type', cardtype);
   img.setAttribute('energy-type', energytype);
-  if (document.getElementById('toggle-borders').checked) {
+  if ((document.getElementById('toggle-borders') as HTMLInputElement).checked) {
     const borderColors = generateBorderColors(cardtype, energytype);
     img.style.background = `linear-gradient(to bottom right, ${borderColors}) border-box`;
     img.style.setProperty('border', `${cardSize / 15}px solid transparent`);

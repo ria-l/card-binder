@@ -58,8 +58,8 @@ function generateGridDropdown(gridCol, gridRow) {
         }
     }
     // sets new values
-    document.getElementById('colDropdown').selectedIndex = gridCol;
-    document.getElementById('rowDropdown').selectedIndex = gridRow;
+    colDropdown.selectedIndex = gridCol;
+    rowDropdown.selectedIndex = gridRow;
 }
 /**
  * saves new grid and refills page
@@ -118,22 +118,16 @@ export function generateSizeDropdown(cardSize) {
 export function resizeCards() {
     const cardSize = parseInt(document.getElementById('sizeDropdown').value);
     localStorage.setItem('cardSize', cardSize.toString());
-    document
-        .querySelectorAll('.card')
-        .forEach((e) => (e.style.width = `${cardSize}px`));
-    document
-        .querySelectorAll('.card')
-        .forEach((e) => (e.style.height = `${cardSize * 1.4}px`));
-    document
-        .querySelectorAll('.card')
-        .forEach((e) => (e.style.borderRadius = `${cardSize / 20}px`));
-    // HTMLCollection can't use foreach
-    const ph = document.getElementsByClassName('placeholder');
-    for (let i = 0, len = ph.length; i < len; i++) {
-        ph[i].style.width = `${cardSize}px`;
-        ph[i].style.height = `${cardSize * 1.4}px`;
-        ph[i].style.borderRadius = `${cardSize / 20}px`;
-        ph[i].style.border = `${cardSize / 15}px solid transparent`;
+    for (const card of document.getElementsByClassName('card')) {
+        card.style.width = `${cardSize}px`;
+        card.style.height = `${cardSize * 1.4}px`;
+        card.style.borderRadius = `${cardSize / 20}px`;
+    }
+    for (const ph of document.getElementsByClassName('placeholder')) {
+        ph.style.width = `${cardSize}px`;
+        ph.style.height = `${cardSize * 1.4}px`;
+        ph.style.borderRadius = `${cardSize / 20}px`;
+        ph.style.border = `${cardSize / 15}px solid transparent`;
     }
 }
 /**
@@ -279,20 +273,20 @@ export function addShowHideToggle(btnId, dropdownId) {
  */
 export function toggleBorders() {
     if (document.getElementById('toggle-borders').checked) {
-        document.querySelectorAll('.card').forEach((e) => {
-            const en = e.getAttribute('energy-type');
-            const ca = e.getAttribute('card-type');
+        for (const card of document.getElementsByClassName('card')) {
+            const en = card.getAttribute('energy-type');
+            const ca = card.getAttribute('card-type');
             const borderColors = page.generateBorderColors(ca, en);
-            e.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
+            card.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
             const cardSize = parseInt(document.getElementById('sizeDropdown').value);
-            e.style.setProperty('border', `${cardSize / 20}px solid transparent`);
-        });
+            card.style.setProperty('border', `${cardSize / 20}px solid transparent`);
+        }
     }
     else {
-        document.querySelectorAll('.card').forEach((e) => {
-            e.style.removeProperty('background');
-            e.style.removeProperty('border');
-        });
+        for (const card of document.getElementsByClassName('card')) {
+            card.style.removeProperty('background');
+            card.style.removeProperty('border');
+        }
     }
 }
 //# sourceMappingURL=ui.js.map

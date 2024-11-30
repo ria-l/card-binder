@@ -45,8 +45,12 @@ function initializeGridValues(): { gridCol: number; gridRow: number } {
  * @param gridRow
  */
 function generateGridDropdown(gridCol: number, gridRow: number) {
-  const colDropdown = document.getElementById('colDropdown');
-  const rowDropdown = document.getElementById('rowDropdown');
+  const colDropdown = document.getElementById(
+    'colDropdown'
+  ) as HTMLSelectElement;
+  const rowDropdown = document.getElementById(
+    'rowDropdown'
+  ) as HTMLSelectElement;
   if (rowDropdown.options.length == 0) {
     for (let i = 0; i < 13; i++) {
       const option = document.createElement('option');
@@ -62,8 +66,8 @@ function generateGridDropdown(gridCol: number, gridRow: number) {
     }
   }
   // sets new values
-  document.getElementById('colDropdown').selectedIndex = gridCol;
-  document.getElementById('rowDropdown').selectedIndex = gridRow;
+  colDropdown.selectedIndex = gridCol;
+  rowDropdown.selectedIndex = gridRow;
 }
 
 /**
@@ -72,11 +76,11 @@ function generateGridDropdown(gridCol: number, gridRow: number) {
 export function updateGrid() {
   localStorage.setItem(
     'row',
-    document.getElementById('rowDropdown').selectedIndex
+    (document.getElementById('rowDropdown') as HTMLSelectElement).selectedIndex
   );
   localStorage.setItem(
     'col',
-    document.getElementById('colDropdown').selectedIndex
+    (document.getElementById('colDropdown') as HTMLSelectElement).selectedIndex
   );
   page.fillPage();
 }
@@ -101,7 +105,9 @@ function initializeSizeValue(): number {
  * @param cardSize
  */
 export function generateSizeDropdown(cardSize: number) {
-  const sizeDropdown = document.getElementById('sizeDropdown');
+  const sizeDropdown = document.getElementById(
+    'sizeDropdown'
+  ) as HTMLSelectElement;
   if (sizeDropdown.options.length == 0) {
     const sizeDropdown = document.getElementById('sizeDropdown');
     for (let i = 1; i < 11; i++) {
@@ -130,25 +136,25 @@ export function generateSizeDropdown(cardSize: number) {
  * saves new size and resizes cards and placeholders
  */
 export function resizeCards() {
-  const cardSize = parseInt(document.getElementById('sizeDropdown').value);
+  const cardSize = parseInt(
+    (document.getElementById('sizeDropdown') as HTMLSelectElement).value
+  );
   localStorage.setItem('cardSize', cardSize.toString());
-  document
-    .querySelectorAll('.card')
-    .forEach((e) => (e.style.width = `${cardSize}px`));
-  document
-    .querySelectorAll('.card')
-    .forEach((e) => (e.style.height = `${cardSize * 1.4}px`));
-  document
-    .querySelectorAll('.card')
-    .forEach((e) => (e.style.borderRadius = `${cardSize / 20}px`));
+  for (const card of document.getElementsByClassName(
+    'card'
+  ) as HTMLCollectionOf<HTMLElement>) {
+    card.style.width = `${cardSize}px`;
+    card.style.height = `${cardSize * 1.4}px`;
+    card.style.borderRadius = `${cardSize / 20}px`;
+  }
 
-  // HTMLCollection can't use foreach
-  const ph = document.getElementsByClassName('placeholder');
-  for (let i = 0, len = ph.length; i < len; i++) {
-    ph[i].style.width = `${cardSize}px`;
-    ph[i].style.height = `${cardSize * 1.4}px`;
-    ph[i].style.borderRadius = `${cardSize / 20}px`;
-    ph[i].style.border = `${cardSize / 15}px solid transparent`;
+  for (const ph of document.getElementsByClassName(
+    'placeholder'
+  ) as HTMLCollectionOf<HTMLElement>) {
+    ph.style.width = `${cardSize}px`;
+    ph.style.height = `${cardSize * 1.4}px`;
+    ph.style.borderRadius = `${cardSize / 20}px`;
+    ph.style.border = `${cardSize / 15}px solid transparent`;
   }
 }
 
@@ -231,7 +237,9 @@ function countPulled(): number {
  */
 export function selectNewBinder(fillpage: string) {
   localStorage.setItem('container', 'binder');
-  const binderDropdown = document.getElementById('binderDropdown');
+  const binderDropdown = document.getElementById(
+    'binderDropdown'
+  ) as HTMLSelectElement;
   const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
   localStorage.setItem('bindername', bindername);
   highlightBinder();
@@ -249,7 +257,9 @@ export function selectNewBinder(fillpage: string) {
  */
 export function selectNewSet(fillpage: string) {
   localStorage.setItem('container', 'set');
-  const setDropdown = document.getElementById('setDropdown');
+  const setDropdown = document.getElementById(
+    'setDropdown'
+  ) as HTMLSelectElement;
   const setname = setDropdown.options[setDropdown.selectedIndex].text;
   localStorage.setItem('setname', setname);
   highlightSet();
@@ -303,22 +313,28 @@ export function addShowHideToggle(btnId: string, dropdownId: string) {
  * adds or removes borders in binder view based on checkbox
  */
 export function toggleBorders() {
-  if (document.getElementById('toggle-borders').checked) {
-    document.querySelectorAll('.card').forEach((e) => {
-      const en = e.getAttribute('energy-type');
-      const ca = e.getAttribute('card-type');
+  if ((document.getElementById('toggle-borders') as HTMLInputElement).checked) {
+    for (const card of document.getElementsByClassName(
+      'card'
+    ) as HTMLCollectionOf<HTMLElement>) {
+      const en = card.getAttribute('energy-type');
+      const ca = card.getAttribute('card-type');
       const borderColors = page.generateBorderColors(ca, en);
-      e.style.setProperty(
+      card.style.setProperty(
         'background',
         `linear-gradient(to bottom right, ${borderColors}) border-box`
       );
-      const cardSize = parseInt(document.getElementById('sizeDropdown').value);
-      e.style.setProperty('border', `${cardSize / 20}px solid transparent`);
-    });
+      const cardSize = parseInt(
+        (document.getElementById('sizeDropdown') as HTMLSelectElement).value
+      );
+      card.style.setProperty('border', `${cardSize / 20}px solid transparent`);
+    }
   } else {
-    document.querySelectorAll('.card').forEach((e) => {
-      e.style.removeProperty('background');
-      e.style.removeProperty('border');
-    });
+    for (const card of document.getElementsByClassName(
+      'card'
+    ) as HTMLCollectionOf<HTMLElement>) {
+      card.style.removeProperty('background');
+      card.style.removeProperty('border');
+    }
   }
 }

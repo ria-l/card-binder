@@ -5,7 +5,8 @@ import * as store from './store.js';
 import * as ui from './ui.js';
 window.onload = () => {
     ui.setBg();
-    document.getElementById('form').action = constants.APPSCRIPT_URL;
+    document.getElementById('form').action =
+        constants.APPSCRIPT_URL;
     if (localStorage.getItem('pull_status') == 'SUCCESS') {
         initializePull();
     }
@@ -214,7 +215,8 @@ function addToList(title) {
 function processNewCards(newCards) {
     updateNewCardsInCache(newCards);
     ui.createProgressBar();
-    document.getElementById('filenamesInput').value = JSON.stringify(newCards);
+    document.getElementById('filenamesInput').value =
+        JSON.stringify(newCards);
     document.getElementById('form').submit();
 }
 /**

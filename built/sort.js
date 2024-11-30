@@ -4,7 +4,8 @@ import * as page from './page.js';
  * sorts and redisplays current cards based on selected sort value
  */
 export function newSort() {
-    const sortBy = document.getElementById('sortDropdown').value;
+    const sortBy = document.getElementById('sortDropdown')
+        .value;
     const data = page.getDataToDisplay();
     const container = localStorage.getItem('container') || 'binder';
     const header = JSON.parse(localStorage.getItem('header') ?? '[]');

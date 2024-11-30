@@ -6,7 +6,8 @@ import * as ui from './ui.js';
 
 window.onload = () => {
   ui.setBg();
-  document.getElementById('form').action = constants.APPSCRIPT_URL;
+  (document.getElementById('form') as HTMLFormElement).action =
+    constants.APPSCRIPT_URL;
   if (localStorage.getItem('pull_status') == 'SUCCESS') {
     initializePull();
   } else {
@@ -242,8 +243,9 @@ function addToList(title: string) {
 function processNewCards(newCards: string[]) {
   updateNewCardsInCache(newCards);
   ui.createProgressBar();
-  document.getElementById('filenamesInput').value = JSON.stringify(newCards);
-  document.getElementById('form').submit();
+  (document.getElementById('filenamesInput') as HTMLInputElement).value =
+    JSON.stringify(newCards);
+  (document.getElementById('form') as HTMLFormElement).submit();
 }
 
 /**

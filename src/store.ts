@@ -12,12 +12,9 @@ export function storeData(data: string[]) {
 
   // store container names
   const binderCol = header.indexOf('binder');
-  let bindernames = data.filter((row) => row[binderCol] != 'binder');
-  bindernames = new Set(bindernames.map((row) => row[binderCol]));
-
+  const bindernames = new Set(data.filter(row => row[binderCol] !== 'binder').map(row => row[binderCol]));
   const setCol = header.indexOf('set');
-  let setnames = data.filter((row) => row[setCol] != 'set');
-  setnames = new Set(setnames.map((row) => row[setCol]));
+  const setnames = new Set(data.filter(row => row[setCol] !== 'set').map(row => row[setCol]));
 
   localStorage.setItem(`bindernames`, JSON.stringify([...bindernames]));
   localStorage.setItem(`setnames`, JSON.stringify([...setnames]));
