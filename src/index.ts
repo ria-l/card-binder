@@ -1,3 +1,5 @@
+// TODO: this whole module needs to be reorganized/split into other modules
+
 import * as app from './app.js';
 import * as page from './page.js';
 import * as sort from './sort.js';
@@ -15,6 +17,9 @@ window.onload = () => {
   setEventListeners();
 };
 
+/**
+ * loads all the visual elements for the index page
+ */
 function initializeIndex() {
   console.log('loading from storage');
   page.fillPage();
@@ -30,12 +35,18 @@ function initializeIndex() {
   localStorage.setItem('page_status', 'SUCCESS');
 }
 
+/**
+ * wrapper method that fetches data and then loads UI
+ */
 async function fetchAndInitializeIndex() {
   const data = await app.fetchData();
   store.storeData(data.data);
   initializeIndex();
 }
 
+/**
+ * adds event listeners to navbar elements
+ */
 function setEventListeners() {
   const binderDropdown = document.getElementById('binderDropdown');
   binderDropdown.addEventListener('change', function () {

@@ -1,5 +1,8 @@
 import * as constants from './constants.js';
 
+/**
+ * wrapper method that calls functions needed to fill page with cards and placeholders
+ */
 export function fillPage() {
   const data = getDataToDisplay();
   const cardTags = createCardTags(data);
@@ -10,7 +13,14 @@ export function fillPage() {
   });
 }
 
-function createTables(cardTags) {
+/**
+ *
+ * @param cardTags generated img elements
+ * @returns generated tables or cards (if no grid) to display
+ */
+function createTables(
+  cardTags: HTMLImageElement[]
+): HTMLTableElement[] | HTMLImageElement[] | Text[] {
   const rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
   const cols = parseInt(document.getElementById('colDropdown').selectedIndex);
   const allTables = [];
@@ -73,7 +83,12 @@ function createTables(cardTags) {
   return allTables;
 }
 
-function createCardTags(data) {
+/**
+ *
+ * @param data JSON sheet data
+ * @returns img elements for owned cards in the data
+ */
+function createCardTags(data: string[]): HTMLImageElement[] {
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
   const header = localStorage.getItem('header').split(',');
@@ -105,7 +120,24 @@ function createCardTags(data) {
   return tags;
 }
 
-function generateImgTag(dir, filename, title, cardSize, cardtype, energytype) {
+/**
+ * generates image elements
+ * @param dir
+ * @param filename
+ * @param title
+ * @param cardSize
+ * @param cardtype
+ * @param energytype
+ * @returns
+ */
+function generateImgTag(
+  dir: string,
+  filename: string,
+  title: string,
+  cardSize: string,
+  cardtype: string,
+  energytype: string
+): HTMLImageElement {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   img.title = title;
@@ -126,7 +158,12 @@ function generateImgTag(dir, filename, title, cardSize, cardtype, energytype) {
   return img;
 }
 
-function displayZoom(dir, filename) {
+/**
+ * displays given card zoomed-in in the center of the screen
+ * @param dir
+ * @param filename
+ */
+function displayZoom(dir: string, filename: string) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   const zoomSpan = document.getElementById('zoom-span');
@@ -142,7 +179,20 @@ function displayZoom(dir, filename) {
   zoomSpan.appendChild(img);
 }
 
-function generatePlaceholder(cardSize, title, borderColors, fillColors) {
+/**
+ * generates placeholders for un-owned cards
+ * @param cardSize
+ * @param title
+ * @param borderColors hex values
+ * @param fillColors hex values
+ * @returns
+ */
+function generatePlaceholder(
+  cardSize: number,
+  title: string,
+  borderColors: string,
+  fillColors: string
+) {
   // note that there are a couple other styles in the css file
   const ph = document.createElement('span');
   ph.className = 'placeholder';
@@ -155,7 +205,16 @@ function generatePlaceholder(cardSize, title, borderColors, fillColors) {
   return ph;
 }
 
-export function generateBorderColors(cardtype, energytype) {
+/**
+ * generates hex string for gradient border
+ * @param cardtype v, vmax, ex, etc
+ * @param energytype grass, water, etc
+ * @returns
+ */
+export function generateBorderColors(
+  cardtype: string,
+  energytype: string
+): string {
   const energyColors = constants.ENERGY_COLORS[energytype];
   const cardColors = constants.CARD_COLORS[cardtype];
   if (cardtype == 'basic') {
@@ -165,7 +224,11 @@ export function generateBorderColors(cardtype, energytype) {
   }
 }
 
-export function getDataToDisplay() {
+/**
+ * retrieve stored data for the active binder or set (also in storage)
+ * @returns data for the given binder/set
+ */
+export function getDataToDisplay(): string[] {
   const binderName = localStorage.getItem('bindername');
   const setName = localStorage.getItem('setname');
   const container = localStorage.getItem('container');

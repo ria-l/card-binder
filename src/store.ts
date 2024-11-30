@@ -1,8 +1,10 @@
+// TODO: refactor
+
 import * as sort from './sort.js';
 
 /**
- *
- * @param {json obj} data all data from sheet
+ * stores binder, set, and header gsheet data in localstorage
+ * @param data all data from sheet
  */
 export function storeData(data) {
   const header = data[0];

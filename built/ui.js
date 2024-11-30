@@ -1,35 +1,29 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.setBg = setBg;
-exports.initializeGridAndSize = initializeGridAndSize;
-exports.updateGrid = updateGrid;
-exports.generateSizeDropdown = generateSizeDropdown;
-exports.resizeCards = resizeCards;
-exports.generateBinderDropdown = generateBinderDropdown;
-exports.generateSetDropdown = generateSetDropdown;
-exports.createProgressBar = createProgressBar;
-exports.selectNewBinder = selectNewBinder;
-exports.selectNewSet = selectNewSet;
-exports.highlightBinder = highlightBinder;
-exports.highlightSet = highlightSet;
-exports.addShowHideToggle = addShowHideToggle;
-exports.toggleBorders = toggleBorders;
-var constants = require("./constants.js");
-var page = require("./page.js");
-function setBg() {
-    var bgSpan = document.getElementById('bgSpan');
-    var x = Math.floor(Math.random() * constants.BG_FILES.length);
-    bgSpan.style.backgroundImage = "url('img/0_bg/".concat(constants.BG_FILES[x], "')");
+import * as constants from './constants.js';
+import * as page from './page.js';
+/**
+ * sets background image randomly
+ */
+export function setBg() {
+    const bgSpan = document.getElementById('bgSpan');
+    const x = Math.floor(Math.random() * constants.BG_FILES.length);
+    bgSpan.style.backgroundImage = `url('img/0_bg/${constants.BG_FILES[x]}')`;
 }
-function initializeGridAndSize() {
-    var cardSize = initializeSizeValue();
+/**
+ * wrapper to set initial grid and size values
+ */
+export function initializeGridAndSize() {
+    const cardSize = initializeSizeValue();
     generateSizeDropdown(cardSize);
-    var _a = initializeGridValues(), gridCol = _a.gridCol, gridRow = _a.gridRow;
+    let { gridCol, gridRow } = initializeGridValues();
     generateGridDropdown(gridCol, gridRow);
 }
+/**
+ * gets stored grid values or sets defaults
+ * @returns
+ */
 function initializeGridValues() {
-    var gridCol = parseInt(localStorage.getItem('col'));
-    var gridRow = parseInt(localStorage.getItem('row'));
+    let gridCol = parseInt(localStorage.getItem('col'));
+    let gridRow = parseInt(localStorage.getItem('row'));
     // sets defaults if not in storage
     if (isNaN(gridCol)) {
         gridCol = 0;
@@ -39,20 +33,25 @@ function initializeGridValues() {
     }
     localStorage.setItem('row', gridRow);
     localStorage.setItem('col', gridCol);
-    return { gridCol: gridCol, gridRow: gridRow };
+    return { gridCol, gridRow };
 }
+/**
+ * creates and displays grid dropdown elements
+ * @param gridCol
+ * @param gridRow
+ */
 function generateGridDropdown(gridCol, gridRow) {
-    var colDropdown = document.getElementById('colDropdown');
-    var rowDropdown = document.getElementById('rowDropdown');
+    const colDropdown = document.getElementById('colDropdown');
+    const rowDropdown = document.getElementById('rowDropdown');
     if (rowDropdown.options.length == 0) {
-        for (var i = 0; i < 13; i++) {
-            var option = document.createElement('option');
+        for (let i = 0; i < 13; i++) {
+            const option = document.createElement('option');
             option.value = i;
             option.textContent = i;
             colDropdown.appendChild(option);
         }
-        for (var i = 0; i < 13; i++) {
-            var option = document.createElement('option');
+        for (let i = 0; i < 13; i++) {
+            const option = document.createElement('option');
             option.value = i;
             option.textContent = i;
             rowDropdown.appendChild(option);
@@ -65,13 +64,17 @@ function generateGridDropdown(gridCol, gridRow) {
 /**
  * saves new grid and refills page
  */
-function updateGrid() {
+export function updateGrid() {
     localStorage.setItem('row', document.getElementById('rowDropdown').selectedIndex);
     localStorage.setItem('col', document.getElementById('colDropdown').selectedIndex);
     page.fillPage();
 }
+/**
+ * gets stored card size value or sets default
+ * @returns
+ */
 function initializeSizeValue() {
-    var cardSize = parseInt(localStorage.getItem('cardSize'));
+    let cardSize = parseInt(localStorage.getItem('cardSize'));
     // sets default if not in storage
     if (isNaN(cardSize)) {
         cardSize = 150;
@@ -80,25 +83,29 @@ function initializeSizeValue() {
     localStorage.setItem('cardSize', cardSize);
     return cardSize;
 }
-function generateSizeDropdown(cardSize) {
-    var sizeDropdown = document.getElementById('sizeDropdown');
+/**
+ * creates and displays card size dropdown
+ * @param cardSize
+ */
+export function generateSizeDropdown(cardSize) {
+    const sizeDropdown = document.getElementById('sizeDropdown');
     if (sizeDropdown.options.length == 0) {
-        var sizeDropdown_1 = document.getElementById('sizeDropdown');
-        for (var i = 1; i < 11; i++) {
-            var option = document.createElement('option');
+        const sizeDropdown = document.getElementById('sizeDropdown');
+        for (let i = 1; i < 11; i++) {
+            const option = document.createElement('option');
             option.value = i * 50;
             option.textContent = i * 50;
-            sizeDropdown_1.appendChild(option);
+            sizeDropdown.appendChild(option);
         }
-        for (var i = 1; i < 20; i++) {
-            var option = document.createElement('option');
+        for (let i = 1; i < 20; i++) {
+            const option = document.createElement('option');
             option.value = i * 10;
             option.textContent = i * 10;
-            sizeDropdown_1.appendChild(option);
+            sizeDropdown.appendChild(option);
         }
     }
     // sets value
-    for (var i = 0; i < sizeDropdown.options.length; i++) {
+    for (let i = 0; i < sizeDropdown.options.length; i++) {
         if (sizeDropdown.options[i].value == cardSize.toString()) {
             sizeDropdown.options[i].selected = true;
             break;
@@ -106,37 +113,39 @@ function generateSizeDropdown(cardSize) {
     }
 }
 /**
- * saves new size and resizes cards
+ * saves new size and resizes cards and placeholders
  */
-function resizeCards() {
-    var cardSize = parseInt(document.getElementById('sizeDropdown').value);
+export function resizeCards() {
+    const cardSize = parseInt(document.getElementById('sizeDropdown').value);
     localStorage.setItem('cardSize', cardSize);
     document
         .querySelectorAll('.card')
-        .forEach(function (e) { return (e.style.width = "".concat(cardSize, "px")); });
+        .forEach((e) => (e.style.width = `${cardSize}px`));
     document
         .querySelectorAll('.card')
-        .forEach(function (e) { return (e.style.height = "".concat(cardSize * 1.4, "px")); });
+        .forEach((e) => (e.style.height = `${cardSize * 1.4}px`));
     document
         .querySelectorAll('.card')
-        .forEach(function (e) { return (e.style.borderRadius = "".concat(cardSize / 20, "px")); });
+        .forEach((e) => (e.style.borderRadius = `${cardSize / 20}px`));
     // HTMLCollection can't use foreach
-    var ph = document.getElementsByClassName('placeholder');
-    for (var i = 0, len = ph.length; i < len; i++) {
-        ph[i].style.width = "".concat(cardSize, "px");
-        ph[i].style.height = "".concat(cardSize * 1.4, "px");
-        ph[i].style.borderRadius = "".concat(cardSize / 20, "px");
-        ph[i].style.border = "".concat(cardSize / 15, "px solid transparent");
+    const ph = document.getElementsByClassName('placeholder');
+    for (let i = 0, len = ph.length; i < len; i++) {
+        ph[i].style.width = `${cardSize}px`;
+        ph[i].style.height = `${cardSize * 1.4}px`;
+        ph[i].style.borderRadius = `${cardSize / 20}px`;
+        ph[i].style.border = `${cardSize / 15}px solid transparent`;
     }
 }
-function generateBinderDropdown() {
-    var binderDropdown = document.getElementById('binderDropdown');
-    var bindernames = JSON.parse(localStorage.getItem('bindernames'));
-    var defaultbinder = localStorage.getItem('bindername');
+/**
+ * creates and displays binder dropdown
+ */
+export function generateBinderDropdown() {
+    const binderDropdown = document.getElementById('binderDropdown');
+    const bindernames = JSON.parse(localStorage.getItem('bindernames'));
+    const defaultbinder = localStorage.getItem('bindername');
     binderDropdown.innerHTML = '';
-    for (var _i = 0, bindernames_1 = bindernames; _i < bindernames_1.length; _i++) {
-        var binder = bindernames_1[_i];
-        var option = document.createElement('option');
+    for (let binder of bindernames) {
+        const option = document.createElement('option');
         option.value = binder;
         option.textContent = binder;
         if (binder == defaultbinder) {
@@ -145,14 +154,16 @@ function generateBinderDropdown() {
         binderDropdown.appendChild(option);
     }
 }
-function generateSetDropdown() {
-    var setDropdown = document.getElementById('setDropdown');
-    var setnames = JSON.parse(localStorage.getItem('setnames'));
-    var defaultset = localStorage.getItem('setname');
+/**
+ * creates and displays set dropdown
+ */
+export function generateSetDropdown() {
+    const setDropdown = document.getElementById('setDropdown');
+    const setnames = JSON.parse(localStorage.getItem('setnames'));
+    const defaultset = localStorage.getItem('setname');
     setDropdown.innerHTML = '';
-    for (var _i = 0, setnames_1 = setnames; _i < setnames_1.length; _i++) {
-        var set = setnames_1[_i];
-        var option = document.createElement('option');
+    for (let set of setnames) {
+        const option = document.createElement('option');
         if (set != 'set') {
             option.value = set;
             option.textContent = set;
@@ -163,14 +174,17 @@ function generateSetDropdown() {
         setDropdown.appendChild(option);
     }
 }
-function createProgressBar() {
-    var span = document.getElementById('progressSpan');
-    var newBar = document.createElement('progress');
-    var max = page.getDataToDisplay().length;
-    var numPulled = countPulled();
-    var ratio = document.createTextNode("".concat(numPulled, "/").concat(max, " "));
-    var percent = document.createTextNode(" ".concat(((numPulled / max) * 100).toFixed(2), "%"));
-    var newSpan = document.createElement('span');
+/**
+ * creates and displays progress bar for current binder/set
+ */
+export function createProgressBar() {
+    const span = document.getElementById('progressSpan');
+    const newBar = document.createElement('progress');
+    const max = page.getDataToDisplay().length;
+    const numPulled = countPulled();
+    const ratio = document.createTextNode(`${numPulled}/${max} `);
+    const percent = document.createTextNode(` ${((numPulled / max) * 100).toFixed(2)}%`);
+    const newSpan = document.createElement('span');
     newBar.max = max;
     newBar.value = numPulled;
     newSpan.id = 'progressSpan';
@@ -179,16 +193,26 @@ function createProgressBar() {
     newSpan.appendChild(percent);
     span.replaceWith(newSpan);
 }
+/**
+ * counts number of owned cards in the current binder/set
+ * @returns
+ */
 function countPulled() {
-    var data = page.getDataToDisplay();
-    var header = localStorage.getItem('header').split(',');
-    var filtered = data.filter(function (row) { return row[header.indexOf('caught')] == 'x'; });
+    const data = page.getDataToDisplay();
+    const header = localStorage.getItem('header').split(',');
+    const filtered = data.filter((row) => row[header.indexOf('caught')] == 'x');
     return filtered.length;
 }
-function selectNewBinder(fillpage) {
+/**
+ * updates storage to newly selected binder, fills page if needed, and creates progress bar
+ * TODO: refactor
+ * TODO: make this boolean
+ * @param fillpage whether the function is being called to fill the page or not
+ */
+export function selectNewBinder(fillpage) {
     localStorage.setItem('container', 'binder');
-    var binderDropdown = document.getElementById('binderDropdown');
-    var bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
+    const binderDropdown = document.getElementById('binderDropdown');
+    const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
     localStorage.setItem('bindername', bindername);
     highlightBinder();
     if (fillpage) {
@@ -196,10 +220,16 @@ function selectNewBinder(fillpage) {
     }
     createProgressBar();
 }
-function selectNewSet(fillpage) {
+/**
+ * updates storage to newly selected binder, fills page if needed, and creates progress bar
+ * TODO: refactor
+ * TODO: make this boolean
+ * @param fillpage whether the function is being called to fill the page or not
+ */
+export function selectNewSet(fillpage) {
     localStorage.setItem('container', 'set');
-    var setDropdown = document.getElementById('setDropdown');
-    var setname = setDropdown.options[setDropdown.selectedIndex].text;
+    const setDropdown = document.getElementById('setDropdown');
+    const setname = setDropdown.options[setDropdown.selectedIndex].text;
     localStorage.setItem('setname', setname);
     highlightSet();
     if (fillpage) {
@@ -207,23 +237,36 @@ function selectNewSet(fillpage) {
     }
     createProgressBar();
 }
-function highlightBinder() {
-    var binderDrop = document.getElementById('binderDropdown');
+/**
+ * highlights or unhighlights binder dropdown based on what was selected
+ * TODO: refactor
+ */
+export function highlightBinder() {
+    const binderDrop = document.getElementById('binderDropdown');
     binderDrop.classList.add('highlight');
-    var setDrop = document.getElementById('setDropdown');
+    const setDrop = document.getElementById('setDropdown');
     setDrop.classList.remove('highlight');
 }
-function highlightSet() {
-    var setDrop = document.getElementById('setDropdown');
+/**
+ * highlights or unhighlights set dropdown based on what was selected
+ * TODO: refactor
+ */
+export function highlightSet() {
+    const setDrop = document.getElementById('setDropdown');
     setDrop.classList.add('highlight');
-    var binderDrop = document.getElementById('binderDropdown');
+    const binderDrop = document.getElementById('binderDropdown');
     binderDrop.classList.remove('highlight');
 }
-function addShowHideToggle(btnId, dropdownId) {
+/**
+ * adds event listener that shows or hides navbar dropdowns based on what was clicked
+ * TODO: this is a mess
+ * @param btnId the clicked button
+ * @param dropdownId the dropdown to show
+ */
+export function addShowHideToggle(btnId, dropdownId) {
     document.getElementById(btnId).addEventListener('click', function () {
-        var arr = document.getElementsByClassName('dropdown-container');
-        for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
-            var item = arr_1[_i];
+        const arr = document.getElementsByClassName('dropdown-container');
+        for (let item of arr) {
             if (item.classList.contains('show') && item.id != dropdownId) {
                 item.classList.toggle('show');
             }
@@ -231,21 +274,25 @@ function addShowHideToggle(btnId, dropdownId) {
         document.getElementById(dropdownId).classList.toggle('show');
     });
 }
-function toggleBorders() {
+/**
+ * adds or removes borders in binder view based on checkbox
+ */
+export function toggleBorders() {
     if (document.getElementById('toggle-borders').checked) {
-        document.querySelectorAll('.card').forEach(function (e) {
-            var en = e.getAttribute('energy-type');
-            var ca = e.getAttribute('card-type');
-            var borderColors = page.generateBorderColors(ca, en);
-            e.style.setProperty('background', "linear-gradient(to bottom right, ".concat(borderColors, ") border-box"));
-            var cardSize = parseInt(document.getElementById('sizeDropdown').value);
-            e.style.setProperty('border', "".concat(cardSize / 20, "px solid transparent"));
+        document.querySelectorAll('.card').forEach((e) => {
+            const en = e.getAttribute('energy-type');
+            const ca = e.getAttribute('card-type');
+            const borderColors = page.generateBorderColors(ca, en);
+            e.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
+            const cardSize = parseInt(document.getElementById('sizeDropdown').value);
+            e.style.setProperty('border', `${cardSize / 20}px solid transparent`);
         });
     }
     else {
-        document.querySelectorAll('.card').forEach(function (e) {
+        document.querySelectorAll('.card').forEach((e) => {
             e.style.removeProperty('background');
             e.style.removeProperty('border');
         });
     }
 }
+//# sourceMappingURL=ui.js.map

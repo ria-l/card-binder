@@ -1,12 +1,18 @@
 import * as constants from './constants.js';
 import * as page from './page.js';
 
+/**
+ * sets background image randomly
+ */
 export function setBg() {
   const bgSpan = document.getElementById('bgSpan');
   const x = Math.floor(Math.random() * constants.BG_FILES.length);
   bgSpan.style.backgroundImage = `url('img/0_bg/${constants.BG_FILES[x]}')`;
 }
 
+/**
+ * wrapper to set initial grid and size values
+ */
 export function initializeGridAndSize() {
   const cardSize = initializeSizeValue();
   generateSizeDropdown(cardSize);
@@ -14,7 +20,11 @@ export function initializeGridAndSize() {
   generateGridDropdown(gridCol, gridRow);
 }
 
-function initializeGridValues() {
+/**
+ * gets stored grid values or sets defaults
+ * @returns
+ */
+function initializeGridValues(): { gridCol: number; gridRow: number } {
   let gridCol = parseInt(localStorage.getItem('col'));
   let gridRow = parseInt(localStorage.getItem('row'));
   // sets defaults if not in storage
@@ -29,7 +39,12 @@ function initializeGridValues() {
   return { gridCol, gridRow };
 }
 
-function generateGridDropdown(gridCol, gridRow) {
+/**
+ * creates and displays grid dropdown elements
+ * @param gridCol
+ * @param gridRow
+ */
+function generateGridDropdown(gridCol: number, gridRow: number) {
   const colDropdown = document.getElementById('colDropdown');
   const rowDropdown = document.getElementById('rowDropdown');
   if (rowDropdown.options.length == 0) {
@@ -66,7 +81,11 @@ export function updateGrid() {
   page.fillPage();
 }
 
-function initializeSizeValue() {
+/**
+ * gets stored card size value or sets default
+ * @returns
+ */
+function initializeSizeValue(): number {
   let cardSize = parseInt(localStorage.getItem('cardSize'));
   // sets default if not in storage
   if (isNaN(cardSize)) {
@@ -77,7 +96,11 @@ function initializeSizeValue() {
   return cardSize;
 }
 
-export function generateSizeDropdown(cardSize) {
+/**
+ * creates and displays card size dropdown
+ * @param cardSize
+ */
+export function generateSizeDropdown(cardSize: number) {
   const sizeDropdown = document.getElementById('sizeDropdown');
   if (sizeDropdown.options.length == 0) {
     const sizeDropdown = document.getElementById('sizeDropdown');
@@ -104,7 +127,7 @@ export function generateSizeDropdown(cardSize) {
 }
 
 /**
- * saves new size and resizes cards
+ * saves new size and resizes cards and placeholders
  */
 export function resizeCards() {
   const cardSize = parseInt(document.getElementById('sizeDropdown').value);
@@ -129,6 +152,9 @@ export function resizeCards() {
   }
 }
 
+/**
+ * creates and displays binder dropdown
+ */
 export function generateBinderDropdown() {
   const binderDropdown = document.getElementById('binderDropdown');
   const bindernames = JSON.parse(localStorage.getItem('bindernames'));
@@ -144,7 +170,9 @@ export function generateBinderDropdown() {
     binderDropdown.appendChild(option);
   }
 }
-
+/**
+ * creates and displays set dropdown
+ */
 export function generateSetDropdown() {
   const setDropdown = document.getElementById('setDropdown');
   const setnames = JSON.parse(localStorage.getItem('setnames'));
@@ -162,7 +190,9 @@ export function generateSetDropdown() {
     setDropdown.appendChild(option);
   }
 }
-
+/**
+ * creates and displays progress bar for current binder/set
+ */
 export function createProgressBar() {
   const span = document.getElementById('progressSpan');
   const newBar = document.createElement('progress');
@@ -182,14 +212,24 @@ export function createProgressBar() {
   span.replaceWith(newSpan);
 }
 
-function countPulled() {
+/**
+ * counts number of owned cards in the current binder/set
+ * @returns
+ */
+function countPulled(): number {
   const data = page.getDataToDisplay();
   const header = localStorage.getItem('header').split(',');
   const filtered = data.filter((row) => row[header.indexOf('caught')] == 'x');
   return filtered.length;
 }
 
-export function selectNewBinder(fillpage) {
+/**
+ * updates storage to newly selected binder, fills page if needed, and creates progress bar
+ * TODO: refactor
+ * TODO: make this boolean
+ * @param fillpage whether the function is being called to fill the page or not
+ */
+export function selectNewBinder(fillpage: string) {
   localStorage.setItem('container', 'binder');
   const binderDropdown = document.getElementById('binderDropdown');
   const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
@@ -201,7 +241,13 @@ export function selectNewBinder(fillpage) {
   createProgressBar();
 }
 
-export function selectNewSet(fillpage) {
+/**
+ * updates storage to newly selected binder, fills page if needed, and creates progress bar
+ * TODO: refactor
+ * TODO: make this boolean
+ * @param fillpage whether the function is being called to fill the page or not
+ */
+export function selectNewSet(fillpage: string) {
   localStorage.setItem('container', 'set');
   const setDropdown = document.getElementById('setDropdown');
   const setname = setDropdown.options[setDropdown.selectedIndex].text;
@@ -213,19 +259,35 @@ export function selectNewSet(fillpage) {
   createProgressBar();
 }
 
+/**
+ * highlights or unhighlights binder dropdown based on what was selected
+ * TODO: refactor
+ */
 export function highlightBinder() {
   const binderDrop = document.getElementById('binderDropdown');
   binderDrop.classList.add('highlight');
   const setDrop = document.getElementById('setDropdown');
   setDrop.classList.remove('highlight');
 }
+
+/**
+ * highlights or unhighlights set dropdown based on what was selected
+ * TODO: refactor
+ */
 export function highlightSet() {
   const setDrop = document.getElementById('setDropdown');
   setDrop.classList.add('highlight');
   const binderDrop = document.getElementById('binderDropdown');
   binderDrop.classList.remove('highlight');
 }
-export function addShowHideToggle(btnId, dropdownId) {
+
+/**
+ * adds event listener that shows or hides navbar dropdowns based on what was clicked
+ * TODO: this is a mess
+ * @param btnId the clicked button
+ * @param dropdownId the dropdown to show
+ */
+export function addShowHideToggle(btnId: string, dropdownId: string) {
   document.getElementById(btnId).addEventListener('click', function () {
     const arr = document.getElementsByClassName('dropdown-container');
     for (let item of arr) {
@@ -237,6 +299,9 @@ export function addShowHideToggle(btnId, dropdownId) {
   });
 }
 
+/**
+ * adds or removes borders in binder view based on checkbox
+ */
 export function toggleBorders() {
   if (document.getElementById('toggle-borders').checked) {
     document.querySelectorAll('.card').forEach((e) => {

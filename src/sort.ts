@@ -1,5 +1,10 @@
+// TODO: get rid of the need for slicing
+
 import * as page from './page.js';
 
+/**
+ * sorts and redisplays current cards based on selected sort value
+ */
 export function newSort() {
   const sortBy = document.getElementById('sortDropdown').value;
   const data = page.getDataToDisplay();
@@ -33,7 +38,13 @@ export function newSort() {
   page.fillPage();
 }
 
-const sort = (col_name, data) => {
+/**
+ * sorts given data based on given column
+ * @param col_name
+ * @param data
+ * @returns
+ */
+const sort = (col_name: string, data: string[]): string[] => {
   const header = localStorage.getItem('header').split(',');
   const column = header.indexOf(col_name);
   return data.sort((a, b) => {
@@ -45,8 +56,13 @@ const sort = (col_name, data) => {
   });
 };
 
-export const sortByCardType = (data) => {
-  let sorted = data.slice(1); // TODO: get rid of the need for slicing
+/**
+ * sorts by v, ex, etc
+ * @param data
+ * @returns
+ */
+export const sortByCardType = (data: string[]): string[] => {
+  let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
   sorted = sort('set', sorted);
@@ -59,7 +75,12 @@ export const sortByCardType = (data) => {
   return sorted;
 };
 
-export const sortByVisuals = (data) => {
+/**
+ * sort by illust, full art, etc
+ * @param data
+ * @returns
+ */
+export const sortByVisuals = (data: string[]): string[] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -73,7 +94,13 @@ export const sortByVisuals = (data) => {
 
   return sorted;
 };
-export const sortByColor = (data) => {
+
+/**
+ * sort by energy type
+ * @param data
+ * @returns
+ */
+export const sortByColor = (data: string[]): string[] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -88,7 +115,12 @@ export const sortByColor = (data) => {
   return sorted;
 };
 
-export const sortByDex = (data) => {
+/**
+ * sort by national dex #
+ * @param data
+ * @returns
+ */
+export const sortByDex = (data: string[]): string[] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -102,7 +134,12 @@ export const sortByDex = (data) => {
   return sorted;
 };
 
-export const sortBySetNum = (data) => {
+/**
+ * sort by set and # within a set
+ * @param data
+ * @returns
+ */
+export const sortBySetNum = (data: string[]): string[] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -111,7 +148,12 @@ export const sortBySetNum = (data) => {
   return sorted;
 };
 
-export const sortByRecent = (data) => {
+/**
+ * sort by recently pulled
+ * @param data
+ * @returns
+ */
+export const sortByRecent = (data: string[]): string[] => {
   let sorted = data.slice(1);
 
   sorted = sort('caught date', sorted);

@@ -1,37 +1,40 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fillPage = fillPage;
-exports.generateBorderColors = generateBorderColors;
-exports.getDataToDisplay = getDataToDisplay;
-var constants = require("./constants.js");
-function fillPage() {
-    var data = getDataToDisplay();
-    var cardTags = createCardTags(data);
-    var tables = createTables(cardTags);
+import * as constants from './constants.js';
+/**
+ * wrapper method that calls functions needed to fill page with cards and placeholders
+ */
+export function fillPage() {
+    const data = getDataToDisplay();
+    const cardTags = createCardTags(data);
+    const tables = createTables(cardTags);
     document.getElementById('contentDiv').innerHTML = '';
-    tables.forEach(function (table) {
+    tables.forEach((table) => {
         document.getElementById('contentDiv').appendChild(table);
     });
 }
+/**
+ *
+ * @param cardTags generated img elements
+ * @returns generated tables or cards (if no grid) to display
+ */
 function createTables(cardTags) {
-    var rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
-    var cols = parseInt(document.getElementById('colDropdown').selectedIndex);
-    var allTables = [];
-    var currentTable;
-    var currentRow;
-    cardTags.forEach(function (tag, i) {
+    const rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
+    const cols = parseInt(document.getElementById('colDropdown').selectedIndex);
+    const allTables = [];
+    let currentTable;
+    let currentRow;
+    cardTags.forEach((tag, i) => {
         if (!rows || !cols) {
             allTables.push(tag);
-            var spaceNode = document.createTextNode(' ');
+            const spaceNode = document.createTextNode(' ');
             allTables.push(spaceNode);
         }
         else {
             // Use the remainder value from the modulo function to put each card into a row/grid bucket.
-            var rowIndex = (i + 1) % cols;
-            var gridIndex = (i + 1) % (rows * cols);
-            var table = document.createElement('table');
-            var tr = document.createElement('tr');
-            var td = document.createElement('td');
+            const rowIndex = (i + 1) % cols;
+            const gridIndex = (i + 1) % (rows * cols);
+            const table = document.createElement('table');
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
             td.appendChild(tag);
             // first card in grid
             if (gridIndex == 1) {
@@ -77,57 +80,76 @@ function createTables(cardTags) {
     });
     return allTables;
 }
+/**
+ *
+ * @param data JSON sheet data
+ * @returns img elements for owned cards in the data
+ */
 function createCardTags(data) {
-    var cardSize = document.getElementById('sizeDropdown').value;
-    var tags = [];
-    var header = localStorage.getItem('header').split(',');
-    for (var rowNum = 0; rowNum < data.length; rowNum++) {
-        var set = constants
+    const cardSize = document.getElementById('sizeDropdown').value;
+    const tags = [];
+    const header = localStorage.getItem('header').split(',');
+    for (let rowNum = 0; rowNum < data.length; rowNum++) {
+        const set = constants
             .getMetadatum('set', data[rowNum], header)
             .toLowerCase();
-        var dir = "img/".concat(set);
-        var filename = constants.getMetadatum('filename', data[rowNum], header);
-        var energytype = constants.getMetadatum('energytype', data[rowNum], header);
-        var cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
-        var visuals = constants.getMetadatum('visuals', data[rowNum], header);
-        var caught = constants.getMetadatum('caught', data[rowNum], header);
-        var title = "".concat(filename, " : ").concat(energytype, " : ").concat(cardtype, " : ").concat(visuals);
+        const dir = `img/${set}`;
+        const filename = constants.getMetadatum('filename', data[rowNum], header);
+        const energytype = constants.getMetadatum('energytype', data[rowNum], header);
+        const cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
+        const visuals = constants.getMetadatum('visuals', data[rowNum], header);
+        const caught = constants.getMetadatum('caught', data[rowNum], header);
+        const title = `${filename} : ${energytype} : ${cardtype} : ${visuals}`;
         if (caught == 'x') {
             tags.push(generateImgTag(dir, filename, title, cardSize, cardtype, energytype));
         }
         else {
-            var borderColors = generateBorderColors(cardtype, energytype);
-            var fillColors = constants.FILL_COLORS(visuals, energytype);
+            const borderColors = generateBorderColors(cardtype, energytype);
+            const fillColors = constants.FILL_COLORS(visuals, energytype);
             tags.push(generatePlaceholder(cardSize, title, borderColors, fillColors));
         }
     }
     return tags;
 }
+/**
+ * generates image elements
+ * @param dir
+ * @param filename
+ * @param title
+ * @param cardSize
+ * @param cardtype
+ * @param energytype
+ * @returns
+ */
 function generateImgTag(dir, filename, title, cardSize, cardtype, energytype) {
-    var img = document.createElement('img');
-    img.src = "".concat(dir, "/").concat(filename);
+    const img = document.createElement('img');
+    img.src = `${dir}/${filename}`;
     img.title = title;
-    img.style.width = "".concat(cardSize, "px");
-    img.style.height = "".concat(cardSize * 1.4, "px"); // keeps cards that are a couple pixels off of standard size from breaking alignment
-    img.style.borderRadius = "".concat(cardSize / 20, "px");
+    img.style.width = `${cardSize}px`;
+    img.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+    img.style.borderRadius = `${cardSize / 20}px`;
     img.classList.add('card');
     img.setAttribute('card-type', cardtype);
     img.setAttribute('energy-type', energytype);
     if (document.getElementById('toggle-borders').checked) {
-        var borderColors = generateBorderColors(cardtype, energytype);
-        img.style.background = "linear-gradient(to bottom right, ".concat(borderColors, ") border-box");
-        img.style.setProperty('border', "".concat(cardSize / 15, "px solid transparent"));
+        const borderColors = generateBorderColors(cardtype, energytype);
+        img.style.background = `linear-gradient(to bottom right, ${borderColors}) border-box`;
+        img.style.setProperty('border', `${cardSize / 15}px solid transparent`);
     }
     img.onclick = function () {
         displayZoom(dir, filename);
     };
     return img;
 }
+/**
+ * displays given card zoomed-in in the center of the screen
+ * @param dir
+ * @param filename
+ */
 function displayZoom(dir, filename) {
-    var img = document.createElement('img');
-    img.src = "".concat(dir, "/").concat(filename);
-    img.style.height = '90dvh';
-    var zoomSpan = document.getElementById('zoom-span');
+    const img = document.createElement('img');
+    img.src = `${dir}/${filename}`;
+    const zoomSpan = document.getElementById('zoom-span');
     img.onclick = function () {
         // close zoomed card
         zoomSpan.innerHTML = '';
@@ -139,32 +161,50 @@ function displayZoom(dir, filename) {
     img.className = 'zoomed-card';
     zoomSpan.appendChild(img);
 }
+/**
+ * generates placeholders for un-owned cards
+ * @param cardSize
+ * @param title
+ * @param borderColors hex values
+ * @param fillColors hex values
+ * @returns
+ */
 function generatePlaceholder(cardSize, title, borderColors, fillColors) {
     // note that there are a couple other styles in the css file
-    var ph = document.createElement('span');
+    const ph = document.createElement('span');
     ph.className = 'placeholder';
     ph.title = title;
-    ph.style.width = "".concat(cardSize, "px");
-    ph.style.height = "".concat(cardSize * 1.4, "px"); // keeps cards that are a couple pixels off of standard size from breaking alignment
-    ph.style.background = "linear-gradient(to bottom right, ".concat(fillColors, ") padding-box, linear-gradient(to bottom right, ").concat(borderColors, ") border-box");
-    ph.style.borderRadius = "".concat(cardSize / 20, "px");
-    ph.style.border = "".concat(cardSize / 15, "px solid transparent");
+    ph.style.width = `${cardSize}px`;
+    ph.style.height = `${cardSize * 1.4}px`; // keeps cards that are a couple pixels off of standard size from breaking alignment
+    ph.style.background = `linear-gradient(to bottom right, ${fillColors}) padding-box, linear-gradient(to bottom right, ${borderColors}) border-box`;
+    ph.style.borderRadius = `${cardSize / 20}px`;
+    ph.style.border = `${cardSize / 15}px solid transparent`;
     return ph;
 }
-function generateBorderColors(cardtype, energytype) {
-    var energyColors = constants.ENERGY_COLORS[energytype];
-    var cardColors = constants.CARD_COLORS[cardtype];
+/**
+ * generates hex string for gradient border
+ * @param cardtype v, vmax, ex, etc
+ * @param energytype grass, water, etc
+ * @returns
+ */
+export function generateBorderColors(cardtype, energytype) {
+    const energyColors = constants.ENERGY_COLORS[energytype];
+    const cardColors = constants.CARD_COLORS[cardtype];
     if (cardtype == 'basic') {
-        return "".concat(energyColors, ",").concat(energyColors, ",").concat(energyColors[1]);
+        return `${energyColors},${energyColors},${energyColors[1]}`;
     }
     else if (cardtype != 'basic') {
-        return "".concat(energyColors, ",white,").concat(cardColors);
+        return `${energyColors},white,${cardColors}`;
     }
 }
-function getDataToDisplay() {
-    var binderName = localStorage.getItem('bindername');
-    var setName = localStorage.getItem('setname');
-    var container = localStorage.getItem('container');
+/**
+ * retrieve stored data for the active binder or set (also in storage)
+ * @returns data for the given binder/set
+ */
+export function getDataToDisplay() {
+    const binderName = localStorage.getItem('bindername');
+    const setName = localStorage.getItem('setname');
+    const container = localStorage.getItem('container');
     if (!container || container === 'binder') {
         return JSON.parse(localStorage.getItem(binderName));
     }
@@ -172,3 +212,4 @@ function getDataToDisplay() {
         return JSON.parse(localStorage.getItem(setName));
     }
 }
+//# sourceMappingURL=page.js.map

@@ -1,7 +1,20 @@
+// TODO: move functions to utils?
+
 export const APPSCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 
-export function getMetadatum(columnTitle, row, header) {
+/**
+ * gets cell value for a given row and column
+ * @param columnTitle just the title
+ * @param row full row
+ * @param header full header
+ * @returns cell value
+ */
+export function getMetadatum(
+  columnTitle: string,
+  row: string[],
+  header: string
+): string {
   if (!header) {
     header = localStorage.getItem('header').split(',');
   }
@@ -59,7 +72,13 @@ export const CARD_COLORS = {
   ],
 };
 
-export function FILL_COLORS(visuals, energytype) {
+/**
+ * generates fill gradient hex colors
+ * @param visuals eg illust, full art
+ * @param energytype eg grass, water
+ * @returns hex codes for applicable gradient
+ */
+export function FILL_COLORS(visuals: string, energytype: string): string {
   const energyColors = ENERGY_COLORS[energytype];
   const gradients = {
     normal: `#f9f9f9,white,#f9f9f9,white,#f9f9f9`,

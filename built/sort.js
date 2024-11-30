@@ -1,15 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sortByRecent = exports.sortBySetNum = exports.sortByDex = exports.sortByColor = exports.sortByVisuals = exports.sortByCardType = void 0;
-exports.newSort = newSort;
-var page = require("./page.js");
-function newSort() {
-    var sortBy = document.getElementById('sortDropdown').value;
-    var data = page.getDataToDisplay();
-    var container = localStorage.getItem('container');
-    var header = localStorage.getItem('header').split(',');
-    var col;
-    var name;
+// TODO: get rid of the need for slicing
+import * as page from './page.js';
+/**
+ * sorts and redisplays current cards based on selected sort value
+ */
+export function newSort() {
+    const sortBy = document.getElementById('sortDropdown').value;
+    const data = page.getDataToDisplay();
+    const container = localStorage.getItem('container');
+    const header = localStorage.getItem('header').split(',');
+    let col;
+    let name;
     if (container == 'binder') {
         col = header.indexOf('binder');
         name = localStorage.bindername;
@@ -18,32 +18,38 @@ function newSort() {
         col = header.indexOf('set');
         name = localStorage.setname;
     }
-    var filtered = data.filter(function (row) { return row[col] == name; });
+    let filtered = data.filter((row) => row[col] == name);
     filtered.unshift(header);
     if (sortBy == 'Dex #') {
-        localStorage.setItem(name, JSON.stringify((0, exports.sortByDex)(filtered)));
+        localStorage.setItem(name, JSON.stringify(sortByDex(filtered)));
     }
     else if (sortBy == 'Energy Type') {
-        localStorage.setItem(name, JSON.stringify((0, exports.sortByColor)(filtered)));
+        localStorage.setItem(name, JSON.stringify(sortByColor(filtered)));
     }
     else if (sortBy == 'Card Type') {
-        localStorage.setItem(name, JSON.stringify((0, exports.sortByCardType)(filtered)));
+        localStorage.setItem(name, JSON.stringify(sortByCardType(filtered)));
     }
     else if (sortBy == 'Set Number') {
-        localStorage.setItem(name, JSON.stringify((0, exports.sortBySetNum)(filtered)));
+        localStorage.setItem(name, JSON.stringify(sortBySetNum(filtered)));
     }
     else if (sortBy == 'Visuals') {
-        localStorage.setItem(name, JSON.stringify((0, exports.sortByVisuals)(filtered)));
+        localStorage.setItem(name, JSON.stringify(sortByVisuals(filtered)));
     }
     else if (sortBy == 'recent') {
-        localStorage.setItem(name, JSON.stringify((0, exports.sortByRecent)(filtered)));
+        localStorage.setItem(name, JSON.stringify(sortByRecent(filtered)));
     }
     page.fillPage();
 }
-var sort = function (col_name, data) {
-    var header = localStorage.getItem('header').split(',');
-    var column = header.indexOf(col_name);
-    return data.sort(function (a, b) {
+/**
+ * sorts given data based on given column
+ * @param col_name
+ * @param data
+ * @returns
+ */
+const sort = (col_name, data) => {
+    const header = localStorage.getItem('header').split(',');
+    const column = header.indexOf(col_name);
+    return data.sort((a, b) => {
         if (a[column] === b[column]) {
             return 0;
         }
@@ -52,8 +58,13 @@ var sort = function (col_name, data) {
         }
     });
 };
-var sortByCardType = function (data) {
-    var sorted = data.slice(1); // TODO: get rid of the need for slicing
+/**
+ * sorts by v, ex, etc
+ * @param data
+ * @returns
+ */
+export const sortByCardType = (data) => {
+    let sorted = data.slice(1);
     sorted = sort('card #', sorted);
     sorted = sort('set', sorted);
     sorted = sort('release date', sorted);
@@ -63,9 +74,13 @@ var sortByCardType = function (data) {
     sorted = sort('card type #', sorted);
     return sorted;
 };
-exports.sortByCardType = sortByCardType;
-var sortByVisuals = function (data) {
-    var sorted = data.slice(1);
+/**
+ * sort by illust, full art, etc
+ * @param data
+ * @returns
+ */
+export const sortByVisuals = (data) => {
+    let sorted = data.slice(1);
     sorted = sort('card #', sorted);
     sorted = sort('set', sorted);
     sorted = sort('release date', sorted);
@@ -76,9 +91,13 @@ var sortByVisuals = function (data) {
     sorted = sort('card type #', sorted);
     return sorted;
 };
-exports.sortByVisuals = sortByVisuals;
-var sortByColor = function (data) {
-    var sorted = data.slice(1);
+/**
+ * sort by energy type
+ * @param data
+ * @returns
+ */
+export const sortByColor = (data) => {
+    let sorted = data.slice(1);
     sorted = sort('card #', sorted);
     sorted = sort('set', sorted);
     sorted = sort('release date', sorted);
@@ -89,9 +108,13 @@ var sortByColor = function (data) {
     sorted = sort('energy type #', sorted);
     return sorted;
 };
-exports.sortByColor = sortByColor;
-var sortByDex = function (data) {
-    var sorted = data.slice(1);
+/**
+ * sort by national dex #
+ * @param data
+ * @returns
+ */
+export const sortByDex = (data) => {
+    let sorted = data.slice(1);
     sorted = sort('card #', sorted);
     sorted = sort('set', sorted);
     sorted = sort('release date', sorted);
@@ -101,18 +124,26 @@ var sortByDex = function (data) {
     sorted = sort('dex #', sorted);
     return sorted;
 };
-exports.sortByDex = sortByDex;
-var sortBySetNum = function (data) {
-    var sorted = data.slice(1);
+/**
+ * sort by set and # within a set
+ * @param data
+ * @returns
+ */
+export const sortBySetNum = (data) => {
+    let sorted = data.slice(1);
     sorted = sort('card #', sorted);
     sorted = sort('set', sorted);
     return sorted;
 };
-exports.sortBySetNum = sortBySetNum;
-var sortByRecent = function (data) {
-    var sorted = data.slice(1);
+/**
+ * sort by recently pulled
+ * @param data
+ * @returns
+ */
+export const sortByRecent = (data) => {
+    let sorted = data.slice(1);
     sorted = sort('caught date', sorted);
     sorted.reverse();
     return sorted;
 };
-exports.sortByRecent = sortByRecent;
+//# sourceMappingURL=sort.js.map
