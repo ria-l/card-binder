@@ -129,7 +129,6 @@ function generateImgTag(dir, filename, title, cardSize, cardtype, energytype) {
 function displayZoom(dir, filename) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
-  img.style.height = '90dvh';
   const zoomSpan = document.getElementById('zoom-span');
   img.onclick = function () {
     // close zoomed card

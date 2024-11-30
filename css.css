@@ -146,6 +146,7 @@ select {
   justify-content: center;
   margin: auto;
   position: fixed;
+  height: 90dvh;
 }
 table {
   display: inline-block;
@@ -255,5 +256,9 @@ ol {
     font-size: 1rem;
     text-align: center;
     margin-left: 0;
+  }
+  .zoomed-card {
+    width: 90dvw;
+    height: auto;
   }
 }
