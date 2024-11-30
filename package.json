@@ -14,5 +14,8 @@
     "url": "https://github.com/ria-l/rewarder/issues"
   },
   "homepage": "https://github.com/ria-l/rewarder#readme",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
 }
