@@ -76,7 +76,7 @@ function createTables(cardTags) {
 function createCardTags(data) {
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
-  const header = localStorage.getItem('header').split(',');
+  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   for (let rowNum = 0; rowNum < data.length; rowNum++) {
     const set = constants
       .getMetadatum('set', data[rowNum], header)

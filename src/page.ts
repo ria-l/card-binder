@@ -91,7 +91,7 @@ function createTables(
 function createCardTags(data: string[]): HTMLImageElement[] {
   const cardSize = document.getElementById('sizeDropdown').value;
   const tags = [];
-  const header = localStorage.getItem('header').split(',');
+  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   for (let rowNum = 0; rowNum < data.length; rowNum++) {
     const set = constants
       .getMetadatum('set', data[rowNum], header)
@@ -215,8 +215,10 @@ export function generateBorderColors(
   cardtype: string,
   energytype: string
 ): string {
-  const energyColors = constants.ENERGY_COLORS[energytype as keyof typeof constants.ENERGY_COLORS];
-  const cardColors = constants.CARD_COLORS[cardtype as keyof typeof constants.CARD_COLORS];
+  const energyColors =
+    constants.ENERGY_COLORS[energytype as keyof typeof constants.ENERGY_COLORS];
+  const cardColors =
+    constants.CARD_COLORS[cardtype as keyof typeof constants.CARD_COLORS];
   if (cardtype == 'basic') {
     return `${energyColors},${energyColors},${energyColors[1]}`;
   } else if (cardtype != 'basic') {

@@ -9,7 +9,7 @@ export const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRhMe2yJH
  */
 export function getMetadatum(columnTitle, row, header) {
     if (!header) {
-        header = localStorage.getItem('header').split(',');
+        header = JSON.parse(localStorage.getItem('header') ?? '[]');
     }
     let index = header.indexOf(_headerTextMap[columnTitle]);
     return row[index];

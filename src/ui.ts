@@ -218,7 +218,7 @@ export function createProgressBar() {
  */
 function countPulled(): number {
   const data = page.getDataToDisplay();
-  const header = localStorage.getItem('header').split(',');
+  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   const filtered = data.filter((row) => row[header.indexOf('caught')] == 'x');
   return filtered.length;
 }

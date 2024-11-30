@@ -8,8 +8,8 @@ import * as page from './page.js';
 export function newSort() {
   const sortBy = document.getElementById('sortDropdown').value;
   const data = page.getDataToDisplay();
-  const container = localStorage.getItem('container');
-  const header = localStorage.getItem('header').split(',');
+  const container = localStorage.getItem('container') || 'binder';
+  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   let col;
   let name;
   if (container == 'binder') {
@@ -45,7 +45,7 @@ export function newSort() {
  * @returns
  */
 const sort = (col_name: string, data: string[]): string[] => {
-  const header = localStorage.getItem('header').split(',');
+  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   const column = header.indexOf(col_name);
   return data.sort((a, b) => {
     if (a[column] === b[column]) {

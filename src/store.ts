@@ -8,7 +8,7 @@ import * as sort from './sort.js';
  */
 export function storeData(data: string[]) {
   const header = data[0];
-  localStorage.setItem('header', header);
+  localStorage.setItem('header', JSON.stringify(header));
 
   // store container names
   const binderCol = header.indexOf('binder');

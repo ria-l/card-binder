@@ -3,7 +3,7 @@ export const APPSCRIPT_URL =
 
 export function getMetadatum(columnTitle, row, header) {
   if (!header) {
-    header = localStorage.getItem('header').split(',');
+    header = JSON.parse(localStorage.getItem('header') ?? '[]');
   }
   let index = header.indexOf(_headerTextMap[columnTitle]);
   return row[index];

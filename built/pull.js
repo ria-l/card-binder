@@ -143,7 +143,7 @@ function processPulled(pulled, data) {
  * @returns
  */
 function getCardMetadata(binderRow) {
-    const header = localStorage.getItem('header').split(',');
+    const header = JSON.parse(localStorage.getItem('header') ?? '[]');
     const filename = constants.getMetadatum('filename', binderRow, header);
     const caught = constants.getMetadatum('caught', binderRow, header);
     const cardtype = constants.getMetadatum('cardtype', binderRow, header);
@@ -224,7 +224,7 @@ function processNewCards(newCards) {
 function updateNewCardsInCache(newCards) {
     const binderName = localStorage.getItem('bindername');
     const binderData = JSON.parse(localStorage.getItem(binderName));
-    const header = localStorage.getItem('header').split(',');
+    const header = JSON.parse(localStorage.getItem('header') ?? '[]');
     newCards.forEach((filename) => {
         for (let rowNum = 0; rowNum < binderData.length; rowNum++) {
             if (constants.getMetadatum('filename', binderData[rowNum], header) ==

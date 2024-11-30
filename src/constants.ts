@@ -16,7 +16,7 @@ export function getMetadatum(
   header: string
 ): string {
   if (!header) {
-    header = localStorage.getItem('header').split(',');
+    header = JSON.parse(localStorage.getItem('header') ?? '[]');
   }
   let index = header.indexOf(
     _headerTextMap[columnTitle as keyof typeof _headerTextMap]
