@@ -34,8 +34,8 @@ function initializeGridValues(): { gridCol: number; gridRow: number } {
   if (isNaN(gridRow)) {
     gridRow = 0;
   }
-  localStorage.setItem('row', gridRow);
-  localStorage.setItem('col', gridCol);
+  localStorage.setItem('row', gridRow.toString());
+  localStorage.setItem('col', gridCol.toString());
   return { gridCol, gridRow };
 }
 
@@ -50,14 +50,14 @@ function generateGridDropdown(gridCol: number, gridRow: number) {
   if (rowDropdown.options.length == 0) {
     for (let i = 0; i < 13; i++) {
       const option = document.createElement('option');
-      option.value = i;
-      option.textContent = i;
+      option.value = i.toString();
+      option.textContent = i.toString();
       colDropdown.appendChild(option);
     }
     for (let i = 0; i < 13; i++) {
       const option = document.createElement('option');
-      option.value = i;
-      option.textContent = i;
+      option.value = i.toString();
+      option.textContent = i.toString();
       rowDropdown.appendChild(option);
     }
   }
@@ -92,7 +92,7 @@ function initializeSizeValue(): number {
     cardSize = 150;
   }
   // set the dropdown value to the specified size.
-  localStorage.setItem('cardSize', cardSize);
+  localStorage.setItem('cardSize', cardSize.toString());
   return cardSize;
 }
 
@@ -106,14 +106,14 @@ export function generateSizeDropdown(cardSize: number) {
     const sizeDropdown = document.getElementById('sizeDropdown');
     for (let i = 1; i < 11; i++) {
       const option = document.createElement('option');
-      option.value = i * 50;
-      option.textContent = i * 50;
+      option.value = (i * 50).toString();
+      option.textContent = (i * 50).toString();
       sizeDropdown.appendChild(option);
     }
     for (let i = 1; i < 20; i++) {
       const option = document.createElement('option');
-      option.value = i * 10;
-      option.textContent = i * 10;
+      option.value = (i * 10).toString();
+      option.textContent = (i * 10).toString();
       sizeDropdown.appendChild(option);
     }
   }
@@ -131,7 +131,7 @@ export function generateSizeDropdown(cardSize: number) {
  */
 export function resizeCards() {
   const cardSize = parseInt(document.getElementById('sizeDropdown').value);
-  localStorage.setItem('cardSize', cardSize);
+  localStorage.setItem('cardSize', cardSize.toString());
   document
     .querySelectorAll('.card')
     .forEach((e) => (e.style.width = `${cardSize}px`));

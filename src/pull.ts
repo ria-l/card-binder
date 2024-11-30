@@ -122,7 +122,7 @@ function pullCards(n: number) {
  * @param pulled index numbers in the filenames array
  * @param data data for the current binder/set
  */
-function processPulled(pulled: number, data: string[]) {
+function processPulled(pulled: number[], data: string[]) {
   const newCards: string[] = [];
   const currentPulls: string[] = [];
   pulled.forEach((card: number) => {
