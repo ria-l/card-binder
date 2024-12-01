@@ -41,6 +41,7 @@ export const ENERGY_COLORS = {
     item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
     supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
     missing: ['#00FF00', '#00FF00'],
+    stadium: ['#45bf45', '#71c871'],
 };
 export const CARD_COLORS = {
     basic: [],
@@ -49,8 +50,6 @@ export const CARD_COLORS = {
     v: ['#4d4d4d', '#000000', '#4d4d4d'], // black & grey
     vmax: ['#fbcf4c', '#e61c75', '#3f3487'], // yellow & pink & purple
     vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
-    item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
-    supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
     trainer: ['#808186', '#696569'], // gray
     energy: [
         '#f78b46', // fire
