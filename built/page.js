@@ -15,69 +15,51 @@ export function fillPage() {
     });
 }
 /**
- *
- * @param cardTags generated img elements
+ * Creates tables to display the card grid on the binder page.
+ * @param cardElements generated img elements
  * @returns generated tables or cards (if no grid) to display
  */
-function createTables(cardTags) {
+function createTables(cardElements) {
     const numRows = document.getElementById('rowDropdown')
         .selectedIndex;
     const numCols = document.getElementById('colDropdown')
         .selectedIndex;
+    if (!numRows || !numCols) {
+        // If no rows or columns, simply return the cards and spaces
+        return cardElements
+            .map((card) => [card, document.createTextNode(' ')])
+            .flat();
+    }
     const allTables = [];
     let currentTable;
     let currentRow;
-    cardTags.forEach((tag, i) => {
-        if (!numRows || !numCols) {
-            allTables.push(tag);
-            const spaceNode = document.createTextNode(' ');
-            allTables.push(spaceNode);
+    const numTableCells = numRows * numCols;
+    const incompleteTableCards = cardElements.length % numTableCells;
+    cardElements.forEach((card, i) => {
+        const rowIndex = i % numCols; // 0 is first card, 1 is last
+        const tableIndex = i % numTableCells; // 0 is first card, 1 is last
+        // Create new table and row for the first card in a new table
+        if (tableIndex === 0) {
+            currentTable = document.createElement('table');
         }
-        else {
-            // Use the remainder value from the modulo function to put each card into a row/grid bucket.
-            const rowIndex = (i + 1) % numCols;
-            const gridIndex = (i + 1) % (numRows * numCols);
-            const table = document.createElement('table');
-            const tr = document.createElement('tr');
-            const td = document.createElement('td');
-            td.appendChild(tag);
-            // first card in grid
-            if (gridIndex == 1) {
-                currentTable = table;
-            }
-            // middle cards
-            if (rowIndex == 1) {
-                // first card in row
-                currentRow = tr;
-                currentRow.appendChild(td);
-            }
-            else if (rowIndex == 0) {
-                // last card in row
-                if (numCols == 1) {
-                    currentRow = tr;
-                }
-                if (numRows == 1) {
-                    currentTable = table;
-                }
-                currentRow.appendChild(td);
-                currentTable.appendChild(currentRow);
-            }
-            else {
-                currentRow.appendChild(td);
-            }
-            // last card in grid
-            if (gridIndex == 0) {
-                if (numCols == 1) {
-                    currentRow = tr;
-                }
-                if (numRows == 1) {
-                    currentTable = table;
-                }
-                allTables.push(currentTable);
-                currentTable = null;
-            }
-            // Any cards that don't fit neatly into the grid
-            if (currentTable) {
+        if (rowIndex === 0) {
+            currentRow = document.createElement('tr');
+        }
+        const td = document.createElement('td');
+        td.appendChild(card);
+        currentRow.appendChild(td);
+        // Handle the last card in a row or last card in cardElements
+        if (rowIndex === numCols - 1 || i === cardElements.length - 1) {
+            currentTable.appendChild(currentRow);
+        }
+        // Handle the last card in a table or last card in cardElements
+        if (tableIndex === numTableCells - 1 || i === cardElements.length - 1) {
+            allTables.push(currentTable);
+        }
+        // Handle the case for incomplete tables
+        if (incompleteTableCards > 0 &&
+            i >= cardElements.length - incompleteTableCards) {
+            if (currentRow) {
                 currentTable.appendChild(currentRow);
                 allTables.push(currentTable);
             }
