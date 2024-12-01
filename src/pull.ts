@@ -97,24 +97,21 @@ function clearDisplay() {
  * @param n number of cards to pull
  */
 function pullCards(n: number) {
-  const container = localStorage.getItem('container');
-  let data;
-  if (container == 'binder' || !container) {
-    const bindername = localStorage.getItem('bindername');
-    data = JSON.parse(localStorage.getItem(bindername));
-  } else {
-    const setname = localStorage.getItem('setname');
-    data = JSON.parse(localStorage.getItem(setname));
-  }
+  const container = localStorage.getItem('container') ?? 'binder';
+  const nameKey = container === 'binder' ? 'bindername' : 'setname';
+  const name = localStorage.getItem(nameKey);
+  const data = name ? JSON.parse(localStorage.getItem(name) ?? '[]') : [];
+
   const cardPool = data.map((row: string[]) =>
-    constants.getMetadatum('filename', row)
+    constants.getCellValue('filename', row, null)
   );
-  let pulled = [];
+  const pulled: number[] = [];
+
   for (let i = 0; i < n; i++) {
-    // max val is length - 1
     const x = Math.floor(Math.random() * cardPool.length);
     pulled.push(x);
   }
+
   processPulled(pulled, data);
 }
 
@@ -123,11 +120,11 @@ function pullCards(n: number) {
  * @param pulled index numbers in the filenames array
  * @param data data for the current binder/set
  */
-function processPulled(pulled: number[], data: string[]) {
+function processPulled(pulled: number[], data: string[][]) {
   const newCards: string[] = [];
-  const currentPulls: string[] = [];
+  const currentPulls: HTMLImageElement[] = [];
   pulled.forEach((card: number) => {
-    const binderRow = data[card];
+    const binderRow = data[card] ?? [];
     const { title, dir, filename, caught, borderColors } =
       getCardMetadata(binderRow);
     const small = generateImg('small', dir, filename, caught, borderColors);
@@ -161,11 +158,11 @@ function getCardMetadata(binderRow: string[]): {
   borderColors: string;
 } {
   const header = JSON.parse(localStorage.getItem('header') ?? '[]');
-  const filename = constants.getMetadatum('filename', binderRow, header);
-  const caught = constants.getMetadatum('caught', binderRow, header);
-  const cardtype = constants.getMetadatum('cardtype', binderRow, header);
-  const energytype = constants.getMetadatum('energytype', binderRow, header);
-  const set = constants.getMetadatum('set', binderRow, header);
+  const filename = constants.getCellValue('filename', binderRow, header);
+  const caught = constants.getCellValue('caught', binderRow, header);
+  const cardtype = constants.getCellValue('cardtype', binderRow, header);
+  const energytype = constants.getCellValue('energytype', binderRow, header);
+  const set = constants.getCellValue('set', binderRow, header);
   let title = `${filename} : ${energytype} : ${cardtype}`;
   if (!caught) {
     title += ` ✨NEW✨`;
@@ -253,13 +250,13 @@ function processNewCards(newCards: string[]) {
  * @param newCards array of filenames
  */
 function updateNewCardsInCache(newCards: string[]) {
-  const binderName = localStorage.getItem('bindername');
-  const binderData = JSON.parse(localStorage.getItem(binderName));
+  const binderName = localStorage.getItem('bindername') ?? '';
+  const binderData = JSON.parse(localStorage.getItem(binderName) ?? '[]');
   const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   newCards.forEach((filename) => {
     for (let rowNum = 0; rowNum < binderData.length; rowNum++) {
       if (
-        constants.getMetadatum('filename', binderData[rowNum], header) ==
+        constants.getCellValue('filename', binderData[rowNum], header) ==
         filename
       ) {
         binderData[rowNum][header.indexOf('caught')] = 'x';
@@ -268,10 +265,10 @@ function updateNewCardsInCache(newCards: string[]) {
     }
     // each card may have a different set, so need to handle storage individually
     const setName = filename.match(/^[^\.]*/)[0].toUpperCase();
-    const setData = JSON.parse(localStorage.getItem(setName));
+    const setData = JSON.parse(localStorage.getItem(setName) ?? '');
     for (let rowNum = 0; rowNum < setData.length; rowNum++) {
       if (
-        constants.getMetadatum('filename', setData[rowNum], header) == filename
+        constants.getCellValue('filename', setData[rowNum], header) == filename
       ) {
         setData[rowNum][header.indexOf('caught')] = 'x';
         localStorage.setItem(setName, JSON.stringify(setData));

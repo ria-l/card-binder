@@ -10,18 +10,19 @@ export const APPSCRIPT_URL =
  * @param header full header
  * @returns cell value
  */
-export function getMetadatum(
+export function getCellValue(
   columnTitle: string,
   row: string[],
-  header: string
+  header: string[] | null
 ): string {
   if (!header) {
     header = JSON.parse(localStorage.getItem('header') ?? '[]');
   }
-  let index = header.indexOf(
-    _headerTextMap[columnTitle as keyof typeof _headerTextMap]
-  );
-  return row[index];
+
+  const column = _headerTextMap[columnTitle as keyof typeof _headerTextMap];
+  const index = header!.indexOf(column);
+
+  return row[index] ?? '';
 }
 
 const _headerTextMap = {

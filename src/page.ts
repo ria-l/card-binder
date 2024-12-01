@@ -4,7 +4,7 @@ import * as constants from './constants.js';
  * wrapper method that calls functions needed to fill page with cards and placeholders
  */
 export function fillPage() {
-  const data = getDataToDisplay();
+  const data: string[][] = getDataToDisplay();
   const cardTags = createCardTags(data);
   const tables = createTables(cardTags);
   document.getElementById('contentDiv').innerHTML = '';
@@ -21,25 +21,23 @@ export function fillPage() {
 function createTables(
   cardTags: HTMLImageElement[]
 ): HTMLTableElement[] | HTMLImageElement[] | Text[] {
-  const rows = parseInt(
-    (document.getElementById('rowDropdown') as HTMLSelectElement).selectedIndex
-  );
-  const cols = parseInt(
-    (document.getElementById('colDropdown') as HTMLSelectElement).selectedIndex
-  );
+  const numRows = (document.getElementById('rowDropdown') as HTMLSelectElement)
+    .selectedIndex;
+  const numCols = (document.getElementById('colDropdown') as HTMLSelectElement)
+    .selectedIndex;
   const allTables: HTMLTableElement[] | HTMLImageElement[] | Text = [];
   let currentTable: HTMLTableElement;
   let currentRow: HTMLTableRowElement;
 
   cardTags.forEach((tag, i) => {
-    if (!rows || !cols) {
+    if (!numRows || !numCols) {
       allTables.push(tag);
       const spaceNode = document.createTextNode(' ');
       allTables.push(spaceNode);
     } else {
       // Use the remainder value from the modulo function to put each card into a row/grid bucket.
-      const rowIndex = (i + 1) % cols;
-      const gridIndex = (i + 1) % (rows * cols);
+      const rowIndex = (i + 1) % numCols;
+      const gridIndex = (i + 1) % (numRows * numCols);
       const table = document.createElement('table');
       const tr = document.createElement('tr');
       const td = document.createElement('td');
@@ -55,10 +53,10 @@ function createTables(
         currentRow.appendChild(td);
       } else if (rowIndex == 0) {
         // last card in row
-        if (cols == 1) {
+        if (numCols == 1) {
           currentRow = tr;
         }
-        if (rows == 1) {
+        if (numRows == 1) {
           currentTable = table;
         }
         currentRow.appendChild(td);
@@ -68,10 +66,10 @@ function createTables(
       }
       // last card in grid
       if (gridIndex == 0) {
-        if (cols == 1) {
+        if (numCols == 1) {
           currentRow = tr;
         }
-        if (rows == 1) {
+        if (numRows == 1) {
           currentTable = table;
         }
         allTables.push(currentTable);
@@ -92,26 +90,21 @@ function createTables(
  * @param data JSON sheet data
  * @returns img elements for owned cards in the data
  */
-function createCardTags(data: string[]): HTMLImageElement[] {
-  const cardSize = (
-    document.getElementById('sizeDropdown') as HTMLSelectElement
-  ).value;
+function createCardTags(data: string[][]): HTMLImageElement[] {
+  const cardSize = parseInt(
+    (document.getElementById('sizeDropdown') as HTMLSelectElement).value
+  );
   const tags = [];
   const header = JSON.parse(localStorage.getItem('header') ?? '[]');
-  for (let rowNum = 0; rowNum < data.length; rowNum++) {
-    const set = constants
-      .getMetadatum('set', data[rowNum], header)
-      .toLowerCase();
+
+  for (const row of data) {
+    const set = constants.getCellValue('set', row, header).toLowerCase();
     const dir = `img/${set}`;
-    const filename = constants.getMetadatum('filename', data[rowNum], header);
-    const energytype = constants.getMetadatum(
-      'energytype',
-      data[rowNum],
-      header
-    );
-    const cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
-    const visuals = constants.getMetadatum('visuals', data[rowNum], header);
-    const caught = constants.getMetadatum('caught', data[rowNum], header);
+    const filename = constants.getCellValue('filename', row, header);
+    const energytype = constants.getCellValue('energytype', row, header);
+    const cardtype = constants.getCellValue('cardtype', row, header);
+    const visuals = constants.getCellValue('visuals', row, header);
+    const caught = constants.getCellValue('caught', row, header);
     const title = `${filename} : ${energytype} : ${cardtype} : ${visuals}`;
     if (caught == 'x') {
       tags.push(
@@ -123,6 +116,7 @@ function createCardTags(data: string[]): HTMLImageElement[] {
       tags.push(generatePlaceholder(cardSize, title, borderColors, fillColors));
     }
   }
+
   return tags;
 }
 
@@ -140,7 +134,7 @@ function generateImgTag(
   dir: string,
   filename: string,
   title: string,
-  cardSize: string,
+  cardSize: number,
   cardtype: string,
   energytype: string
 ): HTMLImageElement {
@@ -227,7 +221,7 @@ export function generateBorderColors(
     constants.CARD_COLORS[cardtype as keyof typeof constants.CARD_COLORS];
   if (cardtype == 'basic') {
     return `${energyColors},${energyColors},${energyColors[1]}`;
-  } else if (cardtype != 'basic') {
+  } else {
     return `${energyColors},white,${cardColors}`;
   }
 }
@@ -236,13 +230,12 @@ export function generateBorderColors(
  * retrieve stored data for the active binder or set (also in storage)
  * @returns data for the given binder/set
  */
-export function getDataToDisplay(): string[] {
-  const binderName = localStorage.getItem('bindername');
-  const setName = localStorage.getItem('setname');
-  const container = localStorage.getItem('container');
-  if (!container || container === 'binder') {
-    return JSON.parse(localStorage.getItem(binderName));
-  } else if (container === 'set') {
-    return JSON.parse(localStorage.getItem(setName));
-  }
+export function getDataToDisplay(): string[][] {
+  const container = localStorage.getItem('container') ?? 'binder';
+  const nameKey = container === 'binder' ? 'bindername' : 'setname';
+  const name = localStorage.getItem(nameKey);
+
+  if (!name) return [];
+
+  return JSON.parse(localStorage.getItem(name) ?? '[]');
 }

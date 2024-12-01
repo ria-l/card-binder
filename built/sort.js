@@ -7,7 +7,7 @@ export function newSort() {
     const sortBy = document.getElementById('sortDropdown')
         .value;
     const data = page.getDataToDisplay();
-    const container = localStorage.getItem('container') || 'binder';
+    const container = localStorage.getItem('container') ?? 'binder';
     const header = JSON.parse(localStorage.getItem('header') ?? '[]');
     let col;
     let name;
@@ -19,7 +19,7 @@ export function newSort() {
         col = header.indexOf('set');
         name = localStorage.setname;
     }
-    let filtered = data.filter((row) => row[col] == name);
+    let filtered = data.filter((row) => row[col] === name);
     filtered.unshift(header);
     if (sortBy == 'Dex #') {
         localStorage.setItem(name, JSON.stringify(sortByDex(filtered)));
@@ -50,12 +50,18 @@ export function newSort() {
 const sort = (col_name, data) => {
     const header = JSON.parse(localStorage.getItem('header') ?? '[]');
     const column = header.indexOf(col_name);
+    if (column === -1) {
+        console.warn(`Column "${col_name}" not found in the header.`);
+        return data;
+    }
     return data.sort((a, b) => {
-        if (a[column] === b[column]) {
+        const aValue = a[column] ?? '';
+        const bValue = b[column] ?? '';
+        if (aValue === bValue) {
             return 0;
         }
         else {
-            return a[column] < b[column] ? -1 : 1;
+            return aValue < bValue ? -1 : 1;
         }
     });
 };

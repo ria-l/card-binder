@@ -25,15 +25,8 @@ export function initializeGridAndSize() {
  * @returns
  */
 function initializeGridValues(): { gridCol: number; gridRow: number } {
-  let gridCol = parseInt(localStorage.getItem('col'));
-  let gridRow = parseInt(localStorage.getItem('row'));
-  // sets defaults if not in storage
-  if (isNaN(gridCol)) {
-    gridCol = 0;
-  }
-  if (isNaN(gridRow)) {
-    gridRow = 0;
-  }
+  let gridCol = parseInt(localStorage.getItem('col') ?? '0');
+  let gridRow = parseInt(localStorage.getItem('row') ?? '0');
   localStorage.setItem('row', gridRow.toString());
   localStorage.setItem('col', gridCol.toString());
   return { gridCol, gridRow };
@@ -76,11 +69,15 @@ function generateGridDropdown(gridCol: number, gridRow: number) {
 export function updateGrid() {
   localStorage.setItem(
     'row',
-    (document.getElementById('rowDropdown') as HTMLSelectElement).selectedIndex
+    (
+      document.getElementById('rowDropdown') as HTMLSelectElement
+    ).selectedIndex.toString()
   );
   localStorage.setItem(
     'col',
-    (document.getElementById('colDropdown') as HTMLSelectElement).selectedIndex
+    (
+      document.getElementById('colDropdown') as HTMLSelectElement
+    ).selectedIndex.toString()
   );
   page.fillPage();
 }
@@ -90,11 +87,7 @@ export function updateGrid() {
  * @returns
  */
 function initializeSizeValue(): number {
-  let cardSize = parseInt(localStorage.getItem('cardSize'));
-  // sets default if not in storage
-  if (isNaN(cardSize)) {
-    cardSize = 150;
-  }
+  let cardSize = parseInt(localStorage.getItem('cardSize') ?? '150');
   // set the dropdown value to the specified size.
   localStorage.setItem('cardSize', cardSize.toString());
   return cardSize;
@@ -163,7 +156,7 @@ export function resizeCards() {
  */
 export function generateBinderDropdown() {
   const binderDropdown = document.getElementById('binderDropdown');
-  const bindernames = JSON.parse(localStorage.getItem('bindernames'));
+  const bindernames = JSON.parse(localStorage.getItem('bindernames') ?? '[]');
   const defaultbinder = localStorage.getItem('bindername');
   binderDropdown.innerHTML = '';
   for (let binder of bindernames) {
@@ -171,7 +164,7 @@ export function generateBinderDropdown() {
     option.value = binder;
     option.textContent = binder;
     if (binder == defaultbinder) {
-      option.selected = 'selected';
+      option.selected = true;
     }
     binderDropdown.appendChild(option);
   }
@@ -181,7 +174,7 @@ export function generateBinderDropdown() {
  */
 export function generateSetDropdown() {
   const setDropdown = document.getElementById('setDropdown');
-  const setnames = JSON.parse(localStorage.getItem('setnames'));
+  const setnames = JSON.parse(localStorage.getItem('setnames') ?? '[]');
   const defaultset = localStorage.getItem('setname');
   setDropdown.innerHTML = '';
   for (let set of setnames) {
@@ -191,7 +184,7 @@ export function generateSetDropdown() {
       option.textContent = set;
     }
     if (set == defaultset) {
-      option.selected = 'selected';
+      option.selected = true;
     }
     setDropdown.appendChild(option);
   }
@@ -313,26 +306,28 @@ export function addShowHideToggle(btnId: string, dropdownId: string) {
  * adds or removes borders in binder view based on checkbox
  */
 export function toggleBorders() {
-  if ((document.getElementById('toggle-borders') as HTMLInputElement).checked) {
-    for (const card of document.getElementsByClassName(
-      'card'
-    ) as HTMLCollectionOf<HTMLElement>) {
-      const en = card.getAttribute('energy-type');
-      const ca = card.getAttribute('card-type');
-      const borderColors = page.generateBorderColors(ca, en);
+  const addBorders = (
+    document.getElementById('toggle-borders') as HTMLInputElement
+  ).checked;
+  const cards = document.getElementsByClassName(
+    'card'
+  ) as HTMLCollectionOf<HTMLElement>;
+  const cardSize = parseInt(
+    (document.getElementById('sizeDropdown') as HTMLSelectElement).value
+  );
+
+  for (const card of cards) {
+    const energytype = card.getAttribute('energy-type');
+    const cardtype = card.getAttribute('card-type');
+
+    if (addBorders && cardtype && energytype) {
+      const borderColors = page.generateBorderColors(cardtype, energytype);
       card.style.setProperty(
         'background',
         `linear-gradient(to bottom right, ${borderColors}) border-box`
       );
-      const cardSize = parseInt(
-        (document.getElementById('sizeDropdown') as HTMLSelectElement).value
-      );
       card.style.setProperty('border', `${cardSize / 20}px solid transparent`);
-    }
-  } else {
-    for (const card of document.getElementsByClassName(
-      'card'
-    ) as HTMLCollectionOf<HTMLElement>) {
+    } else {
       card.style.removeProperty('background');
       card.style.removeProperty('border');
     }

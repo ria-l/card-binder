@@ -17,21 +17,23 @@ export function fillPage() {
  * @returns generated tables or cards (if no grid) to display
  */
 function createTables(cardTags) {
-    const rows = parseInt(document.getElementById('rowDropdown').selectedIndex);
-    const cols = parseInt(document.getElementById('colDropdown').selectedIndex);
+    const numRows = document.getElementById('rowDropdown')
+        .selectedIndex;
+    const numCols = document.getElementById('colDropdown')
+        .selectedIndex;
     const allTables = [];
     let currentTable;
     let currentRow;
     cardTags.forEach((tag, i) => {
-        if (!rows || !cols) {
+        if (!numRows || !numCols) {
             allTables.push(tag);
             const spaceNode = document.createTextNode(' ');
             allTables.push(spaceNode);
         }
         else {
             // Use the remainder value from the modulo function to put each card into a row/grid bucket.
-            const rowIndex = (i + 1) % cols;
-            const gridIndex = (i + 1) % (rows * cols);
+            const rowIndex = (i + 1) % numCols;
+            const gridIndex = (i + 1) % (numRows * numCols);
             const table = document.createElement('table');
             const tr = document.createElement('tr');
             const td = document.createElement('td');
@@ -48,10 +50,10 @@ function createTables(cardTags) {
             }
             else if (rowIndex == 0) {
                 // last card in row
-                if (cols == 1) {
+                if (numCols == 1) {
                     currentRow = tr;
                 }
-                if (rows == 1) {
+                if (numRows == 1) {
                     currentTable = table;
                 }
                 currentRow.appendChild(td);
@@ -62,10 +64,10 @@ function createTables(cardTags) {
             }
             // last card in grid
             if (gridIndex == 0) {
-                if (cols == 1) {
+                if (numCols == 1) {
                     currentRow = tr;
                 }
-                if (rows == 1) {
+                if (numRows == 1) {
                     currentTable = table;
                 }
                 allTables.push(currentTable);
@@ -86,19 +88,17 @@ function createTables(cardTags) {
  * @returns img elements for owned cards in the data
  */
 function createCardTags(data) {
-    const cardSize = document.getElementById('sizeDropdown').value;
+    const cardSize = parseInt(document.getElementById('sizeDropdown').value);
     const tags = [];
     const header = JSON.parse(localStorage.getItem('header') ?? '[]');
-    for (let rowNum = 0; rowNum < data.length; rowNum++) {
-        const set = constants
-            .getMetadatum('set', data[rowNum], header)
-            .toLowerCase();
+    for (const row of data) {
+        const set = constants.getCellValue('set', row, header).toLowerCase();
         const dir = `img/${set}`;
-        const filename = constants.getMetadatum('filename', data[rowNum], header);
-        const energytype = constants.getMetadatum('energytype', data[rowNum], header);
-        const cardtype = constants.getMetadatum('cardtype', data[rowNum], header);
-        const visuals = constants.getMetadatum('visuals', data[rowNum], header);
-        const caught = constants.getMetadatum('caught', data[rowNum], header);
+        const filename = constants.getCellValue('filename', row, header);
+        const energytype = constants.getCellValue('energytype', row, header);
+        const cardtype = constants.getCellValue('cardtype', row, header);
+        const visuals = constants.getCellValue('visuals', row, header);
+        const caught = constants.getCellValue('caught', row, header);
         const title = `${filename} : ${energytype} : ${cardtype} : ${visuals}`;
         if (caught == 'x') {
             tags.push(generateImgTag(dir, filename, title, cardSize, cardtype, energytype));
@@ -193,7 +193,7 @@ export function generateBorderColors(cardtype, energytype) {
     if (cardtype == 'basic') {
         return `${energyColors},${energyColors},${energyColors[1]}`;
     }
-    else if (cardtype != 'basic') {
+    else {
         return `${energyColors},white,${cardColors}`;
     }
 }
@@ -202,14 +202,11 @@ export function generateBorderColors(cardtype, energytype) {
  * @returns data for the given binder/set
  */
 export function getDataToDisplay() {
-    const binderName = localStorage.getItem('bindername');
-    const setName = localStorage.getItem('setname');
-    const container = localStorage.getItem('container');
-    if (!container || container === 'binder') {
-        return JSON.parse(localStorage.getItem(binderName));
-    }
-    else if (container === 'set') {
-        return JSON.parse(localStorage.getItem(setName));
-    }
+    const container = localStorage.getItem('container') ?? 'binder';
+    const nameKey = container === 'binder' ? 'bindername' : 'setname';
+    const name = localStorage.getItem(nameKey);
+    if (!name)
+        return [];
+    return JSON.parse(localStorage.getItem(name) ?? '[]');
 }
 //# sourceMappingURL=page.js.map

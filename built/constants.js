@@ -7,12 +7,13 @@ export const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRhMe2yJH
  * @param header full header
  * @returns cell value
  */
-export function getMetadatum(columnTitle, row, header) {
+export function getCellValue(columnTitle, row, header) {
     if (!header) {
         header = JSON.parse(localStorage.getItem('header') ?? '[]');
     }
-    let index = header.indexOf(_headerTextMap[columnTitle]);
-    return row[index];
+    const column = _headerTextMap[columnTitle];
+    const index = header.indexOf(column);
+    return row[index] ?? '';
 }
 const _headerTextMap = {
     cardtype: 'card type',

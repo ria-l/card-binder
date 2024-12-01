@@ -9,7 +9,7 @@ export function newSort() {
   const sortBy = (document.getElementById('sortDropdown') as HTMLSelectElement)
     .value;
   const data = page.getDataToDisplay();
-  const container = localStorage.getItem('container') || 'binder';
+  const container = localStorage.getItem('container') ?? 'binder';
   const header = JSON.parse(localStorage.getItem('header') ?? '[]');
   let col;
   let name;
@@ -20,7 +20,10 @@ export function newSort() {
     col = header.indexOf('set');
     name = localStorage.setname;
   }
-  let filtered = data.filter((row) => row[col] == name);
+  let filtered: string[][] = data.filter(
+    (row) => row[col] === name
+  ) as unknown as string[][];
+
   filtered.unshift(header);
 
   if (sortBy == 'Dex #') {
@@ -45,14 +48,22 @@ export function newSort() {
  * @param data
  * @returns
  */
-const sort = (col_name: string, data: string[]): string[] => {
-  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
+const sort = (col_name: string, data: string[][]): string[][] => {
+  const header = JSON.parse(localStorage.getItem('header') ?? '[]') as string[];
   const column = header.indexOf(col_name);
+  if (column === -1) {
+    console.warn(`Column "${col_name}" not found in the header.`);
+    return data;
+  }
+
   return data.sort((a, b) => {
-    if (a[column] === b[column]) {
+    const aValue = a[column] ?? '';
+    const bValue = b[column] ?? '';
+
+    if (aValue === bValue) {
       return 0;
     } else {
-      return a[column] < b[column] ? -1 : 1;
+      return aValue < bValue ? -1 : 1;
     }
   });
 };
@@ -62,7 +73,7 @@ const sort = (col_name: string, data: string[]): string[] => {
  * @param data
  * @returns
  */
-export const sortByCardType = (data: string[]): string[] => {
+export const sortByCardType = (data: string[][]): string[][] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -81,7 +92,7 @@ export const sortByCardType = (data: string[]): string[] => {
  * @param data
  * @returns
  */
-export const sortByVisuals = (data: string[]): string[] => {
+export const sortByVisuals = (data: string[][]): string[][] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -101,7 +112,7 @@ export const sortByVisuals = (data: string[]): string[] => {
  * @param data
  * @returns
  */
-export const sortByColor = (data: string[]): string[] => {
+export const sortByColor = (data: string[][]): string[][] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -121,7 +132,7 @@ export const sortByColor = (data: string[]): string[] => {
  * @param data
  * @returns
  */
-export const sortByDex = (data: string[]): string[] => {
+export const sortByDex = (data: string[][]): string[][] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -140,7 +151,7 @@ export const sortByDex = (data: string[]): string[] => {
  * @param data
  * @returns
  */
-export const sortBySetNum = (data: string[]): string[] => {
+export const sortBySetNum = (data: string[][]): string[][] => {
   let sorted = data.slice(1);
 
   sorted = sort('card #', sorted);
@@ -154,7 +165,7 @@ export const sortBySetNum = (data: string[]): string[] => {
  * @param data
  * @returns
  */
-export const sortByRecent = (data: string[]): string[] => {
+export const sortByRecent = (data: string[][]): string[][] => {
   let sorted = data.slice(1);
 
   sorted = sort('caught date', sorted);
