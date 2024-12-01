@@ -228,7 +228,7 @@ function countPulled(): number {
  * TODO: make this boolean
  * @param fillpage whether the function is being called to fill the page or not
  */
-export function selectNewBinder(fillpage: string) {
+export function selectNewBinder(fillpage: boolean) {
   localStorage.setItem('container', 'binder');
   const binderDropdown = document.getElementById(
     'binderDropdown'
@@ -248,7 +248,7 @@ export function selectNewBinder(fillpage: string) {
  * TODO: make this boolean
  * @param fillpage whether the function is being called to fill the page or not
  */
-export function selectNewSet(fillpage: string) {
+export function selectNewSet(fillpage: boolean) {
   localStorage.setItem('container', 'set');
   const setDropdown = document.getElementById(
     'setDropdown'

@@ -48,11 +48,11 @@ async function fetchAndInitializePull() {
 function setEventListeners() {
   const binderDropdown = document.getElementById('binderDropdown');
   binderDropdown.addEventListener('change', function () {
-    ui.selectNewBinder();
+    ui.selectNewBinder(false);
   });
   const setDropdown = document.getElementById('setDropdown');
   setDropdown.addEventListener('change', function () {
-    ui.selectNewSet();
+    ui.selectNewSet(false);
   });
   const pullOneButton = document.getElementById('pullOneButton');
   pullOneButton.addEventListener('click', function () {
@@ -128,9 +128,8 @@ function processPulled(pulled: number[], data: string[][]) {
     const { title, dir, filename, caught, borderColors } =
       getCardMetadata(binderRow);
     const small = generateImg('small', dir, filename, caught, borderColors);
-    document
-      .getElementById('smallCardSpan')
-      .insertBefore(small, smallCardSpan.firstChild);
+    const smallCardSpan = document.getElementById('smallCardSpan');
+    smallCardSpan.insertBefore(small, smallCardSpan.firstChild);
     currentPulls.push(
       generateImg('large', dir, filename, caught, borderColors)
     );

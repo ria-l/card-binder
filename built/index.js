@@ -47,11 +47,11 @@ async function fetchAndInitializeIndex() {
 function setEventListeners() {
     const binderDropdown = document.getElementById('binderDropdown');
     binderDropdown.addEventListener('change', function () {
-        ui.selectNewBinder('fillpage');
+        ui.selectNewBinder(true);
     });
     const setDropdown = document.getElementById('setDropdown');
     setDropdown.addEventListener('change', function () {
-        ui.selectNewSet('fillpage');
+        ui.selectNewSet(true);
     });
     const colDropdown = document.getElementById('colDropdown');
     colDropdown.addEventListener('change', function () {
