@@ -40,6 +40,7 @@ export const ENERGY_COLORS = {
     colorless: ['#f5f4f0', '#d6d2cf'],
     item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
     supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
+    missing: ['#00FF00', '#00FF00'],
 };
 export const CARD_COLORS = {
     basic: [],
@@ -61,6 +62,7 @@ export const CARD_COLORS = {
         '#c992c0', // psychic
         '#f5f4f0', // colorless
     ],
+    missing: ['#00FF00', '#00FF00'],
 };
 /**
  * generates fill gradient hex colors
@@ -76,6 +78,7 @@ export function FILL_COLORS(visuals, energytype) {
         '3d': `${energyColors},${energyColors[0]},white 30%,#f9f9f9,white,#f9f9f9`,
         'full art': `${energyColors},${energyColors[0]},white 75%,#f9f9f9,white,#f9f9f9`,
         illust: `${energyColors},${energyColors},${energyColors}`,
+        missing: '#00FFFF,#00FFFF',
     };
     return gradients[visuals];
 }

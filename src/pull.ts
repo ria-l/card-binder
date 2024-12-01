@@ -161,7 +161,12 @@ function getCardMetadata(binderRow: string[]): {
   const cardtype = constants.getCellValue('cardtype', binderRow, header);
   const energytype = constants.getCellValue('energytype', binderRow, header);
   const set = constants.getCellValue('set', binderRow, header);
-  let title = `${filename} : ${energytype} : ${cardtype}`;
+  const visuals = constants.getCellValue('visuals', binderRow, header);
+  const binder = constants.getCellValue('binder', binderRow, header);
+  const gold = constants.getCellValue('gold', binderRow, header);
+  const tera = constants.getCellValue('tera', binderRow, header);
+  const shiny = constants.getCellValue('shiny', binderRow, header);
+  let title = `${filename} : ${visuals} : ${binder} : gold: [${gold}] : tera: [${tera}] : shiny: [${shiny}]`;
   if (!caught) {
     title += ` ✨NEW✨`;
   }

@@ -98,12 +98,15 @@ function createCardTags(
   const header = JSON.parse(localStorage.getItem('header') ?? '[]');
 
   for (const row of data) {
-    const set = constants.getCellValue('set', row, header).toLowerCase();
+    const set =
+      constants.getCellValue('set', row, header).toLowerCase() || 'missing';
     const dir = `img/${set}`;
     const filename = constants.getCellValue('filename', row, header);
-    const energytype = constants.getCellValue('energytype', row, header);
-    const cardtype = constants.getCellValue('cardtype', row, header);
-    const visuals = constants.getCellValue('visuals', row, header);
+    const energytype =
+      constants.getCellValue('energytype', row, header) || 'missing';
+    const cardtype =
+      constants.getCellValue('cardtype', row, header) || 'missing';
+    const visuals = constants.getCellValue('visuals', row, header) || 'missing';
     const caught = constants.getCellValue('caught', row, header);
     const title = `${filename} : ${energytype} : ${cardtype} : ${visuals}`;
     if (caught == 'x') {
