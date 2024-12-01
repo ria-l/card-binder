@@ -46,34 +46,27 @@ async function fetchAndInitializePull() {
  * sets event listeners for navbar
  */
 function setEventListeners() {
-  const binderDropdown = document.getElementById('binderDropdown');
-  binderDropdown.addEventListener('change', function () {
-    ui.selectNewBinder(false);
-  });
-  const setDropdown = document.getElementById('setDropdown');
-  setDropdown.addEventListener('change', function () {
-    ui.selectNewSet(false);
-  });
-  const pullOneButton = document.getElementById('pullOneButton');
-  pullOneButton.addEventListener('click', function () {
-    pullCards(1);
-  });
-  const pullFiveButton = document.getElementById('pullFiveButton');
-  pullFiveButton.addEventListener('click', function () {
-    pullCards(5);
-  });
-  const pullTenButton = document.getElementById('pullTenButton');
-  pullTenButton.addEventListener('click', function () {
-    pullCards(10);
-  });
-  const clearDisplayButton = document.getElementById('clearDisplayButton');
-  clearDisplayButton.addEventListener('click', function () {
-    clearDisplay();
-  });
-  const syncButton = document.getElementById('syncButton');
-  syncButton.addEventListener('click', function () {
-    fetchAndInitializePull();
-  });
+  document
+    .getElementById('binderDropdown')
+    ?.addEventListener('change', () => ui.selectNewBinder(false));
+  document
+    .getElementById('setDropdown')
+    ?.addEventListener('change', () => ui.selectNewSet(false));
+  document
+    .getElementById('pullOneButton')
+    ?.addEventListener('click', () => pullCards(1));
+  document
+    .getElementById('pullFiveButton')
+    ?.addEventListener('click', () => pullCards(5));
+  document
+    .getElementById('pullTenButton')
+    ?.addEventListener('click', () => pullCards(10));
+  document
+    .getElementById('clearDisplayButton')
+    ?.addEventListener('click', clearDisplay);
+  document
+    .getElementById('syncButton')
+    ?.addEventListener('click', fetchAndInitializePull);
   ui.addShowHideToggle('display-btn', 'display-dropdown');
 }
 
@@ -81,14 +74,20 @@ function setEventListeners() {
  * clears this session's pulled cards from display
  */
 function clearDisplay() {
-  document.getElementById('largeCardSpan').innerHTML = '';
-  document.getElementById('smallCardSpan').innerHTML = '';
-  document.getElementById('listSpan').innerHTML = '';
+  const largeCardSpan = document.getElementById('largeCardSpan');
+  const smallCardSpan = document.getElementById('smallCardSpan');
   const listSpan = document.getElementById('listSpan');
+
+  if (largeCardSpan) largeCardSpan.innerHTML = '';
+  if (smallCardSpan) smallCardSpan.innerHTML = '';
+
   const ol = document.createElement('ol');
   ol.id = 'cardList';
   ol.reversed = true;
-  listSpan.appendChild(ol);
+  if (listSpan) {
+    listSpan.innerHTML = '';
+    listSpan.appendChild(ol);
+  }
 }
 
 /**
@@ -129,7 +128,7 @@ function processPulled(pulled: number[], data: string[][]) {
       getCardMetadata(binderRow);
     const small = generateImg('small', dir, filename, caught, borderColors);
     const smallCardSpan = document.getElementById('smallCardSpan');
-    smallCardSpan.insertBefore(small, smallCardSpan.firstChild);
+    smallCardSpan?.insertBefore(small, smallCardSpan.firstChild);
     currentPulls.push(
       generateImg('large', dir, filename, caught, borderColors)
     );
@@ -218,7 +217,7 @@ function displayLarge(imgs: HTMLImageElement[]) {
   imgs.forEach((img) => {
     newSpan.insertBefore(img, newSpan.firstChild);
   });
-  largeCardSpan.replaceWith(newSpan);
+  largeCardSpan?.replaceWith(newSpan);
 }
 
 /**
@@ -229,7 +228,7 @@ function addToList(title: string) {
   const ol = document.getElementById('cardList');
   const li = document.createElement('li');
   li.appendChild(document.createTextNode(title));
-  ol.insertBefore(li, ol.firstChild);
+  ol?.insertBefore(li, ol.firstChild);
 }
 
 /**
@@ -263,7 +262,8 @@ function updateNewCardsInCache(newCards: string[]) {
       }
     }
     // each card may have a different set, so need to handle storage individually
-    const setName = filename.match(/^[^\.]*/)[0].toUpperCase();
+    const matchResult = filename.match(/^[^\.]*/) ?? '';
+    const setName = matchResult[0].toUpperCase();
     const setData = JSON.parse(localStorage.getItem(setName) ?? '');
     for (let rowNum = 0; rowNum < setData.length; rowNum++) {
       if (

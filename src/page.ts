@@ -7,9 +7,12 @@ export function fillPage() {
   const data: string[][] = getDataToDisplay();
   const cardTags = createCardTags(data);
   const tables = createTables(cardTags);
-  document.getElementById('contentDiv').innerHTML = '';
+  const contentDiv = document.getElementById('contentDiv');
+  if (contentDiv) {
+    contentDiv.innerHTML = '';
+  }
   tables.forEach((table) => {
-    document.getElementById('contentDiv').appendChild(table);
+    document.getElementById('contentDiv')?.appendChild(table);
   });
 }
 
@@ -167,16 +170,18 @@ function displayZoom(dir: string, filename: string) {
   const img = document.createElement('img');
   img.src = `${dir}/${filename}`;
   const zoomSpan = document.getElementById('zoom-span');
-  img.onclick = function () {
-    // close zoomed card
-    zoomSpan.innerHTML = '';
-  };
-  // clear any already zoomed cards
-  if (zoomSpan.innerHTML) {
-    zoomSpan.innerHTML = '';
+  if (zoomSpan) {
+    img.onclick = function () {
+      // close zoomed card
+      zoomSpan.innerHTML = '';
+    };
+    // clear any already zoomed cards
+    if (zoomSpan.innerHTML) {
+      zoomSpan.innerHTML = '';
+    }
+    img.className = 'zoomed-card';
+    zoomSpan.appendChild(img);
   }
-  img.className = 'zoomed-card';
-  zoomSpan.appendChild(img);
 }
 
 /**

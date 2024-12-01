@@ -45,41 +45,33 @@ async function fetchAndInitializeIndex() {
  * adds event listeners to navbar elements
  */
 function setEventListeners() {
-    const binderDropdown = document.getElementById('binderDropdown');
-    binderDropdown.addEventListener('change', function () {
-        ui.selectNewBinder(true);
-    });
-    const setDropdown = document.getElementById('setDropdown');
-    setDropdown.addEventListener('change', function () {
-        ui.selectNewSet(true);
-    });
-    const colDropdown = document.getElementById('colDropdown');
-    colDropdown.addEventListener('change', function () {
-        ui.updateGrid();
-    });
-    const rowDropdown = document.getElementById('rowDropdown');
-    rowDropdown.addEventListener('change', function () {
-        ui.updateGrid();
-    });
-    const sizeDropdown = document.getElementById('sizeDropdown');
-    sizeDropdown.addEventListener('change', function () {
-        ui.resizeCards();
-    });
-    const sortDropdown = document.getElementById('sortDropdown');
-    sortDropdown.addEventListener('change', function () {
-        sort.newSort();
-    });
-    const syncButton = document.getElementById('syncButton');
-    syncButton.addEventListener('click', function () {
-        fetchAndInitializeIndex();
-    });
+    document
+        .getElementById('binderDropdown')
+        ?.addEventListener('change', () => ui.selectNewBinder(true));
+    document
+        .getElementById('setDropdown')
+        ?.addEventListener('change', () => ui.selectNewSet(true));
+    document
+        .getElementById('colDropdown')
+        ?.addEventListener('change', ui.updateGrid);
+    document
+        .getElementById('rowDropdown')
+        ?.addEventListener('change', ui.updateGrid);
+    document
+        .getElementById('sizeDropdown')
+        ?.addEventListener('change', ui.resizeCards);
+    document
+        .getElementById('sortDropdown')
+        ?.addEventListener('change', sort.newSort);
+    document
+        .getElementById('syncButton')
+        ?.addEventListener('click', fetchAndInitializeIndex);
     ui.addShowHideToggle('display-btn', 'display-dropdown');
     ui.addShowHideToggle('grid-btn', 'grid-dropdown');
     ui.addShowHideToggle('size-btn', 'size-dropdown');
     ui.addShowHideToggle('sort-btn', 'sort-dropdown');
-    const borderCheckbox = document.getElementById('toggle-borders');
-    borderCheckbox.addEventListener('change', function () {
-        ui.toggleBorders();
-    });
+    document
+        .getElementById('toggle-borders')
+        ?.addEventListener('change', ui.toggleBorders);
 }
 //# sourceMappingURL=index.js.map

@@ -6,7 +6,7 @@ import * as page from './page.js';
 export function setBg() {
     const bgSpan = document.getElementById('bgSpan');
     const x = Math.floor(Math.random() * constants.BG_FILES.length);
-    bgSpan.style.backgroundImage = `url('img/0_bg/${constants.BG_FILES[x]}')`;
+    bgSpan?.style.setProperty('background-image', `url('img/0_bg/${constants.BG_FILES[x]}')`);
 }
 /**
  * wrapper to set initial grid and size values
@@ -84,21 +84,19 @@ export function generateSizeDropdown(cardSize) {
             const option = document.createElement('option');
             option.value = (i * 50).toString();
             option.textContent = (i * 50).toString();
-            sizeDropdown.appendChild(option);
+            sizeDropdown?.appendChild(option);
         }
         for (let i = 1; i < 20; i++) {
             const option = document.createElement('option');
             option.value = (i * 10).toString();
             option.textContent = (i * 10).toString();
-            sizeDropdown.appendChild(option);
+            sizeDropdown?.appendChild(option);
         }
     }
     // sets value
-    for (let i = 0; i < sizeDropdown.options.length; i++) {
-        if (sizeDropdown.options[i].value == cardSize.toString()) {
-            sizeDropdown.options[i].selected = true;
-            break;
-        }
+    const option = Array.from(sizeDropdown.options).find((option) => option.value === cardSize.toString());
+    if (option) {
+        option.selected = true;
     }
 }
 /**
@@ -126,7 +124,8 @@ export function generateBinderDropdown() {
     const binderDropdown = document.getElementById('binderDropdown');
     const bindernames = JSON.parse(localStorage.getItem('bindernames') ?? '[]');
     const defaultbinder = localStorage.getItem('bindername');
-    binderDropdown.innerHTML = '';
+    if (binderDropdown)
+        binderDropdown.innerHTML = '';
     for (let binder of bindernames) {
         const option = document.createElement('option');
         option.value = binder;
@@ -134,7 +133,7 @@ export function generateBinderDropdown() {
         if (binder == defaultbinder) {
             option.selected = true;
         }
-        binderDropdown.appendChild(option);
+        binderDropdown?.appendChild(option);
     }
 }
 /**
@@ -144,7 +143,8 @@ export function generateSetDropdown() {
     const setDropdown = document.getElementById('setDropdown');
     const setnames = JSON.parse(localStorage.getItem('setnames') ?? '[]');
     const defaultset = localStorage.getItem('setname');
-    setDropdown.innerHTML = '';
+    if (setDropdown)
+        setDropdown.innerHTML = '';
     for (let set of setnames) {
         const option = document.createElement('option');
         if (set != 'set') {
@@ -154,7 +154,7 @@ export function generateSetDropdown() {
         if (set == defaultset) {
             option.selected = true;
         }
-        setDropdown.appendChild(option);
+        setDropdown?.appendChild(option);
     }
 }
 /**
@@ -174,7 +174,7 @@ export function createProgressBar() {
     newSpan.appendChild(ratio);
     newSpan.appendChild(newBar);
     newSpan.appendChild(percent);
-    span.replaceWith(newSpan);
+    span?.replaceWith(newSpan);
 }
 /**
  * counts number of owned cards in the current binder/set
@@ -195,7 +195,7 @@ function countPulled() {
 export function selectNewBinder(fillpage) {
     localStorage.setItem('container', 'binder');
     const binderDropdown = document.getElementById('binderDropdown');
-    const bindername = binderDropdown.options[binderDropdown.selectedIndex].text;
+    const bindername = binderDropdown.options[binderDropdown.selectedIndex]?.text ?? '';
     localStorage.setItem('bindername', bindername);
     highlightBinder();
     if (fillpage) {
@@ -212,7 +212,7 @@ export function selectNewBinder(fillpage) {
 export function selectNewSet(fillpage) {
     localStorage.setItem('container', 'set');
     const setDropdown = document.getElementById('setDropdown');
-    const setname = setDropdown.options[setDropdown.selectedIndex].text;
+    const setname = setDropdown.options[setDropdown.selectedIndex]?.text ?? '';
     localStorage.setItem('setname', setname);
     highlightSet();
     if (fillpage) {
@@ -226,9 +226,9 @@ export function selectNewSet(fillpage) {
  */
 export function highlightBinder() {
     const binderDrop = document.getElementById('binderDropdown');
-    binderDrop.classList.add('highlight');
+    binderDrop?.classList.add('highlight');
     const setDrop = document.getElementById('setDropdown');
-    setDrop.classList.remove('highlight');
+    setDrop?.classList.remove('highlight');
 }
 /**
  * highlights or unhighlights set dropdown based on what was selected
@@ -236,9 +236,9 @@ export function highlightBinder() {
  */
 export function highlightSet() {
     const setDrop = document.getElementById('setDropdown');
-    setDrop.classList.add('highlight');
+    setDrop?.classList.add('highlight');
     const binderDrop = document.getElementById('binderDropdown');
-    binderDrop.classList.remove('highlight');
+    binderDrop?.classList.remove('highlight');
 }
 /**
  * adds event listener that shows or hides navbar dropdowns based on what was clicked
@@ -247,14 +247,14 @@ export function highlightSet() {
  * @param dropdownId the dropdown to show
  */
 export function addShowHideToggle(btnId, dropdownId) {
-    document.getElementById(btnId).addEventListener('click', function () {
+    document.getElementById(btnId)?.addEventListener('click', function () {
         const arr = document.getElementsByClassName('dropdown-container');
         for (let item of arr) {
             if (item.classList.contains('show') && item.id != dropdownId) {
                 item.classList.toggle('show');
             }
         }
-        document.getElementById(dropdownId).classList.toggle('show');
+        document.getElementById(dropdownId)?.classList.toggle('show');
     });
 }
 /**
