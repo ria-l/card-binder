@@ -90,7 +90,7 @@ export function updateGrid() {
  * @returns
  */
 function initializeSizeValue(): number {
-  let cardSize = parseInt(localStorage.getItem('cardSize') ?? '150');
+  let cardSize = parseInt(localStorage.getItem('cardSize') ?? '120');
   // set the dropdown value to the specified size.
   localStorage.setItem('cardSize', cardSize.toString());
   return cardSize;
