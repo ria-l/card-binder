@@ -22,10 +22,10 @@ export function initializeGridAndSize() {
  * @returns
  */
 function initializeGridValues() {
-    let gridCol = parseInt(localStorage.getItem('col') ?? '0');
-    let gridRow = parseInt(localStorage.getItem('row') ?? '0');
-    localStorage.setItem('row', gridRow.toString());
-    localStorage.setItem('col', gridCol.toString());
+    let gridCol = parseInt(localStorage.getItem('grid_col') ?? '0');
+    let gridRow = parseInt(localStorage.getItem('grid_row') ?? '0');
+    localStorage.setItem('grid_row', gridRow.toString());
+    localStorage.setItem('grid_col', gridCol.toString());
     return { gridCol, gridRow };
 }
 /**
@@ -58,8 +58,8 @@ function generateGridDropdown(gridCol, gridRow) {
  * saves new grid and refills page
  */
 export function updateGrid() {
-    localStorage.setItem('row', document.getElementById('rowDropdown').selectedIndex.toString());
-    localStorage.setItem('col', document.getElementById('colDropdown').selectedIndex.toString());
+    localStorage.setItem('grid_row', document.getElementById('rowDropdown').selectedIndex.toString());
+    localStorage.setItem('grid_col', document.getElementById('colDropdown').selectedIndex.toString());
     page.fillPage();
 }
 /**
@@ -67,9 +67,9 @@ export function updateGrid() {
  * @returns
  */
 function initializeSizeValue() {
-    let cardSize = parseInt(localStorage.getItem('cardSize') ?? '120');
+    let cardSize = parseInt(localStorage.getItem('card_size') ?? '120');
     // set the dropdown value to the specified size.
-    localStorage.setItem('cardSize', cardSize.toString());
+    localStorage.setItem('card_size', cardSize.toString());
     return cardSize;
 }
 /**
@@ -104,7 +104,7 @@ export function generateSizeDropdown(cardSize) {
  */
 export function resizeCards() {
     const cardSize = parseInt(document.getElementById('sizeDropdown').value);
-    localStorage.setItem('cardSize', cardSize.toString());
+    localStorage.setItem('card_size', cardSize.toString());
     for (const card of document.getElementsByClassName('card')) {
         card.style.width = `${cardSize}px`;
         card.style.height = `${cardSize * 1.4}px`;

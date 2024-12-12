@@ -28,10 +28,10 @@ export function initializeGridAndSize() {
  * @returns
  */
 function initializeGridValues(): { gridCol: number; gridRow: number } {
-  let gridCol = parseInt(localStorage.getItem('col') ?? '0');
-  let gridRow = parseInt(localStorage.getItem('row') ?? '0');
-  localStorage.setItem('row', gridRow.toString());
-  localStorage.setItem('col', gridCol.toString());
+  let gridCol = parseInt(localStorage.getItem('grid_col') ?? '0');
+  let gridRow = parseInt(localStorage.getItem('grid_row') ?? '0');
+  localStorage.setItem('grid_row', gridRow.toString());
+  localStorage.setItem('grid_col', gridCol.toString());
   return { gridCol, gridRow };
 }
 
@@ -71,13 +71,13 @@ function generateGridDropdown(gridCol: number, gridRow: number) {
  */
 export function updateGrid() {
   localStorage.setItem(
-    'row',
+    'grid_row',
     (
       document.getElementById('rowDropdown') as HTMLSelectElement
     ).selectedIndex.toString()
   );
   localStorage.setItem(
-    'col',
+    'grid_col',
     (
       document.getElementById('colDropdown') as HTMLSelectElement
     ).selectedIndex.toString()
@@ -90,9 +90,9 @@ export function updateGrid() {
  * @returns
  */
 function initializeSizeValue(): number {
-  let cardSize = parseInt(localStorage.getItem('cardSize') ?? '120');
+  let cardSize = parseInt(localStorage.getItem('card_size') ?? '120');
   // set the dropdown value to the specified size.
-  localStorage.setItem('cardSize', cardSize.toString());
+  localStorage.setItem('card_size', cardSize.toString());
   return cardSize;
 }
 
@@ -135,7 +135,7 @@ export function resizeCards() {
   const cardSize = parseInt(
     (document.getElementById('sizeDropdown') as HTMLSelectElement).value
   );
-  localStorage.setItem('cardSize', cardSize.toString());
+  localStorage.setItem('card_size', cardSize.toString());
   for (const card of document.getElementsByClassName(
     'card'
   ) as HTMLCollectionOf<HTMLElement>) {
