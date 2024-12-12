@@ -11,17 +11,17 @@ export function newSort() {
   const data = page.getDataToDisplay();
   const collectionType = localStorage.getItem('collection_type') ?? 'binder';
   const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
-  let col;
+  let colNum;
   let activeCollection = '';
   if (collectionType == 'binder') {
-    col = header.indexOf('binder');
+    colNum = header.indexOf('binder');
     activeCollection = localStorage.getItem('active_binder') ?? '';
   } else {
-    col = header.indexOf('set');
+    colNum = header.indexOf('set');
     activeCollection = localStorage.getItem('active_set') ?? '';
   }
   let filtered: string[][] = data.filter(
-    (row) => row[col] === activeCollection
+    (dataRow) => dataRow[colNum] === activeCollection
   ) as unknown as string[][];
 
   filtered.unshift(header);

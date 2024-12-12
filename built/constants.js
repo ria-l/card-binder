@@ -2,18 +2,18 @@
 export const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
 /**
  * gets cell value for a given row and column
- * @param columnTitle just the title
- * @param row full row
+ * @param colName just the title
+ * @param dataRow full row
  * @param header full header
  * @returns cell value
  */
-export function getCellValue(columnTitle, row, header) {
+export function getCellValue(colName, dataRow, header) {
     if (!header) {
         header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
     }
-    const column = _headerTextMap[columnTitle];
+    const column = _headerTextMap[colName];
     const index = header.indexOf(column);
-    return row[index] ?? '';
+    return dataRow[index] ?? '';
 }
 const _headerTextMap = {
     cardtype: 'card type',

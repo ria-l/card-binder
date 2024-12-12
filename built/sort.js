@@ -9,17 +9,17 @@ export function newSort() {
     const data = page.getDataToDisplay();
     const collectionType = localStorage.getItem('collection_type') ?? 'binder';
     const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
-    let col;
+    let colNum;
     let activeCollection = '';
     if (collectionType == 'binder') {
         colNum = header.indexOf('binder');
         activeCollection = localStorage.getItem('active_binder') ?? '';
     }
     else {
-        col = header.indexOf('set');
+        colNum = header.indexOf('set');
         activeCollection = localStorage.getItem('active_set') ?? '';
     }
-    let filtered = data.filter((row) => row[col] === activeCollection);
+    let filtered = data.filter((dataRow) => dataRow[colNum] === activeCollection);
     filtered.unshift(header);
     if (sortBy == 'Dex #') {
         localStorage.setItem(activeCollection, JSON.stringify(sortByDex(filtered))); // TODO: refactor collection type vars

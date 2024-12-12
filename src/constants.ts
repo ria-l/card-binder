@@ -5,24 +5,24 @@ export const APPSCRIPT_URL =
 
 /**
  * gets cell value for a given row and column
- * @param columnTitle just the title
- * @param row full row
+ * @param colName just the title
+ * @param dataRow full row
  * @param header full header
  * @returns cell value
  */
 export function getCellValue(
-  columnTitle: string,
-  row: string[],
+  colName: string,
+  dataRow: string[],
   header: string[] | null
 ): string {
   if (!header) {
     header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
   }
 
-  const column = _headerTextMap[columnTitle as keyof typeof _headerTextMap];
+  const column = _headerTextMap[colName as keyof typeof _headerTextMap];
   const index = header!.indexOf(column);
 
-  return row[index] ?? '';
+  return dataRow[index] ?? '';
 }
 
 const _headerTextMap = {
