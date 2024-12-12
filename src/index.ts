@@ -11,7 +11,7 @@ window.onload = () => {
   ui.setBg();
   ui.initializeGridAndSize();
   if (
-    localStorage.getItem('init_index') == 'SUCCESS' &&
+    localStorage.getItem('storage_init') == 'SUCCESS' &&
     localStorage.getItem('storage_ver') == constants.STORAGE_VERSION
   ) {
     initializeIndex();
@@ -37,12 +37,13 @@ function initializeIndex() {
     ui.highlightSet();
   }
   ui.createProgressBar();
-  localStorage.setItem('init_index', 'SUCCESS');
+  localStorage.setItem('storage_init', 'SUCCESS');
   localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 
 /**
- * wrapper method that fetches data and then loads UI
+ * wrapper method that fetches data and initializes page.
+ *  TODO: get onload to work with async/await and get rid of this.
  */
 async function fetchAndInitializeIndex() {
   const data = await app.fetchData();

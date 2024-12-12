@@ -7,7 +7,7 @@ window.onload = () => {
     ui.setBg();
     document.getElementById('form').action =
         constants.APPSCRIPT_URL;
-    if (localStorage.getItem('init_pull') == 'SUCCESS' &&
+    if (localStorage.getItem('storage_init') == 'SUCCESS' &&
         localStorage.getItem('storage_ver') == constants.STORAGE_VERSION) {
         initializePull();
     }
@@ -32,11 +32,13 @@ function initializePull() {
         ui.highlightSet();
     }
     ui.createProgressBar();
-    localStorage.setItem('init_pull', 'SUCCESS');
+    localStorage.setItem('storage_init', 'SUCCESS');
     localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 /**
- * wrapper that fetches data and initializes page
+ * wrapper that fetches data and initializes page.
+ *  TODO: get onload to work with async/await and get rid of this.
+
  */
 async function fetchAndInitializePull() {
     const data = await app.fetchData();
