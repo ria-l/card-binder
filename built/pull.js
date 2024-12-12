@@ -7,10 +7,12 @@ window.onload = () => {
     ui.setBg();
     document.getElementById('form').action =
         constants.APPSCRIPT_URL;
-    if (localStorage.getItem('pull_status') == 'SUCCESS') {
+    if (localStorage.getItem('init_pull') == 'SUCCESS' &&
+        localStorage.getItem('storage_ver') == constants.STORAGE_VERSION) {
         initializePull();
     }
     else {
+        localStorage.clear();
         fetchAndInitializePull();
     }
     setEventListeners();
@@ -30,7 +32,8 @@ function initializePull() {
         ui.highlightSet();
     }
     ui.createProgressBar();
-    localStorage.setItem('pull_status', 'SUCCESS');
+    localStorage.setItem('init_pull', 'SUCCESS');
+    localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 /**
  * wrapper that fetches data and initializes page

@@ -4,13 +4,16 @@ import * as page from './page.js';
 import * as sort from './sort.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
+import * as constants from './constants.js';
 window.onload = () => {
     ui.setBg();
     ui.initializeGridAndSize();
-    if (localStorage.getItem('page_status') == 'SUCCESS') {
+    if (localStorage.getItem('init_index') == 'SUCCESS' &&
+        localStorage.getItem('storage_ver') == constants.STORAGE_VERSION) {
         initializeIndex();
     }
     else {
+        localStorage.clear();
         fetchAndInitializeIndex();
     }
     setEventListeners();
@@ -23,15 +26,16 @@ function initializeIndex() {
     page.fillPage();
     ui.generateBinderDropdown();
     ui.generateSetDropdown();
-    const container = localStorage.getItem('container');
-    if (container == 'binder') {
+    const collectionType = localStorage.getItem('collection_type');
+    if (collectionType == 'binder') {
         ui.highlightBinder();
     }
-    else if (container == 'set') {
+    else if (collectionType == 'set') {
         ui.highlightSet();
     }
     ui.createProgressBar();
-    localStorage.setItem('page_status', 'SUCCESS');
+    localStorage.setItem('init_index', 'SUCCESS');
+    localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 /**
  * wrapper method that fetches data and then loads UI
