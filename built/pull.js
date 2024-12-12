@@ -135,7 +135,7 @@ function processPulled(pulled, data) {
  * @returns
  */
 function getCardMetadata(binderRow) {
-    const header = JSON.parse(localStorage.getItem('header') ?? '[]');
+    const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
     const filename = constants.getCellValue('filename', binderRow, header);
     const caught = constants.getCellValue('caught', binderRow, header);
     const cardtype = constants.getCellValue('cardtype', binderRow, header);
@@ -219,7 +219,7 @@ function processNewCards(newCards) {
 function updateNewCardsInCache(newCards) {
     const binderName = localStorage.getItem('bindername') ?? '';
     const binderData = JSON.parse(localStorage.getItem(binderName) ?? '[]');
-    const header = JSON.parse(localStorage.getItem('header') ?? '[]');
+    const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
     newCards.forEach((filename) => {
         for (let rowNum = 0; rowNum < binderData.length; rowNum++) {
             if (constants.getCellValue('filename', binderData[rowNum], header) ==

@@ -8,7 +8,7 @@ export function storeData(data: string[][]): void {
   // Store header
   const header = data[0] ?? [];
   if (!header.length) return; // Exit early if header is empty
-  localStorage.setItem('header', JSON.stringify(header));
+  localStorage.setItem('data_header', JSON.stringify(header));
 
   // Store container names
   const bindernames = getUniqueValuesFromColumn(header, 'binder', data);

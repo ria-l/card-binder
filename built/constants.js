@@ -9,7 +9,7 @@ export const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRhMe2yJH
  */
 export function getCellValue(columnTitle, row, header) {
     if (!header) {
-        header = JSON.parse(localStorage.getItem('header') ?? '[]');
+        header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
     }
     const column = _headerTextMap[columnTitle];
     const index = header.indexOf(column);

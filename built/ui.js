@@ -182,7 +182,7 @@ export function createProgressBar() {
  */
 function countPulled() {
     const data = page.getDataToDisplay();
-    const header = JSON.parse(localStorage.getItem('header') ?? '[]');
+    const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
     const filtered = data.filter((row) => row[header.indexOf('caught')] == 'x');
     return filtered.length;
 }

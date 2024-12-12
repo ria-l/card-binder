@@ -16,7 +16,7 @@ export function getCellValue(
   header: string[] | null
 ): string {
   if (!header) {
-    header = JSON.parse(localStorage.getItem('header') ?? '[]');
+    header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
   }
 
   const column = _headerTextMap[columnTitle as keyof typeof _headerTextMap];

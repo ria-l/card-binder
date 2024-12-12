@@ -10,7 +10,7 @@ export function newSort() {
     .value;
   const data = page.getDataToDisplay();
   const container = localStorage.getItem('container') ?? 'binder';
-  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
+  const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
   let col;
   let name;
   if (container == 'binder') {
@@ -49,7 +49,9 @@ export function newSort() {
  * @returns
  */
 const sort = (col_name: string, data: string[][]): string[][] => {
-  const header = JSON.parse(localStorage.getItem('header') ?? '[]') as string[];
+  const header = JSON.parse(
+    localStorage.getItem('data_header') ?? '[]'
+  ) as string[];
   const column = header.indexOf(col_name);
   if (column === -1) {
     console.warn(`Column "${col_name}" not found in the header.`);

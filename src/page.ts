@@ -95,7 +95,7 @@ function createCardTags(
     (document.getElementById('sizeDropdown') as HTMLSelectElement).value
   );
   const tags = [];
-  const header = JSON.parse(localStorage.getItem('header') ?? '[]');
+  const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
 
   for (const row of data) {
     const set =

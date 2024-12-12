@@ -75,7 +75,7 @@ function createTables(cardElements) {
 function createCardTags(data) {
     const cardSize = parseInt(document.getElementById('sizeDropdown').value);
     const tags = [];
-    const header = JSON.parse(localStorage.getItem('header') ?? '[]');
+    const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
     for (const row of data) {
         const set = constants.getCellValue('set', row, header).toLowerCase() || 'missing';
         const dir = `img/${set}`;
