@@ -104,10 +104,12 @@ function clearDisplay() {
  */
 function pullCards(n: number) {
   const collectionType = localStorage.getItem('collection_type') ?? 'binder';
-  const collectionKey =
+  const storageKey =
     collectionType === 'binder' ? 'active_binder' : 'active_set';
-  const name = localStorage.getItem(collectionKey); // TODO: refactor collection type vars
-  const data = name ? JSON.parse(localStorage.getItem(name) ?? '[]') : []; // TODO: refactor collection type vars/
+  const activeCollection = localStorage.getItem(storageKey);
+  const data = activeCollection
+    ? JSON.parse(localStorage.getItem(activeCollection) ?? '[]')
+    : [];
 
   const cardPool = data.map((row: string[]) =>
     constants.getCellValue('filename', row, null)
@@ -274,13 +276,13 @@ function updateNewCardsInCache(newCards: string[]) {
     // each card may have a different set, so need to handle storage individually
     const matchResult = filename.match(/^[^\.]*/) ?? '';
     const setName = matchResult[0].toUpperCase();
-    const setData = JSON.parse(localStorage.getItem(setName) ?? ''); // TODO: refactor collection type vars
+    const setData = JSON.parse(localStorage.getItem(setName) ?? '');
     for (let rowNum = 0; rowNum < setData.length; rowNum++) {
       if (
         constants.getCellValue('filename', setData[rowNum], header) == filename
       ) {
         setData[rowNum][header.indexOf('caught')] = 'x';
-        localStorage.setItem(setName, JSON.stringify(setData)); // TODO: refactor collection type vars
+        localStorage.setItem(setName, JSON.stringify(setData));
         break;
       }
     }

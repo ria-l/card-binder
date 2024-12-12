@@ -22,7 +22,7 @@ export function newSort() {
     let filtered = data.filter((dataRow) => dataRow[colNum] === activeCollection);
     filtered.unshift(header);
     if (sortBy == 'Dex #') {
-        localStorage.setItem(activeCollection, JSON.stringify(sortByDex(filtered))); // TODO: refactor collection type vars
+        localStorage.setItem(activeCollection, JSON.stringify(sortByDex(filtered)));
     }
     else if (sortBy == 'Energy Type') {
         localStorage.setItem(activeCollection, JSON.stringify(sortByColor(filtered)));
@@ -49,14 +49,14 @@ export function newSort() {
  */
 const sort = (col_name, data) => {
     const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
-    const column = header.indexOf(col_name);
-    if (column === -1) {
+    const col = header.indexOf(col_name);
+    if (col === -1) {
         console.warn(`Column "${col_name}" not found in the header.`);
         return data;
     }
     return data.sort((a, b) => {
-        const aValue = a[column] ?? '';
-        const bValue = b[column] ?? '';
+        const aValue = a[col] ?? '';
+        const bValue = b[col] ?? '';
         if (aValue === bValue) {
             return 0;
         }

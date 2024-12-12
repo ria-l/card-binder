@@ -24,38 +24,38 @@ export function storeData(data) {
 }
 /**
  *
- * @param key 'active_binder' or 'active_set'
+ * @param storageKey 'active_binder' or 'active_set'
  * @param allBinderNames
  */
-function storeRandomNameIfAbsent(key, allBinderNames) {
-    let storedName = localStorage.getItem(key); // TODO: refactor collection type vars
+function storeRandomNameIfAbsent(storageKey, allBinderNames) {
+    let storedName = localStorage.getItem(storageKey);
     if (!storedName) {
         storedName =
             Array.from(allBinderNames)[Math.floor(Math.random() * allBinderNames.size)] ?? '';
-        localStorage.setItem(key, storedName); // TODO: refactor collection type vars
+        localStorage.setItem(storageKey, storedName);
     }
 }
 /**
  * Store only the cards for the given collection
- * @param names
+ * @param allCollectionNames
  * @param data
  * @param header
- * @param columnName
+ * @param colName
  */
-function storeFilteredData(names, data, header, columnName) {
-    const columnIndex = header.indexOf(columnName);
-    names.forEach((name) => {
-        const filtered = data.filter((row) => row[columnIndex] === name);
+function storeFilteredData(allCollectionNames, data, header, colName) {
+    const columnIndex = header.indexOf(colName);
+    allCollectionNames.forEach((collectionName) => {
+        const filtered = data.filter((row) => row[columnIndex] === collectionName);
         // add back the header, since it would be removed during filtering
         filtered.unshift(header);
-        localStorage.setItem(name, JSON.stringify(sort.sortByColor(filtered))); // TODO: refactor collection type vars
+        localStorage.setItem(collectionName, JSON.stringify(sort.sortByColor(filtered)));
     });
 }
-function getUniqueValuesFromColumn(header, columnName, data) {
-    const columnIndex = header.indexOf(columnName);
+function getUniqueValuesFromColumn(header, colName, data) {
+    const columnIndex = header.indexOf(colName);
     const allBinderNames = new Set(data
         .map((row) => row[columnIndex])
-        .filter((value) => value !== undefined && value !== columnName) // Filter out `undefined`
+        .filter((value) => value !== undefined && value !== colName) // Filter out `undefined`
     );
     return allBinderNames;
 }

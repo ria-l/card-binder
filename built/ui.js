@@ -189,7 +189,6 @@ function countPulled() {
 /**
  * updates storage to newly selected binder, fills page if needed, and creates progress bar
  * TODO: refactor
- * TODO: make this boolean
  * @param fillpage whether the function is being called to fill the page or not
  */
 export function selectNewBinder(fillpage) {
@@ -206,7 +205,6 @@ export function selectNewBinder(fillpage) {
 /**
  * updates storage to newly selected binder, fills page if needed, and creates progress bar
  * TODO: refactor
- * TODO: make this boolean
  * @param fillpage whether the function is being called to fill the page or not
  */
 export function selectNewSet(fillpage) {

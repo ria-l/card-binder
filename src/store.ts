@@ -29,53 +29,59 @@ export function storeData(data: string[][]): void {
 
 /**
  *
- * @param key 'active_binder' or 'active_set'
+ * @param storageKey 'active_binder' or 'active_set'
  * @param allBinderNames
  */
-function storeRandomNameIfAbsent(key: string, allBinderNames: Set<string>) {
-  let storedName = localStorage.getItem(key); // TODO: refactor collection type vars
+function storeRandomNameIfAbsent(
+  storageKey: string,
+  allBinderNames: Set<string>
+) {
+  let storedName = localStorage.getItem(storageKey);
   if (!storedName) {
     storedName =
       Array.from(allBinderNames)[
         Math.floor(Math.random() * allBinderNames.size)
       ] ?? '';
-    localStorage.setItem(key, storedName); // TODO: refactor collection type vars
+    localStorage.setItem(storageKey, storedName);
   }
 }
 
 /**
  * Store only the cards for the given collection
- * @param names
+ * @param allCollectionNames
  * @param data
  * @param header
- * @param columnName
+ * @param colName
  */
 function storeFilteredData(
-  names: Set<string>,
+  allCollectionNames: Set<string>,
   data: string[][],
   header: string[],
-  columnName: string
+  colName: string
 ) {
-  const columnIndex = header.indexOf(columnName);
-  names.forEach((name) => {
-    const filtered = data.filter((row) => row[columnIndex] === name);
+  const columnIndex = header.indexOf(colName);
+  allCollectionNames.forEach((collectionName) => {
+    const filtered = data.filter((row) => row[columnIndex] === collectionName);
     // add back the header, since it would be removed during filtering
     filtered.unshift(header);
-    localStorage.setItem(name, JSON.stringify(sort.sortByColor(filtered))); // TODO: refactor collection type vars
+    localStorage.setItem(
+      collectionName,
+      JSON.stringify(sort.sortByColor(filtered))
+    );
   });
 }
 
 function getUniqueValuesFromColumn(
   header: string[],
-  columnName: string,
+  colName: string,
   data: string[][]
 ) {
-  const columnIndex = header.indexOf(columnName);
+  const columnIndex = header.indexOf(colName);
   const allBinderNames = new Set<string>(
     data
       .map((row) => row[columnIndex])
       .filter(
-        (value): value is string => value !== undefined && value !== columnName
+        (value): value is string => value !== undefined && value !== colName
       ) // Filter out `undefined`
   );
   return allBinderNames;

@@ -190,10 +190,10 @@ export function generateBorderColors(cardtype, energytype) {
  */
 export function getDataToDisplay() {
     const collectionType = localStorage.getItem('collection_type') ?? 'binder';
-    const nameKey = collectionType === 'binder' ? 'active_binder' : 'active_set';
-    const name = localStorage.getItem(nameKey); // TODO: refactor collection type vars
-    if (!name)
+    const storageKey = collectionType === 'binder' ? 'active_binder' : 'active_set';
+    const activeCollection = localStorage.getItem(storageKey);
+    if (!activeCollection)
         return [];
-    return JSON.parse(localStorage.getItem(name) ?? '[]'); // TODO: refactor collection type vars
+    return JSON.parse(localStorage.getItem(activeCollection) ?? '[]');
 }
 //# sourceMappingURL=page.js.map

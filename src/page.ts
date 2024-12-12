@@ -237,10 +237,11 @@ export function generateBorderColors(
  */
 export function getDataToDisplay(): string[][] {
   const collectionType = localStorage.getItem('collection_type') ?? 'binder';
-  const nameKey = collectionType === 'binder' ? 'active_binder' : 'active_set';
-  const name = localStorage.getItem(nameKey); // TODO: refactor collection type vars
+  const storageKey =
+    collectionType === 'binder' ? 'active_binder' : 'active_set';
+  const activeCollection = localStorage.getItem(storageKey);
 
-  if (!name) return [];
+  if (!activeCollection) return [];
 
-  return JSON.parse(localStorage.getItem(name) ?? '[]'); // TODO: refactor collection type vars
+  return JSON.parse(localStorage.getItem(activeCollection) ?? '[]');
 }
