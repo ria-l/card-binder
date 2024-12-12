@@ -7,37 +7,37 @@ export function newSort() {
     const sortBy = document.getElementById('sortDropdown')
         .value;
     const data = page.getDataToDisplay();
-    const container = localStorage.getItem('container') ?? 'binder';
+    const collectionType = localStorage.getItem('collection_type') ?? 'binder';
     const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
     let col;
-    let name;
-    if (container == 'binder') {
-        col = header.indexOf('binder');
-        name = localStorage.bindername;
+    let activeCollection = '';
+    if (collectionType == 'binder') {
+        colNum = header.indexOf('binder');
+        activeCollection = localStorage.getItem('active_binder') ?? '';
     }
     else {
         col = header.indexOf('set');
-        name = localStorage.setname;
+        activeCollection = localStorage.getItem('active_set') ?? '';
     }
-    let filtered = data.filter((row) => row[col] === name);
+    let filtered = data.filter((row) => row[col] === activeCollection);
     filtered.unshift(header);
     if (sortBy == 'Dex #') {
-        localStorage.setItem(name, JSON.stringify(sortByDex(filtered)));
+        localStorage.setItem(activeCollection, JSON.stringify(sortByDex(filtered))); // TODO: refactor collection type vars
     }
     else if (sortBy == 'Energy Type') {
-        localStorage.setItem(name, JSON.stringify(sortByColor(filtered)));
+        localStorage.setItem(activeCollection, JSON.stringify(sortByColor(filtered)));
     }
     else if (sortBy == 'Card Type') {
-        localStorage.setItem(name, JSON.stringify(sortByCardType(filtered)));
+        localStorage.setItem(activeCollection, JSON.stringify(sortByCardType(filtered)));
     }
     else if (sortBy == 'Set Number') {
-        localStorage.setItem(name, JSON.stringify(sortBySetNum(filtered)));
+        localStorage.setItem(activeCollection, JSON.stringify(sortBySetNum(filtered)));
     }
     else if (sortBy == 'Visuals') {
-        localStorage.setItem(name, JSON.stringify(sortByVisuals(filtered)));
+        localStorage.setItem(activeCollection, JSON.stringify(sortByVisuals(filtered)));
     }
     else if (sortBy == 'recent') {
-        localStorage.setItem(name, JSON.stringify(sortByRecent(filtered)));
+        localStorage.setItem(activeCollection, JSON.stringify(sortByRecent(filtered)));
     }
     page.fillPage();
 }

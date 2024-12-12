@@ -23,10 +23,10 @@ function initializePull() {
   console.log('loading from storage');
   ui.generateBinderDropdown();
   ui.generateSetDropdown();
-  const container = localStorage.getItem('container');
-  if (container == 'binder') {
+  const collectionType = localStorage.getItem('collection_type');
+  if (collectionType == 'binder') {
     ui.highlightBinder();
-  } else if (container == 'set') {
+  } else if (collectionType == 'set') {
     ui.highlightSet();
   }
   ui.createProgressBar();
@@ -96,10 +96,11 @@ function clearDisplay() {
  * @param n number of cards to pull
  */
 function pullCards(n: number) {
-  const container = localStorage.getItem('container') ?? 'binder';
-  const nameKey = container === 'binder' ? 'bindername' : 'setname';
-  const name = localStorage.getItem(nameKey);
-  const data = name ? JSON.parse(localStorage.getItem(name) ?? '[]') : [];
+  const collectionType = localStorage.getItem('collection_type') ?? 'binder';
+  const collectionKey =
+    collectionType === 'binder' ? 'active_binder' : 'active_set';
+  const name = localStorage.getItem(collectionKey); // TODO: refactor collection type vars
+  const data = name ? JSON.parse(localStorage.getItem(name) ?? '[]') : []; // TODO: refactor collection type vars/
 
   const cardPool = data.map((row: string[]) =>
     constants.getCellValue('filename', row, null)
@@ -117,7 +118,7 @@ function pullCards(n: number) {
 /**
  *
  * @param pulled index numbers in the filenames array
- * @param data data for the current binder/set
+ * @param data data for the current collection
  */
 function processPulled(pulled: number[], data: string[][]) {
   const newCards: string[] = [];
@@ -246,12 +247,12 @@ function processNewCards(newCards: string[]) {
 }
 
 /**
- * updates stored data
+ * updates stored data (handles both binders and sets)
  * @param newCards array of filenames
  */
 function updateNewCardsInCache(newCards: string[]) {
-  const binderName = localStorage.getItem('bindername') ?? '';
-  const binderData = JSON.parse(localStorage.getItem(binderName) ?? '[]');
+  const activeBinder = localStorage.getItem('active_binder') ?? '';
+  const binderData = JSON.parse(localStorage.getItem(activeBinder) ?? '[]');
   const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
   newCards.forEach((filename) => {
     for (let rowNum = 0; rowNum < binderData.length; rowNum++) {
@@ -266,17 +267,17 @@ function updateNewCardsInCache(newCards: string[]) {
     // each card may have a different set, so need to handle storage individually
     const matchResult = filename.match(/^[^\.]*/) ?? '';
     const setName = matchResult[0].toUpperCase();
-    const setData = JSON.parse(localStorage.getItem(setName) ?? '');
+    const setData = JSON.parse(localStorage.getItem(setName) ?? ''); // TODO: refactor collection type vars
     for (let rowNum = 0; rowNum < setData.length; rowNum++) {
       if (
         constants.getCellValue('filename', setData[rowNum], header) == filename
       ) {
         setData[rowNum][header.indexOf('caught')] = 'x';
-        localStorage.setItem(setName, JSON.stringify(setData));
+        localStorage.setItem(setName, JSON.stringify(setData)); // TODO: refactor collection type vars
         break;
       }
     }
   });
   // only set after all cards are updated
-  localStorage.setItem(binderName, JSON.stringify(binderData));
+  localStorage.setItem(activeBinder, JSON.stringify(binderData));
 }

@@ -233,14 +233,14 @@ export function generateBorderColors(
 
 /**
  * retrieve stored data for the active binder or set (also in storage)
- * @returns data for the given binder/set
+ * @returns data for the given collection
  */
 export function getDataToDisplay(): string[][] {
-  const container = localStorage.getItem('container') ?? 'binder';
-  const nameKey = container === 'binder' ? 'bindername' : 'setname';
-  const name = localStorage.getItem(nameKey);
+  const collectionType = localStorage.getItem('collection_type') ?? 'binder';
+  const nameKey = collectionType === 'binder' ? 'active_binder' : 'active_set';
+  const name = localStorage.getItem(nameKey); // TODO: refactor collection type vars
 
   if (!name) return [];
 
-  return JSON.parse(localStorage.getItem(name) ?? '[]');
+  return JSON.parse(localStorage.getItem(name) ?? '[]'); // TODO: refactor collection type vars
 }

@@ -11,34 +11,40 @@ export function storeData(data: string[][]): void {
   localStorage.setItem('data_header', JSON.stringify(header));
 
   // Store container names
-  const bindernames = getUniqueValuesFromColumn(header, 'binder', data);
-  const setnames = getUniqueValuesFromColumn(header, 'set', data);
+  const allBinderNames = getUniqueValuesFromColumn(header, 'binder', data);
+  const allSetNames = getUniqueValuesFromColumn(header, 'set', data);
 
-  // Store bindernames and setnames in localStorage
-  localStorage.setItem('bindernames', JSON.stringify([...bindernames]));
-  localStorage.setItem('setnames', JSON.stringify([...setnames]));
+  // Store allBinderNames and allSetNames in localStorage
+  localStorage.setItem('all_binder_names', JSON.stringify([...allBinderNames]));
+  localStorage.setItem('all_set_names', JSON.stringify([...allSetNames]));
 
   // Store data for each binder
-  storeFilteredData(bindernames, data, header, 'binder');
-  storeFilteredData(setnames, data, header, 'set');
+  storeFilteredData(allBinderNames, data, header, 'binder');
+  storeFilteredData(allSetNames, data, header, 'set');
 
   // Store set and binder names
-  storeRandomNameIfAbsent('bindername', bindernames);
-  storeRandomNameIfAbsent('setname', setnames);
+  storeRandomNameIfAbsent('active_binder', allBinderNames);
+  storeRandomNameIfAbsent('active_set', allSetNames);
 }
 
-function storeRandomNameIfAbsent(key: string, bindernames: Set<string>) {
-  let storedName = localStorage.getItem(key);
+/**
+ *
+ * @param key 'active_binder' or 'active_set'
+ * @param allBinderNames
+ */
+function storeRandomNameIfAbsent(key: string, allBinderNames: Set<string>) {
+  let storedName = localStorage.getItem(key); // TODO: refactor collection type vars
   if (!storedName) {
     storedName =
-      Array.from(bindernames)[Math.floor(Math.random() * bindernames.size)] ??
-      '';
-    localStorage.setItem(key, storedName);
+      Array.from(allBinderNames)[
+        Math.floor(Math.random() * allBinderNames.size)
+      ] ?? '';
+    localStorage.setItem(key, storedName); // TODO: refactor collection type vars
   }
 }
 
 /**
- * Store only the cards for the given container
+ * Store only the cards for the given collection
  * @param names
  * @param data
  * @param header
@@ -55,7 +61,7 @@ function storeFilteredData(
     const filtered = data.filter((row) => row[columnIndex] === name);
     // add back the header, since it would be removed during filtering
     filtered.unshift(header);
-    localStorage.setItem(name, JSON.stringify(sort.sortByColor(filtered)));
+    localStorage.setItem(name, JSON.stringify(sort.sortByColor(filtered))); // TODO: refactor collection type vars
   });
 }
 
@@ -65,12 +71,12 @@ function getUniqueValuesFromColumn(
   data: string[][]
 ) {
   const columnIndex = header.indexOf(columnName);
-  const bindernames = new Set<string>(
+  const allBinderNames = new Set<string>(
     data
       .map((row) => row[columnIndex])
       .filter(
         (value): value is string => value !== undefined && value !== columnName
       ) // Filter out `undefined`
   );
-  return bindernames;
+  return allBinderNames;
 }

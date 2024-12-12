@@ -25,10 +25,10 @@ function initializeIndex() {
   page.fillPage();
   ui.generateBinderDropdown();
   ui.generateSetDropdown();
-  const container = localStorage.getItem('container');
-  if (container == 'binder') {
+  const collectionType = localStorage.getItem('collection_type');
+  if (collectionType == 'binder') {
     ui.highlightBinder();
-  } else if (container == 'set') {
+  } else if (collectionType == 'set') {
     ui.highlightSet();
   }
   ui.createProgressBar();

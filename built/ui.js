@@ -122,15 +122,15 @@ export function resizeCards() {
  */
 export function generateBinderDropdown() {
     const binderDropdown = document.getElementById('binderDropdown');
-    const bindernames = JSON.parse(localStorage.getItem('bindernames') ?? '[]');
-    const defaultbinder = localStorage.getItem('bindername');
+    const allBinderNames = JSON.parse(localStorage.getItem('all_binder_names') ?? '[]');
+    const activeBinder = localStorage.getItem('active_binder');
     if (binderDropdown)
         binderDropdown.innerHTML = '';
-    for (let binder of bindernames) {
+    for (let binder of allBinderNames) {
         const option = document.createElement('option');
         option.value = binder;
         option.textContent = binder;
-        if (binder == defaultbinder) {
+        if (binder == activeBinder) {
             option.selected = true;
         }
         binderDropdown?.appendChild(option);
@@ -141,17 +141,17 @@ export function generateBinderDropdown() {
  */
 export function generateSetDropdown() {
     const setDropdown = document.getElementById('setDropdown');
-    const setnames = JSON.parse(localStorage.getItem('setnames') ?? '[]');
-    const defaultset = localStorage.getItem('setname');
+    const allSetNames = JSON.parse(localStorage.getItem('all_set_names') ?? '[]');
+    const activeSet = localStorage.getItem('active_set');
     if (setDropdown)
         setDropdown.innerHTML = '';
-    for (let set of setnames) {
+    for (let set of allSetNames) {
         const option = document.createElement('option');
         if (set != 'set') {
             option.value = set;
             option.textContent = set;
         }
-        if (set == defaultset) {
+        if (set == activeSet) {
             option.selected = true;
         }
         setDropdown?.appendChild(option);
@@ -193,10 +193,10 @@ function countPulled() {
  * @param fillpage whether the function is being called to fill the page or not
  */
 export function selectNewBinder(fillpage) {
-    localStorage.setItem('container', 'binder');
+    localStorage.setItem('collection_type', 'binder');
     const binderDropdown = document.getElementById('binderDropdown');
-    const bindername = binderDropdown.options[binderDropdown.selectedIndex]?.text ?? '';
-    localStorage.setItem('bindername', bindername);
+    const activeBinder = binderDropdown.options[binderDropdown.selectedIndex]?.text ?? '';
+    localStorage.setItem('active_binder', activeBinder);
     highlightBinder();
     if (fillpage) {
         page.fillPage();
@@ -210,10 +210,10 @@ export function selectNewBinder(fillpage) {
  * @param fillpage whether the function is being called to fill the page or not
  */
 export function selectNewSet(fillpage) {
-    localStorage.setItem('container', 'set');
+    localStorage.setItem('collection_type', 'set');
     const setDropdown = document.getElementById('setDropdown');
-    const setname = setDropdown.options[setDropdown.selectedIndex]?.text ?? '';
-    localStorage.setItem('setname', setname);
+    const activeSet = setDropdown.options[setDropdown.selectedIndex]?.text ?? '';
+    localStorage.setItem('active_set', activeSet);
     highlightSet();
     if (fillpage) {
         page.fillPage();
