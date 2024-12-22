@@ -1,5 +1,18 @@
 import * as constants from './constants.js';
 import * as page from './page.js';
+export function initPageUi() {
+    setBg();
+    // binder dropdown
+    const allBinderNames = JSON.parse(localStorage.getItem('all_binder_names') ?? '[]');
+    const activeBinder = localStorage.getItem('active_binder') ?? '';
+    generateBinderDropdown(allBinderNames, activeBinder);
+    // set dropdown
+    const allSetNames = JSON.parse(localStorage.getItem('all_set_names') ?? '[]');
+    const activeSet = localStorage.getItem('active_set') ?? '';
+    generateSetDropdown(allSetNames, activeSet);
+    // progress bar
+    generateProgressBar();
+}
 /**
  * sets background image randomly
  */
@@ -119,11 +132,10 @@ export function resizeCards() {
 }
 /**
  * creates and displays binder dropdown
+ * // TODO: combine with setdropdown
  */
-export function generateBinderDropdown() {
+export function generateBinderDropdown(allBinderNames, activeBinder) {
     const binderDropdown = document.getElementById('binderDropdown');
-    const allBinderNames = JSON.parse(localStorage.getItem('all_binder_names') ?? '[]');
-    const activeBinder = localStorage.getItem('active_binder');
     if (binderDropdown)
         binderDropdown.innerHTML = '';
     for (let binder of allBinderNames) {
@@ -139,10 +151,8 @@ export function generateBinderDropdown() {
 /**
  * creates and displays set dropdown
  */
-export function generateSetDropdown() {
-    const setDropdown = document.getElementById('setDropdown');
-    const allSetNames = JSON.parse(localStorage.getItem('all_set_names') ?? '[]');
-    const activeSet = localStorage.getItem('active_set');
+export function generateSetDropdown(allSetNames, activeSet) {
+    const setDropdown = document.getElementById('set-dropdown');
     if (setDropdown)
         setDropdown.innerHTML = '';
     for (let set of allSetNames) {
@@ -160,7 +170,7 @@ export function generateSetDropdown() {
 /**
  * creates and displays progress bar for current binder/set
  */
-export function createProgressBar() {
+export function generateProgressBar() {
     const span = document.getElementById('progressSpan');
     const newBar = document.createElement('progress');
     const max = page.getDataToDisplay().length;
@@ -200,7 +210,7 @@ export function selectNewBinder(fillpage) {
     if (fillpage) {
         page.fillPage();
     }
-    createProgressBar();
+    generateProgressBar();
 }
 /**
  * updates storage to newly selected binder, fills page if needed, and creates progress bar
@@ -209,31 +219,31 @@ export function selectNewBinder(fillpage) {
  */
 export function selectNewSet(fillpage) {
     localStorage.setItem('collection_type', 'set');
-    const setDropdown = document.getElementById('setDropdown');
+    const setDropdown = document.getElementById('set-dropdown');
     const activeSet = setDropdown.options[setDropdown.selectedIndex]?.text ?? '';
     localStorage.setItem('active_set', activeSet);
     highlightSet();
     if (fillpage) {
         page.fillPage();
     }
-    createProgressBar();
+    generateProgressBar();
 }
 /**
  * highlights or unhighlights binder dropdown based on what was selected
- * TODO: refactor
+ * TODO: refactor, also doesn't work on load?
  */
 export function highlightBinder() {
     const binderDrop = document.getElementById('binderDropdown');
     binderDrop?.classList.add('highlight');
-    const setDrop = document.getElementById('setDropdown');
+    const setDrop = document.getElementById('set-dropdown');
     setDrop?.classList.remove('highlight');
 }
 /**
  * highlights or unhighlights set dropdown based on what was selected
- * TODO: refactor
+ * TODO: refactor, also doesn't work on load?
  */
 export function highlightSet() {
-    const setDrop = document.getElementById('setDropdown');
+    const setDrop = document.getElementById('set-dropdown');
     setDrop?.classList.add('highlight');
     const binderDrop = document.getElementById('binderDropdown');
     binderDrop?.classList.remove('highlight');

@@ -1,31 +1,23 @@
-// TODO: this whole module needs to be reorganized/split into other modules
-import * as app from './app.js';
+import * as api_clients from './api_clients.js';
+import * as constants from './constants.js';
 import * as page from './page.js';
 import * as sort from './sort.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
-import * as constants from './constants.js';
 window.onload = () => {
-    ui.setBg();
-    ui.initializeGridAndSize();
-    if (localStorage.getItem('storage_init') == 'SUCCESS' &&
-        localStorage.getItem('storage_ver') == constants.STORAGE_VERSION) {
-        initializeIndex();
-    }
-    else {
-        localStorage.clear();
-        fetchAndInitializeIndex();
+    loadPage();
+};
+async function loadPage() {
+    if (localStorage.getItem('storage_init') !== 'SUCCESS' &&
+        localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
+        const sheetsData = await api_clients.fetchSheetsData();
+        const setsData = await api_clients.fetchTcgSets();
+        store.storeData(sheetsData, setsData);
     }
     setEventListeners();
-};
-/**
- * loads all the visual elements for the index page
- */
-function initializeIndex() {
-    console.log('loading from storage');
-    page.fillPage();
-    ui.generateBinderDropdown();
-    ui.generateSetDropdown();
+    ui.initPageUi();
+    // card display
+    ui.initializeGridAndSize();
     const collectionType = localStorage.getItem('collection_type');
     if (collectionType == 'binder') {
         ui.highlightBinder();
@@ -33,18 +25,8 @@ function initializeIndex() {
     else if (collectionType == 'set') {
         ui.highlightSet();
     }
-    ui.createProgressBar();
-    localStorage.setItem('storage_init', 'SUCCESS');
-    localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
-}
-/**
- * wrapper method that fetches data and initializes page.
- *  TODO: get onload to work with async/await and get rid of this.
- */
-async function fetchAndInitializeIndex() {
-    const data = await app.fetchData();
-    store.storeData(data.data);
-    initializeIndex();
+    page.fillPage();
+    store.logSuccess();
 }
 /**
  * adds event listeners to navbar elements
@@ -54,7 +36,7 @@ function setEventListeners() {
         .getElementById('binderDropdown')
         ?.addEventListener('change', () => ui.selectNewBinder(true));
     document
-        .getElementById('setDropdown')
+        .getElementById('set-dropdown')
         ?.addEventListener('change', () => ui.selectNewSet(true));
     document
         .getElementById('colDropdown')
@@ -68,9 +50,7 @@ function setEventListeners() {
     document
         .getElementById('sortDropdown')
         ?.addEventListener('change', sort.newSort);
-    document
-        .getElementById('syncButton')
-        ?.addEventListener('click', fetchAndInitializeIndex);
+    document.getElementById('syncButton')?.addEventListener('click', loadPage);
     ui.addShowHideToggle('display-btn', 'display-dropdown');
     ui.addShowHideToggle('grid-btn', 'grid-dropdown');
     ui.addShowHideToggle('size-btn', 'size-dropdown');

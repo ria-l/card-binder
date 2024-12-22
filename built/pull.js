@@ -1,49 +1,23 @@
-import * as app from './app.js';
+import * as api_clients from './api_clients.js';
 import * as constants from './constants.js';
 import * as page from './page.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
 window.onload = () => {
-    ui.setBg();
+    loadPage();
+};
+async function loadPage() {
+    if (localStorage.getItem('storage_init') !== 'SUCCESS' &&
+        localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
+        const sheetsData = await api_clients.fetchSheetsData();
+        const setsData = await api_clients.fetchTcgSets();
+        store.storeData(sheetsData, setsData);
+    }
     document.getElementById('form').action =
         constants.APPSCRIPT_URL;
-    if (localStorage.getItem('storage_init') == 'SUCCESS' &&
-        localStorage.getItem('storage_ver') == constants.STORAGE_VERSION) {
-        initializePull();
-    }
-    else {
-        localStorage.clear();
-        fetchAndInitializePull();
-    }
     setEventListeners();
-};
-/**
- * sets up UI elements for pull page
- */
-function initializePull() {
-    console.log('loading from storage');
-    ui.generateBinderDropdown();
-    ui.generateSetDropdown();
-    const collectionType = localStorage.getItem('collection_type');
-    if (collectionType == 'binder') {
-        ui.highlightBinder();
-    }
-    else if (collectionType == 'set') {
-        ui.highlightSet();
-    }
-    ui.createProgressBar();
-    localStorage.setItem('storage_init', 'SUCCESS');
-    localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
-}
-/**
- * wrapper that fetches data and initializes page.
- *  TODO: get onload to work with async/await and get rid of this.
-
- */
-async function fetchAndInitializePull() {
-    const data = await app.fetchData();
-    store.storeData(data.data);
-    initializePull();
+    ui.initPageUi();
+    store.logSuccess();
 }
 /**
  * sets event listeners for navbar
@@ -53,7 +27,7 @@ function setEventListeners() {
         .getElementById('binderDropdown')
         ?.addEventListener('change', () => ui.selectNewBinder(false));
     document
-        .getElementById('setDropdown')
+        .getElementById('set-dropdown')
         ?.addEventListener('change', () => ui.selectNewSet(false));
     document
         .getElementById('pullOneButton')
@@ -67,9 +41,7 @@ function setEventListeners() {
     document
         .getElementById('clearDisplayButton')
         ?.addEventListener('click', clearDisplay);
-    document
-        .getElementById('syncButton')
-        ?.addEventListener('click', fetchAndInitializePull);
+    document.getElementById('syncButton')?.addEventListener('click', loadPage);
     ui.addShowHideToggle('display-btn', 'display-dropdown');
 }
 /**
@@ -214,7 +186,7 @@ function addToList(title) {
  */
 function processNewCards(newCards) {
     updateNewCardsInCache(newCards);
-    ui.createProgressBar();
+    ui.generateProgressBar();
     document.getElementById('filenamesInput').value =
         JSON.stringify(newCards);
     document.getElementById('form').submit();

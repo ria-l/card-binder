@@ -1,6 +1,6 @@
 // TODO: move functions to utils?
 export const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRhMe2yJHsPQb1pS1Tl8Nt68iD8ptO36TvZiztSUaAg7K4uOn4zShQgn8w1NVAJpNsgg/exec';
-export const STORAGE_VERSION = '2024.12.12.0221';
+export const STORAGE_VERSION = '2024-12-2211:48:57';
 /**
  * gets cell value for a given row and column
  * @param colName just the title
