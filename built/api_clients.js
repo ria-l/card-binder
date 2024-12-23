@@ -22,7 +22,7 @@ export async function fetchSheetsData() {
         const data = await response.json();
         showStatus('', 'hide');
         console.log('fetched');
-        return data.data;
+        return data;
     }
     catch (error) {
         console.error('Error fetching data:', error);

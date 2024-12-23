@@ -7,19 +7,24 @@ import * as sort from './sort.js';
  * @param setsData all set data from tcg api
  */
 export function storeData(
-  sheetsData: string[][],
+  sheetsData: { sheetName: string[][] },
   setsData: { id: string; ptcgoCode?: string }[]
 ): void {
+  // Store raw data
+  localStorage.setItem('raw_gsheets_dump', JSON.stringify(sheetsData));
+  localStorage.setItem('raw_tcg_sets', JSON.stringify(setsData));
+
   // Store header
-  const header = sheetsData[0] ?? [];
-  if (!header.length) return; // Exit early if header is empty
-  localStorage.setItem('data_header', JSON.stringify(header));
+  const dbAll = sheetsData['db-all'];
+  const allHeader = dbAll[0] ?? [];
+  if (!allHeader.length) return; // Exit early if header is empty
+  localStorage.setItem('data_header', JSON.stringify(allHeader));
 
   // Store container names
   const allBinderNames = getUniqueValuesFromColumn(
-    header,
+    allHeader,
     'binder',
-    sheetsData
+    sheetsData['db-all']
   );
 
   const allSetNames: Set<string> = new Set();
@@ -33,8 +38,8 @@ export function storeData(
   localStorage.setItem('all_set_names', JSON.stringify([...allSetNames]));
 
   // Store data for each binder
-  storeFilteredData(allBinderNames, sheetsData, header, 'binder');
-  storeFilteredData(allSetNames, sheetsData, header, 'set');
+  storeFilteredData(allBinderNames, sheetsData['db-all'], allHeader, 'binder');
+  storeFilteredData(allSetNames, sheetsData['db-all'], allHeader, 'set');
 
   // Store set and binder names
   storeRandomNameIfAbsent('active_binder', allBinderNames);

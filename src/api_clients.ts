@@ -27,8 +27,7 @@ export async function fetchSheetsData() {
 
     showStatus('', 'hide');
     console.log('fetched');
-
-    return data.data;
+    return data;
   } catch (error) {
     console.error('Error fetching data:', error);
     showStatus(`Failed to load data ${error}`, 'show');

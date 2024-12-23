@@ -6,13 +6,29 @@ import * as sort from './sort.js';
  * @param setsData all set data from tcg api
  */
 export function storeData(sheetsData, setsData) {
+    // Store raw data
+    localStorage.setItem('raw_gsheets_dump', JSON.stringify(sheetsData));
+    localStorage.setItem('raw_tcg_sets', JSON.stringify(setsData));
+    // Store new dex_cards object
+    const dbCards = sheetsData['db-cards'];
+    const cardsHeader = dbCards[0];
+    const lsCards = {};
+    for (const row of dbCards.slice(1)) {
+        const vals = {};
+        for (const [i, v] of row.entries()) {
+            vals[cardsHeader[i]] = v;
+        }
+        lsCards[row[0]] = vals;
+    }
+    localStorage.setItem('dex_cards', JSON.stringify(lsCards));
     // Store header
-    const header = sheetsData[0] ?? [];
-    if (!header.length)
+    const dbAll = sheetsData['db-all'];
+    const allHeader = dbAll[0] ?? [];
+    if (!allHeader.length)
         return; // Exit early if header is empty
-    localStorage.setItem('data_header', JSON.stringify(header));
+    localStorage.setItem('data_header', JSON.stringify(allHeader));
     // Store container names
-    const allBinderNames = getUniqueValuesFromColumn(header, 'binder', sheetsData);
+    const allBinderNames = getUniqueValuesFromColumn(allHeader, 'binder', sheetsData['db-all']);
     const allSetNames = new Set();
     for (const tcgSet of setsData) {
         allSetNames.add(`${'ptcgoCode' in tcgSet ? tcgSet['ptcgoCode'] : tcgSet['id']}`);
@@ -20,8 +36,8 @@ export function storeData(sheetsData, setsData) {
     localStorage.setItem('all_binder_names', JSON.stringify([...allBinderNames]));
     localStorage.setItem('all_set_names', JSON.stringify([...allSetNames]));
     // Store data for each binder
-    storeFilteredData(allBinderNames, sheetsData, header, 'binder');
-    storeFilteredData(allSetNames, sheetsData, header, 'set');
+    storeFilteredData(allBinderNames, sheetsData['db-all'], allHeader, 'binder');
+    storeFilteredData(allSetNames, sheetsData['db-all'], allHeader, 'set');
     // Store set and binder names
     storeRandomNameIfAbsent('active_binder', allBinderNames);
     storeRandomNameIfAbsent('active_set', allSetNames);

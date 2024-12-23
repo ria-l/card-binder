@@ -31,7 +31,7 @@ async function loadPage() {
     ui.highlightSet();
   }
   page.fillPage();
-  store.logSuccess()
+  store.logSuccess();
 }
 
 /**

@@ -16,7 +16,7 @@ export function initPageUi() {
 /**
  * sets background image randomly
  */
-export function setBg() {
+function setBg() {
     const bgSpan = document.getElementById('bgSpan');
     const x = Math.floor(Math.random() * constants.BG_FILES.length);
     bgSpan?.style.setProperty('background-image', `url('img/0_bg/${constants.BG_FILES[x]}')`);
