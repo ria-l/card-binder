@@ -1,4 +1,5 @@
 import * as constants from './constants.js';
+import * as interfaces from './interfaces.js';
 import * as sort from './sort.js';
 /**
  * stores binder, set, and header gsheet data in localstorage
@@ -7,20 +8,24 @@ import * as sort from './sort.js';
  */
 export function storeData(sheetsData, setsData) {
     // Store raw data
-    localStorage.setItem('raw_gsheets_dump', JSON.stringify(sheetsData));
+    localStorage.setItem('raw_gsheets_allsheets', JSON.stringify(sheetsData));
     localStorage.setItem('raw_tcg_sets', JSON.stringify(setsData));
     // Store new dex_cards object
     const dbCards = sheetsData['db-cards'];
     const cardsHeader = dbCards[0];
-    const lsCards = {};
-    for (const row of dbCards.slice(1)) {
+    const dexCards = {};
+    for (const cardRow of dbCards.slice(1)) {
         const vals = {};
-        for (const [i, v] of row.entries()) {
+        for (const [i, v] of cardRow.entries()) {
             vals[cardsHeader[i]] = v;
         }
-        lsCards[row[0]] = vals;
+        const idCol = cardsHeader.indexOf('card_id');
+        if (idCol === -1) {
+            throw new Error(`card_id not found in header: ${cardsHeader}`);
+        }
+        dexCards[cardRow[idCol]] = vals;
     }
-    localStorage.setItem('dex_cards', JSON.stringify(lsCards));
+    localStorage.setItem('dex_cards', JSON.stringify(dexCards));
     // Store header
     const dbAll = sheetsData['db-all'];
     const allHeader = dbAll[0] ?? [];
@@ -28,7 +33,10 @@ export function storeData(sheetsData, setsData) {
         return; // Exit early if header is empty
     localStorage.setItem('data_header', JSON.stringify(allHeader));
     // Store container names
-    const allBinderNames = getUniqueValuesFromColumn(allHeader, 'binder', sheetsData['db-all']);
+    const allBinderNames = getUniqueColVals({
+        colName: 'binder_name',
+        data: sheetsData['db-binders'],
+    });
     const allSetNames = new Set();
     for (const tcgSet of setsData) {
         allSetNames.add(`${'ptcgoCode' in tcgSet ? tcgSet['ptcgoCode'] : tcgSet['id']}`);
@@ -71,13 +79,14 @@ function storeFilteredData(allCollectionNames, data, header, colName) {
         localStorage.setItem(collectionName, JSON.stringify(sort.sortByColor(filtered)));
     });
 }
-function getUniqueValuesFromColumn(header, colName, data) {
+function getUniqueColVals(params) {
+    const { colName, data } = params;
+    const header = data[0];
     const columnIndex = header.indexOf(colName);
-    const allBinderNames = new Set(data
+    const uniqueVals = new Set(data
         .map((row) => row[columnIndex])
-        .filter((value) => value !== undefined && value !== colName) // Filter out `undefined`
-    );
-    return allBinderNames;
+        .filter((value) => value !== undefined && value !== colName));
+    return uniqueVals;
 }
 export function logSuccess() {
     localStorage.setItem('storage_init', 'SUCCESS');

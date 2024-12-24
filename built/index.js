@@ -8,7 +8,7 @@ window.onload = () => {
     loadPage();
 };
 async function loadPage() {
-    if (localStorage.getItem('storage_init') !== 'SUCCESS' &&
+    if (localStorage.getItem('storage_init') !== 'SUCCESS' ||
         localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
         const sheetsData = await api_clients.fetchSheetsData();
         const setsData = await api_clients.fetchTcgSets();

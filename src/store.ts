@@ -1,18 +1,36 @@
 import * as constants from './constants.js';
+import * as interfaces from './interfaces.js';
 import * as sort from './sort.js';
-
 /**
  * stores binder, set, and header gsheet data in localstorage
  * @param sheetsData all data from sheet
  * @param setsData all set data from tcg api
  */
 export function storeData(
-  sheetsData: { sheetName: string[][] },
+  sheetsData: interfaces.sheetsData,
   setsData: { id: string; ptcgoCode?: string }[]
 ): void {
   // Store raw data
-  localStorage.setItem('raw_gsheets_dump', JSON.stringify(sheetsData));
+  localStorage.setItem('raw_gsheets_allsheets', JSON.stringify(sheetsData));
   localStorage.setItem('raw_tcg_sets', JSON.stringify(setsData));
+
+  // Store new dex_cards object
+  const dbCards = sheetsData['db-cards'];
+  const cardsHeader = dbCards[0]!;
+
+  const dexCards: interfaces.dexCards = {};
+  for (const cardRow of dbCards.slice(1)) {
+    const vals: { [key: string]: any } = {};
+    for (const [i, v] of cardRow.entries()) {
+      vals[cardsHeader[i]!] = v;
+    }
+    const idCol = cardsHeader.indexOf('card_id');
+    if (idCol === -1) {
+      throw new Error(`card_id not found in header: ${cardsHeader}`);
+    }
+    dexCards[cardRow[idCol]!] = vals;
+  }
+  localStorage.setItem('dex_cards', JSON.stringify(dexCards));
 
   // Store header
   const dbAll = sheetsData['db-all'];
@@ -21,11 +39,10 @@ export function storeData(
   localStorage.setItem('data_header', JSON.stringify(allHeader));
 
   // Store container names
-  const allBinderNames = getUniqueValuesFromColumn(
-    allHeader,
-    'binder',
-    sheetsData['db-all']
-  );
+  const allBinderNames = getUniqueColVals({
+    colName: 'binder_name',
+    data: sheetsData['db-binders'],
+  });
 
   const allSetNames: Set<string> = new Set();
   for (const tcgSet of setsData) {
@@ -90,20 +107,18 @@ function storeFilteredData(
   });
 }
 
-function getUniqueValuesFromColumn(
-  header: string[],
-  colName: string,
-  data: string[][]
-) {
-  const columnIndex = header.indexOf(colName);
-  const allBinderNames = new Set<string>(
+function getUniqueColVals(params: { colName: string; data: string[][] }) {
+  const { colName, data } = params;
+  const header = data[0]!;
+  const columnIndex = header.indexOf(colName)!;
+  const uniqueVals = new Set<string>(
     data
       .map((row) => row[columnIndex])
       .filter(
         (value): value is string => value !== undefined && value !== colName
-      ) // Filter out `undefined`
+      )
   );
-  return allBinderNames;
+  return uniqueVals;
 }
 
 export function logSuccess() {

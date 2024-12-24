@@ -1,3 +1,4 @@
+// update types.ts if changed
 const sheets = [
   'db-all',
   'db-filenames',

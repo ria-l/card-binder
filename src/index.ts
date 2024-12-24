@@ -11,7 +11,7 @@ window.onload = () => {
 
 async function loadPage() {
   if (
-    localStorage.getItem('storage_init') !== 'SUCCESS' &&
+    localStorage.getItem('storage_init') !== 'SUCCESS' ||
     localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION
   ) {
     const sheetsData = await api_clients.fetchSheetsData();
