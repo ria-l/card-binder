@@ -4,7 +4,7 @@ import * as constants from './constants.js';
  * fetches data from gsheet and show/hides loading status
  * @returns JSON data from Google spreadsheet
  */
-export async function fetchSheetsData() {
+export async function fetchGSheetsData() {
   // TODO: factor out the loading status
   const statusSpan = document.getElementById('statusSpan');
   const showStatus = (message: string, className: string) => {

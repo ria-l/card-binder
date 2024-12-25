@@ -5,7 +5,7 @@ import * as constants from './constants.js';
  */
 export function fillPage() {
   const data: string[][] = getDataToDisplay();
-  const cardTags = createCardTags(data);
+  const cardTags = createCardTags({ data: data });
   const tables = createTables(cardTags);
   const contentDiv = document.getElementById('contentDiv');
   if (contentDiv) {
@@ -88,35 +88,79 @@ function createTables(
  * @param data JSON sheet data
  * @returns img elements for owned cards in the data
  */
-function createCardTags(
-  data: string[][]
-): (HTMLImageElement | HTMLSpanElement)[] {
+function createCardTags(params: {
+  data?: string[][];
+  cards?: string[];
+}): (HTMLImageElement | HTMLSpanElement)[] {
+  const { data, cards } = params;
+
   const cardSize = parseInt(
     (document.getElementById('sizeDropdown') as HTMLSelectElement).value
   );
   const tags = [];
   const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
 
-  for (const row of data) {
-    const set =
-      constants.getCellValue('set', row, header).toLowerCase() || 'missing';
-    const dir = `img/${set}`;
-    const filename = constants.getCellValue('filename', row, header);
-    const energytype =
-      constants.getCellValue('energytype', row, header) || 'missing';
-    const cardtype =
-      constants.getCellValue('cardtype', row, header) || 'missing';
-    const visuals = constants.getCellValue('visuals', row, header) || 'missing';
-    const caught = constants.getCellValue('caught', row, header);
-    const title = `${filename} : ${energytype} : ${cardtype} : ${visuals}`;
-    if (caught == 'x') {
-      tags.push(
-        generateImgTag(dir, filename, title, cardSize, cardtype, energytype)
-      );
-    } else {
-      const borderColors = generateBorderColors(cardtype, energytype);
-      const fillColors = constants.FILL_COLORS(visuals, energytype);
-      tags.push(generatePlaceholder(cardSize, title, borderColors, fillColors));
+  // new
+  // if (cards) {
+  //   const xfilenames = JSON.parse(localStorage.getItem('dex_filenames'));
+  //   const xsets = JSON.parse(localStorage.getItem('dex_sets'));
+  //   const xcards = JSON.parse(localStorage.getItem('dex_cards'));
+  //   const xowned = JSON.parse(localStorage.getItem('dex_owned'));
+  //   for (const cardId of cards) {
+  //     const xptcgocode = xsets[cardId]['ptcgocode'];
+  //     const xdir = `img/${xptcgocode}`;
+  //     const xfilename = xfilenames[cardId];
+  //     const xenergytype = xcards[cardId]['energytype'];
+  //     const xcardtype = xcards[cardId]['cardtype'];
+  //     const xvisuals = xcards[cardId]['visuals'];
+  //     const xcaught: boolean = cardId in xowned;
+  //     const xtitle = `${xfilename} : ${xenergytype} : ${xcardtype} : ${xvisuals}`;
+  //     if (xcaught) {
+  //       tags.push(
+  //         generateImgTag(
+  //           xdir,
+  //           xfilename,
+  //           xtitle,
+  //           cardSize,
+  //           xcardtype,
+  //           xenergytype
+  //         )
+  //       );
+  //     } else {
+  //       const borderColors = generateBorderColors(xcardtype, xenergytype);
+  //       const fillColors = constants.FILL_COLORS(xvisuals, xenergytype);
+  //       tags.push(
+  //         generatePlaceholder(cardSize, xtitle, borderColors, fillColors)
+  //       );
+  //     }
+  //   }
+  // } else
+  if (data) {
+    // old
+    for (const row of data) {
+      const set =
+        constants.getCellValue('set', row, header).toLowerCase() || 'missing';
+      const dir = `img/${set}`;
+      const filename = constants.getCellValue('filename', row, header);
+      const energytype =
+        constants.getCellValue('energytype', row, header) || 'missing';
+      const cardtype =
+        constants.getCellValue('cardtype', row, header) || 'missing';
+      const visuals =
+        constants.getCellValue('visuals', row, header) || 'missing';
+      const caught = constants.getCellValue('caught', row, header);
+      const title = `${filename} : ${energytype} : ${cardtype} : ${visuals}`;
+      if (caught == 'x') {
+        tags.push(
+          generateImgTag(dir, filename, title, cardSize, cardtype, energytype)
+        );
+      } else {
+        const borderColors = generateBorderColors(cardtype, energytype);
+        const fillColors = constants.FILL_COLORS(visuals, energytype);
+        tags.push(
+          generatePlaceholder(cardSize, title, borderColors, fillColors)
+        );
+      }
     }
   }
 

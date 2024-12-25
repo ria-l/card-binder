@@ -10,9 +10,9 @@ window.onload = () => {
 async function loadPage() {
     if (localStorage.getItem('storage_init') !== 'SUCCESS' ||
         localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
-        const sheetsData = await api_clients.fetchSheetsData();
-        const setsData = await api_clients.fetchTcgSets();
-        store.storeData(sheetsData, setsData);
+        const gSheetsData = await api_clients.fetchGSheetsData();
+        const tcgSetsData = await api_clients.fetchTcgSets();
+        store.storeData(gSheetsData, tcgSetsData);
     }
     setEventListeners();
     ui.initPageUi();

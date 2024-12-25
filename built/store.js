@@ -1,6 +1,6 @@
 import * as constants from './constants.js';
-import * as interfaces from './interfaces.js';
 import * as sort from './sort.js';
+import * as types from './types.js';
 /**
  * stores binder, set, and header gsheet data in localstorage
  * @param sheetsData all data from sheet
@@ -10,27 +10,19 @@ export function storeData(sheetsData, setsData) {
     // Store raw data
     localStorage.setItem('raw_gsheets_allsheets', JSON.stringify(sheetsData));
     localStorage.setItem('raw_tcg_sets', JSON.stringify(setsData));
-    // Store new dex_cards object
-    const dbCards = sheetsData['db-cards'];
-    const cardsHeader = dbCards[0];
-    const dexCards = {};
-    for (const cardRow of dbCards.slice(1)) {
-        const vals = {};
-        for (const [i, v] of cardRow.entries()) {
-            vals[cardsHeader[i]] = v;
-        }
-        const idCol = cardsHeader.indexOf('card_id');
-        if (idCol === -1) {
-            throw new Error(`card_id not found in header: ${cardsHeader}`);
-        }
-        dexCards[cardRow[idCol]] = vals;
-    }
-    localStorage.setItem('dex_cards', JSON.stringify(dexCards));
+    // Convert and store sheets data
+    localStorage.setItem('dex_cards', JSON.stringify(convertToObjById(sheetsData['db-cards'])));
+    localStorage.setItem('dex_sets', JSON.stringify(convertToObjById(sheetsData['db-sets'])));
+    localStorage.setItem('dex_filenames', JSON.stringify(convertToArrayById(sheetsData['db-filenames'], 'card_id', 'file_name', false)));
+    localStorage.setItem('dex_owned', JSON.stringify(convertToArrayById(sheetsData['db-owned'], 'card_id', 'pulled_date', true)));
+    localStorage.setItem('dex_binders', JSON.stringify(convertToArrayById(sheetsData['db-binders'], 'binder_name', 'card_id', true)));
+    // Original
     // Store header
     const dbAll = sheetsData['db-all'];
     const allHeader = dbAll[0] ?? [];
-    if (!allHeader.length)
+    if (!allHeader.length) {
         return; // Exit early if header is empty
+    }
     localStorage.setItem('data_header', JSON.stringify(allHeader));
     // Store container names
     const allBinderNames = getUniqueColVals({
@@ -49,6 +41,56 @@ export function storeData(sheetsData, setsData) {
     // Store set and binder names
     storeRandomNameIfAbsent('active_binder', allBinderNames);
     storeRandomNameIfAbsent('active_set', allSetNames);
+}
+/**
+ *
+ * @param data
+ * @param key col name that will be the key in the final object
+ * @param val col name that will be the val in the final object
+ */
+function convertToArrayById(data, keyName, valName, hasDupes) {
+    const [header, ...rows] = data;
+    if (!header) {
+        throw new Error(`No content in sheet: ${data.slice(0, 1)}`);
+    }
+    const keyIndex = header.indexOf(keyName);
+    const valIndex = header.indexOf(valName);
+    if (keyIndex === -1 || valIndex === -1) {
+        throw new Error(`${keyName} or ${valName} column(s) not found in sheet: ${data.slice(0, 1)}`);
+    }
+    return rows.reduce((accumulator, currRow) => {
+        const key = currRow[keyIndex] || 'none';
+        const val = currRow[valIndex] || 'none';
+        if (hasDupes) {
+            if (Array.isArray(accumulator[key])) {
+                accumulator[key].push(val);
+            }
+            else {
+                accumulator[key] = [val];
+            }
+        }
+        else {
+            accumulator[key] = val;
+        }
+        return accumulator;
+    }, {});
+}
+// TODO: tidy this up
+function convertToObjById(data) {
+    const [header, ...rows] = data;
+    if (!header) {
+        throw new Error(`No content in data object}`);
+    }
+    return rows.reduce((acc, row) => {
+        const item = header.reduce((obj, colName, i) => {
+            // colName as keyof T tells TypeScript that colName is guaranteed to be one of the keys of T.
+            obj[colName] = row[i];
+            return obj;
+        }, {});
+        // Use the value of 'card_id' (or the first column) as the key
+        acc[item[header[0]]] = item;
+        return acc;
+    }, {});
 }
 /**
  *
