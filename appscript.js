@@ -1,12 +1,5 @@
 // update types.ts if changed
-const sheets = [
-  'db-all',
-  'db-filenames',
-  'db-owned',
-  'db-cards',
-  'db-binders',
-  'db-sets',
-];
+const sheets = ['db-all', 'db-filenames', 'db-owned', 'db-cards', 'db-binders'];
 const scriptProp = PropertiesService.getScriptProperties();
 
 function initialSetup() {

@@ -8,50 +8,39 @@ import * as types from './types.js';
  */
 export function storeData(
   sheetsData: types.GSheetsData,
-  setsData: { id: string; ptcgoCode?: string }[]
+  setsData: { id: string; name: string; series: string; releaseDate: string }[]
 ): void {
   // Store raw data
-  localStorage.setItem('raw_gsheets_allsheets', JSON.stringify(sheetsData));
-  localStorage.setItem('raw_tcg_sets', JSON.stringify(setsData));
+  localStorage.setItem('debug_gsheets_allsheets', JSON.stringify(sheetsData));
+  localStorage.setItem('debug_tcg_sets', JSON.stringify(setsData));
 
-  // Convert and store sheets data
-  localStorage.setItem(
-    'dex_cards',
-    JSON.stringify(convertToObjById<types.Card>(sheetsData['db-cards']))
-  );
+  storeSetData({ data: setsData, storageId: 'dex_sets' });
 
-  localStorage.setItem(
-    'dex_sets',
-    JSON.stringify(convertToObjById<types.SetMeta>(sheetsData['db-sets']))
-  );
-  localStorage.setItem(
-    'dex_filenames',
-    JSON.stringify(
-      convertToArrayById(
-        sheetsData['db-filenames'],
-        'card_id',
-        'file_name',
-        false
-      )
-    )
-  );
-  localStorage.setItem(
-    'dex_owned',
-    JSON.stringify(
-      convertToArrayById(sheetsData['db-owned'], 'card_id', 'pulled_date', true)
-    )
-  );
-  localStorage.setItem(
-    'dex_binders',
-    JSON.stringify(
-      convertToArrayById(
-        sheetsData['db-binders'],
-        'binder_name',
-        'card_id',
-        true
-      )
-    )
-  );
+  storeCardData({ data: sheetsData, storageId: 'dex_cards' });
+
+  processAndStoreOtherData({
+    data: sheetsData['db-filenames'],
+    storageId: 'dex_filenames',
+    keyName: 'card_id',
+    valName: 'file_name',
+    hasDupes: false,
+  });
+
+  processAndStoreOtherData({
+    data: sheetsData['db-owned'],
+    storageId: 'dex_owned',
+    keyName: 'card_id',
+    valName: 'pulled_date',
+    hasDupes: true,
+  });
+
+  const cardIdsByBinder = processAndStoreOtherData({
+    data: sheetsData['db-binders'],
+    storageId: 'dex_binders',
+    keyName: 'binder_name',
+    valName: 'card_id',
+    hasDupes: true,
+  });
 
   // Original
   // Store header
@@ -64,10 +53,7 @@ export function storeData(
   localStorage.setItem('data_header', JSON.stringify(allHeader));
 
   // Store container names
-  const allBinderNames = getUniqueColVals({
-    colName: 'binder_name',
-    data: sheetsData['db-binders'],
-  });
+  const allBinderNames = Object.keys(cardIdsByBinder);
 
   const allSetNames: Set<string> = new Set();
   for (const tcgSet of setsData) {
@@ -79,27 +65,80 @@ export function storeData(
   localStorage.setItem('all_binder_names', JSON.stringify([...allBinderNames]));
   localStorage.setItem('all_set_names', JSON.stringify([...allSetNames]));
 
-  // Store data for each binder
-  storeFilteredData(allBinderNames, sheetsData['db-all'], allHeader, 'binder');
+  // Store data for each set
   storeFilteredData(allSetNames, sheetsData['db-all'], allHeader, 'set');
 
   // Store set and binder names
   storeRandomNameIfAbsent('active_binder', allBinderNames);
-  storeRandomNameIfAbsent('active_set', allSetNames);
+  storeRandomNameIfAbsent('active_set', Array.from(allSetNames));
+}
+
+function storeSetData({
+  data,
+  storageId,
+}: {
+  data: { id: string; name: string; series: string; releaseDate: string }[];
+  storageId: string;
+}) {
+  const toStore = data
+    .sort(
+      (a, b) =>
+        new Date(a.releaseDate).valueOf() - new Date(b.releaseDate).valueOf()
+    )
+    .reduce((acc, { id, name, series }) => {
+      acc[`${series}: ${name}`] = `${id}`;
+      return acc;
+    }, {} as { [name: string]: string });
+
+  localStorage.setItem(storageId, JSON.stringify(toStore));
+}
+
+function storeCardData({
+  data,
+  storageId,
+}: {
+  data: types.GSheetsData;
+  storageId: string;
+}) {
+  const [header, ...rows] = data['db-cards'];
+  if (!header) {
+    throw new Error('no content in db-cards');
+  }
+  const cardsToStore = rows.reduce((rowAcc, currRow) => {
+    const entry = header.reduce((accumulator, currCol, currIndex) => {
+      // creates the dict of metadata
+      accumulator[currCol] = currRow[currIndex];
+      return accumulator;
+    }, {} as Record<string, any>);
+    const cardId = entry['card_id'];
+    if (!cardId) {
+      throw new Error(`no card id in ${header}`);
+    }
+    rowAcc[cardId] = entry;
+    return rowAcc;
+  }, {} as Record<string, types.Card>);
+
+  localStorage.setItem(storageId, JSON.stringify(cardsToStore));
 }
 
 /**
  *
- * @param data
- * @param key col name that will be the key in the final object
- * @param val col name that will be the val in the final object
+ * @param keyName col name that will be the key in the final object
+ * @param valName col name that will be the val in the final object
  */
-function convertToArrayById(
-  data: string[][],
-  keyName: string,
-  valName: string,
-  hasDupes: boolean
-): Record<string, string | string[]> {
+function processAndStoreOtherData({
+  data,
+  storageId,
+  keyName,
+  valName,
+  hasDupes,
+}: {
+  data: string[][];
+  storageId: string;
+  keyName: string;
+  valName: string;
+  hasDupes: boolean;
+}): Record<string, string | string[]> {
   const [header, ...rows] = data;
   if (!header) {
     throw new Error(`No content in sheet: ${data.slice(0, 1)}`);
@@ -114,7 +153,7 @@ function convertToArrayById(
       )}`
     );
   }
-  return rows.reduce((accumulator, currRow) => {
+  const processed = rows.reduce((accumulator, currRow) => {
     const key = currRow[keyIndex] || 'none';
     const val = currRow[valIndex] || 'none';
 
@@ -129,27 +168,9 @@ function convertToArrayById(
     }
     return accumulator;
   }, {} as Record<string, string | string[]>);
-}
 
-// TODO: tidy this up
-function convertToObjById<T extends Record<string, any>>(
-  data: string[][]
-): Record<string, T> {
-  const [header, ...rows] = data;
-  if (!header) {
-    throw new Error(`No content in data object}`);
-  }
-  return rows.reduce((acc, row) => {
-    const item = header.reduce((obj, colName, i) => {
-      // colName as keyof T tells TypeScript that colName is guaranteed to be one of the keys of T.
-      obj[colName as keyof T] = row[i] as T[keyof T];
-      return obj;
-    }, {} as T);
-
-    // Use the value of 'card_id' (or the first column) as the key
-    acc[item[header[0] as keyof T] as string] = item;
-    return acc;
-  }, {} as Record<string, T>);
+  localStorage.setItem(storageId, JSON.stringify(processed));
+  return processed;
 }
 
 /**
@@ -157,15 +178,15 @@ function convertToObjById<T extends Record<string, any>>(
  * @param storageKey 'active_binder' or 'active_set'
  * @param allBinderNames
  */
-function storeRandomNameIfAbsent(
+export function storeRandomNameIfAbsent(
   storageKey: string,
-  allBinderNames: Set<string>
+  allBinderNames: string[]
 ) {
   let storedName = localStorage.getItem(storageKey);
   if (!storedName) {
     storedName =
       Array.from(allBinderNames)[
-        Math.floor(Math.random() * allBinderNames.size)
+        Math.floor(Math.random() * allBinderNames.length)
       ] ?? '';
     localStorage.setItem(storageKey, storedName);
   }

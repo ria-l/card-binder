@@ -4,8 +4,7 @@ export type GSheetsData = {
     | 'db-filenames'
     | 'db-owned'
     | 'db-cards'
-    | 'db-binders'
-    | 'db-sets']: string[][];
+    | 'db-binders']: string[][];
 };
 
 export type Card = {

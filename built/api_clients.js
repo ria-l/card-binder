@@ -42,11 +42,8 @@ export async function fetchTcgSets() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const tcgData = await response.json();
-        const returnVal = tcgData.data.sort((a, b) => {
-            return (new Date(a.releaseDate).valueOf() - new Date(b.releaseDate).valueOf());
-        });
-        return returnVal;
+        const data = await response.json();
+        return data.data;
     }
     catch (error) {
         console.error('Error fetching sets:', error);

@@ -1,11 +1,9 @@
 import * as constants from './constants.js';
 import * as page from './page.js';
+import * as store from './store.js';
 export function initPageUi() {
     setBg();
-    // binder dropdown
-    const allBinderNames = JSON.parse(localStorage.getItem('all_binder_names') ?? '[]');
-    const activeBinder = localStorage.getItem('active_binder') ?? '';
-    generateBinderDropdown(allBinderNames, activeBinder);
+    generateBinderDropdown();
     // set dropdown
     const allSetNames = JSON.parse(localStorage.getItem('all_set_names') ?? '[]');
     const activeSet = localStorage.getItem('active_set') ?? '';
@@ -134,11 +132,17 @@ export function resizeCards() {
  * creates and displays binder dropdown
  * // TODO: combine with setdropdown
  */
-export function generateBinderDropdown(allBinderNames, activeBinder) {
+export function generateBinderDropdown() {
+    let binderNames = Object.keys(JSON.parse(localStorage.getItem('dex_binders') ?? '{}'));
+    if (binderNames.length === 0) {
+        throw new Error('dex_binders not found');
+    }
+    const activeBinder = localStorage.getItem('active_binder') ??
+        binderNames[Math.floor(Math.random() * binderNames.length)];
     const binderDropdown = document.getElementById('binderDropdown');
     if (binderDropdown)
         binderDropdown.innerHTML = '';
-    for (let binder of allBinderNames) {
+    for (let binder of binderNames) {
         const option = document.createElement('option');
         option.value = binder;
         option.textContent = binder;
