@@ -4,11 +4,12 @@ import * as page from './page.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
 window.onload = () => {
-    loadPage();
+    loadPage(false);
 };
-async function loadPage() {
+async function loadPage(sync) {
     if (localStorage.getItem('storage_init') !== 'SUCCESS' ||
-        localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
+        localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION ||
+        sync) {
         const sheetsData = await api_clients.fetchGSheetsData();
         const setsData = await api_clients.fetchTcgSets();
         store.storeData(sheetsData, setsData);
@@ -41,7 +42,9 @@ function setEventListeners() {
     document
         .getElementById('clearDisplayButton')
         ?.addEventListener('click', clearDisplay);
-    document.getElementById('syncButton')?.addEventListener('click', loadPage);
+    document.getElementById('syncButton')?.addEventListener('click', () => {
+        loadPage(true);
+    });
     ui.addShowHideToggle('display-btn', 'display-dropdown');
 }
 /**

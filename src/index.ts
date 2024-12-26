@@ -6,13 +6,14 @@ import * as store from './store.js';
 import * as ui from './ui.js';
 
 window.onload = () => {
-  loadPage();
+  loadPage(false);
 };
 
-async function loadPage() {
+async function loadPage(sync: boolean) {
   if (
     localStorage.getItem('storage_init') !== 'SUCCESS' ||
-    localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION
+    localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION ||
+    sync
   ) {
     const gSheetsData = await api_clients.fetchGSheetsData();
     const tcgSetsData = await api_clients.fetchTcgSets();
@@ -56,7 +57,9 @@ function setEventListeners() {
   document
     .getElementById('sortDropdown')
     ?.addEventListener('change', sort.newSort);
-  document.getElementById('syncButton')?.addEventListener('click', loadPage);
+  document.getElementById('syncButton')?.addEventListener('click', () => {
+    loadPage(true);
+  });
 
   ui.addShowHideToggle('display-btn', 'display-dropdown');
   ui.addShowHideToggle('grid-btn', 'grid-dropdown');

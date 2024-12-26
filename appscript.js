@@ -1,6 +1,7 @@
 // update types.ts if changed
 const sheets = ['db-all', 'db-filenames', 'db-owned', 'db-cards', 'db-binders'];
 const scriptProp = PropertiesService.getScriptProperties();
+const sheetName = 'db-all';
 
 function initialSetup() {
   const activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -107,7 +108,7 @@ function doPost(e) {
 function testPostOne() {
   var eventObject = {
     parameter: {
-      filenames: '["xyp.XY177.karen_.jpg"]',
+      filenames: '["bs.013.poliwrath.jpg"]',
     },
   };
   doPost(eventObject);
@@ -117,7 +118,7 @@ function testPostMult() {
   var eventObject = {
     parameter: {
       filenames:
-        '["xyp.XY177.karen_.jpg","brs.TG22.umbreon_v.png","lor.TG17.pikachu_vmax.png"]',
+        '["bs.013.poliwrath.jpg","bs.014.raichu.jpg","bs.016.zapdos.jpg"]',
     },
   };
   doPost(eventObject);
