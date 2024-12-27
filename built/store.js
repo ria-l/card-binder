@@ -1,133 +1,37 @@
-import * as constants from './constants.js';
 import * as sort from './sort.js';
-import * as types from './types.js';
 /**
  * stores binder, set, and header gsheet data in localstorage
- * @param sheetsData all data from sheet
- * @param setsData all set data from tcg api
+ * @param data all data from sheet
  */
-export function storeData(sheetsData, setsData) {
-    // Store raw data
-    localStorage.setItem('debug_gsheets_allsheets', JSON.stringify(sheetsData));
-    localStorage.setItem('debug_tcg_sets', JSON.stringify(setsData));
-    storeSetData({ data: setsData, storageId: 'dex_sets' });
-    storeCardData({ data: sheetsData, storageId: 'dex_cards' });
-    processAndStoreOtherData({
-        data: sheetsData['db-filenames'],
-        storageId: 'dex_filenames',
-        keyName: 'card_id',
-        valName: 'file_name',
-        hasDupes: false,
-    });
-    processAndStoreOtherData({
-        data: sheetsData['db-owned'],
-        storageId: 'dex_owned',
-        keyName: 'card_id',
-        valName: 'pulled_date',
-        hasDupes: true,
-    });
-    const cardIdsByBinder = processAndStoreOtherData({
-        data: sheetsData['db-binders'],
-        storageId: 'dex_binders',
-        keyName: 'binder_name',
-        valName: 'card_id',
-        hasDupes: true,
-    });
-    // Original
+export function storeData(data) {
     // Store header
-    const dbAll = sheetsData['db-all'];
-    const allHeader = dbAll[0] ?? [];
-    if (!allHeader.length) {
+    const header = data[0] ?? [];
+    if (!header.length)
         return; // Exit early if header is empty
-    }
-    localStorage.setItem('data_header', JSON.stringify(allHeader));
+    localStorage.setItem('data_header', JSON.stringify(header));
     // Store container names
-    const allBinderNames = Object.keys(cardIdsByBinder);
-    const allSetNames = new Set();
-    for (const tcgSet of setsData) {
-        allSetNames.add(`${'ptcgoCode' in tcgSet ? tcgSet['ptcgoCode'] : tcgSet['id']}`);
-    }
+    const allBinderNames = getUniqueValuesFromColumn(header, 'binder', data);
+    const allSetNames = getUniqueValuesFromColumn(header, 'set', data);
+    // Store allBinderNames and allSetNames in localStorage
     localStorage.setItem('all_binder_names', JSON.stringify([...allBinderNames]));
     localStorage.setItem('all_set_names', JSON.stringify([...allSetNames]));
-    // Store data for each set
-    storeFilteredData(allSetNames, sheetsData['db-all'], allHeader, 'set');
+    // Store data for each binder
+    storeFilteredData(allBinderNames, data, header, 'binder');
+    storeFilteredData(allSetNames, data, header, 'set');
     // Store set and binder names
     storeRandomNameIfAbsent('active_binder', allBinderNames);
-    storeRandomNameIfAbsent('active_set', Array.from(allSetNames));
-}
-function storeSetData({ data, storageId, }) {
-    const toStore = data
-        .sort((a, b) => new Date(a.releaseDate).valueOf() - new Date(b.releaseDate).valueOf())
-        .reduce((acc, { id, name, series }) => {
-        acc[`${series}: ${name}`] = `${id}`;
-        return acc;
-    }, {});
-    localStorage.setItem(storageId, JSON.stringify(toStore));
-}
-function storeCardData({ data, storageId, }) {
-    const [header, ...rows] = data['db-cards'];
-    if (!header) {
-        throw new Error('no content in db-cards');
-    }
-    const cardsToStore = rows.reduce((rowAcc, currRow) => {
-        const entry = header.reduce((accumulator, currCol, currIndex) => {
-            // creates the dict of metadata
-            accumulator[currCol] = currRow[currIndex];
-            return accumulator;
-        }, {});
-        const cardId = entry['card_id'];
-        if (!cardId) {
-            throw new Error(`no card id in ${header}`);
-        }
-        rowAcc[cardId] = entry;
-        return rowAcc;
-    }, {});
-    localStorage.setItem(storageId, JSON.stringify(cardsToStore));
-}
-/**
- *
- * @param keyName col name that will be the key in the final object
- * @param valName col name that will be the val in the final object
- */
-function processAndStoreOtherData({ data, storageId, keyName, valName, hasDupes, }) {
-    const [header, ...rows] = data;
-    if (!header) {
-        throw new Error(`No content in sheet: ${data.slice(0, 1)}`);
-    }
-    const keyIndex = header.indexOf(keyName);
-    const valIndex = header.indexOf(valName);
-    if (keyIndex === -1 || valIndex === -1) {
-        throw new Error(`${keyName} or ${valName} column(s) not found in sheet: ${data.slice(0, 1)}`);
-    }
-    const processed = rows.reduce((accumulator, currRow) => {
-        const key = currRow[keyIndex] || 'none';
-        const val = currRow[valIndex] || 'none';
-        if (hasDupes) {
-            if (Array.isArray(accumulator[key])) {
-                accumulator[key].push(val);
-            }
-            else {
-                accumulator[key] = [val];
-            }
-        }
-        else {
-            accumulator[key] = val;
-        }
-        return accumulator;
-    }, {});
-    localStorage.setItem(storageId, JSON.stringify(processed));
-    return processed;
+    storeRandomNameIfAbsent('active_set', allSetNames);
 }
 /**
  *
  * @param storageKey 'active_binder' or 'active_set'
  * @param allBinderNames
  */
-export function storeRandomNameIfAbsent(storageKey, allBinderNames) {
+function storeRandomNameIfAbsent(storageKey, allBinderNames) {
     let storedName = localStorage.getItem(storageKey);
     if (!storedName) {
         storedName =
-            Array.from(allBinderNames)[Math.floor(Math.random() * allBinderNames.length)] ?? '';
+            Array.from(allBinderNames)[Math.floor(Math.random() * allBinderNames.size)] ?? '';
         localStorage.setItem(storageKey, storedName);
     }
 }
@@ -147,17 +51,12 @@ function storeFilteredData(allCollectionNames, data, header, colName) {
         localStorage.setItem(collectionName, JSON.stringify(sort.sortByColor(filtered)));
     });
 }
-function getUniqueColVals(params) {
-    const { colName, data } = params;
-    const header = data[0];
+function getUniqueValuesFromColumn(header, colName, data) {
     const columnIndex = header.indexOf(colName);
-    const uniqueVals = new Set(data
+    const allBinderNames = new Set(data
         .map((row) => row[columnIndex])
-        .filter((value) => value !== undefined && value !== colName));
-    return uniqueVals;
-}
-export function logSuccess() {
-    localStorage.setItem('storage_init', 'SUCCESS');
-    localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
+        .filter((value) => value !== undefined && value !== colName) // Filter out `undefined`
+    );
+    return allBinderNames;
 }
 //# sourceMappingURL=store.js.map
