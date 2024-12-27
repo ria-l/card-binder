@@ -1,24 +1,31 @@
-import * as api_clients from './api_clients.js';
-import * as constants from './constants.js';
+// TODO: this whole module needs to be reorganized/split into other modules
+import * as app from './app.js';
 import * as page from './page.js';
 import * as sort from './sort.js';
 import * as store from './store.js';
 import * as ui from './ui.js';
+import * as constants from './constants.js';
 window.onload = () => {
-    loadPage(false);
-};
-async function loadPage(sync) {
-    if (localStorage.getItem('storage_init') !== 'SUCCESS' ||
-        localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION ||
-        sync) {
-        const gSheetsData = await api_clients.fetchGSheetsData();
-        const tcgSetsData = await api_clients.fetchTcgSets();
-        store.storeData(gSheetsData, tcgSetsData);
+    ui.setBg();
+    ui.initializeGridAndSize();
+    if (localStorage.getItem('storage_init') == 'SUCCESS' &&
+        localStorage.getItem('storage_ver') == constants.STORAGE_VERSION) {
+        initializeIndex();
+    }
+    else {
+        localStorage.clear();
+        fetchAndInitializeIndex();
     }
     setEventListeners();
-    ui.initPageUi();
-    // card display
-    ui.initializeGridAndSize();
+};
+/**
+ * loads all the visual elements for the index page
+ */
+function initializeIndex() {
+    console.log('loading from storage');
+    page.fillPage();
+    ui.generateBinderDropdown();
+    ui.generateSetDropdown();
     const collectionType = localStorage.getItem('collection_type');
     if (collectionType == 'binder') {
         ui.highlightBinder();
@@ -26,8 +33,18 @@ async function loadPage(sync) {
     else if (collectionType == 'set') {
         ui.highlightSet();
     }
-    page.fillPage();
-    store.logSuccess();
+    ui.createProgressBar();
+    localStorage.setItem('storage_init', 'SUCCESS');
+    localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
+}
+/**
+ * wrapper method that fetches data and initializes page.
+ *  TODO: get onload to work with async/await and get rid of this.
+ */
+async function fetchAndInitializeIndex() {
+    const data = await app.fetchData();
+    store.storeData(data['db-all']);
+    initializeIndex();
 }
 /**
  * adds event listeners to navbar elements
@@ -37,7 +54,7 @@ function setEventListeners() {
         .getElementById('binderDropdown')
         ?.addEventListener('change', () => ui.selectNewBinder(true));
     document
-        .getElementById('set-dropdown')
+        .getElementById('setDropdown')
         ?.addEventListener('change', () => ui.selectNewSet(true));
     document
         .getElementById('colDropdown')
@@ -51,9 +68,9 @@ function setEventListeners() {
     document
         .getElementById('sortDropdown')
         ?.addEventListener('change', sort.newSort);
-    document.getElementById('syncButton')?.addEventListener('click', () => {
-        loadPage(true);
-    });
+    document
+        .getElementById('syncButton')
+        ?.addEventListener('click', fetchAndInitializeIndex);
     ui.addShowHideToggle('display-btn', 'display-dropdown');
     ui.addShowHideToggle('grid-btn', 'grid-dropdown');
     ui.addShowHideToggle('size-btn', 'size-dropdown');

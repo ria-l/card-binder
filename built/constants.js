@@ -1,6 +1,6 @@
 // TODO: move functions to utils?
 export const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJo83snXwH8IX3e_gEivjKyP0Hpd9q-Cz_UwI8nJnsUJ3eC0wMaVgdLxgd5bb09MGVOQ/exec';
-export const STORAGE_VERSION = '19:42:52';
+export const STORAGE_VERSION = '2024.12.12.0221';
 /**
  * gets cell value for a given row and column
  * @param colName just the title
@@ -121,5 +121,4 @@ export const BG_FILES = [
     'pink.jpeg',
     'teal.jpeg',
 ];
-export const MY_SUBTYPES = new Set(['ex', 'EX', 'GX', 'V', 'VMAX', 'VSTAR']);
 //# sourceMappingURL=constants.js.map
