@@ -20,7 +20,7 @@ const _headerTextMap = {
     cardtype: 'card type',
     caught: 'caught',
     dex: 'dex #',
-    filename: 'file name',
+    filename: 'filename',
     energytype: 'energy type',
     set: 'set',
     binder: 'binder',
