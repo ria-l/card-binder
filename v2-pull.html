@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="v2-css.css" />
+    <link rel="icon" type="image/x-icon" href="img/0_icons/coin_meowth.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="built/v2-app.js"></script>
+    <script type="module" src="built/v2-pull.js"></script>
+    <script type="module" src="built/v2-constants.js"></script>
+    <script type="module" src="built/v2-ui.js"></script>
+    <script type="module" src="built/v2-page.js"></script>
+    <script type="module" src="built/v2-store.js"></script>
+    <script type="module" src="built/v2-sort.js"></script>
+
+    <title>Pull card remotely</title>
+  </head>
+  <body>
+    <span id="bgSpan"></span>
+    <iframe src="about:blank" name="_iframe"></iframe>
+
+    <nav class="navbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a href="v2-index.html" class="nav-link">
+            <span class="link-text">→ Binder</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="display-btn">
+            <span class="link-text">Collection</span>
+          </a>
+          <ul class="dropdown-container" id="display-dropdown">
+            <li>
+              <a href="#" class="dropdown-item">
+                Binder
+                <select id="binderDropdown"></select
+              ></a>
+            </li>
+            <li>
+              <a href="#" class="dropdown-item">
+                Set
+                <select id="setDropdown"></select
+              ></a>
+            </li>
+            <li>
+              <a href="#" class="dropdown-item">
+                <span id="progressSpan"> <progress></progress> </span
+              ></a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="pullOneButton">
+            <span class="link-text">Pull 1</span>
+          </a>
+        </li>
+        <li class="nav-item mobileHide">
+          <a href="#" class="nav-link" id="pullFiveButton">
+            <span class="link-text">Pull 5</span>
+          </a>
+        </li>
+        <li class="nav-item mobileHide">
+          <a href="#" class="nav-link" id="pullTenButton">
+            <span class="link-text">Pull 10</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="clearDisplayButton">
+            <span class="link-text">Clear</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="syncButton">
+            <span class="link-text">Sync</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main>
+      <span id="statusSpan" class="hide"></span>
+      <div id="parent">
+        <span id="largeCardSpan"></span>
+        <span id="right">
+          <span id="lists">
+            <span id="smallCardSpan"></span>
+            <span id="listSpan">
+              <ol reversed id="cardList"></ol>
+            </span>
+          </span>
+        </span>
+      </div>
+      <form id="form" method="POST" target="_iframe">
+        <input type="text" id="filenamesInput" name="filenames" readonly />
+      </form>
+    </main>
+  </body>
+</html>
