@@ -1,34 +1,25 @@
-// update types.ts if changed
-const sheets = ['db-all', 'db-filenames', 'db-owned', 'db-cards', 'db-binders'];
-const scriptProp = PropertiesService.getScriptProperties();
-const sheetName = 'db-all';
-
-function initialSetup() {
-  const activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  scriptProp.setProperty('key', activeSpreadsheet.getId());
-}
-
 /**
- * returns all the listed sheet contents
  * @param {*} e eventObject
- * @returns {string{}[][]}
+ * @returns {
+      result: 'success',
+      data: [
+        [key_name, key_value],
+      ],
+    };
  */
 function doGet(e) {
+  const sheetName = 'SECRETS';
+  const scriptProp = PropertiesService.getScriptProperties();
   const lock = LockService.getScriptLock();
   lock.tryLock(10000);
-  const dataObj = {};
 
   try {
-    for (const sheetName of sheets) {
-      const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
-      const sheet = doc.getSheetByName(sheetName);
-      const range = sheet.getDataRange();
-      const data = range.getValues();
-      dataObj[sheetName] = data;
-    }
-    return ContentService.createTextOutput(JSON.stringify(dataObj)).setMimeType(
-      ContentService.MimeType.JSON
-    );
+    const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
+    const data = doc.getSheetByName(sheetName).getDataRange().getValues();
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'success', data: data })
+    ).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService.createTextOutput(
       JSON.stringify({ result: 'error', error: err, param: e.parameter })
@@ -44,82 +35,5 @@ function testGet() {
   };
   const data = doGet(eventObject);
   const stringified = data.getContent();
-  const parsed = JSON.parse(stringified);
-  console.log(parsed['db-sets'][0][0]);
-}
-
-/**
- * Marks card as caught in the 'all' sheet.
- * @param {string} stringified stringified filename array
- */
-function catchCard(stringified) {
-  const doc = SpreadsheetApp.openById(scriptProp.getProperty('key'));
-  const sheet = doc.getSheetByName(sheetName);
-  const parsed = JSON.parse(stringified);
-
-  parsed.forEach((filename) => {
-    const cardCell = sheet
-      .createTextFinder(filename)
-      .matchEntireCell(true)
-      .findAll();
-    const cardRow = cardCell[0].getRow();
-
-    // get the col #
-    const caught = sheet
-      .createTextFinder('caught')
-      .matchEntireCell(true)
-      .findAll();
-    const caughtCol = caught[0].getColumn();
-
-    // fill sheet
-    sheet.getRange(cardRow, caughtCol).setValue('x');
-    const caughtDate = sheet
-      .createTextFinder('caught date')
-      .matchEntireCell(true)
-      .findAll();
-    const dateCol = caughtDate[0].getColumn();
-    sheet
-      .getRange(cardRow, dateCol)
-      .setValue(Utilities.formatDate(new Date(), 'GMT-7', 'MM/dd/yyyy'));
-  });
-}
-
-function doPost(e) {
-  const lock = LockService.getScriptLock();
-  lock.tryLock(10000);
-
-  try {
-    const cards = e.parameter['filenames'];
-    catchCard(cards);
-
-    return ContentService.createTextOutput(
-      JSON.stringify({ result: 'success', cards: cards })
-    ).setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    Logger.log(err);
-    return ContentService.createTextOutput(
-      JSON.stringify({ result: 'error', error: err, param: e.parameter })
-    ).setMimeType(ContentService.MimeType.JSON);
-  } finally {
-    lock.releaseLock();
-  }
-}
-
-function testPostOne() {
-  var eventObject = {
-    parameter: {
-      filenames: '["bs.013.poliwrath.jpg"]',
-    },
-  };
-  doPost(eventObject);
-}
-
-function testPostMult() {
-  var eventObject = {
-    parameter: {
-      filenames:
-        '["bs.013.poliwrath.jpg","bs.014.raichu.jpg","bs.016.zapdos.jpg"]',
-    },
-  };
-  doPost(eventObject);
+  console.log(JSON.parse(stringified));
 }

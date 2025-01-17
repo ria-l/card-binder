@@ -70,45 +70,13 @@ main {
   letter-spacing: 0.1ch;
   width: 100%;
 }
-.dropdown-container {
-  background-color: var(--bg-dropdown);
-  border-radius: 1rem;
-  width: 10rem;
-  padding: 1rem;
-  list-style: none;
-  margin-left: 1rem;
-  display: none;
-}
-.dropdown-item {
-  text-align: center;
-  font-size: 1rem;
-  letter-spacing: 0.1ch;
-  width: 100%;
-  color: var(--text-primary);
-  text-decoration: none;
-}
-select,
-progress {
-  width: 8rem;
-}
-#toggle-borders {
-  height: 20px;
-  width: 20px;
-}
-select {
-  padding: 0.5rem;
-  border-radius: 0.4rem;
-}
 .hide {
   display: none !important;
 }
 .show {
   display: inline-block !important;
 }
-.highlight {
-  border: solid 5px #96e3ff;
-}
-#bgSpan {
+#bg-span {
   opacity: 0.3;
   top: 0;
   left: 0;
@@ -139,42 +107,9 @@ select {
   width: 30dvw;
   position: fixed;
 }
-.zoomed-card {
-  align-items: center;
-  display: flex;
-  inset: 0px;
-  justify-content: center;
-  margin: auto;
-  position: fixed;
-  height: 90dvh;
-}
-table {
-  display: inline-block;
-  margin: 10px;
-}
-td img {
-  /* the td is necessary for correct rendering with no grid */
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-.placeholder {
-  /* makes it so border won't affect height/width */
-  display: inline-block;
-  text-align: center;
-}
-td img,
-td .placeholder {
-  /* Keeps cards and placeholders properly aligned. Doesn't work if it's separated into the individual elements. */
-  vertical-align: middle;
-}
 #parent {
   /* keeps large card from acting like mobile on desktop */
   display: flex;
-}
-iframe,
-#filenamesInput {
-  display: none;
 }
 ol {
   text-align: left;
@@ -196,8 +131,8 @@ ol {
   max-width: 100vh;
 }
 #right,
-#smallCardSpan,
-#listSpan {
+#small-card-span,
+#list-span {
   padding: 10px;
   background-color: #fff;
   border-radius: 14px;
@@ -205,7 +140,7 @@ ol {
   flex-basis: 30%;
   display: inline-block;
 }
-#largeCardSpan {
+#large-card-span {
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -225,7 +160,7 @@ ol {
   #parent {
     flex-direction: column;
   }
-  #largeCardSpan {
+  #large-card-span {
     max-height: none;
   }
   .navbar {
@@ -233,9 +168,6 @@ ol {
     width: 100vw;
     height: 5rem;
     z-index: 100;
-  }
-  .mobileHide {
-    display: none;
   }
   .navbar-nav {
     flex-direction: row;
@@ -247,18 +179,9 @@ ol {
     margin-left: 0;
     margin-bottom: 6rem;
   }
-  .dropdown-container {
-    position: absolute;
-    bottom: 4rem;
-    margin-left: 0;
-  }
   .link-text {
     font-size: 1rem;
     text-align: center;
     margin-left: 0;
-  }
-  .zoomed-card {
-    width: 90dvw;
-    height: auto;
   }
 }
