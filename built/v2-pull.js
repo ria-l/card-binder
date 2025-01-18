@@ -1,8 +1,9 @@
 import * as constants from './v2-constants.js';
+import * as pull from './v2-pull-fn.js';
 import * as store from './v2-store.js';
+import * as tcg from './v2-fetch-tcg.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
-import * as tcg from './v2-fetch-tcg.js';
 await main();
 async function main() {
     ui.setRandomBg();
@@ -26,6 +27,9 @@ function setEventListeners() {
     utils
         .getElByIdOrThrow('set-dropdown')
         .addEventListener('change', () => store.saveActiveSetAndCards());
+    utils
+        .getElByIdOrThrow('open-pack')
+        .addEventListener('click', () => pull.openPack());
     utils
         .getElByIdOrThrow('clear-storage-button')
         .addEventListener('click', () => localStorage.clear());

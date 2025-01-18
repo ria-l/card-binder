@@ -4,10 +4,13 @@ import * as store from './v2-store.js';
 import * as types from './v2-types.js';
 import * as utils from './v2-utils.js';
 
-export async function fetchAndStoreCardsBySet(setId: string) {
+export async function fetchAndStoreCardsBySet(
+  setId: string
+): Promise<string[]> {
   const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
   const cards = data.map((row: types.tcgset) => row.id);
   store.storeCardsBySetId(setId, cards);
+  return cards;
 }
 
 export async function fetchAndStoreSetMetadata() {

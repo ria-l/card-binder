@@ -7,6 +7,7 @@ export async function fetchAndStoreCardsBySet(setId) {
     const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
     const cards = data.map((row) => row.id);
     store.storeCardsBySetId(setId, cards);
+    return cards;
 }
 export async function fetchAndStoreSetMetadata() {
     const data = await fetchJson('https://api.pokemontcg.io/v2/sets');

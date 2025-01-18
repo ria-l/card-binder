@@ -1,6 +1,7 @@
 import * as constants from './v2-constants.js';
-import * as tcg from './v2-fetch-tcg.js';
+import * as get from './v2-get.js';
 import * as store from './v2-store.js';
+import * as tcg from './v2-fetch-tcg.js';
 import * as utils from './v2-utils.js';
 
 export function getTcgApiKey(): string {
@@ -14,6 +15,9 @@ export function getTcgApiKey(): string {
   return ''; // not worth getting it if it's missing
 }
 
+/**
+ * gets from storage, or fetches from source if missing
+ */
 export async function getSetMetadata() {
   let setMetadata = localStorage.getItem(constants.STORAGE_KEYS.setMetadata); // dont use throw
   if (setMetadata) {
@@ -45,4 +49,14 @@ export function getSelectedSet(): string {
     return selectedSet.value;
   }
   return '';
+}
+
+export async function getCardsForSet() {
+  const setId = utils.getLsDataOrThrow(constants.STORAGE_KEYS.activeSet);
+  let setData = await get.getSetMetadata();
+  let cards: string[] = setData[setId]['cards'];
+  if (!cards || !cards.length) {
+    cards = await tcg.fetchAndStoreCardsBySet(setId);
+  }
+  return { setId, cards };
 }
