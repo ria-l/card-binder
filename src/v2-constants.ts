@@ -1,5 +1,15 @@
 export const STORAGE_VERSION = '18:54:49';
 
+export const CARDS_SETID_URL = 'https://api.pokemontcg.io/v2/cards?q=set.id:';
+
+export const STORAGE_KEYS = {
+  activeSet: 'v2_active_set',
+  secrets: 'v2_secrets', // also in main
+  appscriptUrl: 'v2_appscript_url', // also in main
+  rawSheetsData: 'v2_raw_sheets_data', // also in main
+  setMetadata: 'v2_set_metadata',
+};
+
 export const BG_FILES = [
   'ace.jpeg',
   'electric.jpeg',

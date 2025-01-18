@@ -70,6 +70,11 @@ main {
   letter-spacing: 0.1ch;
   width: 100%;
 }
+select {
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  width: 8rem;
+}
 .hide {
   display: none !important;
 }
