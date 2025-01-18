@@ -5,7 +5,10 @@ import * as types from './v2-types.js';
 import * as utils from './v2-utils.js';
 export async function fetchAndStoreCardsBySet(setId) {
     const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
-    const cards = data.map((row) => row.id);
+    const cards = data.map((row) => ({
+        id: row.id,
+        rarity: row.rarity,
+    }));
     store.storeCardsBySetId(setId, cards);
     return cards;
 }

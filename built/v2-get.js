@@ -1,6 +1,7 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as store from './v2-store.js';
+import * as types from './v2-types.js';
 import * as tcg from './v2-fetch-tcg.js';
 import * as utils from './v2-utils.js';
 export function getTcgApiKey() {
@@ -50,7 +51,7 @@ export async function getCardsForSet() {
     const setId = utils.getLsDataOrThrow(constants.STORAGE_KEYS.activeSet);
     let setData = await get.getSetMetadata();
     let cards = setData[setId]['cards'];
-    if (!cards || !cards.length) {
+    if (!cards || !Object.keys(cards).length) {
         cards = await tcg.fetchAndStoreCardsBySet(setId);
     }
     return { setId, cards };
