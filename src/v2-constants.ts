@@ -8,6 +8,48 @@ export const STORAGE_KEYS = {
   appscriptUrl: 'v2_appscript_url', // also in main
   rawSheetsData: 'v2_raw_sheets_data', // also in main
   setMetadata: 'v2_set_metadata',
+  owned: 'v2_owned',
+};
+
+export const MY_SUBTYPES = new Set(['ex', 'EX', 'GX', 'V', 'VMAX', 'VSTAR']);
+
+export const ENERGY_COLORS = {
+  grass: ['#c2d349', '#93bb4e'],
+  fire: ['#f78b46', '#f2674b'],
+  water: ['#93d9f5', '#11b6e6'],
+  lightning: ['#fff023', '#ffd126'],
+  psychic: ['#c992c0', '#9b6dad'],
+  fighting: ['#ecab2a', '#d6713d'],
+  dark: ['#0d7080', '#0d3236'],
+  metal: ['#c2e2f4', '#a6b3af'],
+  fairy: ['#e14690', '#b13870'],
+  dragon: ['#b0813a', '#acac42'],
+  colorless: ['#f5f4f0', '#d6d2cf'],
+  item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
+  supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
+  missing: ['#00FF00', '#00FF00'],
+  stadium: ['#45bf45', '#71c871'],
+};
+
+export const CARD_COLORS = {
+  basic: [],
+  ex: ['#60d8c6', '#009d82', '#60d8c6'], // teal
+  gx: ['#00aeed', '#036697', '#00aeed'], // blue
+  v: ['#4d4d4d', '#000000', '#4d4d4d'], // black & grey
+  vmax: ['#fbcf4c', '#e61c75', '#3f3487'], // yellow & pink & purple
+  vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
+  trainer: ['#808186', '#696569'], // gray
+  energy: [
+    '#f78b46', // fire
+    '#ecab2a', // fighting
+    '#fff023', // lightning
+    '#c2d349', // grass
+    '#93d9f5', // water
+    '#0d7080', // dark
+    '#c992c0', // psychic
+    '#f5f4f0', // colorless
+  ],
+  missing: ['#00FF00', '#00FF00'],
 };
 
 export const BG_FILES = [

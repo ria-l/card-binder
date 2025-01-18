@@ -1,5 +1,8 @@
+import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as types from './v2-types.js';
+import * as ui from './v2-ui.js';
+import * as utils from './v2-utils.js';
 
 export async function openPack() {
   const { setId, cards } = await get.getCardsForSet();
@@ -7,7 +10,7 @@ export async function openPack() {
   const cardGroups = groupCardsByRarity(cards);
   const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
 
-  const pulled: types.tcgCard[] = [];
+  const pulled: types.Card[] = [];
 
   for (let i = 0; i < 5; i++) {
     let card;
@@ -27,17 +30,36 @@ export async function openPack() {
     pulled.push(card);
   }
   console.log(pulled);
-  // processPulled(pulled);
+  processPulled(pulled);
 }
 
-function processPulled(pulled: string[]) {
-  // fetch and store metadata for the cards
-  // update owned in storage and sheets
-  // get image and display it and upload to github and sheets
-  // update count of opened cards
+function processPulled(pulled: types.Card[]) {
+  for (const card of pulled) {
+    // push to gsheets
+    // update owned storage
+
+    // upload img to github
+
+    // generate image tag
+    const isNew = isNewCard(card);
+    let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
+    const borderColors = ui.generateBorderColors(card.subtype, card.energy);
+    console.log(title, card.subtype, card.energy, '|', borderColors);
+    // insert small img
+    // insert large img
+    // display text list
+  }
 }
 
-function groupCardsByRarity(cards: types.tcgCard[]) {
+function isNewCard(card: types.Card): boolean {
+  const owned = utils.getLsDataOrThrow(constants.STORAGE_KEYS.owned);
+  if (card.id in owned) {
+    return true;
+  }
+  return false;
+}
+
+function groupCardsByRarity(cards: types.Card[]) {
   return cards.reduce((acc, card) => {
     const rarityGroup =
       card.rarity === 'Rare' ||
@@ -54,11 +76,11 @@ function groupCardsByRarity(cards: types.tcgCard[]) {
     acc[rarityGroup].push(card);
 
     return acc;
-  }, {} as Record<string, types.tcgCard[]>);
+  }, {} as Record<string, types.Card[]>);
 }
 
 function getRandomCard(
-  cardGroups: Record<string, types.tcgCard[]>,
+  cardGroups: Record<string, types.Card[]>,
   defaultGroup: string,
   starThreshold: number,
   rareThreshold: number

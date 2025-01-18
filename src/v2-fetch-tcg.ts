@@ -4,12 +4,23 @@ import * as store from './v2-store.js';
 import * as types from './v2-types.js';
 import * as utils from './v2-utils.js';
 
-export async function fetchAndStoreCardsBySet(setId: string) {
+export async function fetchAndStoreCardsBySet(
+  setId: string
+): Promise<types.Card[]> {
   const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
-  const cards = data.map((row: types.tcgCard) => ({
+  const cards: types.Card[] = data.map((row: types.tcgCard) => ({
     id: row.id,
+    name: row.name,
+    set: row.set.id,
+    subtype: get.getSubtype(row),
+    energy: get.getEnergyType(row),
     rarity: row.rarity,
+    filename: row.images.large,
+    supertype: row.supertype,
+    artist: row.artist,
+    nationalDex: row.nationalPokedexNumbers,
   }));
+
   store.storeCardsBySetId(setId, cards);
   return cards;
 }

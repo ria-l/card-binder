@@ -2,7 +2,7 @@ import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as sort from './v2-sort.js';
 import * as tcg from './v2-fetch-tcg.js';
-import * as utils from './v2-utils.js';
+import * as types from './v2-types.js';
 export function storeSetMetaData(data) {
     const sorted = sort.sortDataByReleaseDate(data);
     const setMetadata = sorted.reduce((acc, { id, name, series, releaseDate }) => {

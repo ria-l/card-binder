@@ -56,4 +56,25 @@ export async function getCardsForSet() {
     }
     return { setId, cards };
 }
+export function getSubtype(card) {
+    const subtypes = card.subtypes ?? [];
+    for (let type of subtypes) {
+        if (constants.MY_SUBTYPES.has(type)) {
+            return type;
+        }
+        else {
+            // doesn't matter if it's not one of my subtypes
+            return card.subtypes.toString();
+        }
+    }
+}
+export function getEnergyType(card) {
+    const energy = card.types ?? '';
+    if (energy && energy[0]) {
+        return energy[0].toLowerCase();
+    }
+    else {
+        return '';
+    }
+}
 //# sourceMappingURL=v2-get.js.map

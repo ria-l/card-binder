@@ -2,7 +2,7 @@ import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as sort from './v2-sort.js';
 import * as tcg from './v2-fetch-tcg.js';
-import * as utils from './v2-utils.js';
+import * as types from './v2-types.js';
 
 export function storeSetMetaData(
   data: {
@@ -48,7 +48,7 @@ export async function saveActiveSetAndCards() {
   }
 }
 
-export async function storeCardsBySetId(setid: string, cards: string[]) {
+export async function storeCardsBySetId(setid: string, cards: types.Card[]) {
   const setData = await get.getSetMetadata();
 
   // init if set is not in storage

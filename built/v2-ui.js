@@ -22,4 +22,23 @@ export async function fillSetDropdown() {
         setDropdown.appendChild(option);
     }
 }
+/**
+ * generates hex string for gradient border
+ * @param cardtype v, vmax, ex, etc
+ * @param energytype grass, water, etc
+ * @returns
+ */
+export function generateBorderColors(cardtype, energytype) {
+    if (!(cardtype in constants.MY_SUBTYPES)) {
+        cardtype = 'missing';
+    }
+    const energyColors = constants.ENERGY_COLORS[energytype];
+    const cardColors = constants.CARD_COLORS[cardtype];
+    if (cardtype == 'basic') {
+        return `${energyColors},${energyColors},${energyColors[1]}`;
+    }
+    else {
+        return `${energyColors},white,${cardColors}`;
+    }
+}
 //# sourceMappingURL=v2-ui.js.map

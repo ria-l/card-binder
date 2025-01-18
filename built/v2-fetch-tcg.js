@@ -7,7 +7,15 @@ export async function fetchAndStoreCardsBySet(setId) {
     const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
     const cards = data.map((row) => ({
         id: row.id,
+        name: row.name,
+        set: row.set.id,
+        subtype: get.getSubtype(row),
+        energy: get.getEnergyType(row),
         rarity: row.rarity,
+        filename: row.images.large,
+        supertype: row.supertype,
+        artist: row.artist,
+        nationalDex: row.nationalPokedexNumbers,
     }));
     store.storeCardsBySetId(setId, cards);
     return cards;

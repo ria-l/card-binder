@@ -27,3 +27,28 @@ export async function fillSetDropdown(): Promise<void> {
     setDropdown.appendChild(option);
   }
 }
+
+
+/**
+ * generates hex string for gradient border
+ * @param cardtype v, vmax, ex, etc
+ * @param energytype grass, water, etc
+ * @returns
+ */
+export function generateBorderColors(
+  cardtype: string,
+  energytype: string
+): string {
+  if (!(cardtype in constants.MY_SUBTYPES)) {
+      cardtype = 'missing';
+    }
+  const energyColors =
+    constants.ENERGY_COLORS[energytype as keyof typeof constants.ENERGY_COLORS];
+  const cardColors =
+    constants.CARD_COLORS[cardtype as keyof typeof constants.CARD_COLORS];
+  if (cardtype == 'basic') {
+    return `${energyColors},${energyColors},${energyColors[1]}`;
+  } else {
+    return `${energyColors},white,${cardColors}`;
+  }
+}

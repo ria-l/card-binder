@@ -1,11 +1,13 @@
+import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as types from './v2-types.js';
+import * as ui from './v2-ui.js';
+import * as utils from './v2-utils.js';
 export async function openPack() {
     const { setId, cards } = await get.getCardsForSet();
     console.log(setId, cards);
     const cardGroups = groupCardsByRarity(cards);
-    // const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
-    const isGodPack = true;
+    const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
     const pulled = [];
     for (let i = 0; i < 5; i++) {
         let card;
@@ -29,13 +31,29 @@ export async function openPack() {
         pulled.push(card);
     }
     console.log(pulled);
-    // processPulled(pulled);
+    processPulled(pulled);
 }
 function processPulled(pulled) {
-    // fetch and store metadata for the cards
-    // update owned in storage and sheets
-    // get image and display it and upload to github and sheets
-    // update count of opened cards
+    for (const card of pulled) {
+        // push to gsheets
+        // update owned storage
+        // upload img to github
+        // generate image tag
+        const isNew = isNewCard(card);
+        let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
+        const borderColors = ui.generateBorderColors(card.subtype, card.energy);
+        console.log(title, card.subtype, card.energy, '|', borderColors);
+        // insert small img
+        // insert large img
+        // display text list
+    }
+}
+function isNewCard(card) {
+    const owned = utils.getLsDataOrThrow(constants.STORAGE_KEYS.owned);
+    if (card.id in owned) {
+        return true;
+    }
+    return false;
 }
 function groupCardsByRarity(cards) {
     return cards.reduce((acc, card) => {

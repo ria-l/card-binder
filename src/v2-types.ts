@@ -37,6 +37,27 @@ export type tcgCard = {
   };
 };
 
+export type Card = {
+  name: string;
+  id: string;
+  artist: string;
+  customDexNum: number;
+  energy: Energy;
+  filename: string;
+  forme: string;
+  isGold: boolean;
+  isShiny: boolean;
+  isTera: boolean;
+  nationalDex: number;
+  rarity: Rarities;
+  set: string;
+  subtype: string;
+  supertype: Supertypes;
+  visuals: Visuals;
+};
+
+type Visuals = 'normal' | '3d' | 'full art' | 'gold' | 'illust';
+
 type Energy =
   | 'Colorless'
   | 'Darkness'

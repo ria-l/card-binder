@@ -54,13 +54,33 @@ export function getSelectedSet(): string {
 
 export async function getCardsForSet(): Promise<{
   setId: string;
-  cards: types.tcgCard[];
+  cards: types.Card[];
 }> {
   const setId = utils.getLsDataOrThrow(constants.STORAGE_KEYS.activeSet);
   let setData = await get.getSetMetadata();
-  let cards: types.tcgCard[] = setData[setId]['cards'];
+  let cards: types.Card[] = setData[setId]['cards'];
   if (!cards || !Object.keys(cards).length) {
     cards = await tcg.fetchAndStoreCardsBySet(setId);
   }
   return { setId, cards };
+}
+
+export function getSubtype(card: types.tcgCard) {
+  const subtypes = card.subtypes ?? [];
+  for (let type of subtypes) {
+    if (constants.MY_SUBTYPES.has(type)) {
+      return type;
+    } else {
+      // doesn't matter if it's not one of my subtypes
+      return card.subtypes.toString();
+    }
+  }
+}
+export function getEnergyType(card: types.tcgCard) {
+  const energy = card.types ?? '';
+  if (energy && energy[0]) {
+    return energy[0].toLowerCase();
+  } else {
+    return '';
+  }
 }
