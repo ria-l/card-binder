@@ -44,6 +44,7 @@ async function processPulled(pulled: types.Card[]) {
 
     displayLargeCard(i, cardImg);
     displaySmallCard(cardImg);
+    addToList(title);
     // display text list
     // push to gsheets
     // update owned in LS
@@ -79,6 +80,13 @@ function displayZoomed(cardImg: HTMLImageElement) {
   displayCard.classList.add('large-card');
   const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
   largeCardSpan.insertBefore(displayCard, largeCardSpan.firstChild);
+}
+
+function addToList(title: string) {
+  const ol = utils.getElByIdOrThrow('card-list');
+  const li = document.createElement('li');
+  li.appendChild(document.createTextNode(title));
+  ol.insertBefore(li, ol.firstChild);
 }
 
 async function createCardImg(
