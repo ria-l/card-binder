@@ -79,4 +79,20 @@ export function generateBorderColors(subtype, energy, supertype) {
         return `${left},${middle},${right}`;
     }
 }
+export function clearDisplay() {
+    const largeCardSpan = document.getElementById('large-card-span');
+    const smallCardSpan = document.getElementById('small-card-span');
+    const listSpan = document.getElementById('list-span');
+    if (largeCardSpan)
+        largeCardSpan.innerHTML = '';
+    if (smallCardSpan)
+        smallCardSpan.innerHTML = '';
+    const ol = document.createElement('ol');
+    ol.id = 'card-list';
+    ol.reversed = true;
+    if (listSpan) {
+        listSpan.innerHTML = '';
+        listSpan.appendChild(ol);
+    }
+}
 //# sourceMappingURL=v2-ui.js.map

@@ -44,6 +44,9 @@ function setEventListeners() {
     .getElByIdOrThrow('open-pack')
     .addEventListener('click', () => pull.openPack());
   utils
+    .getElByIdOrThrow('clear-display-button')
+    .addEventListener('click', ui.clearDisplay);
+  utils
     .getElByIdOrThrow('clear-storage-button')
     .addEventListener('click', () => localStorage.clear());
   utils
