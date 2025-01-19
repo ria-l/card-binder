@@ -1,8 +1,11 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as pull from './v2-pull-fn.js';
+import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
-import * as types from './v2-types.js';
 import * as tcg from './v2-fetch-tcg.js';
+import * as types from './v2-types.js';
+import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
 export function getTcgApiKey(): string {
@@ -66,21 +69,27 @@ export async function getCardsForSet(): Promise<{
 }
 
 export function getSubtype(card: types.tcgCard) {
-  const subtypes = card.subtypes ?? [];
+  const subtypes = card.subtypes ?? ['none'];
+  let subtype = '';
   for (let type of subtypes) {
-    if (constants.MY_SUBTYPES.has(type)) {
-      return type;
-    } else {
-      // doesn't matter if it's not one of my subtypes
-      return card.subtypes.toString();
+    if (type.toLowerCase() in constants.POKEMON_COLORS) {
+      subtype = type;
     }
   }
+  return subtype;
 }
+
 export function getEnergyType(card: types.tcgCard) {
   const energy = card.types ?? '';
   if (energy && energy[0]) {
-    return energy[0].toLowerCase();
+    return energy[0];
   } else {
     return '';
   }
+}
+
+export function getGSheet(sheet: string): string[][] {
+  const data = utils.getLsDataOrThrow(constants.STORAGE_KEYS.rawSheetsData);
+  return data.valueRanges.find((item: any) => item.range.includes(sheet))
+    .values;
 }

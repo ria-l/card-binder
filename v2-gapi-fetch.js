@@ -19,7 +19,6 @@ async function fetchAndStoreSheets() {
       throw new Error(err);
     }
     localStorage.setItem(RAW_SHEETS_DATA_KEY, JSON.stringify(response.result));
-    console.log(response.result);
   };
   tokenClient.requestAccessToken({ prompt: '' });
 }

@@ -1,5 +1,9 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as pull from './v2-pull-fn.js';
+import * as sort from './v2-sort.js';
+import * as store from './v2-store.js';
+import * as tcg from './v2-fetch-tcg.js';
 import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
@@ -43,7 +47,7 @@ function processPulled(pulled: types.Card[]) {
     // generate image tag
     const isNew = isNewCard(card);
     let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
-    const borderColors = ui.generateBorderColors(card.subtype, card.energy);
+    const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
     console.log(title, card.subtype, card.energy, '|', borderColors);
     // insert small img
     // insert large img
@@ -52,11 +56,11 @@ function processPulled(pulled: types.Card[]) {
 }
 
 function isNewCard(card: types.Card): boolean {
-  const owned = utils.getLsDataOrThrow(constants.STORAGE_KEYS.owned);
+  const owned = get.getGSheet('owned');
   if (card.id in owned) {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 function groupCardsByRarity(cards: types.Card[]) {
