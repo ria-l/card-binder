@@ -40,7 +40,14 @@ export async function getActiveSet() {
     if (!activeSet) {
         activeSet = getSelectedSet();
     }
-    return activeSet ?? (await utils.pickRandomSet());
+    return activeSet ?? (await pickAndStoreRandomSet());
+}
+async function pickAndStoreRandomSet() {
+    const setData = await get.getSetMetadata();
+    const setIds = Object.keys(setData);
+    const i = Math.floor(Math.random() * setIds.length);
+    localStorage.setItem(constants.STORAGE_KEYS.activeSet, setIds[i] ?? 'base1');
+    return setIds[i] ?? 'base1';
 }
 export function getSelectedSet() {
     const setDropdown = utils.getElByIdOrThrow('set-dropdown');

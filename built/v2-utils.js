@@ -35,11 +35,6 @@ export function getLsDataOrThrow(storageKey) {
     }
     return JSON.parse(data);
 }
-export async function pickRandomSet() {
-    const setData = await get.getSetMetadata();
-    const x = setData[Math.floor(Math.random() * setData.length)];
-    return setData[x];
-}
 export async function convertBlobToBase64(blob) {
     try {
         const base64String = await blobToBase64(blob);
