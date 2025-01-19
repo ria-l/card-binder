@@ -40,14 +40,10 @@ export async function openPack() {
 async function processPulled(pulled: types.Card[]) {
   for (const [i, card] of pulled.entries()) {
     const { isNew, title, borderColors } = generateImgMetadata(card);
-    const largeCardImg = await createLargeImg(card, isNew, borderColors, title);
-    if (i === 0) {
-      const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
-      largeCardSpan.textContent = '';
-    }
-    displayLargeCard(largeCardImg);
+    const cardImg = await createCardImg(card, isNew, borderColors, title);
 
-    // insert small img
+    displayLargeCard(i, cardImg);
+    displaySmallCard(cardImg);
     // display text list
     // push to gsheets
     // update owned in LS
@@ -55,15 +51,37 @@ async function processPulled(pulled: types.Card[]) {
   // await gh.uploadImgs(pulled);
 }
 
-function displayLargeCard(largeCardImg: HTMLImageElement) {
-  const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
-  // const newSpan = document.createElement('span');
-  // newSpan.id = 'large-card-span';
-  largeCardSpan.insertBefore(largeCardImg, largeCardSpan.firstChild);
-  // largeCardSpan.replaceWith(newSpan);
+function displayLargeCard(i: number, cardImg: HTMLImageElement) {
+  if (i === 0) {
+    const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
+    largeCardSpan.textContent = '';
+  }
+  const largeCard = cardImg.cloneNode(true) as HTMLImageElement;
+  largeCard.classList.add('large-card');
+  displayCard(largeCard, 'large-card-span');
+}
+function displaySmallCard(cardImg: HTMLImageElement) {
+  const smallCard = cardImg.cloneNode() as HTMLImageElement;
+  smallCard.classList.add('small-card');
+  smallCard.onclick = function () {
+    displayZoomed(cardImg);
+  };
+  displayCard(smallCard, 'small-card-span');
 }
 
-async function createLargeImg(
+function displayCard(cardImg: HTMLImageElement, spanId: string) {
+  const span = utils.getElByIdOrThrow(spanId);
+  span.insertBefore(cardImg, span.firstChild);
+}
+
+function displayZoomed(cardImg: HTMLImageElement) {
+  const displayCard = cardImg.cloneNode() as HTMLImageElement;
+  displayCard.classList.add('large-card');
+  const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
+  largeCardSpan.insertBefore(displayCard, largeCardSpan.firstChild);
+}
+
+async function createCardImg(
   card: types.Card,
   isNew: boolean,
   borderColors: string,
@@ -78,7 +96,6 @@ async function createLargeImg(
   const imgEl = new Image();
   imgEl.src = img64;
   imgEl.title = title;
-  imgEl.classList.add('large-card');
   if (!isNew) {
     imgEl.classList.add('owned');
   }
@@ -103,7 +120,7 @@ function generateImgMetadata(card: types.Card) {
 
 function isNewCard(card: types.Card): boolean {
   const owned = get.getGSheet('owned');
-  if (card.id in owned) {
+  if (owned.some((row) => row[0] === card.id)) {
     return false;
   }
   return true;

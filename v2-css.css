@@ -125,7 +125,7 @@ ol {
   margin: 3px;
   height: 100px;
 }
-.small-card.caught {
+.small-card.owned {
   opacity: 0.5;
 }
 .large-card {
@@ -133,7 +133,7 @@ ol {
   border-radius: 36px;
   margin: 5px;
   height: auto;
-  max-width: 100vh;
+  max-width: 600px;
 }
 #right,
 #small-card-span,
