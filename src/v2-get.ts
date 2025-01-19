@@ -71,25 +71,55 @@ export async function getCardsForSet(): Promise<{
 export function getSubtype(card: types.tcgCard) {
   const subtypes = card.subtypes ?? ['none'];
   let subtype = '';
-  for (let type of subtypes) {
-    if (type.toLowerCase() in constants.POKEMON_COLORS) {
-      subtype = type;
+  if (card.supertype === 'Pokémon') {
+    for (let type of subtypes) {
+      if (type.toLowerCase() in constants.POKEMON_COLORS) {
+        subtype = type;
+      }
     }
+    return subtype.toLowerCase();
   }
-  return subtype;
+  if (card.supertype === 'Trainer') {
+    for (let type of subtypes) {
+      if (type.toLowerCase() in constants.TRAINER_COLORS) {
+        subtype = type;
+      }
+    }
+    return subtype.toLowerCase();
+  }
+  if (card.supertype === 'Energy') {
+    for (let type of subtypes) {
+      if (type.toLowerCase() in constants.ENERGY_COLORS) {
+        subtype = type;
+      }
+    }
+    return subtype.toLowerCase();
+  }
 }
 
 export function getEnergyType(card: types.tcgCard) {
-  const energy = card.types ?? '';
-  if (energy && energy[0]) {
-    return energy[0];
-  } else {
-    return '';
-  }
+  if (card.types && card.types.length && card.types[0]) {
+    return card.types[0].toLowerCase();
+  } else return '';
 }
 
 export function getGSheet(sheet: string): string[][] {
   const data = utils.getLsDataOrThrow(constants.STORAGE_KEYS.rawSheetsData);
   return data.valueRanges.find((item: any) => item.range.includes(sheet))
     .values;
+}
+
+export function getSecret(key: string): string {
+  const secrets = utils.getLsDataOrThrow(constants.STORAGE_KEYS.secrets);
+  return secrets[key];
+}
+
+export function getDexNum(card: types.tcgCard) {
+  if (
+    card.nationalPokedexNumbers &&
+    card.nationalPokedexNumbers.length &&
+    card.nationalPokedexNumbers[0]
+  ) {
+    return card.nationalPokedexNumbers[0];
+  } else return card.nationalPokedexNumbers;
 }

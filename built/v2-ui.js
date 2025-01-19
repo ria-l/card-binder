@@ -36,21 +36,16 @@ export async function fillSetDropdown() {
  * @returns
  */
 export function generateBorderColors(subtype, energy, supertype) {
-    // normalize the inputs
-    subtype =
-        subtype.toLowerCase() in constants.POKEMON_COLORS
-            ? subtype.toLowerCase()
-            : 'other';
-    energy =
-        energy.toLowerCase() in constants.ENERGY_COLORS
-            ? energy.toLowerCase()
-            : 'other';
     supertype =
         supertype.toLowerCase() in constants.SUPERTYPE_COLORS
             ? supertype.toLowerCase()
             : 'trainer';
     // generate gradients
     if (supertype === 'pokémon') {
+        subtype =
+            subtype.toLowerCase() in constants.POKEMON_COLORS
+                ? subtype.toLowerCase()
+                : 'basic';
         const left = _getColors(constants.ENERGY_COLORS, energy);
         const right = _getColors(constants.POKEMON_COLORS, subtype);
         return subtype == 'basic'
@@ -58,11 +53,19 @@ export function generateBorderColors(subtype, energy, supertype) {
             : _createGradient(left, 'white', right);
     }
     if (supertype === 'trainer') {
+        subtype =
+            subtype.toLowerCase() in constants.TRAINER_COLORS
+                ? subtype.toLowerCase()
+                : 'item';
         const left = _getColors(constants.TRAINER_COLORS, subtype);
         const right = _getColors(constants.SUPERTYPE_COLORS, supertype);
         return _createGradient(left, 'white', right);
     }
     if (supertype === 'energy') {
+        energy =
+            energy.toLowerCase() in constants.ENERGY_COLORS
+                ? energy.toLowerCase()
+                : 'colorless';
         const left = _getColors(constants.ENERGY_COLORS, energy);
         const right = _getColors(constants.SUPERTYPE_COLORS, supertype);
         return _createGradient(left, 'white', right);
@@ -70,7 +73,7 @@ export function generateBorderColors(subtype, energy, supertype) {
     throw new Error('no supertype for card');
     // helper functions
     function _getColors(colorMap, key) {
-        return colorMap[key];
+        return colorMap[key] ?? ['#00FF00', '#00FF00'];
     }
     function _createGradient(left, middle, right) {
         return `${left},${middle},${right}`;

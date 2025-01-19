@@ -8,20 +8,7 @@ export async function fetchAndStoreCardsBySet(
   setId: string
 ): Promise<types.Card[]> {
   const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
-  const cards: types.Card[] = data.map((row: types.tcgCard) => ({
-    id: row.id,
-    name: row.name,
-    set: row.set.id,
-    subtype: get.getSubtype(row),
-    energy: get.getEnergyType(row),
-    rarity: row.rarity,
-    filename: row.images.large,
-    supertype: row.supertype,
-    artist: row.artist,
-    nationalDex: row.nationalPokedexNumbers,
-  }));
-
-  store.storeCardsBySetId(setId, cards);
+  const cards = store.storeCardsBySetId(setId, data);
   return cards;
 }
 
@@ -51,6 +38,30 @@ export async function fetchJson(url: string): Promise<any> {
     utils.toggleStatusModal('', 'hide');
 
     return data.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function fetchBlob(url: string): Promise<any> {
+  const apiKey = get.getTcgApiKey();
+
+  try {
+    utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'X-Api-Key': apiKey,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data from ${url}`);
+    }
+
+    utils.toggleStatusModal('', 'hide');
+
+    return response.blob();
   } catch (error) {
     console.error(error);
   }

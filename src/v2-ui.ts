@@ -46,15 +46,6 @@ export function generateBorderColors(
   energy: string,
   supertype: string
 ): string {
-  // normalize the inputs
-  subtype =
-    subtype.toLowerCase() in constants.POKEMON_COLORS
-      ? subtype.toLowerCase()
-      : 'other';
-  energy =
-    energy.toLowerCase() in constants.ENERGY_COLORS
-      ? energy.toLowerCase()
-      : 'other';
   supertype =
     supertype.toLowerCase() in constants.SUPERTYPE_COLORS
       ? supertype.toLowerCase()
@@ -62,6 +53,10 @@ export function generateBorderColors(
 
   // generate gradients
   if (supertype === 'pokémon') {
+    subtype =
+      subtype.toLowerCase() in constants.POKEMON_COLORS
+        ? subtype.toLowerCase()
+        : 'basic';
     const left = _getColors(constants.ENERGY_COLORS, energy);
     const right = _getColors(constants.POKEMON_COLORS, subtype);
     return subtype == 'basic'
@@ -69,11 +64,19 @@ export function generateBorderColors(
       : _createGradient(left, 'white', right);
   }
   if (supertype === 'trainer') {
+    subtype =
+      subtype.toLowerCase() in constants.TRAINER_COLORS
+        ? subtype.toLowerCase()
+        : 'item';
     const left = _getColors(constants.TRAINER_COLORS, subtype);
     const right = _getColors(constants.SUPERTYPE_COLORS, supertype);
     return _createGradient(left, 'white', right);
   }
   if (supertype === 'energy') {
+    energy =
+      energy.toLowerCase() in constants.ENERGY_COLORS
+        ? energy.toLowerCase()
+        : 'colorless';
     const left = _getColors(constants.ENERGY_COLORS, energy);
     const right = _getColors(constants.SUPERTYPE_COLORS, supertype);
     return _createGradient(left, 'white', right);
@@ -82,7 +85,7 @@ export function generateBorderColors(
 
   // helper functions
   function _getColors(colorMap: object, key: string) {
-    return colorMap[key as keyof typeof colorMap];
+    return colorMap[key as keyof typeof colorMap] ?? ['#00FF00', '#00FF00'];
   }
   function _createGradient(
     left: string[],

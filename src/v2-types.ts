@@ -43,7 +43,7 @@ export type Card = {
   artist: string;
   customDexNum: number;
   energy: Energy;
-  filename: string;
+  imgUrl: string;
   forme: string;
   isGold: boolean;
   isShiny: boolean;
@@ -54,6 +54,7 @@ export type Card = {
   subtype: string;
   supertype: Supertypes;
   visuals: Visuals;
+  zRaw: tcgCard;
 };
 
 type Visuals = 'normal' | '3d' | 'full art' | 'gold' | 'illust';

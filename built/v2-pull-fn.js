@@ -3,7 +3,7 @@ import * as get from './v2-get.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
-import * as tcg from './v2-fetch-tcg.js';
+import * as tcg from './v2-api-tcg.js';
 import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
@@ -37,20 +37,52 @@ export async function openPack() {
     console.log(pulled);
     processPulled(pulled);
 }
-function processPulled(pulled) {
-    for (const card of pulled) {
-        // push to gsheets
-        // update owned storage
-        // upload img to github
-        // generate image tag
-        const isNew = isNewCard(card);
-        let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
-        const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
-        console.log(title, card.subtype, card.energy, '|', borderColors);
+async function processPulled(pulled) {
+    for (const [i, card] of pulled.entries()) {
+        const { isNew, title, borderColors } = generateImgMetadata(card);
+        const largeCardImg = await createLargeImg(card, isNew, borderColors, title);
+        if (i === 0) {
+            const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
+            largeCardSpan.textContent = '';
+        }
+        displayLargeCard(largeCardImg);
         // insert small img
-        // insert large img
         // display text list
+        // push to gsheets
+        // update owned in LS
     }
+    // await gh.uploadImgs(pulled);
+}
+function displayLargeCard(largeCardImg) {
+    const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
+    // const newSpan = document.createElement('span');
+    // newSpan.id = 'large-card-span';
+    largeCardSpan.insertBefore(largeCardImg, largeCardSpan.firstChild);
+    // largeCardSpan.replaceWith(newSpan);
+}
+async function createLargeImg(card, isNew, borderColors, title) {
+    // TODO: check if uploaded to GH already
+    const imgBlob = await tcg.fetchBlob(card.imgUrl);
+    const img64 = await utils.convertBlobToBase64(imgBlob);
+    if (!img64) {
+        throw new Error(`blob not converted: ${card.imgUrl}`);
+    }
+    const imgEl = new Image();
+    imgEl.src = img64;
+    imgEl.title = title;
+    imgEl.classList.add('large-card');
+    if (!isNew) {
+        imgEl.classList.add('owned');
+    }
+    imgEl.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
+    return imgEl;
+}
+function generateImgMetadata(card) {
+    const isNew = isNewCard(card);
+    let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
+    const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
+    console.log(title, card.subtype, card.energy, '|', borderColors);
+    return { isNew, title, borderColors };
 }
 function isNewCard(card) {
     const owned = get.getGSheet('owned');

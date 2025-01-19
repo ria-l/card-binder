@@ -50,9 +50,24 @@ export async function saveActiveSetAndCards() {
   if (!setData[activeSet]['cards']) {
     await tcg.fetchAndStoreCardsBySet(activeSet);
   }
+  return activeSet;
 }
 
-export async function storeCardsBySetId(setid: string, cards: types.Card[]) {
+export async function storeCardsBySetId(setid: string, data: any) {
+  const cards: types.Card[] = data.map((row: types.tcgCard) => ({
+    artist: row.artist,
+    energy: get.getEnergyType(row),
+    imgUrl: row.images.large,
+    id: row.id,
+    name: row.name,
+    nationalDex: get.getDexNum,
+    rarity: row.rarity,
+    set: row.set.id,
+    subtype: get.getSubtype(row),
+    supertype: row.supertype ? row.supertype.toLowerCase() : '',
+    zRaw: row,
+  }));
+
   const setData = await get.getSetMetadata();
 
   // init if set is not in storage
@@ -66,4 +81,5 @@ export async function storeCardsBySetId(setid: string, cards: types.Card[]) {
     constants.STORAGE_KEYS.setMetadata,
     JSON.stringify(setData)
   );
+  return cards;
 }

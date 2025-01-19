@@ -8,26 +8,38 @@ export const STORAGE_KEYS = {
     setMetadata: 'v2_set_metadata',
     owned: 'v2_owned',
 };
+export const SECRETS_KEYS = {
+    gapiAuthProvider: 'auth_provider_x509_cert_url',
+    gapiAuthUri: 'auth_uri',
+    gapiClientId: 'CLIENT_ID',
+    gapiClientSecret: 'client_secret',
+    gapiJsOrigins: 'javascript_origins',
+    gapiKey: 'GSHEETS_API_KEY',
+    gapiTokenUri: 'token_uri',
+    ghKey: 'GITHUB_TOKEN',
+    ghProjectId: 'project_id',
+    gsheetId: 'SHEET_ID',
+    tcgapi: 'PKMN_API_KEY',
+};
 // left colors for pokemon and energy
 export const ENERGY_COLORS = {
-    grass: ['#c2d349', '#93bb4e'],
-    fire: ['#f78b46', '#f2674b'],
-    water: ['#93d9f5', '#11b6e6'],
-    lightning: ['#fff023', '#ffd126'],
-    psychic: ['#c992c0', '#9b6dad'],
-    fighting: ['#ecab2a', '#d6713d'],
-    dark: ['#0d7080', '#0d3236'],
-    metal: ['#c2e2f4', '#a6b3af'],
-    fairy: ['#e14690', '#b13870'],
-    dragon: ['#b0813a', '#acac42'],
     colorless: ['#f5f4f0', '#d6d2cf'],
+    darkness: ['#0d7080', '#0d3236'],
+    dragon: ['#b0813a', '#acac42'],
+    fairy: ['#e14690', '#b13870'],
+    fighting: ['#ecab2a', '#d6713d'],
+    fire: ['#f78b46', '#f2674b'],
+    grass: ['#c2d349', '#93bb4e'],
+    lightning: ['#fff023', '#ffd126'],
+    metal: ['#c2e2f4', '#a6b3af'],
+    psychic: ['#c992c0', '#9b6dad'],
+    water: ['#93d9f5', '#11b6e6'],
 };
 // left colors for trainer
 export const TRAINER_COLORS = {
     item: ['#54a1cc', '#0a78b6', '#54a1cc'], // blue
     supporter: ['#ffaf4d', '#ff8d00', '#ffaf4d'], // orange
     stadium: ['#45bf45', '#71c871'],
-    other: ['#00FF00', '#00FF00'],
 };
 // right colors for pokemon
 export const POKEMON_COLORS = {
@@ -37,7 +49,6 @@ export const POKEMON_COLORS = {
     v: ['#4d4d4d', '#000000', '#4d4d4d'], // black & grey
     vmax: ['#fbcf4c', '#e61c75', '#3f3487'], // yellow & pink & purple
     vstar: ['#fde0ec', '#bad5ed', '#d2ece3'], // pink & teal & blue
-    other: ['#00FF00', '#00FF00'],
 };
 // right colors for trainer and energy
 export const SUPERTYPE_COLORS = {

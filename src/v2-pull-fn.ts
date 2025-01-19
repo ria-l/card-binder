@@ -37,22 +37,68 @@ export async function openPack() {
   processPulled(pulled);
 }
 
-function processPulled(pulled: types.Card[]) {
-  for (const card of pulled) {
-    // push to gsheets
-    // update owned storage
+async function processPulled(pulled: types.Card[]) {
+  for (const [i, card] of pulled.entries()) {
+    const { isNew, title, borderColors } = generateImgMetadata(card);
+    const largeCardImg = await createLargeImg(card, isNew, borderColors, title);
+    if (i === 0) {
+      const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
+      largeCardSpan.textContent = '';
+    }
+    displayLargeCard(largeCardImg);
 
-    // upload img to github
-
-    // generate image tag
-    const isNew = isNewCard(card);
-    let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
-    const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
-    console.log(title, card.subtype, card.energy, '|', borderColors);
     // insert small img
-    // insert large img
     // display text list
+    // push to gsheets
+    // update owned in LS
   }
+  // await gh.uploadImgs(pulled);
+}
+
+function displayLargeCard(largeCardImg: HTMLImageElement) {
+  const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
+  // const newSpan = document.createElement('span');
+  // newSpan.id = 'large-card-span';
+  largeCardSpan.insertBefore(largeCardImg, largeCardSpan.firstChild);
+  // largeCardSpan.replaceWith(newSpan);
+}
+
+async function createLargeImg(
+  card: types.Card,
+  isNew: boolean,
+  borderColors: string,
+  title: string
+) {
+  // TODO: check if uploaded to GH already
+  const imgBlob = await tcg.fetchBlob(card.imgUrl);
+  const img64 = await utils.convertBlobToBase64(imgBlob);
+  if (!img64) {
+    throw new Error(`blob not converted: ${card.imgUrl}`);
+  }
+  const imgEl = new Image();
+  imgEl.src = img64;
+  imgEl.title = title;
+  imgEl.classList.add('large-card');
+  if (!isNew) {
+    imgEl.classList.add('owned');
+  }
+  imgEl.style.setProperty(
+    'background',
+    `linear-gradient(to bottom right, ${borderColors}) border-box`
+  );
+  return imgEl;
+}
+
+function generateImgMetadata(card: types.Card) {
+  const isNew = isNewCard(card);
+  let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
+  const borderColors = ui.generateBorderColors(
+    card.subtype,
+    card.energy,
+    card.supertype
+  );
+  console.log(title, card.subtype, card.energy, '|', borderColors);
+  return { isNew, title, borderColors };
 }
 
 function isNewCard(card: types.Card): boolean {
