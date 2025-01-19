@@ -1,3 +1,4 @@
+// store data locally and return the stored value
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as pull from './v2-pull-fn.js';

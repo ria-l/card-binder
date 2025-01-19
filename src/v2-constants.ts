@@ -22,7 +22,7 @@ export const SECRETS_KEYS = {
   ghKey: 'GITHUB_TOKEN',
   ghProjectId: 'project_id',
   gsheetId: 'SHEET_ID',
-  tcgapi: 'PKMN_API_KEY',
+  tcgapiKey: 'PKMN_API_KEY',
 };
 
 // left colors for pokemon and energy

@@ -11,11 +11,11 @@ async function getSecrets() {
   if (secrets) {
     return JSON.parse(secrets);
   } else {
-    return await fetchAndStoreSecrets();
+    return await fetchAndStoreSecretsOrThrow();
   }
 }
 
-async function fetchAndStoreSecrets() {
+async function fetchAndStoreSecretsOrThrow() {
   const url = getAppscriptUrl();
   try {
     const data = await fetchSecrets(url);

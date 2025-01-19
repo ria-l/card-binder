@@ -18,7 +18,7 @@ export async function fetchAndStoreSetMetadata() {
 }
 
 export async function fetchJson(url: string): Promise<any> {
-  const apiKey = get.getTcgApiKey();
+  const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
 
   try {
     utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
@@ -44,7 +44,7 @@ export async function fetchJson(url: string): Promise<any> {
 }
 
 export async function fetchBlob(url: string): Promise<any> {
-  const apiKey = get.getTcgApiKey();
+  const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
 
   try {
     utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');

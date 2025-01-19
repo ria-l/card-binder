@@ -1,3 +1,5 @@
+// get data, and fetch/store it if not found
+
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as pull from './v2-pull-fn.js';
@@ -8,33 +10,22 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
-export function getTcgApiKey(): string {
-  const secrets = localStorage.getItem(constants.STORAGE_KEYS.secrets); // don't use throw
-  if (secrets) {
-    const apiKey = JSON.parse(secrets).PKMN_API_KEY;
-    if (apiKey) {
-      return apiKey;
-    }
-  }
-  return ''; // not worth getting it if it's missing
-}
+// this is in api-gapi-secrets.js
+declare function getSecrets(): any;
 
-/**
- * gets from storage, or fetches from source if missing
- */
 export async function getSetMetadata() {
   let setMetadata = localStorage.getItem(constants.STORAGE_KEYS.setMetadata); // dont use throw
-  if (setMetadata) {
-    return JSON.parse(setMetadata);
-  } else {
+
+  if (!setMetadata) {
     const data = await tcg.fetchJson('https://api.pokemontcg.io/v2/sets');
     return store.storeSetMetaData(data);
   }
+
+  return JSON.parse(setMetadata);
 }
 /**
  * Gets one of the following in preferential order: stored active set, selected set, random set.
  * We want the stored value first to preserve selection across pages/sessions.
- * @returns
  */
 export async function getActiveSet(): Promise<string> {
   let activeSet = localStorage.getItem(constants.STORAGE_KEYS.activeSet);
@@ -45,7 +36,7 @@ export async function getActiveSet(): Promise<string> {
 }
 
 async function pickAndStoreRandomSet(): Promise<string> {
-  const setData = await get.getSetMetadata();
+  const setData = await getSetMetadata();
   const setIds = Object.keys(setData);
 
   const i = Math.floor(Math.random() * setIds.length);
@@ -64,18 +55,33 @@ export function getSelectedSet(): string {
   return '';
 }
 
-export async function getCardsForSet(): Promise<{
-  setId: string;
-  cards: types.Card[];
-}> {
-  const setId = utils.getLsDataOrThrow(constants.STORAGE_KEYS.activeSet);
+export async function getCardsForActiveSet(): Promise<types.Card[]> {
+  const setId = await getActiveSet();
   let setData = await get.getSetMetadata();
   let cards: types.Card[] = setData[setId]['cards'];
+
   if (!cards || !Object.keys(cards).length) {
     cards = await tcg.fetchAndStoreCardsBySet(setId);
   }
-  return { setId, cards };
+  return cards;
 }
+
+export function getGSheet(sheet: string): string[][] {
+  const data = utils.getLsDataOrThrow(constants.STORAGE_KEYS.rawSheetsData);
+  return data.valueRanges.find((item: any) => item.range.includes(sheet))
+    .values;
+}
+
+export async function getSecret(key: string): Promise<string> {
+  const secrets = utils.getLsDataOrThrow(constants.STORAGE_KEYS.secrets);
+  if (!secrets) {
+    const fetched = await getSecrets();
+    return fetched[key];
+  }
+  return secrets[key];
+}
+
+// getvalues from api objects
 
 export function getSubtype(card: types.tcgCard) {
   const subtypes = card.subtypes ?? ['none'];
@@ -110,17 +116,6 @@ export function getEnergyType(card: types.tcgCard) {
   if (card.types && card.types.length && card.types[0]) {
     return card.types[0].toLowerCase();
   } else return '';
-}
-
-export function getGSheet(sheet: string): string[][] {
-  const data = utils.getLsDataOrThrow(constants.STORAGE_KEYS.rawSheetsData);
-  return data.valueRanges.find((item: any) => item.range.includes(sheet))
-    .values;
-}
-
-export function getSecret(key: string): string {
-  const secrets = utils.getLsDataOrThrow(constants.STORAGE_KEYS.secrets);
-  return secrets[key];
 }
 
 export function getDexNum(card: types.tcgCard) {

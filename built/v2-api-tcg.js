@@ -13,7 +13,7 @@ export async function fetchAndStoreSetMetadata() {
     store.storeSetMetaData(data);
 }
 export async function fetchJson(url) {
-    const apiKey = get.getTcgApiKey();
+    const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
     try {
         utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
         const response = await fetch(url, {
@@ -34,7 +34,7 @@ export async function fetchJson(url) {
     }
 }
 export async function fetchBlob(url) {
-    const apiKey = get.getTcgApiKey();
+    const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
     try {
         utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
         const response = await fetch(url, {
