@@ -51,11 +51,6 @@ export async function getCardsForActiveSet() {
     }
     return cards;
 }
-export function getGSheet(sheet) {
-    const data = utils.getLsDataOrThrow(constants.STORAGE_KEYS.rawSheetsData);
-    return data.valueRanges.find((item) => item.range.includes(sheet))
-        .values;
-}
 export async function getSecret(key) {
     const secrets = utils.getLsDataOrThrow(constants.STORAGE_KEYS.secrets);
     if (!secrets) {

@@ -3,7 +3,7 @@
 
 const DISCOVERY_DOC =
   'https://sheets.googleapis.com/$discovery/rest?version=v4';
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets'; // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
 
 let tokenClient;
 let gapiInited = false;
@@ -23,7 +23,7 @@ function gapiLoaded() {
 async function initializeGapiClient() {
   const secrets = await getSecrets();
   await gapi.client.init({
-    apiKey: secrets.GSHEETS_API_KEY,
+    apiKey: secrets.gsheets_api_key,
     discoveryDocs: [DISCOVERY_DOC],
   });
   gapiInited = true;
@@ -36,7 +36,7 @@ async function initializeGapiClient() {
 async function gisLoaded() {
   const secrets = await getSecrets();
   tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: secrets.CLIENT_ID,
+    client_id: secrets.client_id,
     scope: SCOPES,
     callback: '', // defined later
   });

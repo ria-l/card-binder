@@ -8,6 +8,9 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
+// in gapi-sheets.js
+declare function pushToSheets(range: string, values: (string | Date)[][]): any;
+
 export async function openPack() {
   const cards = await get.getCardsForActiveSet();
   console.log(cards);
@@ -45,10 +48,15 @@ async function processPulled(pulled: types.Card[]) {
     displayLargeCard(i, cardImg);
     displaySmallCard(cardImg);
     addToList(title);
-    // display text list
-    // push to gsheets
-    // update owned in LS
   }
+
+  const values = pulled.map((card) => [card.id, JSON.stringify(new Date())]);
+  pushToSheets('TEST', values); // TODO: update to prod
+  // update stored owned
+  let owned = utils.getLsDataOrThrow('db-owned'); // TODO should prob be a const but whatever
+  owned = [...owned, ...values];
+  localStorage.setItem('db-owned', JSON.stringify(owned));
+
   // await gh.uploadImgs(pulled);
 }
 
@@ -127,8 +135,8 @@ function generateImgMetadata(card: types.Card) {
 }
 
 function isNewCard(card: types.Card): boolean {
-  const owned = get.getGSheet('owned');
-  if (owned.some((row) => row[0] === card.id)) {
+  const owned = utils.getLsDataOrThrow('db-owned');
+  if (owned.some((row: string[]) => row[0] === card.id)) {
     return false;
   }
   return true;

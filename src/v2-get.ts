@@ -66,12 +66,6 @@ export async function getCardsForActiveSet(): Promise<types.Card[]> {
   return cards;
 }
 
-export function getGSheet(sheet: string): string[][] {
-  const data = utils.getLsDataOrThrow(constants.STORAGE_KEYS.rawSheetsData);
-  return data.valueRanges.find((item: any) => item.range.includes(sheet))
-    .values;
-}
-
 export async function getSecret(key: string): Promise<string> {
   const secrets = utils.getLsDataOrThrow(constants.STORAGE_KEYS.secrets);
   if (!secrets) {

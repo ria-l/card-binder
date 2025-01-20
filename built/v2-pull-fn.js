@@ -44,10 +44,13 @@ async function processPulled(pulled) {
         displayLargeCard(i, cardImg);
         displaySmallCard(cardImg);
         addToList(title);
-        // display text list
-        // push to gsheets
-        // update owned in LS
     }
+    const values = pulled.map((card) => [card.id, JSON.stringify(new Date())]);
+    pushToSheets('TEST', values); // TODO: update to prod
+    // update stored owned
+    let owned = utils.getLsDataOrThrow('db-owned'); // TODO should prob be a const but whatever
+    owned = [...owned, ...values];
+    localStorage.setItem('db-owned', JSON.stringify(owned));
     // await gh.uploadImgs(pulled);
 }
 function displayLargeCard(i, cardImg) {
@@ -107,7 +110,7 @@ function generateImgMetadata(card) {
     return { isNew, title, borderColors };
 }
 function isNewCard(card) {
-    const owned = get.getGSheet('owned');
+    const owned = utils.getLsDataOrThrow('db-owned');
     if (owned.some((row) => row[0] === card.id)) {
         return false;
     }

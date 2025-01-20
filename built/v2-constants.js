@@ -11,15 +11,15 @@ export const STORAGE_KEYS = {
 export const SECRETS_KEYS = {
     gapiAuthProvider: 'auth_provider_x509_cert_url',
     gapiAuthUri: 'auth_uri',
-    gapiClientId: 'CLIENT_ID',
+    gapiClientId: 'client_id',
     gapiClientSecret: 'client_secret',
     gapiJsOrigins: 'javascript_origins',
-    gapiKey: 'GSHEETS_API_KEY',
+    gapiKey: 'gsheets_api_key',
     gapiTokenUri: 'token_uri',
-    ghKey: 'GITHUB_TOKEN',
+    ghKey: 'github_token',
     ghProjectId: 'project_id',
-    gsheetId: 'SHEET_ID',
-    tcgapiKey: 'PKMN_API_KEY',
+    gsheetId: 'sheet_id',
+    tcgapiKey: 'pkmn_api_key',
 };
 // left colors for pokemon and energy
 export const ENERGY_COLORS = {

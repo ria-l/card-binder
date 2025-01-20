@@ -15,7 +15,6 @@ async function main() {
         await syncData();
     }
     await ui.fillSetDropdown();
-    get.getGSheet('owned');
     setEventListeners();
     localStorage.setItem('storage_init', 'SUCCESS');
     localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
