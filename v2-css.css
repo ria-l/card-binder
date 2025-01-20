@@ -166,7 +166,7 @@ ol {
     flex-direction: column;
   }
   #large-card-span {
-    max-height: none;
+    max-height: 600px;
   }
   .navbar {
     bottom: 0;

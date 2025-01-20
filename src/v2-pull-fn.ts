@@ -13,7 +13,6 @@ declare function pushToSheets(range: string, values: (string | Date)[][]): any;
 
 export async function openPack() {
   const cards = await get.getCardsForActiveSet();
-  console.log(cards);
   const cardGroups = groupCardsByRarity(cards);
   const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
 

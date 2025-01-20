@@ -27,7 +27,6 @@ async function fetchAndStoreSheets() {
 function storeEachSheet(response) {
   response.result.valueRanges.forEach((valueRange) => {
     const varName = valueRange.range.match(/'(.*?)'/)[1];
-    console.log(varName, valueRange.values);
     localStorage.setItem(varName, JSON.stringify(valueRange.values));
   });
 }
