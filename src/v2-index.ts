@@ -16,14 +16,14 @@ await main();
 async function main() {
   ui.setRandomBg();
   if (
-    localStorage.getItem('storage_init') !== 'SUCCESS' ||
+    localStorage.getItem('storage_init') !== 'SUCCESS-index' ||
     localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION
   ) {
     await syncData();
   }
   await ui.fillSetDropdown();
   setEventListeners();
-  localStorage.setItem('storage_init', 'SUCCESS');
+  localStorage.setItem('storage_init', 'SUCCESS-index');
   localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 
@@ -39,12 +39,6 @@ function setEventListeners() {
   utils
     .getElByIdOrThrow('set-dropdown')
     .addEventListener('change', () => store.saveActiveSetAndCards());
-  utils
-    .getElByIdOrThrow('open-pack')
-    .addEventListener('click', () => pull.openPack());
-  utils
-    .getElByIdOrThrow('clear-display-button')
-    .addEventListener('click', ui.clearDisplay);
   utils
     .getElByIdOrThrow('clear-storage-button')
     .addEventListener('click', () => localStorage.clear());

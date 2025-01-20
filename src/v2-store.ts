@@ -37,10 +37,6 @@ export function storeSetMetaData(
   return setMetadata;
 }
 
-/**
- * updates storage to newly selected set.
- * @param fillpage whether the function is being called to fill the page or not
- */
 export async function saveActiveSetAndCards() {
   const activeSet = get.getSelectedSet();
   if (!activeSet) {

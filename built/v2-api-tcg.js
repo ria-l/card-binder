@@ -8,7 +8,11 @@ export async function fetchAndStoreCardsBySet(setId) {
     const cards = store.storeCardsBySetId(setId, data);
     return cards;
 }
-export async function fetchAndStoreSetMetadata() {
+export async function fetchAndStoreSetMetadata(forceSync = false) {
+    const storedData = localStorage.getItem(constants.STORAGE_KEYS.setMetadata);
+    if (storedData && !forceSync) {
+        return;
+    }
     const data = await fetchJson('https://api.pokemontcg.io/v2/sets');
     store.storeSetMetaData(data);
 }

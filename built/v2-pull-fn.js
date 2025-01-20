@@ -9,7 +9,6 @@ import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export async function openPack() {
     const cards = await get.getCardsForActiveSet();
-    console.log(cards);
     const cardGroups = groupCardsByRarity(cards);
     const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
     const pulled = [];
