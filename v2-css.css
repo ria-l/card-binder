@@ -1,0 +1,201 @@
+* {
+  /* necessary to get cards and placeholders to be the same size */
+  box-sizing: border-box;
+  font-family: 'Andika', sans-serif;
+}
+:root {
+  font-size: 14px;
+  font-family: 'Andika', sans-serif;
+  --text-primary: #b6b6b6;
+  --text-secondary: #ececec;
+  --bg-primary: #23232e;
+  --bg-secondary: #141418;
+  --bg-dropdown: #343a40;
+  --transition-speed: 300ms;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+body::-webkit-scrollbar {
+  width: 2rem;
+}
+body::-webkit-scrollbar-track {
+  background: #1e1e24;
+}
+body::-webkit-scrollbar-thumb {
+  background: #6649b8;
+}
+main {
+  margin-left: 10rem;
+  padding: 1rem;
+  text-align: center;
+}
+.navbar {
+  position: fixed;
+  background-color: var(--bg-primary);
+  transition: width 300ms ease;
+}
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.nav-item {
+  width: 100%;
+}
+.nav-item:last-child {
+  margin-top: auto;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition-speed);
+}
+.nav-link:hover {
+  filter: grayscale(0%) opacity(1);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+.link-text {
+  margin-left: 1rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.1ch;
+  width: 100%;
+}
+#toggle-borders {
+  height: 20px;
+  width: 20px;
+}
+select {
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  width: 8rem;
+}
+.hide {
+  display: none !important;
+}
+.show {
+  display: inline-block !important;
+}
+#bg-span {
+  opacity: 0.3;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  z-index: -1;
+}
+.showstatus {
+  align-items: center;
+  background: linear-gradient(
+    to bottom right,
+    #fde0ec,
+    #bad5ed,
+    #d2ece3,
+    #fff,
+    #fff,
+    #d2ece3,
+    #bad5ed,
+    #fde0ec
+  );
+  border-radius: 10px;
+  display: flex;
+  inset: 0px;
+  justify-content: center;
+  margin: auto;
+  height: 20dvh;
+  width: 30dvw;
+  position: fixed;
+}
+.placeholder {
+  /* makes it so border won't affect height/width */
+  display: inline-block;
+  text-align: center;
+}
+#parent {
+  /* keeps large card from acting like mobile on desktop */
+  display: flex;
+}
+ol {
+  text-align: left;
+}
+.small-card {
+  border: solid 5px transparent;
+  border-radius: 8px;
+  margin: 3px;
+  height: 100px;
+}
+.small-card.owned {
+  opacity: 0.5;
+}
+.large-card {
+  border: solid 20px transparent;
+  border-radius: 36px;
+  margin: 5px;
+  height: auto;
+  max-width: 600px;
+}
+#right,
+#small-card-span,
+#list-span {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 14px;
+  margin: 10px;
+  flex-basis: 30%;
+  display: inline-block;
+}
+#large-card-span {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  max-height: 98vh;
+  flex-basis: 70%;
+}
+/* desktop */
+@media only screen and (min-width: 777px) {
+  .navbar {
+    top: 0;
+    width: 10rem;
+    height: 100vh;
+  }
+}
+/* mobile */
+@media only screen and (max-width: 777px) {
+  #parent {
+    flex-direction: column;
+  }
+  #large-card-span {
+    max-height: 600px;
+  }
+  .navbar {
+    bottom: 0;
+    width: 100vw;
+    height: 5rem;
+    z-index: 100;
+  }
+  .navbar-nav {
+    flex-direction: row;
+  }
+  .nav-link {
+    justify-content: center;
+  }
+  main {
+    margin-left: 0;
+    margin-bottom: 6rem;
+  }
+  .link-text {
+    font-size: 1rem;
+    text-align: center;
+    margin-left: 0;
+  }
+}
