@@ -1,3 +1,4 @@
+import * as binder from './v2-binder.js';
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as pull from './v2-pull-fn.js';
@@ -23,6 +24,9 @@ async function main() {
   }
   await ui.fillSetDropdown();
   setEventListeners();
+
+  binder.fillPage();
+
   localStorage.setItem('storage_init', 'SUCCESS-index');
   localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
@@ -45,4 +49,7 @@ function setEventListeners() {
   utils
     .getElByIdOrThrow('sync-button')
     .addEventListener('click', () => syncData(true));
+  // document
+  //   .getElementById('toggle-borders')
+  //   ?.addEventListener('change', ui.toggleBorders); // TODO: add function
 }

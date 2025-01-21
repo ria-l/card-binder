@@ -60,11 +60,18 @@ export async function getSecret(key) {
     return secrets[key];
 }
 // getvalues from api objects
+/**
+ * only returns subtypes that are used for color matching in constants, otherwise return empty string.
+ * @param card
+ * @returns
+ */
 export function getSubtype(card) {
-    const subtypes = card.subtypes ?? ['none'];
+    if (!card.subtypes) {
+        return '';
+    }
     let subtype = '';
     if (card.supertype === 'Pokémon') {
-        for (let type of subtypes) {
+        for (let type of card.subtypes) {
             if (type.toLowerCase() in constants.POKEMON_COLORS) {
                 subtype = type;
             }
@@ -72,7 +79,7 @@ export function getSubtype(card) {
         return subtype.toLowerCase();
     }
     if (card.supertype === 'Trainer') {
-        for (let type of subtypes) {
+        for (let type of card.subtypes) {
             if (type.toLowerCase() in constants.TRAINER_COLORS) {
                 subtype = type;
             }
@@ -80,7 +87,7 @@ export function getSubtype(card) {
         return subtype.toLowerCase();
     }
     if (card.supertype === 'Energy') {
-        for (let type of subtypes) {
+        for (let type of card.subtypes) {
             if (type.toLowerCase() in constants.ENERGY_COLORS) {
                 subtype = type;
             }
@@ -103,5 +110,25 @@ export function getDexNum(card) {
     }
     else
         return card.nationalPokedexNumbers;
+}
+export function getRarityType(card) {
+    let gradientKey = 'a_normal';
+    let rarity = card.rarity ?? 'promo';
+    for (const key in constants.RARITY_MAP) {
+        if (constants.RARITY_MAP.hasOwnProperty(key)) {
+            if (constants.RARITY_MAP[key] &&
+                constants.RARITY_MAP[key].some((value) => value === rarity.toLowerCase())) {
+                gradientKey = key;
+            }
+        }
+    }
+    return gradientKey;
+}
+export function getEnergyColors(card) {
+    let energy = card.energy.toLowerCase() in constants.ENERGY_COLORS
+        ? card.energy.toLowerCase()
+        : 'colorless';
+    let energyColors = constants.ENERGY_COLORS[energy] ?? ['#00FFFF', '#00FFFF'];
+    return energyColors;
 }
 //# sourceMappingURL=v2-get.js.map

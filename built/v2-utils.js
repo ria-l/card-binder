@@ -54,4 +54,11 @@ function blobToBase64(blob) {
         reader.readAsDataURL(blob); // Start reading the Blob as a Data URL
     });
 }
+export function isOwnedCard(card) {
+    const owned = utils.getLsDataOrThrow('db-owned');
+    if (owned.some((row) => row[0] === card.id)) {
+        return true;
+    }
+    return false;
+}
 //# sourceMappingURL=v2-utils.js.map

@@ -70,6 +70,10 @@ main {
   letter-spacing: 0.1ch;
   width: 100%;
 }
+#toggle-borders {
+  height: 20px;
+  width: 20px;
+}
 select {
   padding: 0.5rem;
   border-radius: 0.4rem;
@@ -111,6 +115,11 @@ select {
   height: 20dvh;
   width: 30dvw;
   position: fixed;
+}
+.placeholder {
+  /* makes it so border won't affect height/width */
+  display: inline-block;
+  text-align: center;
 }
 #parent {
   /* keeps large card from acting like mobile on desktop */

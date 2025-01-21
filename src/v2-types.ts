@@ -53,11 +53,8 @@ export type Card = {
   set: string;
   subtype: string;
   supertype: Supertypes;
-  visuals: Visuals;
   zRaw: tcgCard;
 };
-
-type Visuals = 'normal' | '3d' | 'full art' | 'gold' | 'illust';
 
 type Energy =
   | 'Colorless'

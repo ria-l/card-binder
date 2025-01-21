@@ -1,4 +1,5 @@
 import * as constants from './v2-constants.js';
+import * as create from './v2-create.js';
 import * as get from './v2-get.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
@@ -38,8 +39,8 @@ export async function openPack() {
 }
 async function processPulled(pulled) {
     for (const [i, card] of pulled.entries()) {
-        const { isNew, title, borderColors } = generateImgMetadata(card);
-        const cardImg = await createCardImg(card, isNew, borderColors, title);
+        const { isOwned, title, borderColors } = create.generateImgMetadata(card);
+        const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title);
         displayLargeCard(i, cardImg);
         displaySmallCard(cardImg);
         addToList(title);
@@ -84,36 +85,6 @@ function addToList(title) {
     const li = document.createElement('li');
     li.appendChild(document.createTextNode(title));
     ol.insertBefore(li, ol.firstChild);
-}
-async function createCardImg(card, isNew, borderColors, title) {
-    // TODO: check if uploaded to GH already
-    const imgBlob = await tcg.fetchBlob(card.imgUrl);
-    const img64 = await utils.convertBlobToBase64(imgBlob);
-    if (!img64) {
-        throw new Error(`blob not converted: ${card.imgUrl}`);
-    }
-    const imgEl = new Image();
-    imgEl.src = img64;
-    imgEl.title = title;
-    if (!isNew) {
-        imgEl.classList.add('owned');
-    }
-    imgEl.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
-    return imgEl;
-}
-function generateImgMetadata(card) {
-    const isNew = isNewCard(card);
-    let title = `${card.name} : ${card.rarity}${isNew ? ' ✨NEW✨' : ''}`;
-    const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
-    console.log(title, card.subtype, card.energy, '|', borderColors);
-    return { isNew, title, borderColors };
-}
-function isNewCard(card) {
-    const owned = utils.getLsDataOrThrow('db-owned');
-    if (owned.some((row) => row[0] === card.id)) {
-        return false;
-    }
-    return true;
 }
 function groupCardsByRarity(cards) {
     return cards.reduce((acc, card) => {

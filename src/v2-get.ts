@@ -77,11 +77,18 @@ export async function getSecret(key: string): Promise<string> {
 
 // getvalues from api objects
 
+/**
+ * only returns subtypes that are used for color matching in constants, otherwise return empty string.
+ * @param card 
+ * @returns 
+ */
 export function getSubtype(card: types.tcgCard) {
-  const subtypes = card.subtypes ?? ['none'];
+  if (!card.subtypes) {
+    return ''
+  }
   let subtype = '';
   if (card.supertype === 'Pokémon') {
-    for (let type of subtypes) {
+    for (let type of card.subtypes) {
       if (type.toLowerCase() in constants.POKEMON_COLORS) {
         subtype = type;
       }
@@ -89,7 +96,7 @@ export function getSubtype(card: types.tcgCard) {
     return subtype.toLowerCase();
   }
   if (card.supertype === 'Trainer') {
-    for (let type of subtypes) {
+    for (let type of card.subtypes) {
       if (type.toLowerCase() in constants.TRAINER_COLORS) {
         subtype = type;
       }
@@ -97,7 +104,7 @@ export function getSubtype(card: types.tcgCard) {
     return subtype.toLowerCase();
   }
   if (card.supertype === 'Energy') {
-    for (let type of subtypes) {
+    for (let type of card.subtypes) {
       if (type.toLowerCase() in constants.ENERGY_COLORS) {
         subtype = type;
       }
@@ -120,4 +127,39 @@ export function getDexNum(card: types.tcgCard) {
   ) {
     return card.nationalPokedexNumbers[0];
   } else return card.nationalPokedexNumbers;
+}
+
+export function getRarityType(card: types.Card) {
+  let gradientKey: 'a_normal' | 'b_holo' | 'c_extra' | 'd_illust' | 'gold' =
+    'a_normal';
+  let rarity: string = card.rarity ?? 'promo';
+  for (const key in constants.RARITY_MAP) {
+    if (constants.RARITY_MAP.hasOwnProperty(key)) {
+      if (
+        constants.RARITY_MAP[key] &&
+        constants.RARITY_MAP[key].some(
+          (value) => value === rarity.toLowerCase()
+        )
+      ) {
+        gradientKey = key as
+          | 'a_normal'
+          | 'b_holo'
+          | 'c_extra'
+          | 'd_illust'
+          | 'gold';
+      }
+    }
+  }
+  return gradientKey;
+}
+
+export function getEnergyColors(card: types.Card) {
+  let energy =
+    card.energy.toLowerCase() in constants.ENERGY_COLORS
+      ? card.energy.toLowerCase()
+      : 'colorless';
+  let energyColors = constants.ENERGY_COLORS[
+    energy as keyof typeof constants.ENERGY_COLORS
+  ] ?? ['#00FFFF', '#00FFFF'];
+  return energyColors;
 }
