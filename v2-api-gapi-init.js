@@ -50,7 +50,13 @@ function addModuleToPage() {
     let moduleScript = document.createElement('script');
     moduleScript.defer = true;
     moduleScript.type = 'module';
-    moduleScript.src = 'built/v2-pull.js';
+
+    const urlPath = new URL(document.URL).pathname;
+    if (urlPath.includes('pull.html')) {
+      moduleScript.src = 'built/v2-pull.js';
+    } else if (urlPath.includes('index.html')) {
+      moduleScript.src = 'built/v2-index.js';
+    }
 
     document.head.appendChild(moduleScript);
     console.log('module script added to page.');

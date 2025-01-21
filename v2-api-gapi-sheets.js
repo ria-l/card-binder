@@ -1,7 +1,11 @@
 const SHEET_NAMES = ['db-owned', 'db-cards', 'db-binders'];
 const RAW_SHEETS_DATA_KEY = 'v2_raw_sheets_data'; // also in constants module.
 
-async function fetchAndStoreSheets() {
+async function fetchAndStoreSheets(forceSync = false) {
+  const storedData = localStorage.getItem(RAW_SHEETS_DATA_KEY);
+  if (storedData && !forceSync) {
+    return;
+  }
   tokenClient.callback = async (resp) => {
     if (resp.error !== undefined) {
       throw resp;
@@ -27,7 +31,6 @@ async function fetchAndStoreSheets() {
 function storeEachSheet(response) {
   response.result.valueRanges.forEach((valueRange) => {
     const varName = valueRange.range.match(/'(.*?)'/)[1];
-    console.log(varName, valueRange.values);
     localStorage.setItem(varName, JSON.stringify(valueRange.values));
   });
 }

@@ -62,3 +62,11 @@ function blobToBase64(blob: Blob): Promise<string> {
     reader.readAsDataURL(blob); // Start reading the Blob as a Data URL
   });
 }
+
+export function isOwnedCard(card: types.Card): boolean {
+  const owned = utils.getLsDataOrThrow('db-owned');
+  if (owned.some((row: string[]) => row[0] === card.id)) {
+    return true;
+  }
+  return false;
+}
