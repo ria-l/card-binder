@@ -41,8 +41,9 @@ async function processPulled(pulled) {
     for (const [i, card] of pulled.entries()) {
         const { isOwned, title, borderColors } = create.generateImgMetadata(card);
         const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title);
-        displayLargeCard(i, cardImg);
-        displaySmallCard(cardImg);
+        const imgId = `${card.id}${i.toString()}${new Date().toString()}`;
+        displayLargeCard(i, imgId, cardImg);
+        displaySmallCard(cardImg, imgId);
         addToList(title);
     }
     const values = pulled.map((card) => [card.id, JSON.stringify(new Date())]);
@@ -53,32 +54,30 @@ async function processPulled(pulled) {
     localStorage.setItem('db-owned', JSON.stringify(owned));
     // await gh.uploadImgs(pulled);
 }
-function displayLargeCard(i, cardImg) {
-    if (i === 0) {
-        const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
-        largeCardSpan.textContent = '';
-    }
+function displayLargeCard(i, imgId, cardImg) {
+    cardImg.id = imgId;
+    // if (i === 0) {
+    //   const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
+    //   largeCardSpan.textContent = '';
+    // }
     const largeCard = cardImg.cloneNode(true);
     largeCard.classList.add('large-card');
     displayCard(largeCard, 'large-card-span');
+    return;
 }
-function displaySmallCard(cardImg) {
+function displaySmallCard(cardImg, imgId) {
     const smallCard = cardImg.cloneNode();
     smallCard.classList.add('small-card');
     smallCard.onclick = function () {
-        displayZoomed(cardImg);
+        const x = utils.getElByIdOrThrow(imgId);
+        x.scrollIntoView();
+        console.log('clicked', imgId);
     };
     displayCard(smallCard, 'small-card-span');
 }
 function displayCard(cardImg, spanId) {
     const span = utils.getElByIdOrThrow(spanId);
     span.insertBefore(cardImg, span.firstChild);
-}
-function displayZoomed(cardImg) {
-    const displayCard = cardImg.cloneNode();
-    displayCard.classList.add('large-card');
-    const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
-    largeCardSpan.insertBefore(displayCard, largeCardSpan.firstChild);
 }
 function addToList(title) {
     const ol = utils.getElByIdOrThrow('card-list');

@@ -49,9 +49,10 @@ async function processPulled(pulled: types.Card[]) {
       borderColors,
       title
     );
-
-    displayLargeCard(i, cardImg);
-    displaySmallCard(cardImg);
+    // for scrolling in to view
+    const imgId = `${card.id}${i.toString()}${new Date().toString()}`;
+    displayLargeCard( imgId, cardImg);
+    displaySmallCard(cardImg, imgId);
     addToList(title);
   }
 
@@ -65,21 +66,20 @@ async function processPulled(pulled: types.Card[]) {
   // await gh.uploadImgs(pulled);
 }
 
-function displayLargeCard(i: number, cardImg: HTMLImageElement) {
-  if (i === 0) {
-    const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
-    largeCardSpan.textContent = '';
-  }
+function displayLargeCard( imgId: string, cardImg: HTMLImageElement) {
+  cardImg.id = imgId;
   const largeCard = cardImg.cloneNode(true) as HTMLImageElement;
   largeCard.classList.add('large-card');
   displayCard(largeCard, 'large-card-span');
+  return;
 }
 
-function displaySmallCard(cardImg: HTMLImageElement) {
+function displaySmallCard(cardImg: HTMLImageElement, imgId: string) {
   const smallCard = cardImg.cloneNode() as HTMLImageElement;
   smallCard.classList.add('small-card');
   smallCard.onclick = function () {
-    displayZoomed(cardImg);
+    const targetCard = utils.getElByIdOrThrow(imgId);
+    targetCard.scrollIntoView();
   };
   displayCard(smallCard, 'small-card-span');
 }
@@ -87,13 +87,6 @@ function displaySmallCard(cardImg: HTMLImageElement) {
 function displayCard(cardImg: HTMLImageElement, spanId: string) {
   const span = utils.getElByIdOrThrow(spanId);
   span.insertBefore(cardImg, span.firstChild);
-}
-
-function displayZoomed(cardImg: HTMLImageElement) {
-  const displayCard = cardImg.cloneNode() as HTMLImageElement;
-  displayCard.classList.add('large-card');
-  const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
-  largeCardSpan.insertBefore(displayCard, largeCardSpan.firstChild);
 }
 
 function addToList(title: string) {

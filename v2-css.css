@@ -120,6 +120,17 @@ select {
   /* makes it so border won't affect height/width */
   display: inline-block;
   text-align: center;
+  vertical-align: top;
+}
+.zoomed-card {
+  align-items: center;
+  display: flex;
+  inset: 0px;
+  justify-content: center;
+  margin: auto;
+  position: fixed;
+  height: 90dvh;
+  width: auto;
 }
 #parent {
   /* keeps large card from acting like mobile on desktop */
@@ -197,5 +208,9 @@ ol {
     font-size: 1rem;
     text-align: center;
     margin-left: 0;
+  }
+  .zoomed-card {
+    width: 90dvw;
+    height: auto;
   }
 }

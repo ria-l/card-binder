@@ -51,9 +51,9 @@ export async function createCardImgForBinder(card, borderColors, title) {
         img.style.background = `linear-gradient(to bottom right, ${borderColors}) border-box`;
         img.style.setProperty('border', `${width / 15}px solid transparent`);
     }
-    // imgEl.onclick = function () {
-    //   displayZoom(dir, filename);
-    // }; // TODO: add
+    img.onclick = function () {
+        ui.zoomCardInBinder(img);
+    };
     return img;
 }
 export async function createPlaceholderForBinder(borderColors, title, fillColors) {
@@ -66,6 +66,7 @@ export async function createPlaceholderForBinder(borderColors, title, fillColors
     ph.style.background = `linear-gradient(to bottom right, ${fillColors}) padding-box, linear-gradient(to bottom right, ${borderColors}) border-box`;
     ph.style.setProperty('border-radius', `${width / 20}px`);
     ph.style.setProperty('border', `${width / 15}px solid transparent`);
+    ph.innerHTML = ''; // TODO: add number, name, and rarity
     return ph;
 }
 export async function createCardsForActiveSetInBinder() {

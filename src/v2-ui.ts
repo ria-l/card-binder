@@ -110,3 +110,25 @@ export function clearDisplay() {
     listSpan.appendChild(ol);
   }
 }
+
+/**
+ * displays given card zoomed-in in the center of the screen
+ * @param dir
+ * @param filename
+ */
+export function zoomCardInBinder(img: HTMLImageElement) {
+  const zImg = img.cloneNode(true) as HTMLImageElement;
+  const zoomSpan = document.getElementById('zoom-span');
+  if (zoomSpan) {
+    zImg.onclick = function () {
+      // close zoomed card
+      zoomSpan.innerHTML = '';
+    };
+    // clear any already zoomed cards
+    if (zoomSpan.innerHTML) {
+      zoomSpan.innerHTML = '';
+    }
+    zImg.className = 'zoomed-card';
+    zoomSpan.appendChild(zImg);
+  }
+}
