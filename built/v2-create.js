@@ -56,7 +56,7 @@ export async function createCardImgForBinder(card, borderColors, title) {
     };
     return img;
 }
-export async function createPlaceholderForBinder(borderColors, title, fillColors) {
+export async function createPlaceholderForBinder(borderColors, title, fillColors, card) {
     const width = 150;
     const ph = document.createElement('span');
     ph.classList.add('placeholder');
@@ -66,7 +66,9 @@ export async function createPlaceholderForBinder(borderColors, title, fillColors
     ph.style.background = `linear-gradient(to bottom right, ${fillColors}) padding-box, linear-gradient(to bottom right, ${borderColors}) border-box`;
     ph.style.setProperty('border-radius', `${width / 20}px`);
     ph.style.setProperty('border', `${width / 15}px solid transparent`);
-    ph.innerHTML = ''; // TODO: add number, name, and rarity
+    ph.innerHTML = `${card.zRaw.number}/${card.zRaw.set.printedTotal} (${card.zRaw.set.total})
+  <br>${card.name}
+  <br>${card.rarity}`;
     return ph;
 }
 export async function createCardsForActiveSetInBinder() {
@@ -79,7 +81,7 @@ export async function createCardsForActiveSetInBinder() {
         }
         else {
             const fillColors = binder.generateFillColors(card);
-            tags.push(await create.createPlaceholderForBinder(borderColors, title, fillColors));
+            tags.push(await create.createPlaceholderForBinder(borderColors, title, fillColors, card));
         }
     }
     return tags;

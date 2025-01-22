@@ -41,8 +41,9 @@ async function processPulled(pulled) {
     for (const [i, card] of pulled.entries()) {
         const { isOwned, title, borderColors } = create.generateImgMetadata(card);
         const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title);
+        // for scrolling in to view
         const imgId = `${card.id}${i.toString()}${new Date().toString()}`;
-        displayLargeCard(i, imgId, cardImg);
+        displayLargeCard(imgId, cardImg);
         displaySmallCard(cardImg, imgId);
         addToList(title);
     }
@@ -54,12 +55,8 @@ async function processPulled(pulled) {
     localStorage.setItem('db-owned', JSON.stringify(owned));
     // await gh.uploadImgs(pulled);
 }
-function displayLargeCard(i, imgId, cardImg) {
+function displayLargeCard(imgId, cardImg) {
     cardImg.id = imgId;
-    // if (i === 0) {
-    //   const largeCardSpan = utils.getElByIdOrThrow('large-card-span');
-    //   largeCardSpan.textContent = '';
-    // }
     const largeCard = cardImg.cloneNode(true);
     largeCard.classList.add('large-card');
     displayCard(largeCard, 'large-card-span');
@@ -69,9 +66,8 @@ function displaySmallCard(cardImg, imgId) {
     const smallCard = cardImg.cloneNode();
     smallCard.classList.add('small-card');
     smallCard.onclick = function () {
-        const x = utils.getElByIdOrThrow(imgId);
-        x.scrollIntoView();
-        console.log('clicked', imgId);
+        const targetCard = utils.getElByIdOrThrow(imgId);
+        targetCard.scrollIntoView();
     };
     displayCard(smallCard, 'small-card-span');
 }

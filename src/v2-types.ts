@@ -26,9 +26,11 @@ export type tcgCard = {
     id: string;
     name: string;
     series: string;
-    ptcgoCode: string;
+    printedTotal: number;
+    total: number;
     releaseDate: string;
   };
+  number: string;
   artist: string;
   rarity: Rarities;
   nationalPokedexNumbers: number[];

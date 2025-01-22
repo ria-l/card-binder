@@ -83,7 +83,8 @@ export async function createCardImgForBinder(
 export async function createPlaceholderForBinder(
   borderColors: string,
   title: string,
-  fillColors: string
+  fillColors: string,
+  card: types.Card
 ): Promise<HTMLSpanElement> {
   const width = 150;
   const ph = document.createElement('span');
@@ -94,14 +95,16 @@ export async function createPlaceholderForBinder(
   ph.style.background = `linear-gradient(to bottom right, ${fillColors}) padding-box, linear-gradient(to bottom right, ${borderColors}) border-box`;
   ph.style.setProperty('border-radius', `${width / 20}px`);
   ph.style.setProperty('border', `${width / 15}px solid transparent`);
-  ph.innerHTML = ''; // TODO: add number, name, and rarity
+  ph.innerHTML = `${card.zRaw.number}/${card.zRaw.set.printedTotal} (${card.zRaw.set.total})
+  <br>${card.name}
+  <br>${card.rarity}`;
   return ph;
 }
 
 export async function createCardsForActiveSetInBinder(): Promise<
   (HTMLImageElement | HTMLSpanElement)[]
 > {
-  const cardData = await get.getCardsForActiveSet();
+  const cardData: types.Card[] = await get.getCardsForActiveSet();
   const tags = [];
   for (const card of cardData) {
     const { isOwned, title, borderColors } = create.generateImgMetadata(card);
@@ -110,7 +113,12 @@ export async function createCardsForActiveSetInBinder(): Promise<
     } else {
       const fillColors = binder.generateFillColors(card);
       tags.push(
-        await create.createPlaceholderForBinder(borderColors, title, fillColors)
+        await create.createPlaceholderForBinder(
+          borderColors,
+          title,
+          fillColors,
+          card
+        )
       );
     }
   }
