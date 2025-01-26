@@ -2,6 +2,7 @@
 
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -13,16 +14,27 @@ import * as utils from './v2-utils.js';
 // this is in api-gapi-secrets.js
 declare function getSecrets(): any;
 
-export async function getSetMetadata() {
-  let setMetadata = localStorage.getItem(constants.STORAGE_KEYS.setMetadata); // dont use throw
-
-  if (!setMetadata) {
-    const data = await tcg.fetchJson('https://api.pokemontcg.io/v2/sets');
+export async function getSetMetadata(): Promise<types.tcgSet[]> {
+  const data = await localbase.db
+    .collection('v2_set_metadata')
+    .get()
+    .then((sets: any) => {
+      return sets;
+    });
+  if (!data || !data.length) {
+    const data: types.tcgSet[] = await tcg.fetchJson(
+      'https://api.pokemontcg.io/v2/sets'
+    );
     return store.storeSetMetaData(data);
   }
-
-  return JSON.parse(setMetadata);
+  return data;
 }
+
+export async function getSecret(key: string): Promise<string> {
+  const secrets = await getSecrets();
+  return secrets[key];
+}
+
 /**
  * Gets one of the following in preferential order: stored active set, selected set, random set.
  * We want the stored value first to preserve selection across pages/sessions.
@@ -64,15 +76,6 @@ export async function getCardsForActiveSet(): Promise<types.Card[]> {
     cards = await tcg.fetchAndStoreCardsBySet(setId);
   }
   return cards;
-}
-
-export async function getSecret(key: string): Promise<string> {
-  const secrets = utils.getLsDataOrThrow(constants.STORAGE_KEYS.secrets);
-  if (!secrets) {
-    const fetched = await getSecrets();
-    return fetched[key];
-  }
-  return secrets[key];
 }
 
 // getvalues from api objects
@@ -178,4 +181,35 @@ export function getEnergyColors(card: types.Card) {
     return subtypeColors;
   }
   return ['#00FFFF', '#00FFFF'];
+}
+
+// TODO: wip
+// async function getBinderCards() {
+//   let cards: string[][] = []; // Initialize an empty array to store the matching documents
+
+//   localbase.db
+//     .collection('db-binders')
+//     .get()
+//     .then((data: object[]) => {
+//       data.forEach((row: any) => {
+//         if (row.pulled_date === 'classic') {
+//           cards.push(row);
+//         }
+//       });
+
+//       console.log('Cards array:', cards);
+//     })
+//     .catch((error: any) => {
+//       console.error('Error getting documents: ', error);
+//     });
+// }
+
+export async function getCardMetadata(): Promise<types.CardsDb> {
+  const data = await localbase.db
+    .collection('v2_cards')
+    .get()
+    .then((sets: any) => {
+      return sets;
+    });
+  return data;
 }

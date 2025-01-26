@@ -13,7 +13,7 @@ export async function fetchAndStoreCardsBySet(
 }
 
 export async function fetchAndStoreSetMetadata(forceSync: boolean = false) {
-  const storedData = localStorage.getItem(constants.STORAGE_KEYS.setMetadata);
+  const storedData = await get.getSetMetadata();
   if (storedData && !forceSync) {
     return;
   }
