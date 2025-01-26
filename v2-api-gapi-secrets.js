@@ -7,9 +7,10 @@ const SECRETS_KEY = 'v2_secrets';
 const APPSCRIPT_URL_KEY = 'v2_appscript_url';
 
 async function getSecrets() {
-  const secrets = localStorage.getItem(SECRETS_KEY);
-  if (secrets) {
-    return JSON.parse(secrets);
+  const db = new Localbase('db');
+  const secrets = await db.collection(SECRETS_KEY).get();
+  if (secrets.length) {
+    return secrets[0];
   } else {
     return await fetchAndStoreSecretsOrThrow();
   }
@@ -23,8 +24,12 @@ async function fetchAndStoreSecretsOrThrow() {
     for (const secret of data) {
       secrets[secret[0]] = secret[1];
     }
-    localStorage.setItem(SECRETS_KEY, JSON.stringify(secrets));
-    console.log('secrets stored.');
+
+    const db = new Localbase('db');
+    await db.collection(SECRETS_KEY).delete();
+    await db.collection(SECRETS_KEY).add(secrets);
+    console.log('secrets stored: ', secrets);
+
     return secrets;
   } catch (error) {
     throw new Error(error);
@@ -37,7 +42,7 @@ function getAppscriptUrl() {
     return url;
   }
   while (true) {
-    let input = prompt('Appscript URL') ?? null;
+    const input = prompt('Appscript URL') ?? null;
     // if user clicks "cancel"
     if (input === null) {
       console.error('No URL inputted');
@@ -56,7 +61,7 @@ async function fetchSecrets(url) {
       throw new Error(`Failed to fetch data from ${url}`);
     }
     const data = await response.json();
-    console.log('secrets fetched.');
+    console.log('secrets fetched: ', data.data);
     return data.data;
   } catch (error) {
     throw new Error(error);
