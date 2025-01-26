@@ -18,16 +18,16 @@ export function setRandomBg() {
 }
 
 export async function fillSetDropdown(): Promise<void> {
-  const setMetadata = await get.getSetMetadata();
+  const setMetadata: types.tcgSet[] = await get.getSetMetadata();
   const activeSet = await get.getActiveSet();
-
+  console.log('active set: ', activeSet);
   const setDropdown = utils.getElByIdOrThrow('set-dropdown');
   if (setDropdown) setDropdown.innerHTML = '';
-  for (let setId of Object.keys(setMetadata)) {
+  for (let setId of setMetadata) {
     const option = document.createElement('option');
-    option.value = setId;
-    option.textContent = setMetadata[setId]['name'];
-    if (setId == activeSet) {
+    option.value = setId.id;
+    option.textContent = setId.name;
+    if (setId.id == activeSet) {
       option.selected = true;
     }
     setDropdown.appendChild(option);

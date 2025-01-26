@@ -2,6 +2,7 @@
 
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -10,24 +11,22 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
-export function storeSetMetaData(data: types.tcgSet[]) {
+/**
+ * initial saving of just the set metadata without cards. this is triggered on fresh load or sync.
+ */
+export async function storeSetMetaData(
+  data: types.tcgSet[]
+): Promise<types.tcgSet[]> {
   const sorted = sort.sortSetsByReleaseDate(data);
+  const mapped = sorted.map((set) => {
+    set['_key'] = set['id'];
+    return set;
+  });
 
-  const setMetadata = sorted.reduce(
-    (acc, { id, name, series, releaseDate }) => {
-      acc[id] = { name, series, releaseDate };
-      return acc;
-    },
-    {} as {
-      [id: string]: { name: string; series: string; releaseDate: string };
-    }
-  );
-
-  localStorage.setItem(
-    constants.STORAGE_KEYS.setMetadata,
-    JSON.stringify(setMetadata)
-  );
-  return setMetadata;
+  await localbase.db
+    .collection(constants.STORAGE_KEYS.setMetadata)
+    .set(mapped, { keys: true });
+  return mapped;
 }
 
 export async function saveActiveSetAndCards() {

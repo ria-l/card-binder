@@ -47,15 +47,6 @@ export async function getActiveSet(): Promise<string> {
   return activeSet ?? (await pickAndStoreRandomSet());
 }
 
-async function pickAndStoreRandomSet(): Promise<string> {
-  const setData = await getSetMetadata();
-  const setIds = Object.keys(setData);
-
-  const i = Math.floor(Math.random() * setIds.length);
-  localStorage.setItem(constants.STORAGE_KEYS.activeSet, setIds[i] ?? 'base1');
-  return setIds[i] ?? 'base1';
-}
-
 export function getSelectedSet(): string {
   const setDropdown = utils.getElByIdOrThrow(
     'set-dropdown'
@@ -67,15 +58,15 @@ export function getSelectedSet(): string {
   return '';
 }
 
-export async function getCardsForActiveSet(): Promise<types.Card[]> {
-  const setId = await getActiveSet();
-  let setData = await get.getSetMetadata();
-  let cards: types.Card[] = setData[setId]['cards'];
+export async function pickAndStoreRandomSet(): Promise<string> {
+  const setData: types.tcgSet[] = await getSetMetadata();
+  const setIds = setData.map((set) => {
+    return set.id;
+  });
 
-  if (!cards || !Object.keys(cards).length) {
-    cards = await tcg.fetchAndStoreCardsBySet(setId);
-  }
-  return cards;
+  const i = Math.floor(Math.random() * setIds.length);
+  localStorage.setItem(constants.STORAGE_KEYS.activeSet, setIds[i] ?? 'base1');
+  return setIds[i] ?? 'base1';
 }
 
 // getvalues from api objects
