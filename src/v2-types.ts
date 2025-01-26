@@ -22,14 +22,7 @@ export type tcgCard = {
   supertype: Supertypes;
   subtypes: string[];
   types: Energy[];
-  set: {
-    id: string;
-    name: string;
-    series: string;
-    printedTotal: number;
-    total: number;
-    releaseDate: string;
-  };
+  set: tcgSet;
   number: string;
   artist: string;
   rarity: Rarities;
@@ -109,3 +102,10 @@ type Rarities =
   | 'Uncommon';
 
 type Supertypes = 'Energy' | 'Pokémon' | 'Trainer';
+
+export type CardsDb = [
+  {
+    id: string;
+    cards: Card[];
+  }
+];

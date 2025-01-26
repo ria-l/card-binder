@@ -36,7 +36,7 @@ export async function storeCardsBySetId(setid, data) {
         imgUrl: row.images.large,
         id: row.id,
         name: row.name,
-        nationalDex: get.getDexNum,
+        nationalDex: get.getDexNum(row),
         rarity: row.rarity,
         set: row.set.id,
         subtype: get.getSubtype(row),

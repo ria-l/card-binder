@@ -125,10 +125,21 @@ export function getRarityType(card) {
     return gradientKey;
 }
 export function getEnergyColors(card) {
-    let energy = card.energy.toLowerCase() in constants.ENERGY_COLORS
-        ? card.energy.toLowerCase()
-        : 'colorless';
-    let energyColors = constants.ENERGY_COLORS[energy] ?? ['#00FFFF', '#00FFFF'];
-    return energyColors;
+    if (card.supertype.toLowerCase() === 'pokémon' ||
+        card.supertype.toLowerCase() === 'energy') {
+        let energy = card.energy.toLowerCase() in constants.ENERGY_COLORS
+            ? card.energy.toLowerCase()
+            : 'colorless';
+        let energyColors = constants.ENERGY_COLORS[energy] ?? ['#00FFFF', '#00FFFF'];
+        return energyColors;
+    }
+    if (card.supertype.toLowerCase() == 'trainer') {
+        const subtype = get.getSubtype(card.zRaw)
+            ? get.getSubtype(card.zRaw)?.toLowerCase()
+            : 'item';
+        let subtypeColors = constants.TRAINER_COLORS[subtype] ?? ['#00FFFF', '#00FFFF'];
+        return subtypeColors;
+    }
+    return ['#00FFFF', '#00FFFF'];
 }
 //# sourceMappingURL=v2-get.js.map
