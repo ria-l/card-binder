@@ -34,6 +34,21 @@ export async function fillSetDropdown(): Promise<void> {
   }
 }
 
+export function clearDisplay() {
+  const largeCardSpan = document.getElementById('large-card-span');
+  const smallCardSpan = document.getElementById('small-card-span');
+  const listSpan = document.getElementById('list-span');
+  if (largeCardSpan) largeCardSpan.innerHTML = '';
+  if (smallCardSpan) smallCardSpan.innerHTML = '';
+  const ol = document.createElement('ol');
+  ol.id = 'card-list';
+  ol.reversed = true;
+  if (listSpan) {
+    listSpan.innerHTML = '';
+    listSpan.appendChild(ol);
+  }
+}
+
 /**
  * generates hex string for gradient border
  * @param subtype basic, ex etc
@@ -93,21 +108,6 @@ export function generateBorderColors(
     right: string[]
   ) {
     return `${left},${middle},${right}`;
-  }
-}
-
-export function clearDisplay() {
-  const largeCardSpan = document.getElementById('large-card-span');
-  const smallCardSpan = document.getElementById('small-card-span');
-  const listSpan = document.getElementById('list-span');
-  if (largeCardSpan) largeCardSpan.innerHTML = '';
-  if (smallCardSpan) smallCardSpan.innerHTML = '';
-  const ol = document.createElement('ol');
-  ol.id = 'card-list';
-  ol.reversed = true;
-  if (listSpan) {
-    listSpan.innerHTML = '';
-    listSpan.appendChild(ol);
   }
 }
 
