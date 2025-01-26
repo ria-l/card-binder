@@ -6,7 +6,7 @@ import * as tcg from './v2-api-tcg.js';
 import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
-export function sortDataByReleaseDate(data) {
+export function sortSetsByReleaseDate(data) {
     return data.sort((a, b) => new Date(a.releaseDate).valueOf() - new Date(b.releaseDate).valueOf());
 }
 export const sortBySetNum = (data) => {

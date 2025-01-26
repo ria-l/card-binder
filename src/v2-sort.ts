@@ -7,14 +7,7 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
-export function sortDataByReleaseDate(
-  data: {
-    id: string;
-    name: string;
-    series: string;
-    releaseDate: string;
-  }[]
-) {
+export function sortSetsByReleaseDate(data: types.tcgSet[]) {
   return data.sort(
     (a, b) =>
       new Date(a.releaseDate).valueOf() - new Date(b.releaseDate).valueOf()

@@ -9,7 +9,7 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export function storeSetMetaData(data) {
-    const sorted = sort.sortDataByReleaseDate(data);
+    const sorted = sort.sortSetsByReleaseDate(data);
     const setMetadata = sorted.reduce((acc, { id, name, series, releaseDate }) => {
         acc[id] = { name, series, releaseDate };
         return acc;

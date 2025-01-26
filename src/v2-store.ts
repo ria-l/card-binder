@@ -10,15 +10,8 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
-export function storeSetMetaData(
-  data: {
-    id: string;
-    name: string;
-    series: string;
-    releaseDate: string;
-  }[]
-) {
-  const sorted = sort.sortDataByReleaseDate(data);
+export function storeSetMetaData(data: types.tcgSet[]) {
+  const sorted = sort.sortSetsByReleaseDate(data);
 
   const setMetadata = sorted.reduce(
     (acc, { id, name, series, releaseDate }) => {
