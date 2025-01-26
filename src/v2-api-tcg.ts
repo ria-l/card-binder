@@ -4,14 +4,6 @@ import * as store from './v2-store.js';
 import * as types from './v2-types.js';
 import * as utils from './v2-utils.js';
 
-export async function fetchAndStoreCardsBySet(
-  setId: string
-): Promise<types.Card[]> {
-  const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
-  const cards = store.storeCardsBySetId(setId, data);
-  return cards;
-}
-
 export async function fetchAndStoreSetMetadata(forceSync: boolean = false) {
   const storedData = await get.getSetMetadata();
   if (storedData && !forceSync) {
@@ -45,6 +37,11 @@ export async function fetchJson(url: string): Promise<any> {
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function fetchCardsForSet(setId: string): Promise<types.Card[]> {
+  const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
+  return data;
 }
 
 export async function fetchBlob(url: string): Promise<any> {

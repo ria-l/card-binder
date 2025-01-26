@@ -29,47 +29,37 @@ export async function storeSetMetaData(
   return mapped;
 }
 
-export async function saveActiveSetAndCards() {
+export function saveActiveSet() {
   const activeSet = get.getSelectedSet();
   if (!activeSet) {
     throw new Error('no set selected');
   }
   localStorage.setItem(constants.STORAGE_KEYS.activeSet, activeSet);
-
-  const setData = await get.getSetMetadata();
-  if (!setData[activeSet]['cards']) {
-    await tcg.fetchAndStoreCardsBySet(activeSet);
-  }
   return activeSet;
 }
 
-export async function storeCardsBySetId(setid: string, data: any) {
+/**
+ * stores just the cards for the given set
+ */
+export async function storeCardsBySetId(
+  setid: string,
+  data: any
+): Promise<types.Card[]> {
+  const cardData: types.CardsDb = await get.getCardMetadata();
+  const alreadyStored = cardData.find((item) => item.id === setid);
+
   const cards: types.Card[] = data.map((row: types.tcgCard) => ({
-    artist: row.artist,
-    energy: get.getEnergyType(row),
-    imgUrl: row.images.large,
     id: row.id,
-    name: row.name,
+    energy: get.getEnergyType(row),
     nationalDex: get.getDexNum(row),
-    rarity: row.rarity,
-    set: row.set.id,
     subtype: get.getSubtype(row),
     supertype: row.supertype ? row.supertype.toLowerCase() : '',
     zRaw: row,
   }));
-
-  const setData = await get.getSetMetadata();
-
-  // init if set is not in storage
-  if (!setData[setid]) {
-    setData[setid] = {};
+  if (!alreadyStored) {
+    await localbase.db
+      .collection('v2_cards')
+      .add({ id: setid, cards: cards }, setid);
   }
-
-  setData[setid]['cards'] = cards;
-
-  localStorage.setItem(
-    constants.STORAGE_KEYS.setMetadata,
-    JSON.stringify(setData)
-  );
   return cards;
 }

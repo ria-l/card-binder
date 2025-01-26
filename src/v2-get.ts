@@ -69,7 +69,31 @@ export async function pickAndStoreRandomSet(): Promise<string> {
   return setIds[i] ?? 'base1';
 }
 
-// getvalues from api objects
+export async function getCardMetadata(): Promise<types.CardsDb> {
+  const data = await localbase.db
+    .collection('v2_cards')
+    .get()
+    .then((sets: any) => {
+      return sets;
+    });
+  return data;
+}
+
+export function getEnergyType(card: types.tcgCard) {
+  if (card.types && card.types.length && card.types[0]) {
+    return card.types[0].toLowerCase();
+  } else return '';
+}
+
+export function getDexNum(card: types.tcgCard) {
+  if (
+    card.nationalPokedexNumbers &&
+    card.nationalPokedexNumbers.length &&
+    card.nationalPokedexNumbers[0]
+  ) {
+    return card.nationalPokedexNumbers[0];
+  } else return card.nationalPokedexNumbers;
+}
 
 /**
  * only returns subtypes that are used for color matching in constants, otherwise return empty string.
@@ -107,21 +131,18 @@ export function getSubtype(card: types.tcgCard) {
   }
 }
 
-export function getEnergyType(card: types.tcgCard) {
-  if (card.types && card.types.length && card.types[0]) {
-    return card.types[0].toLowerCase();
-  } else return '';
+export async function getCardsForActiveSet(): Promise<types.Card[]> {
+  const setId = await getActiveSet();
+  let setData = await get.getSetMetadata();
+  let cards: types.Card[] = setData[setId]['cards'];
+
+  if (!cards || !Object.keys(cards).length) {
+    cards = await tcg.fetchAndStoreCardsBySet(setId);
+  }
+  return cards;
 }
 
-export function getDexNum(card: types.tcgCard) {
-  if (
-    card.nationalPokedexNumbers &&
-    card.nationalPokedexNumbers.length &&
-    card.nationalPokedexNumbers[0]
-  ) {
-    return card.nationalPokedexNumbers[0];
-  } else return card.nationalPokedexNumbers;
-}
+// getvalues from api objects
 
 export function getRarityType(card: types.Card) {
   let gradientKey: 'a_normal' | 'b_holo' | 'c_extra' | 'd_illust' | 'gold' =
@@ -194,13 +215,3 @@ export function getEnergyColors(card: types.Card) {
 //       console.error('Error getting documents: ', error);
 //     });
 // }
-
-export async function getCardMetadata(): Promise<types.CardsDb> {
-  const data = await localbase.db
-    .collection('v2_cards')
-    .get()
-    .then((sets: any) => {
-      return sets;
-    });
-  return data;
-}

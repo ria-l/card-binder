@@ -36,9 +36,9 @@ async function syncData(forceSync: boolean = false) {
  * sets event listeners for navbar
  */
 function setEventListeners() {
-  utils
-    .getElByIdOrThrow('set-dropdown')
-    .addEventListener('change', () => store.saveActiveSetAndCards());
+  utils.getElByIdOrThrow('set-dropdown').addEventListener('change', () => {
+    changeSet();
+  });
   utils
     .getElByIdOrThrow('open-pack')
     .addEventListener('click', () => pull.openPack());
@@ -54,4 +54,15 @@ function setEventListeners() {
   utils
     .getElByIdOrThrow('debug-button')
     .addEventListener('click', () => get.pickAndStoreRandomSet());
+}
+
+async function changeSet() {
+  const activeSet = store.saveActiveSet();
+
+  const cardData: types.CardsDb = await get.getCardMetadata();
+  const alreadyStored = cardData.find((item) => item.id === activeSet);
+  if (!alreadyStored) {
+    const data = await tcg.fetchCardsForSet(activeSet);
+    await store.storeCardsBySetId(activeSet, data);
+  }
 }
