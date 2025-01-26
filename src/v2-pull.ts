@@ -51,4 +51,7 @@ function setEventListeners() {
   utils
     .getElByIdOrThrow('sync-button')
     .addEventListener('click', () => syncData(true));
+  utils
+    .getElByIdOrThrow('debug-button')
+    .addEventListener('click', () => get.pickAndStoreRandomSet());
 }
