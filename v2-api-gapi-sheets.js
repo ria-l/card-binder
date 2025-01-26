@@ -2,10 +2,13 @@ const SHEET_NAMES = ['db-owned', 'db-cards', 'db-binders'];
 const RAW_SHEETS_DATA_KEY = 'v2_raw_sheets_data'; // also in constants module.
 
 async function fetchAndStoreSheets(forceSync = false) {
-  const storedData = localStorage.getItem(RAW_SHEETS_DATA_KEY);
-  if (storedData && !forceSync) {
+  const db = new Localbase('db');
+  db.config.debug = false;
+  const storedData = await db.collection(RAW_SHEETS_DATA_KEY).get();
+  if (storedData.length && !forceSync) {
     return;
   }
+
   tokenClient.callback = async (resp) => {
     if (resp.error !== undefined) {
       throw resp;
@@ -22,42 +25,25 @@ async function fetchAndStoreSheets(forceSync = false) {
     } catch (err) {
       throw new Error(err);
     }
-    localStorage.setItem(RAW_SHEETS_DATA_KEY, JSON.stringify(response.result));
-    storeEachSheet(response);
+    await db.collection(RAW_SHEETS_DATA_KEY).delete();
+    await db.collection(RAW_SHEETS_DATA_KEY).add(response.result);
+    await storeEachSheet(response, db);
   };
   tokenClient.requestAccessToken({ prompt: '' });
 }
 
-function storeEachSheet(response) {
-  response.result.valueRanges.forEach((valueRange) => {
-    const varName = valueRange.range.match(/'(.*?)'/)[1];
-    localStorage.setItem(varName, JSON.stringify(valueRange.values));
-  });
-}
+async function storeEachSheet(response, db) {
+  for (const valueRange of response.result.valueRanges) {
+    const sheetName = valueRange.range.match(/'(.*?)'/)[1];
+    const header = valueRange.values[0];
 
-async function pushToSheets(range, values) {
-  tokenClient.callback = async (resp) => {
-    if (resp.error !== undefined) {
-      throw resp;
+    await db.collection(sheetName).delete();
+    for (const e of valueRange.values.slice(1)) {
+      const entry = {};
+      header.forEach((h, index) => {
+        entry[h] = e[index];
+      });
+      await db.collection(sheetName).add(entry);
     }
-    const secrets = await getSecrets();
-    const request = {
-      spreadsheetId: secrets.sheet_id,
-      range: range,
-      valueInputOption: 'USER_ENTERED',
-      resource: {
-        majorDimension: 'ROWS',
-        values: values,
-      },
-    };
-    try {
-      const response = (
-        await gapi.client.sheets.spreadsheets.values.append(request)
-      ).data;
-      console.log(JSON.stringify(response));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  tokenClient.requestAccessToken({ prompt: '' });
+  }
 }
