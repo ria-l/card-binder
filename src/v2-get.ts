@@ -131,7 +131,7 @@ export function getSubtype(card: types.tcgCard) {
   }
 }
 
-export async function getCardsForActiveSet(): Promise<types.Card[]> {
+export async function getCardsForActiveSet(): Promise<{ id: string; cards: types.Card[] }> {
   let cards;
   const activeSet = await getActiveSet();
 
@@ -144,7 +144,9 @@ export async function getCardsForActiveSet(): Promise<types.Card[]> {
         return document;
       });
   } finally {
-    cards = await store.storeCardsBySetId(activeSet);
+    if (!cards || !Object.keys(cards).length) {
+      cards = await store.storeCardsBySetId(activeSet);
+    }
   }
   return cards;
 }

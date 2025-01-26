@@ -13,7 +13,8 @@ import * as utils from './v2-utils.js';
 declare function pushToSheets(range: string, values: (string | Date)[][]): any;
 
 export async function openPack() {
-  const cards = await get.getCardsForActiveSet();
+  const cards: { id: string; cards: types.Card[] } =
+    await get.getCardsForActiveSet();
   const cardGroups = groupCardsByRarity(cards);
   const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
 
@@ -38,6 +39,31 @@ export async function openPack() {
   }
   console.log(pulled);
   processPulled(pulled);
+}
+
+function groupCardsByRarity(obj: { id: string; cards: types.Card[] }) {
+  const groupedCards: {
+    Rare: types.Card[];
+    Uncommon: types.Card[];
+    Common: types.Card[];
+    Star: types.Card[];
+  } = {
+    Rare: [],
+    Uncommon: [],
+    Common: [],
+    Star: [],
+  };
+  for (const card of obj.cards) {
+    const rarityGroup =
+      card.zRaw.rarity === 'Rare' ||
+      card.zRaw.rarity === 'Uncommon' ||
+      card.zRaw.rarity === 'Common'
+        ? card.zRaw.rarity
+        : 'Star';
+
+    groupedCards[rarityGroup].push(card);
+  }
+  return groupedCards;
 }
 
 async function processPulled(pulled: types.Card[]) {
@@ -94,26 +120,6 @@ function addToList(title: string) {
   const li = document.createElement('li');
   li.appendChild(document.createTextNode(title));
   ol.insertBefore(li, ol.firstChild);
-}
-
-function groupCardsByRarity(cards: types.Card[]) {
-  return cards.reduce((acc, card) => {
-    const rarityGroup =
-      card.rarity === 'Rare' ||
-      card.rarity === 'Uncommon' ||
-      card.rarity === 'Common'
-        ? card.rarity
-        : 'Star';
-
-    // If the rarity group doesn't exist in the accumulator, create it
-    if (!acc[rarityGroup]) {
-      acc[rarityGroup] = [];
-    }
-    // Push the current card into the corresponding rarity array
-    acc[rarityGroup].push(card);
-
-    return acc;
-  }, {} as Record<string, types.Card[]>);
 }
 
 function getRandomCard(
