@@ -132,12 +132,19 @@ export function getSubtype(card: types.tcgCard) {
 }
 
 export async function getCardsForActiveSet(): Promise<types.Card[]> {
-  const setId = await getActiveSet();
-  let setData = await get.getSetMetadata();
-  let cards: types.Card[] = setData[setId]['cards'];
+  let cards;
+  const activeSet = await getActiveSet();
 
-  if (!cards || !Object.keys(cards).length) {
-    cards = await tcg.fetchAndStoreCardsBySet(setId);
+  try {
+    cards = await localbase.db
+      .collection('v2_cards')
+      .doc(activeSet)
+      .get()
+      .then((document: any) => {
+        return document;
+      });
+  } finally {
+    cards = await store.storeCardsBySetId(activeSet);
   }
   return cards;
 }

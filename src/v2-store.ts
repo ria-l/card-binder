@@ -40,15 +40,12 @@ export function saveActiveSet() {
 
 /**
  * stores just the cards for the given set
+ * assumes they are not stored already; existence checks are in calling functions
  */
-export async function storeCardsBySetId(
-  setid: string,
-  data: any
-): Promise<types.Card[]> {
-  const cardData: types.CardsDb = await get.getCardMetadata();
-  const alreadyStored = cardData.find((item) => item.id === setid);
+export async function storeCardsBySetId(setId: string): Promise<types.Card[]> {
+  const data: any = await tcg.fetchCardsForSet(setId);
 
-  const cards: types.Card[] = data.map((row: types.tcgCard) => ({
+  const toStore: types.Card[] = data.map((row: types.tcgCard) => ({
     id: row.id,
     energy: get.getEnergyType(row),
     nationalDex: get.getDexNum(row),
@@ -56,10 +53,10 @@ export async function storeCardsBySetId(
     supertype: row.supertype ? row.supertype.toLowerCase() : '',
     zRaw: row,
   }));
-  if (!alreadyStored) {
-    await localbase.db
-      .collection('v2_cards')
-      .add({ id: setid, cards: cards }, setid);
-  }
-  return cards;
+
+  await localbase.db
+    .collection('v2_cards')
+    .add({ id: setId, cards: toStore }, setId);
+
+  return toStore;
 }

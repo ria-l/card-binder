@@ -14,6 +14,7 @@ export type tcgSet = {
     symbol: string;
     logo: string;
   };
+  _key?: string;
 };
 
 export type tcgCard = {

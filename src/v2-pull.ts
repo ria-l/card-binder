@@ -1,5 +1,6 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -56,13 +57,7 @@ function setEventListeners() {
     .addEventListener('click', () => get.pickAndStoreRandomSet());
 }
 
-async function changeSet() {
+async function changeSet(): Promise<void> {
   const activeSet = store.saveActiveSet();
-
-  const cardData: types.CardsDb = await get.getCardMetadata();
-  const alreadyStored = cardData.find((item) => item.id === activeSet);
-  if (!alreadyStored) {
-    const data = await tcg.fetchCardsForSet(activeSet);
-    await store.storeCardsBySetId(activeSet, data);
-  }
+  store.storeCardsBySetId(activeSet);
 }
