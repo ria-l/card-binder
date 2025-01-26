@@ -13,6 +13,8 @@ export async function fillPage() {
   const cards = await create.createCardsForActiveSetInBinder();
   const contentDiv = utils.getElByIdOrThrow('content-div');
   contentDiv.innerHTML = '';
+
+  // const sorted = sort.sortBySetNum(cards)
   cards.forEach((card) => {
     contentDiv.appendChild(card);
   });

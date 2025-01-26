@@ -106,6 +106,7 @@ export async function createCardsForActiveSetInBinder(): Promise<
 > {
   const cardData: types.Card[] = await get.getCardsForActiveSet();
   const tags = [];
+  sort.sortBySetNum(cardData);
   for (const card of cardData) {
     const { isOwned, title, borderColors } = create.generateImgMetadata(card);
     if (isOwned) {

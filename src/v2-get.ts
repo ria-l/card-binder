@@ -79,12 +79,12 @@ export async function getSecret(key: string): Promise<string> {
 
 /**
  * only returns subtypes that are used for color matching in constants, otherwise return empty string.
- * @param card 
- * @returns 
+ * @param card
+ * @returns
  */
 export function getSubtype(card: types.tcgCard) {
   if (!card.subtypes) {
-    return ''
+    return '';
   }
   let subtype = '';
   if (card.supertype === 'Pokémon') {
@@ -154,12 +154,28 @@ export function getRarityType(card: types.Card) {
 }
 
 export function getEnergyColors(card: types.Card) {
-  let energy =
-    card.energy.toLowerCase() in constants.ENERGY_COLORS
-      ? card.energy.toLowerCase()
-      : 'colorless';
-  let energyColors = constants.ENERGY_COLORS[
-    energy as keyof typeof constants.ENERGY_COLORS
-  ] ?? ['#00FFFF', '#00FFFF'];
-  return energyColors;
+  if (
+    card.supertype.toLowerCase() === 'pokémon' ||
+    card.supertype.toLowerCase() === 'energy'
+  ) {
+    let energy =
+      card.energy.toLowerCase() in constants.ENERGY_COLORS
+        ? card.energy.toLowerCase()
+        : 'colorless';
+    let energyColors = constants.ENERGY_COLORS[
+      energy as keyof typeof constants.ENERGY_COLORS
+    ] ?? ['#00FFFF', '#00FFFF'];
+    return energyColors;
+  }
+  if (card.supertype.toLowerCase() == 'trainer') {
+    const subtype = get.getSubtype(card.zRaw)
+      ? get.getSubtype(card.zRaw)?.toLowerCase()
+      : 'item';
+
+    let subtypeColors = constants.TRAINER_COLORS[
+      subtype as keyof typeof constants.TRAINER_COLORS
+    ] ?? ['#00FFFF', '#00FFFF'];
+    return subtypeColors;
+  }
+  return ['#00FFFF', '#00FFFF'];
 }

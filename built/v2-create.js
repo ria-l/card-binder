@@ -74,6 +74,7 @@ export async function createPlaceholderForBinder(borderColors, title, fillColors
 export async function createCardsForActiveSetInBinder() {
     const cardData = await get.getCardsForActiveSet();
     const tags = [];
+    sort.sortBySetNum(cardData);
     for (const card of cardData) {
         const { isOwned, title, borderColors } = create.generateImgMetadata(card);
         if (isOwned) {
