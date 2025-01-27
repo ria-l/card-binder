@@ -10,6 +10,7 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export async function getSetMetadata() {
+    localbase.db.config.debug = false;
     const data = await localbase.db
         .collection('v2_set_metadata')
         .get()
@@ -55,6 +56,7 @@ export async function pickAndStoreRandomSet() {
     return setIds[i] ?? 'base1';
 }
 export async function getCardMetadata() {
+    localbase.db.config.debug = false;
     const data = await localbase.db
         .collection('v2_cards')
         .get()
@@ -117,6 +119,7 @@ export function getSubtype(card) {
 export async function getCardsForActiveSet() {
     let cards;
     const activeSet = await getActiveSet();
+    localbase.db.config.debug = false;
     try {
         cards = await localbase.db
             .collection('v2_cards')
@@ -164,6 +167,48 @@ export function getEnergyColors(card) {
         return subtypeColors;
     }
     return ['#00FFFF', '#00FFFF'];
+}
+export function getCardSize() {
+    const dropdown = utils.getElByIdOrThrow('size-dropdown');
+    const selected = dropdown.value;
+    if (selected) {
+        localStorage.setItem('card_size', selected);
+        return parseInt(selected);
+    }
+    const stored = localStorage.getItem('card_size');
+    if (stored) {
+        return parseInt(stored);
+    }
+    localStorage.setItem('card_size', '120');
+    return 120;
+}
+export function getGridCol() {
+    const dropdown = utils.getElByIdOrThrow('col-dropdown');
+    const selected = dropdown.selectedIndex;
+    if (selected > -1) {
+        localStorage.setItem('grid_col', selected.toString());
+        return selected;
+    }
+    const stored = localStorage.getItem('grid_col');
+    if (stored) {
+        return parseInt(stored);
+    }
+    localStorage.setItem('grid_col', '0');
+    return 0;
+}
+export function getGridRow() {
+    const dropdown = utils.getElByIdOrThrow('row-dropdown');
+    const selected = dropdown.selectedIndex;
+    if (selected > -1) {
+        localStorage.setItem('grid_row', selected.toString());
+        return selected;
+    }
+    const stored = localStorage.getItem('grid_row');
+    if (stored) {
+        return parseInt(stored);
+    }
+    localStorage.setItem('grid_row', '0');
+    return 0;
 }
 // TODO: wip
 // async function getBinderCards() {

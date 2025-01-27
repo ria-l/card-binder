@@ -4,7 +4,6 @@
   font-family: 'Andika', sans-serif;
 }
 :root {
-  font-size: 14px;
   font-family: 'Andika', sans-serif;
   --text-primary: #b6b6b6;
   --text-secondary: #ececec;
@@ -70,6 +69,27 @@ main {
   letter-spacing: 0.1ch;
   width: 100%;
 }
+.dropdown-container {
+  background-color: var(--bg-dropdown);
+  border-radius: 1rem;
+  width: 10rem;
+  padding: 1rem;
+  list-style: none;
+  margin-left: 1rem;
+  display: none;
+}
+.dropdown-item {
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 0.1ch;
+  width: 100%;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+select,
+progress {
+  width: 8rem;
+}
 #toggle-borders {
   height: 20px;
   width: 20px;
@@ -129,8 +149,24 @@ select {
   justify-content: center;
   margin: auto;
   position: fixed;
-  height: 90dvh;
-  width: auto;
+  height: 90dvh !important;
+  width: auto !important;
+}
+table {
+  display: inline-block;
+  margin: 10px;
+}
+td img {
+  /* the td is necessary for correct rendering with no grid */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td img,
+td .placeholder {
+  /* Keeps cards and placeholders properly aligned. Doesn't work if it's separated into the individual elements. */
+  vertical-align: middle;
 }
 #parent {
   /* keeps large card from acting like mobile on desktop */
@@ -204,13 +240,18 @@ ol {
     margin-left: 0;
     margin-bottom: 6rem;
   }
+  .dropdown-container {
+    position: absolute;
+    bottom: 4rem;
+    margin-left: 0;
+  }
   .link-text {
     font-size: 1rem;
     text-align: center;
     margin-left: 0;
   }
   .zoomed-card {
-    width: 90dvw;
-    height: auto;
+    width: 90dvw !important;
+    height: auto !important;
   }
 }

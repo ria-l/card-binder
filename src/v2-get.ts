@@ -15,6 +15,7 @@ import * as utils from './v2-utils.js';
 declare function getSecrets(): any;
 
 export async function getSetMetadata(): Promise<types.tcgSet[]> {
+  localbase.db.config.debug = false;
   const data = await localbase.db
     .collection('v2_set_metadata')
     .get()
@@ -70,6 +71,7 @@ export async function pickAndStoreRandomSet(): Promise<string> {
 }
 
 export async function getCardMetadata(): Promise<types.CardsDb> {
+  localbase.db.config.debug = false;
   const data = await localbase.db
     .collection('v2_cards')
     .get()
@@ -137,7 +139,7 @@ export async function getCardsForActiveSet(): Promise<{
 }> {
   let cards;
   const activeSet = await getActiveSet();
-
+  localbase.db.config.debug = false;
   try {
     cards = await localbase.db
       .collection('v2_cards')
@@ -205,6 +207,57 @@ export function getEnergyColors(card: types.Card) {
     return subtypeColors;
   }
   return ['#00FFFF', '#00FFFF'];
+}
+
+export function getCardSize(): number {
+  const dropdown = utils.getElByIdOrThrow('size-dropdown') as HTMLSelectElement;
+  const selected = dropdown.value;
+  if (selected) {
+    localStorage.setItem('card_size', selected);
+    return parseInt(selected);
+  }
+
+  const stored = localStorage.getItem('card_size');
+  if (stored) {
+    return parseInt(stored);
+  }
+
+  localStorage.setItem('card_size', '120');
+  return 120;
+}
+
+export function getGridCol(): number {
+  const dropdown = utils.getElByIdOrThrow('col-dropdown') as HTMLSelectElement;
+  const selected = dropdown.selectedIndex;
+  if (selected > -1) {
+    localStorage.setItem('grid_col', selected.toString());
+    return selected;
+  }
+
+  const stored = localStorage.getItem('grid_col');
+  if (stored) {
+    return parseInt(stored);
+  }
+
+  localStorage.setItem('grid_col', '0');
+  return 0;
+}
+
+export function getGridRow(): number {
+  const dropdown = utils.getElByIdOrThrow('row-dropdown') as HTMLSelectElement;
+  const selected = dropdown.selectedIndex;
+  if (selected > -1) {
+    localStorage.setItem('grid_row', selected.toString());
+    return selected;
+  }
+
+  const stored = localStorage.getItem('grid_row');
+  if (stored) {
+    return parseInt(stored);
+  }
+
+  localStorage.setItem('grid_row', '0');
+  return 0;
 }
 
 // TODO: wip

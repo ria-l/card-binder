@@ -64,6 +64,7 @@ async function processPulled(pulled) {
         displaySmallCard(cardImg, imgId);
         addToList(title);
         // update stored owned
+        localbase.db.config.debug = false;
         await localbase.db
             .collection('db-owned')
             .add({ card_id: card.id, pulled_date: date });

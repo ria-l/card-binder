@@ -59,7 +59,7 @@ export async function createCardImgForBinder(
   if (!img64) {
     throw new Error(`blob not converted: ${card.zRaw.images.large}`);
   }
-  const width = 150;
+  const width = get.getCardSize();
   const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
 
   const img = new Image(width, height);
@@ -89,7 +89,7 @@ export async function createPlaceholderForBinder(
   fillColors: string,
   card: types.Card
 ): Promise<HTMLSpanElement> {
-  const width = 150;
+  const width = get.getCardSize();
   const ph = document.createElement('span');
   ph.classList.add('placeholder');
   ph.title = title;
@@ -98,6 +98,7 @@ export async function createPlaceholderForBinder(
   ph.style.background = `linear-gradient(to bottom right, ${fillColors}) padding-box, linear-gradient(to bottom right, ${borderColors}) border-box`;
   ph.style.setProperty('border-radius', `${width / 20}px`);
   ph.style.setProperty('border', `${width / 15}px solid transparent`);
+  ph.style.setProperty('font-size', `${width / 10}px`);
   ph.innerHTML = `${card.zRaw.number}/${card.zRaw.set.printedTotal} (${card.zRaw.set.total})
   <br>${card.zRaw.name}
   <br>${card.zRaw.rarity}`;
@@ -130,4 +131,62 @@ export async function createCardsForActiveSetInBinder(): Promise<
     }
   }
   return tags;
+}
+
+export function fillSizeDropdown() {
+  const sizeDropdown = utils.getElByIdOrThrow(
+    'size-dropdown'
+  ) as HTMLSelectElement;
+
+  if (sizeDropdown.options.length == 0) {
+    for (let i = 1; i < 11; i++) {
+      const option = document.createElement('option');
+      option.value = (i * 50).toString();
+      option.textContent = (i * 50).toString();
+      sizeDropdown.appendChild(option);
+    }
+    for (let i = 1; i < 20; i++) {
+      const option = document.createElement('option');
+      option.value = (i * 10).toString();
+      option.textContent = (i * 10).toString();
+      sizeDropdown.appendChild(option);
+    }
+  }
+  // sets value
+  const cardSize = get.getCardSize();
+  const option = Array.from(sizeDropdown.options).find(
+    (option) => option.value === cardSize.toString()
+  );
+  if (option) {
+    option.selected = true;
+  }
+}
+
+export function fillGridDropdown() {
+  const colDropdown = utils.getElByIdOrThrow(
+    'col-dropdown'
+  ) as HTMLSelectElement;
+  const rowDropdown = utils.getElByIdOrThrow(
+    'row-dropdown'
+  ) as HTMLSelectElement;
+
+  if (rowDropdown.options.length == 0) {
+    for (let i = 0; i < 13; i++) {
+      const option = document.createElement('option');
+      option.value = i.toString();
+      option.textContent = i.toString();
+      colDropdown.appendChild(option);
+    }
+    for (let i = 0; i < 13; i++) {
+      const option = document.createElement('option');
+      option.value = i.toString();
+      option.textContent = i.toString();
+      rowDropdown.appendChild(option);
+    }
+  }
+  // sets new values
+  let gridCol = get.getGridCol();
+  let gridRow = get.getGridRow();
+  colDropdown.selectedIndex = gridCol;
+  rowDropdown.selectedIndex = gridRow;
 }

@@ -18,6 +18,7 @@ export async function storeSetMetaData(data) {
         set['_key'] = set['id'];
         return set;
     });
+    localbase.db.config.debug = false;
     await localbase.db
         .collection(constants.STORAGE_KEYS.setMetadata)
         .set(mapped, { keys: true });
@@ -46,6 +47,7 @@ export async function storeCardsBySetId(setId) {
         zRaw: row,
     }));
     const toStore = { id: setId, cards: customizedCards };
+    localbase.db.config.debug = false;
     await localbase.db.collection('v2_cards').add(toStore, setId);
     return toStore;
 }

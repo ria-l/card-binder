@@ -53,6 +53,7 @@ function blobToBase64(blob: Blob): Promise<string> {
 
 export async function isOwnedCard(card: types.Card): Promise<boolean> {
   let result;
+  localbase.db.config.debug = false
   try {
     result = await localbase.db
       .collection('db-owned')

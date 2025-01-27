@@ -44,6 +44,7 @@ function blobToBase64(blob) {
 }
 export async function isOwnedCard(card) {
     let result;
+    localbase.db.config.debug = false;
     try {
         result = await localbase.db
             .collection('db-owned')

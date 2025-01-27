@@ -1,3 +1,4 @@
+import * as binder from './v2-binder.js';
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as pull from './v2-pull-fn.js';
@@ -131,4 +132,52 @@ export function zoomCardInBinder(img: HTMLImageElement) {
     zImg.className = 'zoomed-card';
     zoomSpan.appendChild(zImg);
   }
+}
+
+export function updateGrid() {
+  localStorage.setItem(
+    'grid_row',
+    (
+      utils.getElByIdOrThrow('row-dropdown') as HTMLSelectElement
+    ).selectedIndex.toString()
+  );
+  localStorage.setItem(
+    'grid_col',
+    (
+      utils.getElByIdOrThrow('col-dropdown') as HTMLSelectElement
+    ).selectedIndex.toString()
+  );
+  binder.fillPage();
+}
+
+export function resizeCards() {
+  const cardSize = get.getCardSize();
+  for (const card of document.getElementsByClassName(
+    'card'
+  ) as HTMLCollectionOf<HTMLElement>) {
+    card.style.setProperty('width', `${cardSize}px`);
+    card.style.setProperty('height', `${cardSize * 1.4}px`);
+    card.style.setProperty('border-radius', `${cardSize / 20}px`);
+  }
+  for (const ph of document.getElementsByClassName(
+    'placeholder'
+  ) as HTMLCollectionOf<HTMLElement>) {
+    ph.style.setProperty('width', `${cardSize}px`);
+    ph.style.setProperty('height', `${cardSize * 1.4}px`);
+    ph.style.setProperty('border-radius', `${cardSize / 20}px`);
+    ph.style.setProperty('border', `${cardSize / 15}px solid transparent`);
+    ph.style.setProperty('font-size', `${cardSize / 10}px`);
+  }
+}
+
+export function addShowHideToggle(btnId: string, dropdownId: string) {
+  utils.getElByIdOrThrow(btnId).addEventListener('click', function () {
+    const containers = document.getElementsByClassName('dropdown-container');
+    for (let el of containers) {
+      if (el.classList.contains('show') && el.id != dropdownId) {
+        el.classList.toggle('show');
+      }
+    }
+    utils.getElByIdOrThrow(dropdownId).classList.toggle('show');
+  });
 }
