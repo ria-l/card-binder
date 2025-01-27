@@ -39,18 +39,16 @@ export async function openPack() {
     processPulled(pulled);
 }
 function groupCardsByRarity(obj) {
-    const groupedCards = {
-        Rare: [],
-        Uncommon: [],
-        Common: [],
-        Star: [],
-    };
+    const groupedCards = {};
     for (const card of obj.cards) {
         const rarityGroup = card.zRaw.rarity === 'Rare' ||
             card.zRaw.rarity === 'Uncommon' ||
             card.zRaw.rarity === 'Common'
             ? card.zRaw.rarity
             : 'Star';
+        if (!groupedCards[rarityGroup]) {
+            groupedCards[rarityGroup] = [];
+        }
         groupedCards[rarityGroup].push(card);
     }
     return groupedCards;
