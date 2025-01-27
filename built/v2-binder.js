@@ -95,4 +95,10 @@ function createTables(cardImgs) {
     // });
     // return allTables;
 }
+export function refreshBinder() {
+    const regex = new RegExp('index');
+    if (regex.test(location.pathname)) {
+        fillPage();
+    }
+}
 //# sourceMappingURL=v2-binder.js.map

@@ -1,3 +1,4 @@
+import * as binder from './v2-binder.js';
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as localbase from './v2-localbase.js';
@@ -65,4 +66,5 @@ export async function isOwnedCard(card: types.Card): Promise<boolean> {
 export async function changeSet(): Promise<void> {
   const activeSet = store.saveActiveSet();
   store.storeCardsBySetId(activeSet);
+  binder.refreshBinder();
 }

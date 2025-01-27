@@ -108,3 +108,10 @@ function createTables(cardImgs: (HTMLImageElement | HTMLSpanElement)[]) {
   // });
   // return allTables;
 }
+
+export function refreshBinder() {
+  const regex = new RegExp('index');
+  if (regex.test(location.pathname)) {
+    fillPage();
+  }
+}
