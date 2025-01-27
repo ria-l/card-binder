@@ -16,6 +16,7 @@ async function main() {
         await syncData();
     }
     await ui.fillSetDropdown();
+    initializeGridAndSize();
     setEventListeners();
     binder.fillPage();
     localStorage.setItem('storage_init', 'SUCCESS-index');
@@ -41,5 +42,88 @@ function setEventListeners() {
     // document
     //   .getElementById('toggle-borders')
     //   ?.addEventListener('change', ui.toggleBorders); // TODO: add function
+}
+/**
+ * wrapper to set initial grid and size values
+ */
+export function initializeGridAndSize() {
+    const cardSize = initializeSizeValue();
+    generateSizeDropdown(cardSize);
+    let { gridCol, gridRow } = initializeGridValues();
+    generateGridDropdown(gridCol, gridRow);
+}
+/**
+ * creates and displays card size dropdown
+ * @param cardSize
+ */
+export function generateSizeDropdown(cardSize) {
+    const sizeDropdown = utils.getElByIdOrThrow('size-dropdown');
+    if (sizeDropdown.options.length == 0) {
+        const sizeDropdown = utils.getElByIdOrThrow('size-dropdown');
+        for (let i = 1; i < 11; i++) {
+            const option = document.createElement('option');
+            option.value = (i * 50).toString();
+            option.textContent = (i * 50).toString();
+            sizeDropdown.appendChild(option);
+        }
+        for (let i = 1; i < 20; i++) {
+            const option = document.createElement('option');
+            option.value = (i * 10).toString();
+            option.textContent = (i * 10).toString();
+            sizeDropdown.appendChild(option);
+        }
+    }
+    // sets value
+    const option = Array.from(sizeDropdown.options).find((option) => option.value === cardSize.toString());
+    if (option) {
+        option.selected = true;
+    }
+}
+/**
+ * gets stored card size value or sets default
+ * @returns
+ */
+function initializeSizeValue() {
+    let cardSize = parseInt(localStorage.getItem('card_size') ?? '120');
+    // set the dropdown value to the specified size.
+    localStorage.setItem('card_size', cardSize.toString());
+    return cardSize;
+}
+/**
+ * gets stored grid values or sets defaults
+ * @returns
+ */
+function initializeGridValues() {
+    let gridCol = parseInt(localStorage.getItem('grid_col') ?? '0');
+    let gridRow = parseInt(localStorage.getItem('grid_row') ?? '0');
+    localStorage.setItem('grid_row', gridRow.toString());
+    localStorage.setItem('grid_col', gridCol.toString());
+    return { gridCol, gridRow };
+}
+/**
+ * creates and displays grid dropdown elements
+ * @param gridCol
+ * @param gridRow
+ */
+function generateGridDropdown(gridCol, gridRow) {
+    const colDropdown = utils.getElByIdOrThrow('col-dropdown');
+    const rowDropdown = utils.getElByIdOrThrow('row-dropdown');
+    if (rowDropdown.options.length == 0) {
+        for (let i = 0; i < 13; i++) {
+            const option = document.createElement('option');
+            option.value = i.toString();
+            option.textContent = i.toString();
+            colDropdown.appendChild(option);
+        }
+        for (let i = 0; i < 13; i++) {
+            const option = document.createElement('option');
+            option.value = i.toString();
+            option.textContent = i.toString();
+            rowDropdown.appendChild(option);
+        }
+    }
+    // sets new values
+    colDropdown.selectedIndex = gridCol;
+    rowDropdown.selectedIndex = gridRow;
 }
 //# sourceMappingURL=v2-index.js.map

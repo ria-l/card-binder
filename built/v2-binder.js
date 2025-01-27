@@ -15,9 +15,7 @@ export async function fillPage() {
     cards.forEach((card) => {
         contentDiv.appendChild(card);
     });
-    ///
-    // const cardTags = createCardTags(data);
-    // const tables = createTables(cardTags);
+    // const tables = createTables(cards);
     // const contentDiv = document.getElementById('contentDiv');
     // if (contentDiv) {
     //   contentDiv.innerHTML = '';

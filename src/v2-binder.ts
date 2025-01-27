@@ -18,9 +18,9 @@ export async function fillPage() {
     contentDiv.appendChild(card);
   });
 
-  ///
-  // const cardTags = createCardTags(data);
-  // const tables = createTables(cardTags);
+  
+
+  // const tables = createTables(cards);
   // const contentDiv = document.getElementById('contentDiv');
   // if (contentDiv) {
   //   contentDiv.innerHTML = '';
