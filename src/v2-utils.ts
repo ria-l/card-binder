@@ -50,17 +50,14 @@ function blobToBase64(blob: Blob): Promise<string> {
   });
 }
 
-export function isOwnedCard(card: types.Card): boolean {
+export async function isOwnedCard(card: types.Card): Promise<boolean> {
+  let result;
   try {
-    localbase.db
+    result = await localbase.db
       .collection('db-owned')
       .doc({ card_id: card.id })
-      .get()
-      .then((document: string) => {
-        console.log(document);
-        return true;
-      });
+      .get();
   } finally {
-    return false;
   }
+  return result ? true : false;
 }

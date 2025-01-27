@@ -34,19 +34,9 @@ export type tcgCard = {
 };
 
 export type Card = {
-  name: string;
   id: string;
-  artist: string;
-  customDexNum: number;
   energy: Energy;
-  imgUrl: string;
-  forme: string;
-  isGold: boolean;
-  isShiny: boolean;
-  isTera: boolean;
   nationalDex: number;
-  rarity: Rarities;
-  set: string;
   subtype: string;
   supertype: Supertypes;
   zRaw: tcgCard;

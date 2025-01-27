@@ -67,7 +67,9 @@ function groupCardsByRarity(obj: { id: string; cards: types.Card[] }) {
 
 async function processPulled(pulled: types.Card[]) {
   for (const [i, card] of pulled.entries()) {
-    const { isOwned, title, borderColors } = create.generateImgMetadata(card);
+    const { isOwned, title, borderColors } = await create.generateImgMetadata(
+      card
+    );
     const cardImg = await create.createCardImgForPulls(
       card,
       isOwned,
@@ -75,8 +77,8 @@ async function processPulled(pulled: types.Card[]) {
       title
     );
     // for scrolling in to view
-    const imgId = `${card.id}${i.toString()}${new Date().toString()}`;
-    displayLargeCard( imgId, cardImg);
+    const imgId = `${card.zRaw.id}${i.toString()}${new Date().toString()}`;
+    displayLargeCard(imgId, cardImg);
     displaySmallCard(cardImg, imgId);
     addToList(title);
   }
@@ -91,7 +93,7 @@ async function processPulled(pulled: types.Card[]) {
   // await gh.uploadImgs(pulled);
 }
 
-function displayLargeCard( imgId: string, cardImg: HTMLImageElement) {
+function displayLargeCard(imgId: string, cardImg: HTMLImageElement) {
   cardImg.id = imgId;
   const largeCard = cardImg.cloneNode(true) as HTMLImageElement;
   largeCard.classList.add('large-card');

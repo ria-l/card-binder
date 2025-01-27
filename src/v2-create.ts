@@ -17,10 +17,10 @@ export async function createCardImgForPulls(
   title: string
 ) {
   // TODO: check if uploaded to GH already
-  const imgBlob = await tcg.fetchBlob(card.imgUrl);
+  const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
   const img64 = await utils.convertBlobToBase64(imgBlob);
   if (!img64) {
-    throw new Error(`blob not converted: ${card.imgUrl}`);
+    throw new Error(`blob not converted: ${card.zRaw.images.large}`);
   }
   const imgEl = new Image();
   imgEl.src = img64;
@@ -34,9 +34,12 @@ export async function createCardImgForPulls(
   );
   return imgEl;
 }
-export function generateImgMetadata(card: types.Card) {
-  const isOwned = utils.isOwnedCard(card);
-  let title = `${card.name} : ${card.rarity}${!isOwned ? ' ✨NEW✨' : ''}`;
+
+export async function generateImgMetadata(card: types.Card) {
+  const isOwned = await utils.isOwnedCard(card);
+  let title = `${card.zRaw.name} : ${card.zRaw.rarity}${
+    !isOwned ? ' ✨NEW✨' : ''
+  }`;
   const borderColors = ui.generateBorderColors(
     card.subtype,
     card.energy,
