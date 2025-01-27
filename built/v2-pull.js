@@ -1,5 +1,6 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -27,9 +28,9 @@ async function syncData(forceSync = false) {
  * sets event listeners for navbar
  */
 function setEventListeners() {
-    utils
-        .getElByIdOrThrow('set-dropdown')
-        .addEventListener('change', () => store.saveActiveSetAndCards());
+    utils.getElByIdOrThrow('set-dropdown').addEventListener('change', () => {
+        utils.changeSet();
+    });
     utils
         .getElByIdOrThrow('open-pack')
         .addEventListener('click', () => pull.openPack());
@@ -42,5 +43,8 @@ function setEventListeners() {
     utils
         .getElByIdOrThrow('sync-button')
         .addEventListener('click', () => syncData(true));
+    utils
+        .getElByIdOrThrow('debug-button')
+        .addEventListener('click', () => get.pickAndStoreRandomSet());
 }
 //# sourceMappingURL=v2-pull.js.map

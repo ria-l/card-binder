@@ -15,17 +15,34 @@ export function setRandomBg() {
 export async function fillSetDropdown() {
     const setMetadata = await get.getSetMetadata();
     const activeSet = await get.getActiveSet();
+    console.log('active set: ', activeSet);
     const setDropdown = utils.getElByIdOrThrow('set-dropdown');
     if (setDropdown)
         setDropdown.innerHTML = '';
-    for (let setId of Object.keys(setMetadata)) {
+    for (let setId of setMetadata) {
         const option = document.createElement('option');
-        option.value = setId;
-        option.textContent = setMetadata[setId]['name'];
-        if (setId == activeSet) {
+        option.value = setId.id;
+        option.textContent = setId.name;
+        if (setId.id == activeSet) {
             option.selected = true;
         }
         setDropdown.appendChild(option);
+    }
+}
+export function clearDisplay() {
+    const largeCardSpan = document.getElementById('large-card-span');
+    const smallCardSpan = document.getElementById('small-card-span');
+    const listSpan = document.getElementById('list-span');
+    if (largeCardSpan)
+        largeCardSpan.innerHTML = '';
+    if (smallCardSpan)
+        smallCardSpan.innerHTML = '';
+    const ol = document.createElement('ol');
+    ol.id = 'card-list';
+    ol.reversed = true;
+    if (listSpan) {
+        listSpan.innerHTML = '';
+        listSpan.appendChild(ol);
     }
 }
 /**
@@ -77,22 +94,6 @@ export function generateBorderColors(subtype, energy, supertype) {
     }
     function _createGradient(left, middle, right) {
         return `${left},${middle},${right}`;
-    }
-}
-export function clearDisplay() {
-    const largeCardSpan = document.getElementById('large-card-span');
-    const smallCardSpan = document.getElementById('small-card-span');
-    const listSpan = document.getElementById('list-span');
-    if (largeCardSpan)
-        largeCardSpan.innerHTML = '';
-    if (smallCardSpan)
-        smallCardSpan.innerHTML = '';
-    const ol = document.createElement('ol');
-    ol.id = 'card-list';
-    ol.reversed = true;
-    if (listSpan) {
-        listSpan.innerHTML = '';
-        listSpan.appendChild(ol);
     }
 }
 /**

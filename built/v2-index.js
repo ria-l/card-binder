@@ -31,7 +31,7 @@ async function syncData(forceSync = false) {
 function setEventListeners() {
     utils
         .getElByIdOrThrow('set-dropdown')
-        .addEventListener('change', () => store.saveActiveSetAndCards());
+        .addEventListener('change', () => utils.changeSet());
     utils
         .getElByIdOrThrow('clear-storage-button')
         .addEventListener('click', () => localStorage.clear());

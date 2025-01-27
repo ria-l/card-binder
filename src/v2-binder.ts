@@ -14,7 +14,6 @@ export async function fillPage() {
   const contentDiv = utils.getElByIdOrThrow('content-div');
   contentDiv.innerHTML = '';
 
-  // const sorted = sort.sortBySetNum(cards)
   cards.forEach((card) => {
     contentDiv.appendChild(card);
   });

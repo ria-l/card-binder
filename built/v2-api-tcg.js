@@ -3,13 +3,8 @@ import * as get from './v2-get.js';
 import * as store from './v2-store.js';
 import * as types from './v2-types.js';
 import * as utils from './v2-utils.js';
-export async function fetchAndStoreCardsBySet(setId) {
-    const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
-    const cards = store.storeCardsBySetId(setId, data);
-    return cards;
-}
 export async function fetchAndStoreSetMetadata(forceSync = false) {
-    const storedData = localStorage.getItem(constants.STORAGE_KEYS.setMetadata);
+    const storedData = await get.getSetMetadata();
     if (storedData && !forceSync) {
         return;
     }
@@ -36,6 +31,10 @@ export async function fetchJson(url) {
     catch (error) {
         console.error(error);
     }
+}
+export async function fetchCardsForSet(setId) {
+    const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
+    return data;
 }
 export async function fetchBlob(url) {
     const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);

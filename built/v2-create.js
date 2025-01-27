@@ -11,10 +11,10 @@ import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export async function createCardImgForPulls(card, isOwned, borderColors, title) {
     // TODO: check if uploaded to GH already
-    const imgBlob = await tcg.fetchBlob(card.imgUrl);
+    const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
     const img64 = await utils.convertBlobToBase64(imgBlob);
     if (!img64) {
-        throw new Error(`blob not converted: ${card.imgUrl}`);
+        throw new Error(`blob not converted: ${card.zRaw.images.large}`);
     }
     const imgEl = new Image();
     imgEl.src = img64;
@@ -25,18 +25,18 @@ export async function createCardImgForPulls(card, isOwned, borderColors, title) 
     imgEl.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
     return imgEl;
 }
-export function generateImgMetadata(card) {
-    const isOwned = utils.isOwnedCard(card);
-    let title = `${card.name} : ${card.rarity}${!isOwned ? ' ✨NEW✨' : ''}`;
+export async function generateImgMetadata(card) {
+    const isOwned = await utils.isOwnedCard(card);
+    let title = `${card.zRaw.name} : ${card.zRaw.rarity}${!isOwned ? ' ✨NEW✨' : ''}`;
     const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
     return { isOwned, title, borderColors };
 }
 export async function createCardImgForBinder(card, borderColors, title) {
     // TODO: check if uploaded to GH already
-    const imgBlob = await tcg.fetchBlob(card.imgUrl);
+    const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
     const img64 = await utils.convertBlobToBase64(imgBlob);
     if (!img64) {
-        throw new Error(`blob not converted: ${card.imgUrl}`);
+        throw new Error(`blob not converted: ${card.zRaw.images.large}`);
     }
     const width = 150;
     const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
@@ -67,16 +67,16 @@ export async function createPlaceholderForBinder(borderColors, title, fillColors
     ph.style.setProperty('border-radius', `${width / 20}px`);
     ph.style.setProperty('border', `${width / 15}px solid transparent`);
     ph.innerHTML = `${card.zRaw.number}/${card.zRaw.set.printedTotal} (${card.zRaw.set.total})
-  <br>${card.name}
-  <br>${card.rarity}`;
+  <br>${card.zRaw.name}
+  <br>${card.zRaw.rarity}`;
     return ph;
 }
 export async function createCardsForActiveSetInBinder() {
     const cardData = await get.getCardsForActiveSet();
     const tags = [];
-    sort.sortBySetNum(cardData);
-    for (const card of cardData) {
-        const { isOwned, title, borderColors } = create.generateImgMetadata(card);
+    sort.sortBySetNum(cardData.cards);
+    for (const card of cardData.cards) {
+        const { isOwned, title, borderColors } = await create.generateImgMetadata(card);
         if (isOwned) {
             tags.push(await create.createCardImgForBinder(card, borderColors, title));
         }

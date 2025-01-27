@@ -1,6 +1,7 @@
 // get data, and fetch/store it if not found
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -9,12 +10,21 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export async function getSetMetadata() {
-    let setMetadata = localStorage.getItem(constants.STORAGE_KEYS.setMetadata); // dont use throw
-    if (!setMetadata) {
+    const data = await localbase.db
+        .collection('v2_set_metadata')
+        .get()
+        .then((sets) => {
+        return sets;
+    });
+    if (!data || !data.length) {
         const data = await tcg.fetchJson('https://api.pokemontcg.io/v2/sets');
         return store.storeSetMetaData(data);
     }
-    return JSON.parse(setMetadata);
+    return data;
+}
+export async function getSecret(key) {
+    const secrets = await getSecrets();
+    return secrets[key];
 }
 /**
  * Gets one of the following in preferential order: stored active set, selected set, random set.
@@ -27,13 +37,6 @@ export async function getActiveSet() {
     }
     return activeSet ?? (await pickAndStoreRandomSet());
 }
-async function pickAndStoreRandomSet() {
-    const setData = await getSetMetadata();
-    const setIds = Object.keys(setData);
-    const i = Math.floor(Math.random() * setIds.length);
-    localStorage.setItem(constants.STORAGE_KEYS.activeSet, setIds[i] ?? 'base1');
-    return setIds[i] ?? 'base1';
-}
 export function getSelectedSet() {
     const setDropdown = utils.getElByIdOrThrow('set-dropdown');
     const selectedSet = setDropdown.options[setDropdown.selectedIndex];
@@ -42,24 +45,40 @@ export function getSelectedSet() {
     }
     return '';
 }
-export async function getCardsForActiveSet() {
-    const setId = await getActiveSet();
-    let setData = await get.getSetMetadata();
-    let cards = setData[setId]['cards'];
-    if (!cards || !Object.keys(cards).length) {
-        cards = await tcg.fetchAndStoreCardsBySet(setId);
-    }
-    return cards;
+export async function pickAndStoreRandomSet() {
+    const setData = await getSetMetadata();
+    const setIds = setData.map((set) => {
+        return set.id;
+    });
+    const i = Math.floor(Math.random() * setIds.length);
+    localStorage.setItem(constants.STORAGE_KEYS.activeSet, setIds[i] ?? 'base1');
+    return setIds[i] ?? 'base1';
 }
-export async function getSecret(key) {
-    const secrets = utils.getLsDataOrThrow(constants.STORAGE_KEYS.secrets);
-    if (!secrets) {
-        const fetched = await getSecrets();
-        return fetched[key];
-    }
-    return secrets[key];
+export async function getCardMetadata() {
+    const data = await localbase.db
+        .collection('v2_cards')
+        .get()
+        .then((sets) => {
+        return sets;
+    });
+    return data;
 }
-// getvalues from api objects
+export function getEnergyType(card) {
+    if (card.types && card.types.length && card.types[0]) {
+        return card.types[0].toLowerCase();
+    }
+    else
+        return '';
+}
+export function getDexNum(card) {
+    if (card.nationalPokedexNumbers &&
+        card.nationalPokedexNumbers.length &&
+        card.nationalPokedexNumbers[0]) {
+        return card.nationalPokedexNumbers[0];
+    }
+    else
+        return card.nationalPokedexNumbers;
+}
 /**
  * only returns subtypes that are used for color matching in constants, otherwise return empty string.
  * @param card
@@ -95,25 +114,29 @@ export function getSubtype(card) {
         return subtype.toLowerCase();
     }
 }
-export function getEnergyType(card) {
-    if (card.types && card.types.length && card.types[0]) {
-        return card.types[0].toLowerCase();
+export async function getCardsForActiveSet() {
+    let cards;
+    const activeSet = await getActiveSet();
+    try {
+        cards = await localbase.db
+            .collection('v2_cards')
+            .doc(activeSet)
+            .get()
+            .then((document) => {
+            return document;
+        });
     }
-    else
-        return '';
-}
-export function getDexNum(card) {
-    if (card.nationalPokedexNumbers &&
-        card.nationalPokedexNumbers.length &&
-        card.nationalPokedexNumbers[0]) {
-        return card.nationalPokedexNumbers[0];
+    finally {
+        if (!cards || !Object.keys(cards).length) {
+            cards = await store.storeCardsBySetId(activeSet);
+        }
     }
-    else
-        return card.nationalPokedexNumbers;
+    return cards;
 }
+// getvalues from api objects
 export function getRarityType(card) {
     let gradientKey = 'a_normal';
-    let rarity = card.rarity ?? 'promo';
+    let rarity = card.zRaw.rarity ?? 'promo';
     for (const key in constants.RARITY_MAP) {
         if (constants.RARITY_MAP.hasOwnProperty(key)) {
             if (constants.RARITY_MAP[key] &&
@@ -142,4 +165,22 @@ export function getEnergyColors(card) {
     }
     return ['#00FFFF', '#00FFFF'];
 }
+// TODO: wip
+// async function getBinderCards() {
+//   let cards: string[][] = []; // Initialize an empty array to store the matching documents
+//   localbase.db
+//     .collection('db-binders')
+//     .get()
+//     .then((data: object[]) => {
+//       data.forEach((row: any) => {
+//         if (row.pulled_date === 'classic') {
+//           cards.push(row);
+//         }
+//       });
+//       console.log('Cards array:', cards);
+//     })
+//     .catch((error: any) => {
+//       console.error('Error getting documents: ', error);
+//     });
+// }
 //# sourceMappingURL=v2-get.js.map

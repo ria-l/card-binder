@@ -1,5 +1,6 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -21,20 +22,6 @@ export function toggleStatusModal(message, showHide) {
         statusSpan.className = showHide;
     }
 }
-export function getLsDataOrThrow(storageKey) {
-    const data = localStorage.getItem(storageKey);
-    if (!data) {
-        throw new Error(`No ${storageKey} data found in local storage`);
-    }
-    try {
-        JSON.parse(data);
-    }
-    catch (error) {
-        // parse will throw an error if the data is a string
-        return data;
-    }
-    return JSON.parse(data);
-}
 export async function convertBlobToBase64(blob) {
     try {
         const base64String = await blobToBase64(blob);
@@ -54,11 +41,20 @@ function blobToBase64(blob) {
         reader.readAsDataURL(blob); // Start reading the Blob as a Data URL
     });
 }
-export function isOwnedCard(card) {
-    const owned = utils.getLsDataOrThrow('db-owned');
-    if (owned.some((row) => row[0] === card.id)) {
-        return true;
+export async function isOwnedCard(card) {
+    let result;
+    try {
+        result = await localbase.db
+            .collection('db-owned')
+            .doc({ card_id: card.id })
+            .get();
     }
-    return false;
+    finally {
+    }
+    return result ? true : false;
+}
+export async function changeSet() {
+    const activeSet = store.saveActiveSet();
+    store.storeCardsBySetId(activeSet);
 }
 //# sourceMappingURL=v2-utils.js.map

@@ -1,6 +1,7 @@
 import * as constants from './v2-constants.js';
 import * as create from './v2-create.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -37,22 +38,40 @@ export async function openPack() {
     console.log(pulled);
     processPulled(pulled);
 }
+function groupCardsByRarity(obj) {
+    const groupedCards = {
+        Rare: [],
+        Uncommon: [],
+        Common: [],
+        Star: [],
+    };
+    for (const card of obj.cards) {
+        const rarityGroup = card.zRaw.rarity === 'Rare' ||
+            card.zRaw.rarity === 'Uncommon' ||
+            card.zRaw.rarity === 'Common'
+            ? card.zRaw.rarity
+            : 'Star';
+        groupedCards[rarityGroup].push(card);
+    }
+    return groupedCards;
+}
 async function processPulled(pulled) {
+    const date = new Date();
     for (const [i, card] of pulled.entries()) {
-        const { isOwned, title, borderColors } = create.generateImgMetadata(card);
+        const { isOwned, title, borderColors } = await create.generateImgMetadata(card);
         const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title);
         // for scrolling in to view
-        const imgId = `${card.id}${i.toString()}${new Date().toString()}`;
+        const imgId = `${card.zRaw.id}${i.toString()}${new Date().toString()}`;
         displayLargeCard(imgId, cardImg);
         displaySmallCard(cardImg, imgId);
         addToList(title);
+        // update stored owned
+        await localbase.db
+            .collection('db-owned')
+            .add({ card_id: card.id, pulled_date: date });
     }
-    const values = pulled.map((card) => [card.id, JSON.stringify(new Date())]);
+    const values = pulled.map((card) => [card.id, JSON.stringify(date)]);
     pushToSheets('TEST', values); // TODO: update to prod
-    // update stored owned
-    let owned = utils.getLsDataOrThrow('db-owned'); // TODO should prob be a const but whatever
-    owned = [...owned, ...values];
-    localStorage.setItem('db-owned', JSON.stringify(owned));
     // await gh.uploadImgs(pulled);
 }
 function displayLargeCard(imgId, cardImg) {
@@ -80,22 +99,6 @@ function addToList(title) {
     const li = document.createElement('li');
     li.appendChild(document.createTextNode(title));
     ol.insertBefore(li, ol.firstChild);
-}
-function groupCardsByRarity(cards) {
-    return cards.reduce((acc, card) => {
-        const rarityGroup = card.rarity === 'Rare' ||
-            card.rarity === 'Uncommon' ||
-            card.rarity === 'Common'
-            ? card.rarity
-            : 'Star';
-        // If the rarity group doesn't exist in the accumulator, create it
-        if (!acc[rarityGroup]) {
-            acc[rarityGroup] = [];
-        }
-        // Push the current card into the corresponding rarity array
-        acc[rarityGroup].push(card);
-        return acc;
-    }, {});
 }
 function getRandomCard(cardGroups, defaultGroup, starThreshold, rareThreshold) {
     let cards = cardGroups[defaultGroup] ?? cardGroups['Star']; // accounts for promo sets
