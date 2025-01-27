@@ -38,7 +38,7 @@ async function syncData(forceSync: boolean = false) {
  */
 function setEventListeners() {
   utils.getElByIdOrThrow('set-dropdown').addEventListener('change', () => {
-    changeSet();
+    utils.changeSet();
   });
   utils
     .getElByIdOrThrow('open-pack')
@@ -57,7 +57,3 @@ function setEventListeners() {
     .addEventListener('click', () => get.pickAndStoreRandomSet());
 }
 
-async function changeSet(): Promise<void> {
-  const activeSet = store.saveActiveSet();
-  store.storeCardsBySetId(activeSet);
-}

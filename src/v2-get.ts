@@ -131,7 +131,10 @@ export function getSubtype(card: types.tcgCard) {
   }
 }
 
-export async function getCardsForActiveSet(): Promise<{ id: string; cards: types.Card[] }> {
+export async function getCardsForActiveSet(): Promise<{
+  id: string;
+  cards: types.Card[];
+}> {
   let cards;
   const activeSet = await getActiveSet();
 
@@ -156,7 +159,7 @@ export async function getCardsForActiveSet(): Promise<{ id: string; cards: types
 export function getRarityType(card: types.Card) {
   let gradientKey: 'a_normal' | 'b_holo' | 'c_extra' | 'd_illust' | 'gold' =
     'a_normal';
-  let rarity: string = card.rarity ?? 'promo';
+  let rarity: string = card.zRaw.rarity ?? 'promo';
   for (const key in constants.RARITY_MAP) {
     if (constants.RARITY_MAP.hasOwnProperty(key)) {
       if (

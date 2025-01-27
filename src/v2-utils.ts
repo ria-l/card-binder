@@ -61,3 +61,8 @@ export async function isOwnedCard(card: types.Card): Promise<boolean> {
   }
   return result ? true : false;
 }
+
+export async function changeSet(): Promise<void> {
+  const activeSet = store.saveActiveSet();
+  store.storeCardsBySetId(activeSet);
+}

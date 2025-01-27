@@ -54,10 +54,10 @@ export async function createCardImgForBinder(
   title: string
 ): Promise<HTMLImageElement> {
   // TODO: check if uploaded to GH already
-  const imgBlob = await tcg.fetchBlob(card.imgUrl);
+  const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
   const img64 = await utils.convertBlobToBase64(imgBlob);
   if (!img64) {
-    throw new Error(`blob not converted: ${card.imgUrl}`);
+    throw new Error(`blob not converted: ${card.zRaw.images.large}`);
   }
   const width = 150;
   const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
@@ -99,19 +99,22 @@ export async function createPlaceholderForBinder(
   ph.style.setProperty('border-radius', `${width / 20}px`);
   ph.style.setProperty('border', `${width / 15}px solid transparent`);
   ph.innerHTML = `${card.zRaw.number}/${card.zRaw.set.printedTotal} (${card.zRaw.set.total})
-  <br>${card.name}
-  <br>${card.rarity}`;
+  <br>${card.zRaw.name}
+  <br>${card.zRaw.rarity}`;
   return ph;
 }
 
 export async function createCardsForActiveSetInBinder(): Promise<
   (HTMLImageElement | HTMLSpanElement)[]
 > {
-  const cardData: types.Card[] = await get.getCardsForActiveSet();
+  const cardData: { id: string; cards: types.Card[] } =
+    await get.getCardsForActiveSet();
   const tags = [];
-  sort.sortBySetNum(cardData);
-  for (const card of cardData) {
-    const { isOwned, title, borderColors } = create.generateImgMetadata(card);
+  sort.sortBySetNum(cardData.cards);
+  for (const card of cardData.cards) {
+    const { isOwned, title, borderColors } = await create.generateImgMetadata(
+      card
+    );
     if (isOwned) {
       tags.push(await create.createCardImgForBinder(card, borderColors, title));
     } else {
