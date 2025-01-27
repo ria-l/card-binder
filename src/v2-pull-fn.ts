@@ -17,7 +17,6 @@ export async function openPack() {
     await get.getCardsForActiveSet();
   const cardGroups = groupCardsByRarity(cards);
   const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
-
   const pulled: types.Card[] = [];
 
   for (let i = 0; i < 5; i++) {

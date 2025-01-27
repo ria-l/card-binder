@@ -1,5 +1,6 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -27,20 +28,6 @@ export function toggleStatusModal(
   }
 }
 
-export function getLsDataOrThrow(storageKey: string): any | null {
-  const data = localStorage.getItem(storageKey);
-  if (!data) {
-    throw new Error(`No ${storageKey} data found in local storage`);
-  }
-  try {
-    JSON.parse(data);
-  } catch (error) {
-    // parse will throw an error if the data is a string
-    return data;
-  }
-  return JSON.parse(data);
-}
-
 export async function convertBlobToBase64(blob: Blob) {
   try {
     const base64String = await blobToBase64(blob);
@@ -64,9 +51,16 @@ function blobToBase64(blob: Blob): Promise<string> {
 }
 
 export function isOwnedCard(card: types.Card): boolean {
-  const owned = utils.getLsDataOrThrow('db-owned');
-  if (owned.some((row: string[]) => row[0] === card.id)) {
-    return true;
+  try {
+    localbase.db
+      .collection('db-owned')
+      .doc({ card_id: card.id })
+      .get()
+      .then((document: string) => {
+        console.log(document);
+        return true;
+      });
+  } finally {
+    return false;
   }
-  return false;
 }
