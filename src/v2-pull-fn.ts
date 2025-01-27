@@ -1,6 +1,7 @@
 import * as constants from './v2-constants.js';
 import * as create from './v2-create.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -66,6 +67,7 @@ function groupCardsByRarity(obj: { id: string; cards: types.Card[] }) {
 }
 
 async function processPulled(pulled: types.Card[]) {
+  const date = new Date();
   for (const [i, card] of pulled.entries()) {
     const { isOwned, title, borderColors } = await create.generateImgMetadata(
       card
@@ -81,14 +83,13 @@ async function processPulled(pulled: types.Card[]) {
     displayLargeCard(imgId, cardImg);
     displaySmallCard(cardImg, imgId);
     addToList(title);
+    // update stored owned
+    await localbase.db
+      .collection('db-owned')
+      .add({ card_id: card.id, pulled_date: date });
   }
-
-  const values = pulled.map((card) => [card.id, JSON.stringify(new Date())]);
+  const values = pulled.map((card) => [card.id, JSON.stringify(date)]);
   pushToSheets('TEST', values); // TODO: update to prod
-  // update stored owned
-  let owned = utils.getLsDataOrThrow('db-owned'); // TODO should prob be a const but whatever
-  owned = [...owned, ...values];
-  localStorage.setItem('db-owned', JSON.stringify(owned));
 
   // await gh.uploadImgs(pulled);
 }

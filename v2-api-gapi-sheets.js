@@ -47,3 +47,30 @@ async function storeEachSheet(response, db) {
     }
   }
 }
+
+async function pushToSheets(range, values) {
+tokenClient.callback = async (resp) => {
+  if (resp.error !== undefined) {
+    throw resp;
+  }
+  const secrets = await getSecrets();
+  const request = {
+    spreadsheetId: secrets.sheet_id,
+    range: range,
+    valueInputOption: 'USER_ENTERED',
+    resource: {
+      majorDimension: 'ROWS',
+      values: values,
+    },
+  };
+  try {
+    const response = (
+      await gapi.client.sheets.spreadsheets.values.append(request)
+    ).data;
+    console.log(JSON.stringify(response));
+  } catch (err) {
+    console.error(err);
+  }
+};
+tokenClient.requestAccessToken({ prompt: '' });
+}
