@@ -27,7 +27,6 @@ async function initializeGapiClient() {
     discoveryDocs: [DISCOVERY_DOC],
   });
   gapiInited = true;
-  addModuleToPage();
 }
 
 /**
@@ -41,22 +40,64 @@ async function gisLoaded() {
     callback: '', // defined later
   });
   gisInited = true;
-  addModuleToPage();
+  authUser();
+  retryAddModuleToPage();
+}
+
+async function authUser() {
+  console.log('Authorizing user...')
+  // Create a promise to wait for the callback to complete
+  const tokenRequestPromise = new Promise((resolve, reject) => {
+    // Set the callback on tokenClient
+    tokenClient.callback = async (resp) => {
+      if (resp.error !== undefined) {
+        reject(resp); // Reject if there's an error
+      } else {
+        resolve(resp); // Resolve when we get a valid response
+      }
+    };
+  });
+  // Await the token request, which will pause until the promise resolves/rejects
+  await tokenClient.requestAccessToken({ prompt: '' });
+  // Wait for the token request's callback to complete
+  await tokenRequestPromise;
 }
 
 function addModuleToPage() {
-  if (gapiInited && gisInited) {
-    console.log('successfully initiated gapi');
-    let moduleScript = document.createElement('script');
-    moduleScript.defer = true;
-    moduleScript.type = 'module';
-    const urlPath = new URL(document.URL).pathname;
-    if (urlPath.includes('pull.html')) {
-      moduleScript.src = 'built/v2-pull.js';
-    } else if (urlPath.includes('index.html')) {
-      moduleScript.src = 'built/v2-index.js';
-    }
-    document.head.appendChild(moduleScript);
-    console.log('module script added to page.');
+  let moduleScript = document.createElement('script');
+  moduleScript.defer = true;
+  moduleScript.type = 'module';
+  const urlPath = new URL(document.URL).pathname;
+  if (urlPath.includes('pull.html')) {
+    moduleScript.src = 'built/v2-pull.js';
+  } else if (urlPath.includes('index.html')) {
+    moduleScript.src = 'built/v2-index.js';
   }
+  document.head.appendChild(moduleScript);
+}
+
+async function retryAddModuleToPage(maxRetries = 5, delay = 2000) {
+  let attempts = 0;
+
+  while (attempts < maxRetries) {
+    if (gapiInited && gisInited) {
+      console.log('Both gapi and gis are initialized, adding module...');
+      addModuleToPage();
+      console.log('Module successfully added.');
+      return;
+    }
+
+    // If not initialized, retry after waiting for the delay
+    attempts++;
+    console.log(
+      `Attempt ${attempts}: gapiInited = ${gapiInited}, gisInited = ${gisInited}. Retrying in ${
+        delay / 1000
+      } seconds...`
+    );
+
+    // Wait before retrying
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
+  console.log('Max retries reached. gapi or gis is not initialized.');
+  throw new Error('Failed to initialize gapi and gis after maximum retries');
 }

@@ -8,28 +8,22 @@ async function fetchAndStoreSheets(forceSync = false) {
   if (storedData.length && !forceSync) {
     return;
   }
+  const secrets = await getSecrets();
+  let response;
 
-  tokenClient.callback = async (resp) => {
-    if (resp.error !== undefined) {
-      throw resp;
-    }
-    const secrets = await getSecrets();
-    let response;
+  try {
+    response = await gapi.client.sheets.spreadsheets.values.batchGet({
+      spreadsheetId: secrets.sheet_id,
+      ranges: SHEET_NAMES,
+      majorDimension: 'ROWS',
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
 
-    try {
-      response = await gapi.client.sheets.spreadsheets.values.batchGet({
-        spreadsheetId: secrets.sheet_id,
-        ranges: SHEET_NAMES,
-        majorDimension: 'ROWS',
-      });
-    } catch (err) {
-      throw new Error(err);
-    }
-    await db.collection(RAW_SHEETS_DATA_KEY).delete();
-    await db.collection(RAW_SHEETS_DATA_KEY).add(response.result);
-    await storeEachSheet(response, db);
-  };
-  tokenClient.requestAccessToken({ prompt: '' });
+  await db.collection(RAW_SHEETS_DATA_KEY).delete();
+  await db.collection(RAW_SHEETS_DATA_KEY).add(response.result);
+  await storeEachSheet(response, db);
 }
 
 async function storeEachSheet(response, db) {
@@ -49,10 +43,6 @@ async function storeEachSheet(response, db) {
 }
 
 async function pushToSheets(range, values) {
-tokenClient.callback = async (resp) => {
-  if (resp.error !== undefined) {
-    throw resp;
-  }
   const secrets = await getSecrets();
   const request = {
     spreadsheetId: secrets.sheet_id,
@@ -71,6 +61,4 @@ tokenClient.callback = async (resp) => {
   } catch (err) {
     console.error(err);
   }
-};
-tokenClient.requestAccessToken({ prompt: '' });
 }
