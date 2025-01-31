@@ -51,4 +51,12 @@ export async function storeCardsBySetId(setId) {
     await localbase.db.collection('v2_cards').add(toStore, setId);
     return toStore;
 }
+export async function storeGhImgPaths(data) {
+    localbase.db.config.debug = false;
+    for (const item of data.tree) {
+        await localbase.db
+            .collection(constants.STORAGE_KEYS.filePaths)
+            .add({ path: item.path });
+    }
+}
 //# sourceMappingURL=v2-store.js.map

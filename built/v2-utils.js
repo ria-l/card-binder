@@ -1,6 +1,7 @@
 import * as binder from './v2-binder.js';
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as gh from './v2-api-github.js';
 import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
@@ -52,12 +53,26 @@ export async function isOwnedCard(card) {
             .get();
     }
     finally {
+        return result ? true : false;
     }
-    return result ? true : false;
 }
 export async function changeSet() {
     const activeSet = store.saveActiveSet();
     store.storeCardsBySetId(activeSet);
     binder.refreshBinder();
+}
+export async function fileInGithub(path) {
+    let result;
+    localbase.db.config.debug = true;
+    try {
+        result = await localbase.db
+            .collection(constants.STORAGE_KEYS.filePaths)
+            .doc({ path: path })
+            .get();
+        console.log(result);
+    }
+    finally {
+        return result ? true : false;
+    }
 }
 //# sourceMappingURL=v2-utils.js.map

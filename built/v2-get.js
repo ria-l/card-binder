@@ -228,4 +228,19 @@ export function getGridRow() {
 //       console.error('Error getting documents: ', error);
 //     });
 // }
+export async function getImgSrc(card, img) {
+    const url = new URL(card.zRaw.images.large);
+    const path = url.pathname.substring(1); // 'xy0/2_hires.png'
+    if (await utils.fileInGithub(path)) {
+        img.src = `img/${path}`;
+    }
+    else {
+        const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
+        const img64 = await utils.convertBlobToBase64(imgBlob);
+        if (!img64) {
+            throw new Error(`blob not converted: ${card.zRaw.images.large}`);
+        }
+        img.src = img64;
+    }
+}
 //# sourceMappingURL=v2-get.js.map

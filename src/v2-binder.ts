@@ -56,7 +56,7 @@ function createTables(
     // If no rows or columns, simply return the cards and spaces
     return cardImgs.map((card) => [card, document.createTextNode(' ')]).flat();
   }
-  
+
   const allTables: (HTMLImageElement | HTMLSpanElement | Text)[] = [];
   let currentTable: HTMLTableElement;
   let currentRow: HTMLTableRowElement;

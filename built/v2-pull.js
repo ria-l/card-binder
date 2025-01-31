@@ -1,5 +1,6 @@
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as gh from './v2-api-github.js';
 import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
@@ -16,6 +17,7 @@ async function main() {
         await syncData();
     }
     await ui.fillSetDropdown();
+    await gh.fetchAndStoreGh();
     setEventListeners();
     localStorage.setItem('storage_init', 'SUCCESS');
     localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
@@ -45,6 +47,6 @@ function setEventListeners() {
         .addEventListener('click', () => syncData(true));
     utils
         .getElByIdOrThrow('debug-button')
-        .addEventListener('click', () => get.pickAndStoreRandomSet());
+        .addEventListener('click', () => gh.fetchAndStoreGh());
 }
 //# sourceMappingURL=v2-pull.js.map

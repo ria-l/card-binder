@@ -2,6 +2,7 @@ import * as binder from './v2-binder.js';
 import * as create from './v2-create.js';
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as gh from './v2-api-github.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -16,6 +17,7 @@ async function main() {
         localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
         await syncData();
     }
+    await gh.fetchAndStoreGh();
     await ui.fillSetDropdown();
     create.fillSizeDropdown();
     create.fillGridDropdown();

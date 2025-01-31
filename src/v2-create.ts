@@ -16,23 +16,18 @@ export async function createCardImgForPulls(
   borderColors: string,
   title: string
 ) {
-  // TODO: check if uploaded to GH already
-  const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
-  const img64 = await utils.convertBlobToBase64(imgBlob);
-  if (!img64) {
-    throw new Error(`blob not converted: ${card.zRaw.images.large}`);
-  }
-  const imgEl = new Image();
-  imgEl.src = img64;
-  imgEl.title = title;
+  const img = new Image();
+  await get.getImgSrc(card, img);
+
+  img.title = title;
   if (isOwned) {
-    imgEl.classList.add('owned');
+    img.classList.add('owned');
   }
-  imgEl.style.setProperty(
+  img.style.setProperty(
     'background',
     `linear-gradient(to bottom right, ${borderColors}) border-box`
   );
-  return imgEl;
+  return img;
 }
 
 export async function generateImgMetadata(card: types.Card) {
@@ -53,17 +48,11 @@ export async function createCardImgForBinder(
   borderColors: string,
   title: string
 ): Promise<HTMLImageElement> {
-  // TODO: check if uploaded to GH already
-  const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
-  const img64 = await utils.convertBlobToBase64(imgBlob);
-  if (!img64) {
-    throw new Error(`blob not converted: ${card.zRaw.images.large}`);
-  }
   const width = get.getCardSize();
   const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
 
   const img = new Image(width, height);
-  img.src = img64;
+  await get.getImgSrc(card, img);
   img.title = title;
   img.style.setProperty(
     'background',
