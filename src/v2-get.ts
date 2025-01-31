@@ -28,7 +28,8 @@ export async function getSetMetadata(): Promise<types.tcgSet[]> {
     );
     return store.storeSetMetaData(data);
   }
-  return data;
+  const sorted = sort.sortSetsByReleaseDate(data);
+  return sorted;
 }
 
 export async function getSecret(key: string): Promise<string> {

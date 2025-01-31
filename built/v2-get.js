@@ -21,7 +21,8 @@ export async function getSetMetadata() {
         const data = await tcg.fetchJson('https://api.pokemontcg.io/v2/sets');
         return store.storeSetMetaData(data);
     }
-    return data;
+    const sorted = sort.sortSetsByReleaseDate(data);
+    return sorted;
 }
 export async function getSecret(key) {
     const secrets = await getSecrets();
