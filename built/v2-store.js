@@ -59,4 +59,10 @@ export async function storeGhImgPaths(data) {
             .add({ path: item.path });
     }
 }
+export async function storeBlob(card, blob64) {
+    localbase.db.config.debug = false;
+    await localbase.db
+        .collection(constants.STORAGE_KEYS.blobs)
+        .add({ card_id: card.id, blob64: blob64 }, card.id);
+}
 //# sourceMappingURL=v2-store.js.map

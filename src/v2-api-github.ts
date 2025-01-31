@@ -13,8 +13,7 @@ export async function fetchGhJson(
   url: string
 ): Promise<types.GithubTree | undefined> {
   try {
-    utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
-    console.log('fetching', url);
+    console.log(`Fetching ${url}`);
     const response = await fetch(url, {
       method: 'GET',
     });
@@ -23,8 +22,6 @@ export async function fetchGhJson(
     }
 
     const data = await response.json();
-
-    utils.toggleStatusModal('', 'hide');
 
     return data;
   } catch (error) {

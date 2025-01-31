@@ -73,3 +73,14 @@ export async function storeGhImgPaths(data: types.GithubTree): Promise<void> {
       .add({ path: item.path });
   }
 }
+
+export async function storeBlob(
+  card: types.Card,
+  blob64: string
+): Promise<void> {
+  localbase.db.config.debug = false;
+
+  await localbase.db
+    .collection(constants.STORAGE_KEYS.blobs)
+    .add({ card_id: card.id, blob64: blob64 }, card.id);
+}

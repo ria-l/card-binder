@@ -2,6 +2,7 @@ import * as binder from './v2-binder.js';
 import * as constants from './v2-constants.js';
 import * as create from './v2-create.js';
 import * as get from './v2-get.js';
+import * as localbase from './v2-localbase.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -9,9 +10,9 @@ import * as tcg from './v2-api-tcg.js';
 import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
-export async function createCardImgForPulls(card, isOwned, borderColors, title) {
+export async function createCardImgForPulls(card, isOwned, borderColors, title, blobsObj, filePathsObj) {
     const img = new Image();
-    await get.getImgSrc(card, img);
+    await get.getImgSrc(card, img, blobsObj, filePathsObj);
     img.title = title;
     if (isOwned) {
         img.classList.add('owned');
@@ -25,11 +26,11 @@ export async function generateImgMetadata(card) {
     const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
     return { isOwned, title, borderColors };
 }
-export async function createCardImgForBinder(card, borderColors, title) {
+export async function createCardImgForBinder(card, borderColors, title, blobsObj, filePathsObj) {
     const width = get.getCardSize();
     const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
     const img = new Image(width, height);
-    await get.getImgSrc(card, img);
+    await get.getImgSrc(card, img, blobsObj, filePathsObj);
     img.title = title;
     img.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
     img.style.setProperty('border-radius', `${width / 20}px`);
@@ -61,13 +62,25 @@ export async function createPlaceholderForBinder(borderColors, title, fillColors
     return ph;
 }
 export async function createCardsForActiveSetInBinder() {
+    const blobsObj = await localbase.db
+        .collection(constants.STORAGE_KEYS.blobs)
+        .get()
+        .then((blobs) => {
+        return blobs;
+    });
+    const filePathsObj = await localbase.db
+        .collection(constants.STORAGE_KEYS.filePaths)
+        .get()
+        .then((blobs) => {
+        return blobs;
+    });
     const cardData = await get.getCardsForActiveSet();
     const tags = [];
     sort.sortBySetNum(cardData.cards);
     for (const card of cardData.cards) {
         const { isOwned, title, borderColors } = await create.generateImgMetadata(card);
         if (isOwned) {
-            tags.push(await create.createCardImgForBinder(card, borderColors, title));
+            tags.push(await create.createCardImgForBinder(card, borderColors, title, blobsObj, filePathsObj));
         }
         else {
             const fillColors = binder.generateFillColors(card);

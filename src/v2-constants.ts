@@ -7,6 +7,7 @@ export const GITHUB_TREE_URL =
 export const STORAGE_KEYS = {
   activeSet: 'v2_active_set',
   appscriptUrl: 'v2_appscript_url', // also in main
+  blobs: 'v2_blobs',
   filePaths: 'v2_filepaths',
   owned: 'v2_owned',
   rawSheetsData: 'v2_raw_sheets_data', // also in main

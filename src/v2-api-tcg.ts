@@ -17,7 +17,7 @@ export async function fetchJson(url: string): Promise<any> {
   const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
 
   try {
-    utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
+    console.log(`Fetching ${url}`);
 
     const response = await fetch(url, {
       method: 'GET',
@@ -30,8 +30,6 @@ export async function fetchJson(url: string): Promise<any> {
     }
 
     const data = await response.json();
-
-    utils.toggleStatusModal('', 'hide');
 
     return data.data;
   } catch (error) {
@@ -48,7 +46,7 @@ export async function fetchBlob(url: string): Promise<any> {
   const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
 
   try {
-    utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
+    console.log(`Fetching ${url}`);
 
     const response = await fetch(url, {
       method: 'GET',
@@ -59,8 +57,6 @@ export async function fetchBlob(url: string): Promise<any> {
     if (!response.ok) {
       throw new Error(`Failed to fetch data from ${url}`);
     }
-
-    utils.toggleStatusModal('', 'hide');
 
     return response.blob();
   } catch (error) {

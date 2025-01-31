@@ -17,7 +17,7 @@ declare function getSecrets(): any;
 export async function getSetMetadata(): Promise<types.tcgSet[]> {
   localbase.db.config.debug = false;
   const data = await localbase.db
-    .collection('v2_set_metadata')
+    .collection(constants.STORAGE_KEYS.setMetadata)
     .get()
     .then((sets: any) => {
       return sets;
@@ -281,18 +281,39 @@ export function getGridRow(): number {
 //     });
 // }
 
-export async function getImgSrc(card: types.Card, img: HTMLImageElement) {
+export async function getImgSrc(
+  card: types.Card,
+  img: HTMLImageElement,
+  blobsObj: {
+    card_id: string;
+    blob64: string;
+  }[],
+  filePathsObj: { path: string }[]
+) {
+  utils.toggleStatusModal(card.id, 'showstatus');
   const url = new URL(card.zRaw.images.large);
   const path = url.pathname.substring(1); // 'xy0/2_hires.png'
+  const blobInStorage = await utils.blobInStorage(card, blobsObj);
+  const pathInStorage = await utils.pathInStorage(path, filePathsObj);
 
-  if (await utils.fileInGithub(path)) {
+  // in file system
+  if (pathInStorage) {
     img.src = `img/${path}`;
-  } else {
+  }
+
+  // in indexdb
+  else if (blobInStorage) {
+    img.src = blobInStorage;
+  }
+
+  // fetch and store
+  else {
     const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
     const img64 = await utils.convertBlobToBase64(imgBlob);
     if (!img64) {
       throw new Error(`blob not converted: ${card.zRaw.images.large}`);
     }
     img.src = img64;
+    await store.storeBlob(card, img64);
   }
 }

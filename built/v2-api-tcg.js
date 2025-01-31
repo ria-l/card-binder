@@ -14,7 +14,7 @@ export async function fetchAndStoreSetMetadata(forceSync = false) {
 export async function fetchJson(url) {
     const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
     try {
-        utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
+        console.log(`Fetching ${url}`);
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -25,7 +25,6 @@ export async function fetchJson(url) {
             throw new Error(`Failed to fetch data from ${url}`);
         }
         const data = await response.json();
-        utils.toggleStatusModal('', 'hide');
         return data.data;
     }
     catch (error) {
@@ -39,7 +38,7 @@ export async function fetchCardsForSet(setId) {
 export async function fetchBlob(url) {
     const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
     try {
-        utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
+        console.log(`Fetching ${url}`);
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -49,7 +48,6 @@ export async function fetchBlob(url) {
         if (!response.ok) {
             throw new Error(`Failed to fetch data from ${url}`);
         }
-        utils.toggleStatusModal('', 'hide');
         return response.blob();
     }
     catch (error) {

@@ -71,16 +71,36 @@ export async function changeSet(): Promise<void> {
   binder.refreshBinder();
 }
 
-export async function fileInGithub(path: string): Promise<boolean> {
-  let result;
-  localbase.db.config.debug = true;
-  try {
-    result = await localbase.db
-      .collection(constants.STORAGE_KEYS.filePaths)
-      .doc({ path: path })
-      .get();
-    console.log(result);
-  } finally {
-    return result ? true : false;
+export async function pathInStorage(
+  path: string,
+  filePathsObj: { path: string }[]
+): Promise<boolean> {
+  if (!filePathsObj) {
+    return false;
   }
+  const filePathsByCardId: any = new Map(
+    filePathsObj.map((obj: { path: string }) => [obj.path, obj])
+  );
+  return filePathsByCardId.get(path) ? true : false;
+}
+
+export async function blobInStorage(
+  card: types.Card,
+  blobsObj: {
+    card_id: string;
+    blob64: string;
+  }[]
+): Promise<string | undefined> {
+  if (!blobsObj) {
+    return undefined;
+  }
+  const blobsByCardId: any = new Map(
+    blobsObj.map((obj: { card_id: string; blob64: string }) => [
+      obj.card_id,
+      obj,
+    ])
+  );
+
+  const result = blobsByCardId.get(card.id);
+  return result ? blobsByCardId.get(card.id).blob64 : undefined;
 }

@@ -10,14 +10,15 @@ import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
 export async function fillPage() {
+  utils.toggleStatusModal('loading binder...', 'showstatus');
   const cards = await create.createCardsForActiveSetInBinder();
   const contentDiv = utils.getElByIdOrThrow('content-div');
   contentDiv.innerHTML = '';
-
   const tables = createTables(cards);
   tables.forEach((table) => {
     contentDiv.appendChild(table);
   });
+  utils.toggleStatusModal('', 'hide');
 }
 
 export function generateFillColors(card: types.Card): string {

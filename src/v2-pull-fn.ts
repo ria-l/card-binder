@@ -14,6 +14,19 @@ import * as utils from './v2-utils.js';
 declare function pushToSheets(range: string, values: (string | Date)[][]): any;
 
 export async function openPack() {
+  const blobsObj = await localbase.db
+    .collection(constants.STORAGE_KEYS.blobs)
+    .get()
+    .then((blobs: any) => {
+      return blobs;
+    });
+  const filePathsObj = await localbase.db
+    .collection(constants.STORAGE_KEYS.filePaths)
+    .get()
+    .then((blobs: any) => {
+      return blobs;
+    });
+
   const cards: { id: string; cards: types.Card[] } =
     await get.getCardsForActiveSet();
   const cardGroups = groupCardsByRarity(cards);
@@ -38,7 +51,8 @@ export async function openPack() {
     pulled.push(card);
   }
   console.log(pulled);
-  processPulled(pulled);
+  await processPulled(pulled, blobsObj, filePathsObj);
+  utils.toggleStatusModal('', 'hide');
 }
 
 function groupCardsByRarity(obj: { id: string; cards: types.Card[] }) {
@@ -60,17 +74,27 @@ function groupCardsByRarity(obj: { id: string; cards: types.Card[] }) {
   return groupedCards;
 }
 
-async function processPulled(pulled: types.Card[]) {
+async function processPulled(
+  pulled: types.Card[],
+  blobsObj: {
+    card_id: string;
+    blob64: string;
+  }[],
+  filePathsObj: { path: string }[]
+) {
   const date = new Date();
   for (const [i, card] of pulled.entries()) {
     const { isOwned, title, borderColors } = await create.generateImgMetadata(
       card
     );
+
     const cardImg = await create.createCardImgForPulls(
       card,
       isOwned,
       borderColors,
-      title
+      title,
+      blobsObj,
+      filePathsObj
     );
     // for scrolling in to view
     const imgId = `${card.zRaw.id}${i.toString()}${new Date().toString()}`;
@@ -85,7 +109,6 @@ async function processPulled(pulled: types.Card[]) {
   }
   const values = pulled.map((card) => [card.id, JSON.stringify(date)]);
   pushToSheets('TEST', values); // TODO: update to prod
-
   // await gh.uploadImgs(pulled);
 }
 

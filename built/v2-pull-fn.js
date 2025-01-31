@@ -10,6 +10,18 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export async function openPack() {
+    const blobsObj = await localbase.db
+        .collection(constants.STORAGE_KEYS.blobs)
+        .get()
+        .then((blobs) => {
+        return blobs;
+    });
+    const filePathsObj = await localbase.db
+        .collection(constants.STORAGE_KEYS.filePaths)
+        .get()
+        .then((blobs) => {
+        return blobs;
+    });
     const cards = await get.getCardsForActiveSet();
     const cardGroups = groupCardsByRarity(cards);
     const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
@@ -36,7 +48,8 @@ export async function openPack() {
         pulled.push(card);
     }
     console.log(pulled);
-    processPulled(pulled);
+    await processPulled(pulled, blobsObj, filePathsObj);
+    utils.toggleStatusModal('', 'hide');
 }
 function groupCardsByRarity(obj) {
     const groupedCards = {};
@@ -53,11 +66,11 @@ function groupCardsByRarity(obj) {
     }
     return groupedCards;
 }
-async function processPulled(pulled) {
+async function processPulled(pulled, blobsObj, filePathsObj) {
     const date = new Date();
     for (const [i, card] of pulled.entries()) {
         const { isOwned, title, borderColors } = await create.generateImgMetadata(card);
-        const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title);
+        const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title, blobsObj, filePathsObj);
         // for scrolling in to view
         const imgId = `${card.zRaw.id}${i.toString()}${new Date().toString()}`;
         displayLargeCard(imgId, cardImg);

@@ -10,8 +10,7 @@ import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export async function fetchGhJson(url) {
     try {
-        utils.toggleStatusModal(`Fetching ${url}`, 'showstatus');
-        console.log('fetching', url);
+        console.log(`Fetching ${url}`);
         const response = await fetch(url, {
             method: 'GET',
         });
@@ -19,7 +18,6 @@ export async function fetchGhJson(url) {
             throw new Error(`Failed to fetch data from ${url}`);
         }
         const data = await response.json();
-        utils.toggleStatusModal('', 'hide');
         return data;
     }
     catch (error) {

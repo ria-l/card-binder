@@ -61,18 +61,22 @@ export async function changeSet() {
     store.storeCardsBySetId(activeSet);
     binder.refreshBinder();
 }
-export async function fileInGithub(path) {
-    let result;
-    localbase.db.config.debug = true;
-    try {
-        result = await localbase.db
-            .collection(constants.STORAGE_KEYS.filePaths)
-            .doc({ path: path })
-            .get();
-        console.log(result);
+export async function pathInStorage(path, filePathsObj) {
+    if (!filePathsObj) {
+        return false;
     }
-    finally {
-        return result ? true : false;
+    const filePathsByCardId = new Map(filePathsObj.map((obj) => [obj.path, obj]));
+    return filePathsByCardId.get(path) ? true : false;
+}
+export async function blobInStorage(card, blobsObj) {
+    if (!blobsObj) {
+        return undefined;
     }
+    const blobsByCardId = new Map(blobsObj.map((obj) => [
+        obj.card_id,
+        obj,
+    ]));
+    const result = blobsByCardId.get(card.id);
+    return result ? blobsByCardId.get(card.id).blob64 : undefined;
 }
 //# sourceMappingURL=v2-utils.js.map
