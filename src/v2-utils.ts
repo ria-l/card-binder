@@ -57,7 +57,7 @@ export async function isOwnedCard(card: types.Card): Promise<boolean> {
   localbase.db.config.debug = false;
   try {
     result = await localbase.db
-      .collection('db-owned')
+      .collection(constants.STORAGE_KEYS.owned)
       .doc({ card_id: card.id })
       .get();
   } finally {

@@ -202,7 +202,6 @@ ol {
   display: inline-block;
 }
 #large-card-span {
-  display: flex;
   flex-direction: column;
   overflow: auto;
   max-height: 98vh;
@@ -223,6 +222,7 @@ ol {
   }
   #large-card-span {
     max-height: 600px;
+    display: flex;
   }
   .navbar {
     bottom: 0;

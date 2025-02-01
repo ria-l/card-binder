@@ -60,7 +60,9 @@ export async function storeCardsBySetId(setId: string): Promise<{
   );
   const toStore = { id: setId, cards: customizedCards };
   localbase.db.config.debug = false;
-  await localbase.db.collection('v2_cards').add(toStore, setId);
+  await localbase.db
+    .collection(constants.STORAGE_KEYS.cards)
+    .add(toStore, setId);
   return toStore;
 }
 

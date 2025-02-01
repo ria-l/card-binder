@@ -101,6 +101,7 @@ export async function createPlaceholderForBinder(
   ph.style.setProperty('font-size', `${width / 10}px`);
   ph.innerHTML = `${card.zRaw.number}/${card.zRaw.set.printedTotal} (${card.zRaw.set.total})
   <br>${card.zRaw.name}
+  <br>#${card.nationalDex}
   <br>${card.zRaw.rarity}`;
   return ph;
 }
@@ -121,11 +122,12 @@ export async function createCardsForActiveSetInBinder(): Promise<
       return blobs;
     });
 
-  const cardData: { id: string; cards: types.Card[] } =
-    await get.getCardsForActiveSet();
   const tags = [];
-  sort.sortBySetNum(cardData.cards);
-  for (const card of cardData.cards) {
+  const sorted = await sort.sortCards();
+  if (!sorted) {
+    throw new Error('couldnt sort');
+  }
+  for (const card of sorted) {
     const { isOwned, title, borderColors } = await create.generateImgMetadata(
       card
     );

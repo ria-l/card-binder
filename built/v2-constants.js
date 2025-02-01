@@ -4,9 +4,10 @@ export const GITHUB_TREE_URL = 'https://api.github.com/repos/ria-l/card-binder/g
 export const STORAGE_KEYS = {
     activeSet: 'v2_active_set',
     appscriptUrl: 'v2_appscript_url', // also in main
+    cards: 'v2_cards',
     blobs: 'v2_blobs',
     filePaths: 'v2_filepaths',
-    owned: 'v2_owned',
+    owned: 'db-owned',
     rawSheetsData: 'v2_raw_sheets_data', // also in main
     secrets: 'v2_secrets', // also in main
     setMetadata: 'v2_set_metadata',
@@ -23,6 +24,11 @@ export const SECRETS_KEYS = {
     ghProjectId: 'project_id',
     gsheetId: 'sheet_id',
     tcgapiKey: 'pkmn_api_key',
+};
+export const SHEET_NAMES = {
+    owned: 'db-owned',
+    cards: 'db-cards',
+    binders: 'db-binders',
 };
 // left colors for pokemon and energy
 export const ENERGY_COLORS = {
@@ -100,7 +106,6 @@ export const RARITY_MAP = {
         'rare shiny gx',
         'rare ultra',
         'shiny ultra rare',
-        'ultra rare',
         'ultra rare',
     ],
     d_illust: [

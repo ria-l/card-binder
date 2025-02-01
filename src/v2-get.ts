@@ -74,7 +74,7 @@ export async function pickAndStoreRandomSet(): Promise<string> {
 export async function getCardMetadata(): Promise<types.CardsDb> {
   localbase.db.config.debug = false;
   const data = await localbase.db
-    .collection('v2_cards')
+    .collection(constants.STORAGE_KEYS.cards)
     .get()
     .then((sets: any) => {
       return sets;
@@ -143,7 +143,7 @@ export async function getCardsForActiveSet(): Promise<{
   localbase.db.config.debug = false;
   try {
     cards = await localbase.db
-      .collection('v2_cards')
+      .collection(constants.STORAGE_KEYS.cards)
       .doc(activeSet)
       .get()
       .then((document: any) => {

@@ -104,11 +104,11 @@ async function processPulled(
     // update stored owned
     localbase.db.config.debug = false;
     await localbase.db
-      .collection('db-owned')
+      .collection(constants.STORAGE_KEYS.owned)
       .add({ card_id: card.id, pulled_date: date });
   }
   const values = pulled.map((card) => [card.id, JSON.stringify(date)]);
-  pushToSheets('TEST', values); // TODO: update to prod
+  pushToSheets(constants.SHEET_NAMES.owned, values);
   // await gh.uploadImgs(pulled);
 }
 

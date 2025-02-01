@@ -48,7 +48,9 @@ export async function storeCardsBySetId(setId) {
     }));
     const toStore = { id: setId, cards: customizedCards };
     localbase.db.config.debug = false;
-    await localbase.db.collection('v2_cards').add(toStore, setId);
+    await localbase.db
+        .collection(constants.STORAGE_KEYS.cards)
+        .add(toStore, setId);
     return toStore;
 }
 export async function storeGhImgPaths(data) {

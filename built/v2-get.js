@@ -59,7 +59,7 @@ export async function pickAndStoreRandomSet() {
 export async function getCardMetadata() {
     localbase.db.config.debug = false;
     const data = await localbase.db
-        .collection('v2_cards')
+        .collection(constants.STORAGE_KEYS.cards)
         .get()
         .then((sets) => {
         return sets;
@@ -123,7 +123,7 @@ export async function getCardsForActiveSet() {
     localbase.db.config.debug = false;
     try {
         cards = await localbase.db
-            .collection('v2_cards')
+            .collection(constants.STORAGE_KEYS.cards)
             .doc(activeSet)
             .get()
             .then((document) => {
