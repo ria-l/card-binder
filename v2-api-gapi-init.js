@@ -45,7 +45,7 @@ async function gisLoaded() {
 }
 
 async function authUser() {
-  console.log('Authorizing user...')
+  console.log('Authorizing user...');
   // Create a promise to wait for the callback to complete
   const tokenRequestPromise = new Promise((resolve, reject) => {
     // Set the callback on tokenClient
@@ -71,7 +71,7 @@ function addModuleToPage() {
   if (urlPath.includes('pull.html')) {
     moduleScript.src = 'built/v2-pull.js';
   } else if (urlPath.includes('index.html')) {
-    moduleScript.src = 'built/v2-index.js';
+    moduleScript.src = 'built/v2-binder.js';
   }
   document.head.appendChild(moduleScript);
 }
