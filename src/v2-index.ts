@@ -10,7 +10,6 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
-// this is in a top-level js file.
 declare function fetchAndStoreSheets(forceSync: boolean): any;
 
 await main();
@@ -23,7 +22,6 @@ async function main() {
   ) {
     await syncData();
   }
-  await ui.fillSetDropdown();
   await gh.fetchAndStoreGh();
   setEventListeners();
   localStorage.setItem('storage_init', 'SUCCESS');
@@ -39,15 +37,12 @@ async function syncData(forceSync: boolean = false) {
  * sets event listeners for navbar
  */
 function setEventListeners() {
-  utils.getElByIdOrThrow('set-dropdown').addEventListener('change', () => {
-    utils.changeSet();
-  });
   utils
-    .getElByIdOrThrow('open-pack')
-    .addEventListener('click', () => pull.openPack());
+    .getElByIdOrThrow('clear-storage-button')
+    .addEventListener('click', () => localStorage.clear());
   utils
-    .getElByIdOrThrow('clear-display-button')
-    .addEventListener('click', ui.clearDisplay);
+    .getElByIdOrThrow('sync-button')
+    .addEventListener('click', () => syncData(true));
   utils
     .getElByIdOrThrow('debug-button')
     .addEventListener('click', () => gh.fetchAndStoreGh());

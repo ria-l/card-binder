@@ -40,12 +40,6 @@ function setEventListeners() {
         .getElByIdOrThrow('clear-display-button')
         .addEventListener('click', ui.clearDisplay);
     utils
-        .getElByIdOrThrow('clear-storage-button')
-        .addEventListener('click', () => localStorage.clear());
-    utils
-        .getElByIdOrThrow('sync-button')
-        .addEventListener('click', () => syncData(true));
-    utils
         .getElByIdOrThrow('debug-button')
         .addEventListener('click', () => gh.fetchAndStoreGh());
 }

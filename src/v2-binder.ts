@@ -62,12 +62,6 @@ function setEventListeners() {
   ui.addShowHideToggle('grid-btn', 'grid-dropdown-container');
   ui.addShowHideToggle('size-btn', 'size-dropdown-container');
   ui.addShowHideToggle('sort-btn', 'sort-dropdown-container');
-  utils
-    .getElByIdOrThrow('clear-storage-button')
-    .addEventListener('click', () => localStorage.clear());
-  utils
-    .getElByIdOrThrow('sync-button')
-    .addEventListener('click', () => syncData(true));
   utils.getElByIdOrThrow('sort-dropdown').addEventListener('change', () => {
     binder.fillPage();
   });

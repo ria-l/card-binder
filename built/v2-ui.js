@@ -1,4 +1,4 @@
-import * as binder from './v2-binder.js';
+import * as binder from './v2-binder-fn.js';
 import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
 import * as pull from './v2-pull-fn.js';

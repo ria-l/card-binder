@@ -1,6 +1,8 @@
-import * as constants from './v2-constants.js';
+import * as binder from './v2-binder-fn.js';
 import * as create from './v2-create.js';
+import * as constants from './v2-constants.js';
 import * as get from './v2-get.js';
+import * as gh from './v2-api-github.js';
 import * as pull from './v2-pull-fn.js';
 import * as sort from './v2-sort.js';
 import * as store from './v2-store.js';
@@ -8,83 +10,51 @@ import * as tcg from './v2-api-tcg.js';
 import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
-export async function fillPage() {
-    utils.toggleStatusModal('loading binder...', 'showstatus');
-    const cards = await create.createCardsForActiveSetInBinder();
-    const contentDiv = utils.getElByIdOrThrow('content-div');
-    contentDiv.innerHTML = '';
-    const tables = createTables(cards);
-    tables.forEach((table) => {
-        contentDiv.appendChild(table);
-    });
-    utils.toggleStatusModal('', 'hide');
+await main();
+async function main() {
+    ui.setRandomBg();
+    if (localStorage.getItem('storage_init') !== 'SUCCESS-index' ||
+        localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
+        await syncData();
+    }
+    await gh.fetchAndStoreGh();
+    await ui.fillSetDropdown();
+    create.fillSizeDropdown();
+    create.fillGridDropdown();
+    setEventListeners();
+    binder.fillPage();
+    localStorage.setItem('storage_init', 'SUCCESS-index');
+    localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
-export function generateFillColors(card) {
-    let energyColors = get.getEnergyColors(card);
-    let rarityType = get.getRarityType(card);
-    const fillColors = _fillColors(energyColors);
-    return fillColors[rarityType];
+async function syncData(forceSync = false) {
+    await fetchAndStoreSheets(forceSync);
+    await tcg.fetchAndStoreSetMetadata(forceSync);
 }
 /**
- * not in constants bc of dynamic colors
+ * sets event listeners for navbar
  */
-function _fillColors(energyColors) {
-    return {
-        a_normal: `#f9f9f9,white,#f9f9f9,white,#f9f9f9`,
-        b_holo: `${energyColors.join(',')},${energyColors[0]},white 30%,#f9f9f9,white,#f9f9f9`,
-        c_extra: `${energyColors.join(',')},${energyColors[0]},white 75%,#f9f9f9,white,#f9f9f9`,
-        d_illust: `${energyColors.join(',')},${energyColors.join(',')},${energyColors.join(',')}`,
-        gold: '#fef081,#c69221,#fef081,#c69221,#fef081,#c69221',
-    };
-}
-function createTables(cardImgs) {
-    const numRows = get.getGridRow();
-    const numCols = get.getGridCol();
-    if (!numRows || !numCols) {
-        // If no rows or columns, simply return the cards and spaces
-        return cardImgs.map((card) => [card, document.createTextNode(' ')]).flat();
-    }
-    const allTables = [];
-    let currentTable;
-    let currentRow;
-    const numTableCells = numRows * numCols;
-    const incompleteTableCards = cardImgs.length % numTableCells;
-    cardImgs.forEach((card, i) => {
-        const rowIndex = i % numCols; // 0 is first card, 1 is last
-        const tableIndex = i % numTableCells; // 0 is first card, 1 is last
-        // Create new table and row for the first card in a new table
-        if (tableIndex === 0) {
-            currentTable = document.createElement('table');
-        }
-        if (rowIndex === 0) {
-            currentRow = document.createElement('tr');
-        }
-        const td = document.createElement('td');
-        td.appendChild(card);
-        currentRow.appendChild(td);
-        // Handle the last card in a row or last card in cardImgs
-        if (rowIndex === numCols - 1 || i === cardImgs.length - 1) {
-            currentTable.appendChild(currentRow);
-        }
-        // Handle the last card in a table or last card in cardImgs
-        if (tableIndex === numTableCells - 1 || i === cardImgs.length - 1) {
-            allTables.push(currentTable);
-        }
-        // Handle the case for incomplete tables
-        if (incompleteTableCards > 0 &&
-            i >= cardImgs.length - incompleteTableCards) {
-            if (currentRow) {
-                currentTable.appendChild(currentRow);
-                allTables.push(currentTable);
-            }
-        }
+function setEventListeners() {
+    utils
+        .getElByIdOrThrow('set-dropdown')
+        .addEventListener('change', () => utils.changeSet());
+    utils
+        .getElByIdOrThrow('col-dropdown')
+        .addEventListener('change', ui.updateGrid);
+    utils
+        .getElByIdOrThrow('row-dropdown')
+        .addEventListener('change', ui.updateGrid);
+    utils
+        .getElByIdOrThrow('size-dropdown')
+        .addEventListener('change', ui.resizeCards);
+    // ui.addShowHideToggle('display-btn', 'display-dropdown');
+    ui.addShowHideToggle('grid-btn', 'grid-dropdown-container');
+    ui.addShowHideToggle('size-btn', 'size-dropdown-container');
+    ui.addShowHideToggle('sort-btn', 'sort-dropdown-container');
+    utils.getElByIdOrThrow('sort-dropdown').addEventListener('change', () => {
+        binder.fillPage();
     });
-    return allTables;
-}
-export function refreshBinder() {
-    const regex = new RegExp('index');
-    if (regex.test(location.pathname)) {
-        fillPage();
-    }
+    // document
+    //   .getElementById('toggle-borders')
+    //   ?.addEventListener('change', ui.toggleBorders); // TODO: add function
 }
 //# sourceMappingURL=v2-binder.js.map
