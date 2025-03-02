@@ -80,7 +80,7 @@ async function processPulled(
     card_id: string;
     blob64: string;
   }[],
-  filePathsObj: { path: string }[]
+  filePathsObj: types.GithubTree[]
 ) {
   const date = new Date();
   for (const [i, card] of pulled.entries()) {

@@ -11,6 +11,13 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
+declare class Localbase {
+  dbName: string | 'db';
+  config: { debug: boolean };
+  collection: Function;
+  constructor(dbName?: string);
+}
+
 /**
  * initial saving of just the set metadata without cards. this is triggered on fresh load or sync.
  */
@@ -66,14 +73,20 @@ export async function storeCardsBySetId(setId: string): Promise<{
   return toStore;
 }
 
-export async function storeGhImgPaths(data: types.GithubTree): Promise<void> {
-  localbase.db.config.debug = false;
+export async function storeGhImgPaths(data: types.GithubJson): Promise<void> {
+  console.log('== storeGhImgPaths ==');
+  const db = new Localbase('db'); // bugs out if not using a new instance for some reason and importing doesn't work 🤷🏻‍♀️
+  db.config.debug = false;
+  const mapped = data.tree
+    .filter((tree) => tree.path.includes('img'))
+    .map((tree) => {
+      tree['_key'] = utils.extractFilenameWithoutExtension(tree.path);
+      return tree;
+    });
 
-  for (const item of data.tree) {
-    await localbase.db
-      .collection(constants.STORAGE_KEYS.filePaths)
-      .add({ path: item.path });
-  }
+  await db
+    .collection(constants.STORAGE_KEYS.filePaths)
+    .set(mapped, { keys: true });
 }
 
 export async function storeBlob(

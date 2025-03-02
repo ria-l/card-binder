@@ -61,12 +61,17 @@ export async function changeSet() {
     store.storeCardsBySetId(activeSet);
     binder.refreshBinder();
 }
-export async function pathInStorage(path, filePathsObj) {
+export async function pathInStorage(cardUrl, filePathsObj) {
+    localbase.db.config.debug = false;
     if (!filePathsObj) {
         return false;
     }
-    const filePathsByCardId = new Map(filePathsObj.map((obj) => [obj.path, obj]));
-    return filePathsByCardId.get(path) ? true : false;
+    const key = extractFilenameWithoutExtension(cardUrl);
+    const cardPathBlob = await localbase.db
+        .collection(constants.STORAGE_KEYS.filePaths)
+        .doc(key)
+        .get();
+    return cardPathBlob ? true : false;
 }
 export async function blobInStorage(card, blobsObj) {
     if (!blobsObj) {
@@ -78,5 +83,14 @@ export async function blobInStorage(card, blobsObj) {
     ]));
     const result = blobsByCardId.get(card.id);
     return result ? blobsByCardId.get(card.id).blob64 : undefined;
+}
+/**
+ * gets just the file name without the extension
+ */
+export function extractFilenameWithoutExtension(path) {
+    const filename = path.split('/').pop() ?? path;
+    // Remove the file extension using a regular expression
+    const filenameWithoutExtension = filename.replace(/\.[^.]+$/, '');
+    return filenameWithoutExtension;
 }
 //# sourceMappingURL=v2-utils.js.map

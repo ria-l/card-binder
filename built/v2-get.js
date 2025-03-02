@@ -10,7 +10,8 @@ import * as types from './v2-types.js';
 import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 export async function getSetMetadata() {
-    localbase.db.config.debug = false;
+    console.log('== getSetMetadata ==');
+    localbase.db.config.debug = true;
     const data = await localbase.db
         .collection(constants.STORAGE_KEYS.setMetadata)
         .get()
@@ -234,7 +235,7 @@ export async function getImgSrc(card, img, blobsObj, filePathsObj) {
     const url = new URL(card.zRaw.images.large);
     const path = url.pathname.substring(1); // 'xy0/2_hires.png'
     const blobInStorage = await utils.blobInStorage(card, blobsObj);
-    const pathInStorage = await utils.pathInStorage(path, filePathsObj);
+    const pathInStorage = await utils.pathInStorage(card.zRaw.images.large, filePathsObj);
     // in file system
     if (pathInStorage) {
         img.src = `img/${path}`;

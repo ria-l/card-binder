@@ -10,6 +10,7 @@ import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 
 export async function fillPage() {
+  console.log('== fillPage ==');
   utils.toggleStatusModal('loading binder...', 'showstatus');
   const cards = await create.createCardsForActiveSetInBinder();
   const contentDiv = utils.getElByIdOrThrow('content-div');

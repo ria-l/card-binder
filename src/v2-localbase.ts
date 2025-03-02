@@ -1,5 +1,5 @@
 export declare class Localbase {
-  dbName: string;
+  dbName: string | 'db';
   lf: { [key: string]: any }; // Stores localForage instances
   collectionName: string | null;
   orderByProperty: string | null;
@@ -21,7 +21,7 @@ export declare class Localbase {
   update: Function;
   set: Function;
   delete: Function;
-  constructor(dbName: string);
+  constructor(dbName?: string);
 }
 
 export const db = new Localbase('db');

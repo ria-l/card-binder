@@ -63,6 +63,7 @@ export async function createPlaceholderForBinder(borderColors, title, fillColors
     return ph;
 }
 export async function createCardsForActiveSetInBinder() {
+    console.log('== createCardsForActiveSetInBinder ==');
     const blobsObj = await localbase.db
         .collection(constants.STORAGE_KEYS.blobs)
         .get()
@@ -72,13 +73,13 @@ export async function createCardsForActiveSetInBinder() {
     const filePathsObj = await localbase.db
         .collection(constants.STORAGE_KEYS.filePaths)
         .get()
-        .then((blobs) => {
-        return blobs;
+        .then((objs) => {
+        return objs;
     });
     const tags = [];
     const sorted = await sort.sortCards();
     if (!sorted) {
-        throw new Error('couldnt sort');
+        throw new Error('couldn\'t sort');
     }
     for (const card of sorted) {
         const { isOwned, title, borderColors } = await create.generateImgMetadata(card);

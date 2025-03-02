@@ -19,9 +19,9 @@ export function setRandomBg() {
 }
 
 export async function fillSetDropdown(): Promise<void> {
+  console.log('== fillSetDropdown ==');
   const setMetadata: types.tcgSet[] = await get.getSetMetadata();
   const activeSet = await get.getActiveSet();
-  console.log('active set: ', activeSet);
   const setDropdown = utils.getElByIdOrThrow('set-dropdown');
   if (setDropdown) setDropdown.innerHTML = '';
   for (let setId of setMetadata) {

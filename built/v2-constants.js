@@ -1,6 +1,5 @@
 export const STORAGE_VERSION = '18:54:49';
 export const CARDS_SETID_URL = 'https://api.pokemontcg.io/v2/cards?q=set.id:';
-export const GITHUB_TREE_URL = 'https://api.github.com/repos/ria-l/card-binder/git/trees/cb53ab7c3b97b92f5b7e2dbe032c6933bc07942c?recursive=1';
 export const STORAGE_KEYS = {
     activeSet: 'v2_active_set',
     appscriptUrl: 'v2_appscript_url', // also in main

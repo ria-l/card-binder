@@ -11,9 +11,11 @@ import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 await main();
 async function main() {
+    console.log('== main ==');
     ui.setRandomBg();
     if (localStorage.getItem('storage_init') !== 'SUCCESS' ||
         localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
+        console.log('main: storage not found or version mismatch. Syncing data...');
         await syncData();
     }
     await ui.fillSetDropdown();
@@ -41,6 +43,6 @@ function setEventListeners() {
         .addEventListener('click', ui.clearDisplay);
     utils
         .getElByIdOrThrow('debug-button')
-        .addEventListener('click', () => gh.fetchAndStoreGh());
+        .addEventListener('click', () => gh.getLatestCommitSha());
 }
 //# sourceMappingURL=v2-pull.js.map

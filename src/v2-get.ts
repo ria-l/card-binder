@@ -15,7 +15,8 @@ import * as utils from './v2-utils.js';
 declare function getSecrets(): any;
 
 export async function getSetMetadata(): Promise<types.tcgSet[]> {
-  localbase.db.config.debug = false;
+  console.log('== getSetMetadata ==');
+  localbase.db.config.debug = true;
   const data = await localbase.db
     .collection(constants.STORAGE_KEYS.setMetadata)
     .get()
@@ -289,13 +290,16 @@ export async function getImgSrc(
     card_id: string;
     blob64: string;
   }[],
-  filePathsObj: { path: string }[]
+  filePathsObj: types.GithubTree[]
 ) {
   utils.toggleStatusModal(card.id, 'showstatus');
   const url = new URL(card.zRaw.images.large);
   const path = url.pathname.substring(1); // 'xy0/2_hires.png'
   const blobInStorage = await utils.blobInStorage(card, blobsObj);
-  const pathInStorage = await utils.pathInStorage(path, filePathsObj);
+  const pathInStorage = await utils.pathInStorage(
+    card.zRaw.images.large,
+    filePathsObj
+  );
 
   // in file system
   if (pathInStorage) {

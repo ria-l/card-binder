@@ -72,16 +72,19 @@ export async function changeSet(): Promise<void> {
 }
 
 export async function pathInStorage(
-  path: string,
-  filePathsObj: { path: string }[]
+  cardUrl: string,
+  filePathsObj: types.GithubTree[]
 ): Promise<boolean> {
+  localbase.db.config.debug = false;
   if (!filePathsObj) {
     return false;
   }
-  const filePathsByCardId: any = new Map(
-    filePathsObj.map((obj: { path: string }) => [obj.path, obj])
-  );
-  return filePathsByCardId.get(path) ? true : false;
+  const key = extractFilenameWithoutExtension(cardUrl);
+  const cardPathBlob = await localbase.db
+    .collection(constants.STORAGE_KEYS.filePaths)
+    .doc(key)
+    .get();
+  return cardPathBlob ? true : false;
 }
 
 export async function blobInStorage(
@@ -103,4 +106,16 @@ export async function blobInStorage(
 
   const result = blobsByCardId.get(card.id);
   return result ? blobsByCardId.get(card.id).blob64 : undefined;
+}
+/**
+ * gets just the file name without the extension
+ */
+
+export function extractFilenameWithoutExtension(path: string) {
+  const filename = path.split('/').pop() ?? path;
+
+  // Remove the file extension using a regular expression
+  const filenameWithoutExtension = filename.replace(/\.[^.]+$/, '');
+
+  return filenameWithoutExtension;
 }

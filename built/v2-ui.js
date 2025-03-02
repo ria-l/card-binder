@@ -14,9 +14,9 @@ export function setRandomBg() {
     bgSpan.style.setProperty('background-image', `url('img/0_bg/${constants.BG_FILES[x]}')`);
 }
 export async function fillSetDropdown() {
+    console.log('== fillSetDropdown ==');
     const setMetadata = await get.getSetMetadata();
     const activeSet = await get.getActiveSet();
-    console.log('active set: ', activeSet);
     const setDropdown = utils.getElByIdOrThrow('set-dropdown');
     if (setDropdown)
         setDropdown.innerHTML = '';

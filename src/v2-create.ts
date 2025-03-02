@@ -20,7 +20,7 @@ export async function createCardImgForPulls(
     card_id: string;
     blob64: string;
   }[],
-  filePathsObj: { path: string }[]
+  filePathsObj: types.GithubTree[]
 ) {
   const img = new Image();
   await get.getImgSrc(card, img, blobsObj, filePathsObj);
@@ -57,7 +57,7 @@ export async function createCardImgForBinder(
     card_id: string;
     blob64: string;
   }[],
-  filePathsObj: { path: string }[]
+  filePathsObj: types.GithubTree[]
 ): Promise<HTMLImageElement> {
   const width = get.getCardSize();
   const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
@@ -109,6 +109,7 @@ export async function createPlaceholderForBinder(
 export async function createCardsForActiveSetInBinder(): Promise<
   (HTMLImageElement | HTMLSpanElement)[]
 > {
+  console.log('== createCardsForActiveSetInBinder ==')
   const blobsObj = await localbase.db
     .collection(constants.STORAGE_KEYS.blobs)
     .get()
@@ -118,14 +119,14 @@ export async function createCardsForActiveSetInBinder(): Promise<
   const filePathsObj = await localbase.db
     .collection(constants.STORAGE_KEYS.filePaths)
     .get()
-    .then((blobs: any) => {
-      return blobs;
+    .then((objs: any) => {
+      return objs;
     });
 
   const tags = [];
   const sorted = await sort.sortCards();
   if (!sorted) {
-    throw new Error('couldnt sort');
+    throw new Error('couldn\'t sort');
   }
   for (const card of sorted) {
     const { isOwned, title, borderColors } = await create.generateImgMetadata(

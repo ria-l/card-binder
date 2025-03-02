@@ -26,9 +26,18 @@ export async function fetchGhJson(url) {
     return undefined;
 }
 export async function fetchAndStoreGh() {
-    const data = await fetchGhJson(constants.GITHUB_TREE_URL);
+    console.log('== fetchAndStoreGh ==');
+    const commitSha = await getLatestCommitSha();
+    const treeUrl = `https://api.github.com/repos/ria-l/card-binder/git/trees/${commitSha}?recursive=1`;
+    const data = await fetchGhJson(treeUrl);
     if (data) {
         store.storeGhImgPaths(data);
     }
+}
+export async function getLatestCommitSha() {
+    console.log('== getLatestCommitSha ==');
+    const response = await fetch(`https://api.github.com/repos/ria-l/card-binder/commits`);
+    const data = await response.json();
+    return data[0].sha;
 }
 //# sourceMappingURL=v2-api-github.js.map
