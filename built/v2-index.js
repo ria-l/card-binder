@@ -11,17 +11,20 @@ import * as ui from './v2-ui.js';
 import * as utils from './v2-utils.js';
 await main();
 async function main() {
+    console.log(' == index main ==');
     ui.setRandomBg();
-    if (localStorage.getItem('storage_init') !== 'SUCCESS' ||
+    if (localStorage.getItem('storage_init') !== 'SUCCESS-index' ||
         localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION) {
+        console.log('main: storage not found or version mismatch. Syncing data...');
         await syncData();
     }
     await gh.fetchAndStoreGh();
     setEventListeners();
-    localStorage.setItem('storage_init', 'SUCCESS');
+    localStorage.setItem('storage_init', 'SUCCESS-index');
     localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 async function syncData(forceSync = false) {
+    console.log(' == index syncData == ', forceSync);
     await fetchAndStoreSheets(forceSync);
     await tcg.fetchAndStoreSetMetadata(forceSync);
 }

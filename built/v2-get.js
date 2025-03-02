@@ -38,6 +38,7 @@ export async function getActiveSet() {
     if (!activeSet) {
         activeSet = getSelectedSet();
     }
+    console.log('active set: ', activeSet);
     return activeSet ?? (await pickAndStoreRandomSet());
 }
 export function getSelectedSet() {

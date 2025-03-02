@@ -25,6 +25,7 @@ async function main() {
     localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 async function syncData(forceSync = false) {
+    console.log('== syncData ==', forceSync);
     await fetchAndStoreSheets(forceSync);
     await tcg.fetchAndStoreSetMetadata(forceSync);
 }

@@ -33,6 +33,7 @@ async function main() {
 }
 
 async function syncData(forceSync: boolean = false) {
+  console.log('== syncData ==', forceSync);
   await fetchAndStoreSheets(forceSync);
   await tcg.fetchAndStoreSetMetadata(forceSync);
 }
