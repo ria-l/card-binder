@@ -28,26 +28,29 @@
             <span class="link-text">→ Binder</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="clear-storage-button">
-            <span class="link-text">Clear LS</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="sync-button">
-            <span class="link-text">Sync</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="debug-button">
-            <span class="link-text">Debug</span>
-          </a>
-        </li>
       </ul>
     </nav>
     <main>
       <span id="status-span" class="hide"></span>
-      <div id="content-div" class="content-div"></div>
+      <div id="content-div" class="content-div">
+        <ul>
+          <li>
+            <button>Clear LS</button>
+          </li>
+          <li>
+            <button>Clear indexdb</button>
+          </li>
+          <li>
+            <button>Sync data</button>
+          </li>
+          <li>
+            <button>Sync images</button>
+          </li>
+          <li>Add API key<input /></li>
+          <li>Github key<input /></li>
+          <li>Sheets key<input /></li>
+        </ul>
+      </div>
     </main>
     <script src="https://unpkg.com/localbase/dist/localbase.dev.js"></script>
     <script defer type="text/javascript" src="v2-api-gapi-secrets.js"></script>
