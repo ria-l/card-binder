@@ -4,7 +4,6 @@
   font-family: 'Andika', sans-serif;
 }
 :root {
-  font-size: 14px;
   font-family: 'Andika', sans-serif;
   --text-primary: #b6b6b6;
   --text-secondary: #ececec;
@@ -98,6 +97,7 @@ progress {
 select {
   padding: 0.5rem;
   border-radius: 0.4rem;
+  width: 8rem;
 }
 .hide {
   display: none !important;
@@ -105,10 +105,7 @@ select {
 .show {
   display: inline-block !important;
 }
-.highlight {
-  border: solid 5px #96e3ff;
-}
-#bgSpan {
+#bg-span {
   opacity: 0.3;
   top: 0;
   left: 0;
@@ -139,6 +136,12 @@ select {
   width: 30dvw;
   position: fixed;
 }
+.placeholder {
+  /* makes it so border won't affect height/width */
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+}
 .zoomed-card {
   align-items: center;
   display: flex;
@@ -146,7 +149,8 @@ select {
   justify-content: center;
   margin: auto;
   position: fixed;
-  height: 90dvh;
+  height: 90dvh !important;
+  width: auto !important;
 }
 table {
   display: inline-block;
@@ -158,11 +162,7 @@ td img {
   margin-left: auto;
   margin-right: auto;
 }
-.placeholder {
-  /* makes it so border won't affect height/width */
-  display: inline-block;
-  text-align: center;
-}
+
 td img,
 td .placeholder {
   /* Keeps cards and placeholders properly aligned. Doesn't work if it's separated into the individual elements. */
@@ -171,10 +171,6 @@ td .placeholder {
 #parent {
   /* keeps large card from acting like mobile on desktop */
   display: flex;
-}
-iframe,
-#filenamesInput {
-  display: none;
 }
 ol {
   text-align: left;
@@ -185,7 +181,7 @@ ol {
   margin: 3px;
   height: 100px;
 }
-.small-card.caught {
+.small-card.owned {
   opacity: 0.5;
 }
 .large-card {
@@ -193,11 +189,11 @@ ol {
   border-radius: 36px;
   margin: 5px;
   height: auto;
-  max-width: 100vh;
+  max-width: 600px;
 }
 #right,
-#smallCardSpan,
-#listSpan {
+#small-card-span,
+#list-span {
   padding: 10px;
   background-color: #fff;
   border-radius: 14px;
@@ -205,8 +201,7 @@ ol {
   flex-basis: 30%;
   display: inline-block;
 }
-#largeCardSpan {
-  display: flex;
+#large-card-span {
   flex-direction: column;
   overflow: auto;
   max-height: 98vh;
@@ -225,17 +220,15 @@ ol {
   #parent {
     flex-direction: column;
   }
-  #largeCardSpan {
-    max-height: none;
+  #large-card-span {
+    max-height: 600px;
+    display: flex;
   }
   .navbar {
     bottom: 0;
     width: 100vw;
     height: 5rem;
     z-index: 100;
-  }
-  .mobileHide {
-    display: none;
   }
   .navbar-nav {
     flex-direction: row;
@@ -258,7 +251,7 @@ ol {
     margin-left: 0;
   }
   .zoomed-card {
-    width: 90dvw;
-    height: auto;
+    width: 90dvw !important;
+    height: auto !important;
   }
 }

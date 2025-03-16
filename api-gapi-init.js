@@ -69,11 +69,11 @@ function addModuleToPage() {
   moduleScript.type = 'module';
   const urlPath = new URL(document.URL).pathname;
   if (urlPath.includes('pull.html')) {
-    moduleScript.src = 'built/v2-pull.js';
+    moduleScript.src = 'built/pull.js';
   } else if (urlPath.includes('binder.html')) {
-    moduleScript.src = 'built/v2-binder.js';
+    moduleScript.src = 'built/binder.js';
   } else if (urlPath.includes('index.html')) {
-    moduleScript.src = 'built/v2-index.js';
+    moduleScript.src = 'built/index.js';
   }
   document.head.appendChild(moduleScript);
 }

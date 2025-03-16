@@ -1,8 +1,8 @@
-import * as constants from './v2-constants.js';
-import * as get from './v2-get.js';
-import * as store from './v2-store.js';
-import * as types from './v2-types.js';
-import * as utils from './v2-utils.js';
+import * as constants from './constants.js';
+import * as get from './get.js';
+import * as store from './store.js';
+import * as types from './types.js';
+import * as utils from './utils.js';
 
 export async function fetchAndStoreSetMetadata(forceSync: boolean = false) {
   const storedData = await get.getSetMetadata();

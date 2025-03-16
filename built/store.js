@@ -1,62 +1,76 @@
+// store data locally and return the stored value
+import * as constants from './constants.js';
+import * as get from './get.js';
+import * as localbase from './localbase.js';
+import * as pull from './pull-fn.js';
 import * as sort from './sort.js';
+import * as store from './store.js';
+import * as tcg from './api-tcg.js';
+import * as types from './types.js';
+import * as ui from './ui.js';
+import * as utils from './utils.js';
 /**
- * stores binder, set, and header gsheet data in localstorage
- * @param data all data from sheet
+ * initial saving of just the set metadata without cards. this is triggered on fresh load or sync.
  */
-export function storeData(data) {
-    // Store header
-    const header = data[0] ?? [];
-    if (!header.length)
-        return; // Exit early if header is empty
-    localStorage.setItem('data_header', JSON.stringify(header));
-    // Store container names
-    const allBinderNames = getUniqueValuesFromColumn(header, 'binder', data);
-    const allSetNames = getUniqueValuesFromColumn(header, 'set', data);
-    // Store allBinderNames and allSetNames in localStorage
-    localStorage.setItem('all_binder_names', JSON.stringify([...allBinderNames]));
-    localStorage.setItem('all_set_names', JSON.stringify([...allSetNames]));
-    // Store data for each binder
-    storeFilteredData(allBinderNames, data, header, 'binder');
-    storeFilteredData(allSetNames, data, header, 'set');
-    // Store set and binder names
-    storeRandomNameIfAbsent('active_binder', allBinderNames);
-    storeRandomNameIfAbsent('active_set', allSetNames);
-}
-/**
- *
- * @param storageKey 'active_binder' or 'active_set'
- * @param allBinderNames
- */
-function storeRandomNameIfAbsent(storageKey, allBinderNames) {
-    let storedName = localStorage.getItem(storageKey);
-    if (!storedName) {
-        storedName =
-            Array.from(allBinderNames)[Math.floor(Math.random() * allBinderNames.size)] ?? '';
-        localStorage.setItem(storageKey, storedName);
-    }
-}
-/**
- * Store only the cards for the given collection
- * @param allCollectionNames
- * @param data
- * @param header
- * @param colName
- */
-function storeFilteredData(allCollectionNames, data, header, colName) {
-    const columnIndex = header.indexOf(colName);
-    allCollectionNames.forEach((collectionName) => {
-        const filtered = data.filter((row) => row[columnIndex] === collectionName);
-        // add back the header, since it would be removed during filtering
-        filtered.unshift(header);
-        localStorage.setItem(collectionName, JSON.stringify(sort.sortByColor(filtered)));
+export async function storeSetMetaData(data) {
+    const sorted = sort.sortSetsByReleaseDate(data);
+    const mapped = sorted.map((set) => {
+        set['_key'] = set['id'];
+        return set;
     });
+    localbase.db.config.debug = false;
+    await localbase.db
+        .collection(constants.STORAGE_KEYS.setMetadata)
+        .set(mapped, { keys: true });
+    return mapped;
 }
-function getUniqueValuesFromColumn(header, colName, data) {
-    const columnIndex = header.indexOf(colName);
-    const allBinderNames = new Set(data
-        .map((row) => row[columnIndex])
-        .filter((value) => value !== undefined && value !== colName) // Filter out `undefined`
-    );
-    return allBinderNames;
+export function saveActiveSet() {
+    const activeSet = get.getSelectedSet();
+    if (!activeSet) {
+        throw new Error('no set selected');
+    }
+    localStorage.setItem(constants.STORAGE_KEYS.activeSet, activeSet);
+    return activeSet;
+}
+/**
+ * stores just the cards for the given set
+ * assumes they are not stored already; existence checks are in calling functions
+ */
+export async function storeCardsBySetId(setId) {
+    const cardsForSet = await tcg.fetchCardsForSet(setId);
+    const customizedCards = cardsForSet.map((row) => ({
+        id: row.id,
+        energy: get.getEnergyType(row),
+        nationalDex: get.getDexNum(row),
+        subtype: get.getSubtype(row),
+        supertype: row.supertype ? row.supertype.toLowerCase() : '',
+        zRaw: row,
+    }));
+    const toStore = { id: setId, cards: customizedCards };
+    localbase.db.config.debug = false;
+    await localbase.db
+        .collection(constants.STORAGE_KEYS.cards)
+        .add(toStore, setId);
+    return toStore;
+}
+export async function storeGhImgPaths(data) {
+    console.log('== storeGhImgPaths ==');
+    const db = new Localbase('db'); // bugs out if not using a new instance for some reason and importing doesn't work 🤷🏻‍♀️
+    db.config.debug = false;
+    const mapped = data.tree
+        .filter((tree) => tree.path.includes('img'))
+        .map((tree) => {
+        tree['_key'] = utils.extractFilenameWithoutExtension(tree.path);
+        return tree;
+    });
+    await db
+        .collection(constants.STORAGE_KEYS.filePaths)
+        .set(mapped, { keys: true });
+}
+export async function storeBlob(card, blob64) {
+    localbase.db.config.debug = false;
+    await localbase.db
+        .collection(constants.STORAGE_KEYS.blobs)
+        .add({ card_id: card.id, blob64: blob64 }, card.id);
 }
 //# sourceMappingURL=store.js.map

@@ -11,113 +11,60 @@
       href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       rel="stylesheet"
     />
-    <script type="module" src="built/app.js"></script>
-    <script type="module" src="built/index.js"></script>
-    <script type="module" src="built/sort.js"></script>
-    <script type="module" src="built/ui.js"></script>
-    <script type="module" src="built/page.js"></script>
-    <script type="module" src="built/store.js"></script>
-    <script type="module" src="built/constants.js"></script>
 
-    <title>Card Binder</title>
+    <title>Settings</title>
   </head>
   <body>
-    <span id="bgSpan"></span>
+    <span id="bg-span"></span>
     <nav class="navbar">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a href="pull.html" class="nav-link">
-            <span class="link-text">→ Gacha</span>
+            <span class="link-text">→ Packs</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link" id="display-btn">
-            <span class="link-text">Collection</span>
-          </a>
-          <ul class="dropdown-container" id="display-dropdown">
-            <li>
-              <a href="#" class="dropdown-item">
-                Binder
-                <select id="binderDropdown"></select
-              ></a>
-            </li>
-            <li>
-              <a href="#" class="dropdown-item">
-                Set
-                <select id="setDropdown"></select
-              ></a>
-            </li>
-            <li>
-              <a href="#" class="dropdown-item">
-                <span id="progressSpan"> <progress></progress> </span
-              ></a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="grid-btn">
-            <span class="link-text">Grid</span>
-          </a>
-          <ul class="dropdown-container" id="grid-dropdown">
-            <li>
-              <a href="#" class="dropdown-item">
-                Cols
-                <select id="colDropdown" size="4"></select
-              ></a>
-            </li>
-            <li>
-              <a href="#" class="dropdown-item">
-                Rows
-                <select id="rowDropdown" size="4"></select
-              ></a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="size-btn">
-            <span class="link-text">Card size</span>
-          </a>
-          <ul class="dropdown-container" id="size-dropdown">
-            <li>
-              <select id="sizeDropdown" size="5"></select>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="sort-btn">
-            <span class="link-text">Sort</span>
-          </a>
-          <ul class="dropdown-container" id="sort-dropdown">
-            <li>
-              <select id="sortDropdown">
-                <option value="Energy Type">Energy Type</option>
-                <option value="Dex #">Dex #</option>
-                <option value="Set Number">Set Number</option>
-                <option value="Card Type">Card Type</option>
-                <option value="Visuals">Visuals</option>
-                <option value="recent">Recent</option>
-              </select>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <span class="link-text"
-              ><input id="toggle-borders" type="checkbox" /> Borders</span
-            >
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="syncButton">
-            <span class="link-text">Sync</span>
+          <a href="binder.html" class="nav-link">
+            <span class="link-text">→ Binder</span>
           </a>
         </li>
       </ul>
     </nav>
     <main>
-      <span id="statusSpan" class="hide"></span>
-      <span id="zoom-span" class="zoom"></span>
-      <div id="contentDiv" class="contentDiv"></div>
+      <span id="status-span" class="hide"></span>
+      <div id="content-div" class="content-div">
+        <ul>
+          <li>
+            <button>Clear LS</button>
+          </li>
+          <li>
+            <button>Clear indexdb</button>
+          </li>
+          <li>
+            <button>Sync data</button>
+          </li>
+          <li>
+            <button>Sync images</button>
+          </li>
+          <li>Add API key<input /></li>
+          <li>Github key<input /></li>
+          <li>Sheets key<input /></li>
+        </ul>
+      </div>
     </main>
+    <script src="https://unpkg.com/localbase/dist/localbase.dev.js"></script>
+    <script defer type="text/javascript" src="api-gapi-secrets.js"></script>
+    <script defer type="text/javascript" src="api-gapi-init.js"></script>
+    <script defer type="text/javascript" src="api-gapi-sheets.js"></script>
+    <script
+      defer
+      src="https://apis.google.com/js/api.js"
+      onload="gapiLoaded()"
+    ></script>
+    <script
+      defer
+      src="https://accounts.google.com/gsi/client"
+      onload="gisLoaded()"
+    ></script>
   </body>
 </html>

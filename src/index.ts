@@ -1,87 +1,52 @@
-// TODO: this whole module needs to be reorganized/split into other modules
-
-import * as app from './app.js';
-import * as page from './page.js';
+import * as constants from './constants.js';
+import * as get from './get.js';
+import * as gh from './api-github.js';
+import * as localbase from './localbase.js';
+import * as pull from './pull-fn.js';
 import * as sort from './sort.js';
 import * as store from './store.js';
+import * as tcg from './api-tcg.js';
+import * as types from './types.js';
 import * as ui from './ui.js';
-import * as constants from './constants.js';
+import * as utils from './utils.js';
 
-window.onload = () => {
-  ui.setBg();
-  ui.initializeGridAndSize();
+declare function fetchAndStoreSheets(forceSync: boolean): any;
+
+await main();
+
+async function main() {
+  console.log(' == index main ==');
+  ui.setRandomBg();
   if (
-    localStorage.getItem('storage_init') == 'SUCCESS' &&
-    localStorage.getItem('storage_ver') == constants.STORAGE_VERSION
+    localStorage.getItem('storage_init') !== 'SUCCESS-index' ||
+    localStorage.getItem('storage_ver') !== constants.STORAGE_VERSION
   ) {
-    initializeIndex();
-  } else {
-    localStorage.clear();
-    fetchAndInitializeIndex();
+    console.log('main: storage not found or version mismatch. Syncing data...');
+    await syncData();
   }
+  await gh.fetchAndStoreGh();
   setEventListeners();
-};
-
-/**
- * loads all the visual elements for the index page
- */
-function initializeIndex() {
-  console.log('loading from storage');
-  page.fillPage();
-  ui.generateBinderDropdown();
-  ui.generateSetDropdown();
-  const collectionType = localStorage.getItem('collection_type');
-  if (collectionType == 'binder') {
-    ui.highlightBinder();
-  } else if (collectionType == 'set') {
-    ui.highlightSet();
-  }
-  ui.createProgressBar();
-  localStorage.setItem('storage_init', 'SUCCESS');
+  localStorage.setItem('storage_init', 'SUCCESS-index');
   localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
 }
 
-/**
- * wrapper method that fetches data and initializes page.
- *  TODO: get onload to work with async/await and get rid of this.
- */
-async function fetchAndInitializeIndex() {
-  const data = await app.fetchData();
-  store.storeData(data['db-all']);
-  initializeIndex();
+async function syncData(forceSync: boolean = false) {
+  console.log(' == index syncData == ', forceSync);
+  await fetchAndStoreSheets(forceSync);
+  await tcg.fetchAndStoreSetMetadata(forceSync);
 }
 
 /**
- * adds event listeners to navbar elements
+ * sets event listeners for navbar
  */
 function setEventListeners() {
-  document
-    .getElementById('binderDropdown')
-    ?.addEventListener('change', () => ui.selectNewBinder(true));
-  document
-    .getElementById('setDropdown')
-    ?.addEventListener('change', () => ui.selectNewSet(true));
-  document
-    .getElementById('colDropdown')
-    ?.addEventListener('change', ui.updateGrid);
-  document
-    .getElementById('rowDropdown')
-    ?.addEventListener('change', ui.updateGrid);
-  document
-    .getElementById('sizeDropdown')
-    ?.addEventListener('change', ui.resizeCards);
-  document
-    .getElementById('sortDropdown')
-    ?.addEventListener('change', sort.newSort);
-  document
-    .getElementById('syncButton')
-    ?.addEventListener('click', fetchAndInitializeIndex);
-
-  ui.addShowHideToggle('display-btn', 'display-dropdown');
-  ui.addShowHideToggle('grid-btn', 'grid-dropdown');
-  ui.addShowHideToggle('size-btn', 'size-dropdown');
-  ui.addShowHideToggle('sort-btn', 'sort-dropdown');
-  document
-    .getElementById('toggle-borders')
-    ?.addEventListener('change', ui.toggleBorders);
+  utils
+    .getElByIdOrThrow('clear-storage-button')
+    .addEventListener('click', () => localStorage.clear());
+  utils
+    .getElByIdOrThrow('sync-button')
+    .addEventListener('click', () => syncData(true));
+  utils
+    .getElByIdOrThrow('debug-button')
+    .addEventListener('click', () => gh.fetchAndStoreGh());
 }

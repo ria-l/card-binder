@@ -1,156 +1,116 @@
-// TODO: get rid of the need for slicing
-import * as page from './page.js';
+import * as constants from './constants.js';
+import * as get from './get.js';
+import * as pull from './pull-fn.js';
+import * as sm from './sort-mapping.js';
+import * as store from './store.js';
+import * as tcg from './api-tcg.js';
+import * as types from './types.js';
+import * as ui from './ui.js';
+import * as utils from './utils.js';
+export function sortSetsByReleaseDate(data) {
+    return data.sort((a, b) => new Date(a.releaseDate).valueOf() - new Date(b.releaseDate).valueOf());
+}
+export const sortBySetNum = (data) => {
+    return data.sort((a, b) => {
+        const numA = extractNumber(a.zRaw.number);
+        const numB = extractNumber(b.zRaw.number);
+        return numA - numB;
+    });
+};
+export const sortByReleaseDate = (data) => {
+    return data.sort((a, b) => {
+        const dateA = new Date(a.zRaw.set.releaseDate);
+        const dateB = new Date(b.zRaw.set.releaseDate);
+        // Ensure valid dates before comparing
+        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+            return 0; // If either date is invalid, leave the order unchanged
+        }
+        return dateA.getTime() - dateB.getTime();
+    });
+};
+export function sortByDex(data) {
+    return data.sort((a, b) => {
+        const numA = a.nationalDex ?? 2000;
+        const numB = b.nationalDex ?? 2000;
+        return numA - numB;
+    });
+}
+export const sortByEnergy = (data) => {
+    return data.sort((a, b) => {
+        const numA = sm.energy[a.energy.toLowerCase()] ?? 2000;
+        const numB = sm.energy[b.energy.toLowerCase()] ?? 2000;
+        return numA - numB;
+    });
+};
+export const sortByRarity = (data) => {
+    return data.sort((a, b) => {
+        const numA = sm.rarity[a.zRaw.rarity?.toLowerCase()] ?? 2000;
+        const numB = sm.rarity[b.zRaw.rarity?.toLowerCase()] ?? 2000;
+        return numA - numB;
+    });
+};
+export const sortBySubtype = (data) => {
+    return data.sort((a, b) => {
+        const numA = sm.subtype[a.subtype.toLowerCase()] ?? 2000;
+        const numB = sm.subtype[b.subtype.toLowerCase()] ?? 2000;
+        return numA - numB;
+    });
+};
+export const sortBySupertype = (data) => {
+    return data.sort((a, b) => {
+        const numA = sm.supertype[a.supertype.toLowerCase()] ?? 2000;
+        const numB = sm.supertype[b.supertype.toLowerCase()] ?? 2000;
+        return numA - numB;
+    });
+};
+function extractNumber(str) {
+    const match = str.match(/(\d+)/); // Extracts the first sequence of digits
+    return match ? parseInt(match[0], 10) : 0; // Default to 0 if no number is found
+}
 /**
  * sorts and redisplays current cards based on selected sort value
  */
-export function newSort() {
-    const sortBy = document.getElementById('sortDropdown')
+export async function sortCards() {
+    const cards = await get.getCardsForActiveSet();
+    const sortBy = utils.getElByIdOrThrow('sort-dropdown')
         .value;
-    const data = page.getDataToDisplay();
-    const collectionType = localStorage.getItem('collection_type') ?? 'binder';
-    const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
-    let colNum;
-    let activeCollection = '';
-    if (collectionType == 'binder') {
-        colNum = header.indexOf('binder');
-        activeCollection = localStorage.getItem('active_binder') ?? '';
-    }
-    else {
-        colNum = header.indexOf('set');
-        activeCollection = localStorage.getItem('active_set') ?? '';
-    }
-    let filtered = data.filter((dataRow) => dataRow[colNum] === activeCollection);
-    filtered.unshift(header);
     if (sortBy == 'Dex #') {
-        localStorage.setItem(activeCollection, JSON.stringify(sortByDex(filtered)));
+        let sorted = sortBySetNum(cards.cards);
+        sorted = sortByReleaseDate(sorted);
+        sorted = sortBySubtype(sorted);
+        sorted = sortByRarity(sorted);
+        sorted = sortByDex(sorted);
+        return sortBySupertype(sorted);
     }
     else if (sortBy == 'Energy Type') {
-        localStorage.setItem(activeCollection, JSON.stringify(sortByColor(filtered)));
+        let sorted = sortBySetNum(cards.cards);
+        sorted = sortByReleaseDate(sorted);
+        sorted = sortByRarity(sorted);
+        sorted = sortByDex(sorted);
+        sorted = sortByEnergy(sorted);
+        return sortBySupertype(sorted);
     }
     else if (sortBy == 'Card Type') {
-        localStorage.setItem(activeCollection, JSON.stringify(sortByCardType(filtered)));
+        let sorted = sortBySetNum(cards.cards);
+        sorted = sortByReleaseDate(sorted);
+        sorted = sortByDex(sorted);
+        sorted = sortByEnergy(sorted);
+        sorted = sortBySubtype(sorted);
+        return sortBySupertype(sorted);
     }
     else if (sortBy == 'Set Number') {
-        localStorage.setItem(activeCollection, JSON.stringify(sortBySetNum(filtered)));
+        let sorted = sortBySetNum(cards.cards);
+        return sortBySupertype(sorted);
     }
-    else if (sortBy == 'Visuals') {
-        localStorage.setItem(activeCollection, JSON.stringify(sortByVisuals(filtered)));
+    else if (sortBy == 'Rarity') {
+        let sorted = sortBySetNum(cards.cards);
+        sorted = sortByReleaseDate(sorted);
+        sorted = sortByDex(sorted);
+        sorted = sortByEnergy(sorted);
+        sorted = sortByRarity(sorted);
+        return sortBySupertype(sorted);
     }
     else if (sortBy == 'recent') {
-        localStorage.setItem(activeCollection, JSON.stringify(sortByRecent(filtered)));
     }
-    page.fillPage();
 }
-/**
- * sorts given data based on given column
- * @param col_name
- * @param data
- * @returns
- */
-const sort = (col_name, data) => {
-    const header = JSON.parse(localStorage.getItem('data_header') ?? '[]');
-    const col = header.indexOf(col_name);
-    if (col === -1) {
-        console.warn(`Column "${col_name}" not found in the header.`);
-        return data;
-    }
-    return data.sort((a, b) => {
-        const aValue = a[col] ?? '';
-        const bValue = b[col] ?? '';
-        if (aValue === bValue) {
-            return 0;
-        }
-        else {
-            return aValue < bValue ? -1 : 1;
-        }
-    });
-};
-/**
- * sorts by v, ex, etc
- * @param data
- * @returns
- */
-export const sortByCardType = (data) => {
-    let sorted = data.slice(1);
-    sorted = sort('card #', sorted);
-    sorted = sort('set', sorted);
-    sorted = sort('release date', sorted);
-    sorted = sort('forme #', sorted);
-    sorted = sort('dex #', sorted);
-    sorted = sort('energy type #', sorted);
-    sorted = sort('card type #', sorted);
-    return sorted;
-};
-/**
- * sort by illust, full art, etc
- * @param data
- * @returns
- */
-export const sortByVisuals = (data) => {
-    let sorted = data.slice(1);
-    sorted = sort('card #', sorted);
-    sorted = sort('set', sorted);
-    sorted = sort('release date', sorted);
-    sorted = sort('forme #', sorted);
-    sorted = sort('dex #', sorted);
-    sorted = sort('energy type #', sorted);
-    sorted = sort('visuals #', sorted);
-    sorted = sort('card type #', sorted);
-    return sorted;
-};
-/**
- * sort by energy type
- * @param data
- * @returns
- */
-export const sortByColor = (data) => {
-    let sorted = data.slice(1);
-    sorted = sort('card #', sorted);
-    sorted = sort('set', sorted);
-    sorted = sort('release date', sorted);
-    sorted = sort('card type #', sorted);
-    sorted = sort('visuals #', sorted);
-    sorted = sort('forme #', sorted);
-    sorted = sort('dex #', sorted);
-    sorted = sort('energy type #', sorted);
-    return sorted;
-};
-/**
- * sort by national dex #
- * @param data
- * @returns
- */
-export const sortByDex = (data) => {
-    let sorted = data.slice(1);
-    sorted = sort('card #', sorted);
-    sorted = sort('set', sorted);
-    sorted = sort('release date', sorted);
-    sorted = sort('card type #', sorted);
-    sorted = sort('visuals #', sorted);
-    sorted = sort('forme #', sorted);
-    sorted = sort('dex #', sorted);
-    return sorted;
-};
-/**
- * sort by set and # within a set
- * @param data
- * @returns
- */
-export const sortBySetNum = (data) => {
-    let sorted = data.slice(1);
-    sorted = sort('card #', sorted);
-    sorted = sort('set', sorted);
-    return sorted;
-};
-/**
- * sort by recently pulled
- * @param data
- * @returns
- */
-export const sortByRecent = (data) => {
-    let sorted = data.slice(1);
-    sorted = sort('caught date', sorted);
-    sorted.reverse();
-    return sorted;
-};
 //# sourceMappingURL=sort.js.map

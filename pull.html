@@ -11,95 +11,76 @@
       href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       rel="stylesheet"
     />
-    <script type="module" src="built/app.js"></script>
-    <script type="module" src="built/pull.js"></script>
-    <script type="module" src="built/constants.js"></script>
-    <script type="module" src="built/ui.js"></script>
-    <script type="module" src="built/page.js"></script>
-    <script type="module" src="built/store.js"></script>
-    <script type="module" src="built/sort.js"></script>
 
-    <title>Pull card remotely</title>
+    <title>Pull cards v2</title>
   </head>
   <body>
-    <span id="bgSpan"></span>
-    <iframe src="about:blank" name="_iframe"></iframe>
+    <span id="bg-span"></span>
 
     <nav class="navbar">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a href="index.html" class="nav-link">
+          <a href="binder.html" class="nav-link">
             <span class="link-text">→ Binder</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link" id="display-btn">
-            <span class="link-text">Collection</span>
-          </a>
-          <ul class="dropdown-container" id="display-dropdown">
-            <li>
-              <a href="#" class="dropdown-item">
-                Binder
-                <select id="binderDropdown"></select
-              ></a>
-            </li>
-            <li>
-              <a href="#" class="dropdown-item">
-                Set
-                <select id="setDropdown"></select
-              ></a>
-            </li>
-            <li>
-              <a href="#" class="dropdown-item">
-                <span id="progressSpan"> <progress></progress> </span
-              ></a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="pullOneButton">
-            <span class="link-text">Pull 1</span>
-          </a>
-        </li>
-        <li class="nav-item mobileHide">
-          <a href="#" class="nav-link" id="pullFiveButton">
-            <span class="link-text">Pull 5</span>
-          </a>
-        </li>
-        <li class="nav-item mobileHide">
-          <a href="#" class="nav-link" id="pullTenButton">
-            <span class="link-text">Pull 10</span>
+          <a href="#" class="nav-link">
+            <span class="link-text">
+              <select id="set-dropdown"></select>
+            </span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link" id="clearDisplayButton">
-            <span class="link-text">Clear</span>
+          <a href="#" class="nav-link" id="open-pack">
+            <span class="link-text">Open pack</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link" id="syncButton">
-            <span class="link-text">Sync</span>
+          <a href="#" class="nav-link" id="clear-display-button">
+            <span class="link-text">Clean up</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="debug-button">
+            <span class="link-text">Debug</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">
+            <span class="link-text">⚙️</span>
           </a>
         </li>
       </ul>
     </nav>
 
     <main>
-      <span id="statusSpan" class="hide"></span>
+      <span id="status-span" class="hide"></span>
       <div id="parent">
-        <span id="largeCardSpan"></span>
+        <span id="large-card-span"></span>
         <span id="right">
           <span id="lists">
-            <span id="smallCardSpan"></span>
-            <span id="listSpan">
-              <ol reversed id="cardList"></ol>
+            <span id="small-card-span"></span>
+            <span id="list-span">
+              <ol reversed id="card-list"></ol>
             </span>
           </span>
         </span>
       </div>
-      <form id="form" method="POST" target="_iframe">
-        <input type="text" id="filenamesInput" name="filenames" readonly />
-      </form>
     </main>
+    <script src="https://unpkg.com/localbase/dist/localbase.dev.js"></script>
+    <script defer type="text/javascript" src="api-gapi-secrets.js"></script>
+    <script defer type="text/javascript" src="api-gapi-init.js"></script>
+    <script defer type="text/javascript" src="api-gapi-sheets.js"></script>
+    <script
+      defer
+      src="https://apis.google.com/js/api.js"
+      onload="gapiLoaded()"
+    ></script>
+    <script
+      defer
+      src="https://accounts.google.com/gsi/client"
+      onload="gisLoaded()"
+    ></script>
   </body>
 </html>
