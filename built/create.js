@@ -10,9 +10,10 @@ import * as tcg from './api-tcg.js';
 import * as types from './types.js';
 import * as ui from './ui.js';
 import * as utils from './utils.js';
+import * as crCard from './create-card-tag.js';
 export async function createCardImgForPulls(card, isOwned, borderColors, title, blobsObj, filePathsObj) {
     const img = new Image();
-    await get.getImgSrc(card, img, blobsObj, filePathsObj);
+    await crCard.getImgSrc(card, img, blobsObj, filePathsObj);
     img.title = title;
     if (isOwned) {
         img.classList.add('owned');
@@ -25,25 +26,6 @@ export async function generateImgMetadata(card) {
     let title = `${card.zRaw.name} : ${card.zRaw.rarity}${!isOwned ? ' ✨NEW✨' : ''}`;
     const borderColors = ui.generateBorderColors(card.subtype, card.energy, card.supertype);
     return { isOwned, title, borderColors };
-}
-export async function createCardImgForBinder(card, borderColors, title, blobsObj, filePathsObj) {
-    const width = get.getCardSize();
-    const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
-    const img = new Image(width, height);
-    await get.getImgSrc(card, img, blobsObj, filePathsObj);
-    img.title = title;
-    img.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
-    img.style.setProperty('border-radius', `${width / 20}px`);
-    img.classList.add('card');
-    // add borders if toggle is checked
-    if (document.getElementById('toggle-borders').checked) {
-        img.style.background = `linear-gradient(to bottom right, ${borderColors}) border-box`;
-        img.style.setProperty('border', `${width / 15}px solid transparent`);
-    }
-    img.onclick = function () {
-        ui.zoomCardInBinder(img);
-    };
-    return img;
 }
 export async function createPlaceholderForBinder(borderColors, title, fillColors, card) {
     const width = get.getCardSize();
@@ -84,7 +66,7 @@ export async function createCardsForActiveSetInBinder() {
     for (const card of sorted) {
         const { isOwned, title, borderColors } = await create.generateImgMetadata(card);
         if (isOwned) {
-            tags.push(await create.createCardImgForBinder(card, borderColors, title, blobsObj, filePathsObj));
+            tags.push(await crCard.createCardImgForBinder(card, borderColors, title, blobsObj, filePathsObj));
         }
         else {
             const fillColors = binder.generateFillColors(card);

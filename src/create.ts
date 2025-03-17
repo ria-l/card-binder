@@ -10,6 +10,7 @@ import * as tcg from './api-tcg.js';
 import * as types from './types.js';
 import * as ui from './ui.js';
 import * as utils from './utils.js';
+import * as crCard from './create-card-tag.js';
 
 export async function createCardImgForPulls(
   card: types.Card,
@@ -23,7 +24,7 @@ export async function createCardImgForPulls(
   filePathsObj: types.GithubTree[]
 ) {
   const img = new Image();
-  await get.getImgSrc(card, img, blobsObj, filePathsObj);
+  await crCard.getImgSrc(card, img, blobsObj, filePathsObj);
 
   img.title = title;
   if (isOwned) {
@@ -49,39 +50,7 @@ export async function generateImgMetadata(card: types.Card) {
   return { isOwned, title, borderColors };
 }
 
-export async function createCardImgForBinder(
-  card: types.Card,
-  borderColors: string,
-  title: string,
-  blobsObj: {
-    card_id: string;
-    blob64: string;
-  }[],
-  filePathsObj: types.GithubTree[]
-): Promise<HTMLImageElement> {
-  const width = get.getCardSize();
-  const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
 
-  const img = new Image(width, height);
-  await get.getImgSrc(card, img, blobsObj, filePathsObj);
-  img.title = title;
-  img.style.setProperty(
-    'background',
-    `linear-gradient(to bottom right, ${borderColors}) border-box`
-  );
-  img.style.setProperty('border-radius', `${width / 20}px`);
-  img.classList.add('card');
-
-  // add borders if toggle is checked
-  if ((document.getElementById('toggle-borders') as HTMLInputElement).checked) {
-    img.style.background = `linear-gradient(to bottom right, ${borderColors}) border-box`;
-    img.style.setProperty('border', `${width / 15}px solid transparent`);
-  }
-  img.onclick = function () {
-    ui.zoomCardInBinder(img);
-  };
-  return img;
-}
 
 export async function createPlaceholderForBinder(
   borderColors: string,
@@ -134,7 +103,7 @@ export async function createCardsForActiveSetInBinder(): Promise<
     );
     if (isOwned) {
       tags.push(
-        await create.createCardImgForBinder(
+        await crCard.createCardImgForBinder(
           card,
           borderColors,
           title,

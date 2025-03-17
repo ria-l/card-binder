@@ -76,6 +76,7 @@ function addModuleToPage() {
     moduleScript.src = 'built/index.js';
   }
   document.head.appendChild(moduleScript);
+  console.log(moduleScript, ' module successfully added.');
 }
 
 async function retryAddModuleToPage(maxRetries = 5, delay = 2000) {
@@ -85,7 +86,6 @@ async function retryAddModuleToPage(maxRetries = 5, delay = 2000) {
     if (gapiInited && gisInited) {
       console.log('Both gapi and gis are initialized, adding module...');
       addModuleToPage();
-      console.log('Module successfully added.');
       return;
     }
 

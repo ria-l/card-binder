@@ -60,7 +60,7 @@ export async function storeGhImgPaths(data) {
     const mapped = data.tree
         .filter((tree) => tree.path.includes('img'))
         .map((tree) => {
-        tree['_key'] = utils.extractFilenameWithoutExtension(tree.path);
+        tree['_key'] = utils.extractDirAndFilenameWithoutExt(tree.path);
         return tree;
     });
     await db

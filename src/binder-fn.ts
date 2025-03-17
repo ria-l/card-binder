@@ -8,6 +8,8 @@ import * as tcg from './api-tcg.js';
 import * as types from './types.js';
 import * as ui from './ui.js';
 import * as utils from './utils.js';
+import * as crCard from './create-card-tag.js';
+
 
 export async function fillPage() {
   console.log('== fillPage ==');
