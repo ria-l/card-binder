@@ -24,7 +24,7 @@ export async function createCardImgForPulls(
   filePathsObj: types.GithubTree[]
 ) {
   const img = new Image();
-  await crCard.getImgSrc(card, img, blobsObj, filePathsObj);
+  await crCard.getImgSrcAndSyncWGh(card, img, blobsObj, filePathsObj);
 
   img.title = title;
   if (isOwned) {
@@ -49,8 +49,6 @@ export async function generateImgMetadata(card: types.Card) {
   );
   return { isOwned, title, borderColors };
 }
-
-
 
 export async function createPlaceholderForBinder(
   borderColors: string,

@@ -22,7 +22,7 @@ export const SECRETS_KEYS = {
   gapiJsOrigins: 'javascript_origins',
   gapiKey: 'gsheets_api_key',
   gapiTokenUri: 'token_uri',
-  ghKey: 'github_token',
+  ghToken: 'github_token',
   ghProjectId: 'project_id',
   gsheetId: 'sheet_id',
   tcgapiKey: 'pkmn_api_key',

@@ -48,3 +48,35 @@ export async function getLatestCommitSha() {
   const data = await response.json();
   return data[0].sha;
 }
+
+export async function uploadImg(
+  img64: string,
+  fileName: string
+): Promise<void> {
+  const url = `https://api.github.com/repos/ria-l/card-binder/contents/img/${fileName}`;
+  const token = get.getSecret(constants.SECRETS_KEYS.ghToken);
+
+  const cleanBase64 = img64.split(',')[1];
+
+  // Construct the GitHub API request payload
+  const payload = {
+    message: `Upload ${fileName}`,
+    content: cleanBase64,
+  };
+
+  // Set up the fetch options with authorization header
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      Authorization: `token ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    console.error('Failed to upload image to GitHub');
+  } else {
+    console.log('Image uploaded successfully to GitHub');
+  }
+}

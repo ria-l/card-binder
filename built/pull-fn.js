@@ -84,7 +84,6 @@ async function processPulled(pulled, blobsObj, filePathsObj) {
     }
     const values = pulled.map((card) => [card.id, JSON.stringify(date)]);
     pushToSheets(constants.SHEET_NAMES.owned, values);
-    // await gh.uploadImgs(pulled);
 }
 function displayLargeCard(imgId, cardImg) {
     cardImg.id = imgId;

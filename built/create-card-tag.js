@@ -9,12 +9,13 @@ import * as store from './store.js';
 import * as tcg from './api-tcg.js';
 import * as types from './types.js';
 import * as ui from './ui.js';
+import * as gh from './api-github.js';
 import * as utils from './utils.js';
 export async function createCardImgForBinder(card, borderColors, title, blobsObj, filePathsObj) {
     const width = get.getCardSize();
     const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
     const img = new Image(width, height);
-    await getImgSrc(card, img, blobsObj, filePathsObj);
+    await getImgSrcAndSyncWGh(card, img, blobsObj, filePathsObj);
     img.title = title;
     img.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
     img.style.setProperty('border-radius', `${width / 20}px`);
@@ -29,12 +30,12 @@ export async function createCardImgForBinder(card, borderColors, title, blobsObj
     };
     return img;
 }
-export async function getImgSrc(card, img, blobsObj, filePathsObj) {
-    utils.toggleStatusModal(card.id, 'showstatus');
-    const url = new URL(card.zRaw.images.large);
+export async function getImgSrcAndSyncWGh(cardObj, img, blobsObj, filePathsObj) {
+    utils.toggleStatusModal(cardObj.id, 'showstatus');
+    const url = new URL(cardObj.zRaw.images.large);
     const path = url.pathname.substring(1); // 'xy0/2_hires.png'
-    const blobStored = await blobInStorage(card, blobsObj);
-    const pathStored = await isPathInStorage(card.zRaw.images.large, filePathsObj);
+    const blobStored = await blobInStorage(cardObj, blobsObj);
+    const pathStored = await isPathInStorage(cardObj.zRaw.images.large, filePathsObj);
     // in file system
     if (pathStored) {
         img.src = `img/${path}`;
@@ -45,13 +46,14 @@ export async function getImgSrc(card, img, blobsObj, filePathsObj) {
     }
     // fetch and store
     else {
-        const imgBlob = await tcg.fetchBlob(card.zRaw.images.large);
+        const imgBlob = await tcg.fetchBlob(cardObj.zRaw.images.large);
         const img64 = await utils.convertBlobToBase64(imgBlob);
         if (!img64) {
-            throw new Error(`blob not converted: ${card.zRaw.images.large}`);
+            throw new Error(`blob not converted: ${cardObj.zRaw.images.large}`);
         }
         img.src = img64;
-        await store.storeBlob(card, img64);
+        await store.storeBlob(cardObj, img64);
+        await gh.uploadImg(img64, path);
     }
 }
 export async function blobInStorage(card, blobsObj) {
