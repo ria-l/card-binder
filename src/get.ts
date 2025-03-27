@@ -38,6 +38,19 @@ export async function getSecret(key: string): Promise<string> {
   return secrets[key];
 }
 
+export async function getOwnedDb(): Promise<
+  { card_id: string; pulled_date: string }[]
+> {
+  localbase.db.config.debug = true;
+  const data = await localbase.db
+    .collection(constants.STORAGE_KEYS.owned)
+    .get()
+    .then((sets: any) => {
+      return sets;
+    });
+  return data;
+}
+
 /**
  * Gets one of the following in preferential order: stored active set, selected set, random set.
  * We want the stored value first to preserve selection across pages/sessions.
@@ -262,4 +275,3 @@ export function getGridRow(): number {
   localStorage.setItem('grid_row', '0');
   return 0;
 }
-

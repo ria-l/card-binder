@@ -24,6 +24,20 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="#" class="nav-link">
+            <span class="link-text">
+              <select id="set-dropdown"></select>
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <span class="link-text">
+              <span id="progress-bar"></span>
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="binder.html" class="nav-link">
             <span class="link-text">→ Binder</span>
           </a>
@@ -35,13 +49,13 @@
       <div id="content-div" class="content-div">
         <ul>
           <li>
-            <button>Clear LS</button>
+            <button id="clear-storage-button">Clear LS</button>
           </li>
           <li>
             <button>Clear indexdb</button>
           </li>
           <li>
-            <button>Sync data</button>
+            <button id="sync-button">Sync data</button>
           </li>
           <li>
             <button>Sync images</button>
@@ -49,6 +63,10 @@
           <li>Add API key<input /></li>
           <li>Github key<input /></li>
           <li>Sheets key<input /></li>
+        </ul>
+        <hr />
+        <ul>
+          <li><button id="createProgressBar">createProgressBar</button></li>
         </ul>
       </div>
     </main>

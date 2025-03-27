@@ -29,6 +29,16 @@ export async function getSecret(key) {
     const secrets = await getSecrets();
     return secrets[key];
 }
+export async function getOwnedDb() {
+    localbase.db.config.debug = true;
+    const data = await localbase.db
+        .collection(constants.STORAGE_KEYS.owned)
+        .get()
+        .then((sets) => {
+        return sets;
+    });
+    return data;
+}
 /**
  * Gets one of the following in preferential order: stored active set, selected set, random set.
  * We want the stored value first to preserve selection across pages/sessions.

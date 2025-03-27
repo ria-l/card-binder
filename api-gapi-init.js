@@ -72,7 +72,7 @@ function addModuleToPage() {
     moduleScript.src = 'built/pull.js';
   } else if (urlPath.includes('binder.html')) {
     moduleScript.src = 'built/binder.js';
-  } else if (urlPath.includes('index.html')) {
+  } else {
     moduleScript.src = 'built/index.js';
   }
   document.head.appendChild(moduleScript);

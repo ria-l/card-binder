@@ -149,4 +149,34 @@ export function addShowHideToggle(btnId, dropdownId) {
         utils.getElByIdOrThrow(dropdownId).classList.toggle('show');
     });
 }
+export async function createProgressBar() {
+    const span = utils.getElByIdOrThrow('progress-bar');
+    const [setMetadata, activeSet, owned] = await Promise.all([
+        get.getSetMetadata(),
+        get.getActiveSet(),
+        get.getOwnedDb(),
+    ]);
+    const activeSetData = setMetadata.find((item) => item.id === activeSet);
+    const max = (activeSetData?.total ?? 1);
+    const numPulled = countUniqueCardIds(activeSet, owned);
+    const ratio = `${numPulled}/${max} `;
+    const percent = `${((numPulled / max) * 100).toFixed(2)}%`;
+    const newBar = document.createElement('progress');
+    newBar.max = max;
+    newBar.value = numPulled;
+    const newSpan = document.createElement('span');
+    newSpan.id = 'progress-span';
+    newSpan.innerHTML = `${ratio}${newBar.outerHTML} ${percent}`;
+    span.replaceWith(newSpan);
+}
+/**
+ * Use a Set to store unique card_ids for the given setId
+ */
+function countUniqueCardIds(setId, setData) {
+    const uniqueCardIds = new Set(setData
+        .filter((item) => item.card_id.startsWith(setId)) // Filter by setId
+        .map((item) => item.card_id) // Map to get only card_id
+    );
+    return uniqueCardIds.size; // Return the size of the Set, which is the count of unique card IDs
+}
 //# sourceMappingURL=ui.js.map

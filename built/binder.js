@@ -22,6 +22,7 @@ async function main() {
     }
     await gh.fetchAndStoreGh();
     await ui.fillSetDropdown();
+    await ui.createProgressBar();
     create.fillSizeDropdown();
     create.fillGridDropdown();
     setEventListeners();

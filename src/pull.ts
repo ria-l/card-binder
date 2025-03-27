@@ -26,6 +26,7 @@ async function main() {
     await syncData();
   }
   await ui.fillSetDropdown();
+  await ui.createProgressBar();
   await gh.fetchAndStoreGh();
   setEventListeners();
   localStorage.setItem('storage_init', 'SUCCESS');

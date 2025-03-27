@@ -39,7 +39,7 @@ function setEventListeners() {
         .getElByIdOrThrow('sync-button')
         .addEventListener('click', () => syncData(true));
     utils
-        .getElByIdOrThrow('debug-button')
-        .addEventListener('click', () => gh.fetchAndStoreGh());
+        .getElByIdOrThrow('createProgressBar')
+        .addEventListener('click', () => ui.createProgressBar());
 }
 //# sourceMappingURL=index.js.map
