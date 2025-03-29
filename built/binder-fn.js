@@ -84,7 +84,7 @@ function createTables(cardImgs) {
     return allTables;
 }
 export function refreshBinder() {
-    const regex = new RegExp('index');
+    const regex = new RegExp('binder');
     if (regex.test(location.pathname)) {
         fillPage();
     }

@@ -10,7 +10,6 @@ import * as ui from './ui.js';
 import * as utils from './utils.js';
 import * as crCard from './create-card-tag.js';
 
-
 export async function fillPage() {
   console.log('== fillPage ==');
   utils.toggleStatusModal('loading binder...', 'showstatus');
@@ -102,7 +101,7 @@ function createTables(
 }
 
 export function refreshBinder() {
-  const regex = new RegExp('index');
+  const regex = new RegExp('binder');
   if (regex.test(location.pathname)) {
     fillPage();
   }
