@@ -35,23 +35,4 @@ export async function fetchCardsForSet(setId) {
     const data = await fetchJson(`${constants.CARDS_SETID_URL}${setId}`);
     return data;
 }
-export async function fetchBlob(url) {
-    const apiKey = await get.getSecret(constants.SECRETS_KEYS.tcgapiKey);
-    try {
-        console.log(`Fetching ${url}`);
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'X-Api-Key': apiKey,
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`Failed to fetch data from ${url}`);
-        }
-        return response.blob();
-    }
-    catch (error) {
-        console.error(error);
-    }
-}
 //# sourceMappingURL=api-tcg.js.map

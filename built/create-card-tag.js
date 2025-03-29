@@ -35,18 +35,11 @@ export async function getImgSrc(cardObj, img, filePathsObj) {
     const url = new URL(cardObj.zRaw.images.large);
     const path = url.pathname.substring(1); // 'xy0/2_hires.png'
     const pathStored = await isPathInStorage(cardObj.zRaw.images.large, filePathsObj);
-    // in file system
     if (pathStored) {
         img.src = `img/${path}`;
     }
-    // fetch and store
     else {
-        const imgBlob = await tcg.fetchBlob(cardObj.zRaw.images.large);
-        const img64 = await utils.convertBlobToBase64(imgBlob);
-        if (!img64) {
-            throw new Error(`blob not converted: ${cardObj.zRaw.images.large}`);
-        }
-        img.src = img64;
+        img.src = cardObj.zRaw.images.large;
     }
 }
 export async function isPathInStorage(cardUrl, filePathsObj) {

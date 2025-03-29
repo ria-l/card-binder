@@ -24,25 +24,6 @@ export function toggleStatusModal(message, showHide) {
         statusSpan.className = showHide;
     }
 }
-export async function convertBlobToBase64(blob) {
-    try {
-        const base64String = await blobToBase64(blob);
-        return base64String; // Optionally return the Base64 string
-    }
-    catch (error) {
-        console.error('Error converting Blob to Base64:', error);
-    }
-}
-function blobToBase64(blob) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            resolve(reader.result); // Resolve with Base64 string
-        };
-        reader.onerror = reject; // Reject if an error occurs
-        reader.readAsDataURL(blob); // Start reading the Blob as a Data URL
-    });
-}
 export async function isOwnedCard(card) {
     let result;
     localbase.db.config.debug = false;
