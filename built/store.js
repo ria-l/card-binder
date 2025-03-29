@@ -67,10 +67,4 @@ export async function storeGhImgPaths(data) {
         .collection(constants.STORAGE_KEYS.filePaths)
         .set(mapped, { keys: true });
 }
-export async function storeBlob(card, blob64) {
-    localbase.db.config.debug = false;
-    await localbase.db
-        .collection(constants.STORAGE_KEYS.blobs)
-        .add({ card_id: card.id, blob64: blob64 }, card.id);
-}
 //# sourceMappingURL=store.js.map

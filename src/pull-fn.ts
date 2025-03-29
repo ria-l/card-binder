@@ -14,12 +14,6 @@ import * as utils from './utils.js';
 declare function pushToSheets(range: string, values: (string | Date)[][]): any;
 
 export async function openPack() {
-  const blobsObj = await localbase.db
-    .collection(constants.STORAGE_KEYS.blobs)
-    .get()
-    .then((blobs: any) => {
-      return blobs;
-    });
   const filePathsObj = await localbase.db
     .collection(constants.STORAGE_KEYS.filePaths)
     .get()
@@ -51,7 +45,7 @@ export async function openPack() {
     pulled.push(card);
   }
   console.log(pulled);
-  await processPulled(pulled, blobsObj, filePathsObj);
+  await processPulled(pulled, filePathsObj);
   utils.toggleStatusModal('', 'hide');
 }
 
@@ -76,10 +70,6 @@ function groupCardsByRarity(obj: { id: string; cards: types.Card[] }) {
 
 async function processPulled(
   pulled: types.Card[],
-  blobsObj: {
-    card_id: string;
-    blob64: string;
-  }[],
   filePathsObj: types.GithubTree[]
 ) {
   const date = new Date();
@@ -93,7 +83,6 @@ async function processPulled(
       isOwned,
       borderColors,
       title,
-      blobsObj,
       filePathsObj
     );
     // for scrolling in to view

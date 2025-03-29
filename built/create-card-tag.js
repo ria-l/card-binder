@@ -11,11 +11,11 @@ import * as types from './types.js';
 import * as ui from './ui.js';
 import * as gh from './api-github.js';
 import * as utils from './utils.js';
-export async function createCardImgForBinder(card, borderColors, title, blobsObj, filePathsObj) {
+export async function createCardImgForBinder(card, borderColors, title, filePathsObj) {
     const width = get.getCardSize();
     const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
     const img = new Image(width, height);
-    await getImgSrc(card, img, blobsObj, filePathsObj);
+    await getImgSrc(card, img, filePathsObj);
     img.title = title;
     img.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
     img.style.setProperty('border-radius', `${width / 20}px`);
@@ -30,19 +30,14 @@ export async function createCardImgForBinder(card, borderColors, title, blobsObj
     };
     return img;
 }
-export async function getImgSrc(cardObj, img, blobsObj, filePathsObj) {
+export async function getImgSrc(cardObj, img, filePathsObj) {
     utils.toggleStatusModal(cardObj.id, 'showstatus');
     const url = new URL(cardObj.zRaw.images.large);
     const path = url.pathname.substring(1); // 'xy0/2_hires.png'
-    const blobStored = await blobInStorage(cardObj, blobsObj);
     const pathStored = await isPathInStorage(cardObj.zRaw.images.large, filePathsObj);
     // in file system
     if (pathStored) {
         img.src = `img/${path}`;
-    }
-    // in indexdb
-    else if (blobStored) {
-        img.src = blobStored;
     }
     // fetch and store
     else {
@@ -52,19 +47,7 @@ export async function getImgSrc(cardObj, img, blobsObj, filePathsObj) {
             throw new Error(`blob not converted: ${cardObj.zRaw.images.large}`);
         }
         img.src = img64;
-        await store.storeBlob(cardObj, img64);
     }
-}
-export async function blobInStorage(card, blobsObj) {
-    if (!blobsObj) {
-        return undefined;
-    }
-    const blobsByCardId = new Map(blobsObj.map((obj) => [
-        obj.card_id,
-        obj,
-    ]));
-    const result = blobsByCardId.get(card.id);
-    return result ? blobsByCardId.get(card.id).blob64 : undefined;
 }
 export async function isPathInStorage(cardUrl, filePathsObj) {
     localbase.db.config.debug = false;

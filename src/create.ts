@@ -17,14 +17,10 @@ export async function createCardImgForPulls(
   isOwned: boolean,
   borderColors: string,
   title: string,
-  blobsObj: {
-    card_id: string;
-    blob64: string;
-  }[],
   filePathsObj: types.GithubTree[]
 ) {
   const img = new Image();
-  await crCard.getImgSrc(card, img, blobsObj, filePathsObj);
+  await crCard.getImgSrc(card, img, filePathsObj);
 
   img.title = title;
   if (isOwned) {
@@ -77,12 +73,6 @@ export async function createCardsForActiveSetInBinder(): Promise<
   (HTMLImageElement | HTMLSpanElement)[]
 > {
   console.log('== createCardsForActiveSetInBinder ==');
-  const blobsObj = await localbase.db
-    .collection(constants.STORAGE_KEYS.blobs)
-    .get()
-    .then((blobs: any) => {
-      return blobs;
-    });
   const filePathsObj = await localbase.db
     .collection(constants.STORAGE_KEYS.filePaths)
     .get()
@@ -105,7 +95,6 @@ export async function createCardsForActiveSetInBinder(): Promise<
           card,
           borderColors,
           title,
-          blobsObj,
           filePathsObj
         )
       );
