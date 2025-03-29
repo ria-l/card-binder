@@ -15,7 +15,7 @@ export async function createCardImgForBinder(card, borderColors, title, blobsObj
     const width = get.getCardSize();
     const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
     const img = new Image(width, height);
-    await getImgSrcAndSyncWGh(card, img, blobsObj, filePathsObj);
+    await getImgSrc(card, img, blobsObj, filePathsObj);
     img.title = title;
     img.style.setProperty('background', `linear-gradient(to bottom right, ${borderColors}) border-box`);
     img.style.setProperty('border-radius', `${width / 20}px`);
@@ -30,7 +30,7 @@ export async function createCardImgForBinder(card, borderColors, title, blobsObj
     };
     return img;
 }
-export async function getImgSrcAndSyncWGh(cardObj, img, blobsObj, filePathsObj) {
+export async function getImgSrc(cardObj, img, blobsObj, filePathsObj) {
     utils.toggleStatusModal(cardObj.id, 'showstatus');
     const url = new URL(cardObj.zRaw.images.large);
     const path = url.pathname.substring(1); // 'xy0/2_hires.png'
@@ -53,7 +53,6 @@ export async function getImgSrcAndSyncWGh(cardObj, img, blobsObj, filePathsObj) 
         }
         img.src = img64;
         await store.storeBlob(cardObj, img64);
-        await gh.uploadImg(img64, path);
     }
 }
 export async function blobInStorage(card, blobsObj) {

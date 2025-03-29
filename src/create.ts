@@ -24,7 +24,7 @@ export async function createCardImgForPulls(
   filePathsObj: types.GithubTree[]
 ) {
   const img = new Image();
-  await crCard.getImgSrcAndSyncWGh(card, img, blobsObj, filePathsObj);
+  await crCard.getImgSrc(card, img, blobsObj, filePathsObj);
 
   img.title = title;
   if (isOwned) {

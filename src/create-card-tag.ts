@@ -26,7 +26,7 @@ export async function createCardImgForBinder(
   const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
 
   const img = new Image(width, height);
-  await getImgSrcAndSyncWGh(card, img, blobsObj, filePathsObj);
+  await getImgSrc(card, img, blobsObj, filePathsObj);
   img.title = title;
   img.style.setProperty(
     'background',
@@ -46,7 +46,7 @@ export async function createCardImgForBinder(
   return img;
 }
 
-export async function getImgSrcAndSyncWGh(
+export async function getImgSrc(
   cardObj: types.Card,
   img: HTMLImageElement,
   blobsObj: {
@@ -84,7 +84,6 @@ export async function getImgSrcAndSyncWGh(
     }
     img.src = img64;
     await store.storeBlob(cardObj, img64);
-    await gh.uploadImg(img64, path);
   }
 }
 

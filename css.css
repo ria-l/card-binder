@@ -1,10 +1,10 @@
 * {
   /* necessary to get cards and placeholders to be the same size */
   box-sizing: border-box;
-  font-family: 'Andika', sans-serif;
+  font-family: sans-serif;
 }
 :root {
-  font-family: 'Andika', sans-serif;
+  font-family: sans-serif;
   --text-primary: #b6b6b6;
   --text-secondary: #ececec;
   --bg-primary: #23232e;
@@ -65,7 +65,7 @@ main {
 }
 .link-text {
   margin-left: 1rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
   letter-spacing: 0.1ch;
   width: 100%;
 }
@@ -80,7 +80,7 @@ main {
 }
 .dropdown-item {
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.8rem;
   letter-spacing: 0.1ch;
   width: 100%;
   color: var(--text-primary);
@@ -246,7 +246,7 @@ ol {
     margin-left: 0;
   }
   .link-text {
-    font-size: 1rem;
+    font-size: 0.8rem;
     text-align: center;
     margin-left: 0;
   }

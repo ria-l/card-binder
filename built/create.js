@@ -13,7 +13,7 @@ import * as utils from './utils.js';
 import * as crCard from './create-card-tag.js';
 export async function createCardImgForPulls(card, isOwned, borderColors, title, blobsObj, filePathsObj) {
     const img = new Image();
-    await crCard.getImgSrcAndSyncWGh(card, img, blobsObj, filePathsObj);
+    await crCard.getImgSrc(card, img, blobsObj, filePathsObj);
     img.title = title;
     if (isOwned) {
         img.classList.add('owned');
