@@ -47,7 +47,6 @@ export async function getImgSrc(
   img: HTMLImageElement,
   filePathsObj: types.GithubTree[]
 ) {
-  utils.toggleStatusModal(cardObj.id, 'showstatus');
   const url = new URL(cardObj.zRaw.images.large);
   const path = url.pathname.substring(1); // 'xy0/2_hires.png'
 
@@ -71,7 +70,6 @@ export async function isPathInStorage(
     return false;
   }
   const key = utils.extractDirAndFilenameWithoutExt(cardUrl);
-  console.log('cardurl', cardUrl);
   const cardPathBlob = await localbase.db
     .collection(constants.STORAGE_KEYS.filePaths)
     .doc(key)

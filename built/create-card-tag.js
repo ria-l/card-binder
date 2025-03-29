@@ -31,7 +31,7 @@ export async function createCardImgForBinder(card, borderColors, title, filePath
     return img;
 }
 export async function getImgSrc(cardObj, img, filePathsObj) {
-    utils.toggleStatusModal(cardObj.id, 'showstatus');
+    // utils.toggleStatusModal(cardObj.id, 'showstatus');
     const url = new URL(cardObj.zRaw.images.large);
     const path = url.pathname.substring(1); // 'xy0/2_hires.png'
     const pathStored = await isPathInStorage(cardObj.zRaw.images.large, filePathsObj);
