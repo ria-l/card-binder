@@ -2,7 +2,6 @@ import * as binder from './binder-fn.js';
 import * as create from './create.js';
 import * as constants from './constants.js';
 import * as get from './get.js';
-import * as gh from './api-github.js';
 import * as pull from './pull-fn.js';
 import * as sort from './sort.js';
 import * as store from './store.js';
@@ -20,7 +19,6 @@ async function main() {
         console.log('main: storage not found or version mismatch. Syncing data...');
         await syncData();
     }
-    await gh.fetchAndStoreGh();
     await ui.fillSetDropdown();
     await ui.createProgressBar();
     create.fillSizeDropdown();

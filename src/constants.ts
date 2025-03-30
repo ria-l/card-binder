@@ -6,7 +6,6 @@ export const STORAGE_KEYS = {
   activeSet: 'v2_active_set',
   appscriptUrl: 'v2_appscript_url', // also in main
   cards: 'v2_cards',
-  filePaths: 'v2_filepaths',
   owned: 'db-owned',
   rawSheetsData: 'v2_raw_sheets_data', // also in main
   secrets: 'v2_secrets', // also in main
@@ -21,8 +20,6 @@ export const SECRETS_KEYS = {
   gapiJsOrigins: 'javascript_origins',
   gapiKey: 'gsheets_api_key',
   gapiTokenUri: 'token_uri',
-  ghToken: 'github_token',
-  ghProjectId: 'project_id',
   gsheetId: 'sheet_id',
   tcgapiKey: 'pkmn_api_key',
 };

@@ -100,19 +100,3 @@ export type CardsDb = [
     cards: Card[];
   }
 ];
-
-export type GithubJson = {
-  sha: string;
-  url: string;
-  tree: GithubTree[];
-  truncated: boolean;
-};
-
-export type GithubTree = {
-  path: string;
-  mode: string;
-  type: string;
-  sha: string;
-  url: string;
-  _key?: string;
-};

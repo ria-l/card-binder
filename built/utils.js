@@ -1,7 +1,6 @@
 import * as binder from './binder-fn.js';
 import * as constants from './constants.js';
 import * as get from './get.js';
-import * as gh from './api-github.js';
 import * as localbase from './localbase.js';
 import * as pull from './pull-fn.js';
 import * as sort from './sort.js';

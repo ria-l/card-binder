@@ -1,6 +1,5 @@
 import * as constants from './constants.js';
 import * as get from './get.js';
-import * as gh from './api-github.js';
 import * as localbase from './localbase.js';
 import * as pull from './pull-fn.js';
 import * as sort from './sort.js';
@@ -24,7 +23,6 @@ async function main() {
     console.log('main: storage not found or version mismatch. Syncing data...');
     await syncData();
   }
-  await gh.fetchAndStoreGh();
   setEventListeners();
   localStorage.setItem('storage_init', 'SUCCESS-index');
   localStorage.setItem('storage_ver', constants.STORAGE_VERSION);

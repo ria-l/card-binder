@@ -16,12 +16,10 @@ export async function createCardImgForPulls(
   card: types.Card,
   isOwned: boolean,
   borderColors: string,
-  title: string,
-  filePathsObj: types.GithubTree[]
+  title: string
 ) {
   const img = new Image();
-  await crCard.getImgSrc(card, img, filePathsObj);
-
+  img.src = card.zRaw.images.large;
   img.title = title;
   if (isOwned) {
     img.classList.add('owned');
@@ -73,12 +71,6 @@ export async function createCardsForActiveSetInBinder(): Promise<
   (HTMLImageElement | HTMLSpanElement)[]
 > {
   console.log('== createCardsForActiveSetInBinder ==');
-  const filePathsObj = await localbase.db
-    .collection(constants.STORAGE_KEYS.filePaths)
-    .get()
-    .then((objs: any) => {
-      return objs;
-    });
 
   const tags = [];
   const sorted = await sort.sortCards();
@@ -90,14 +82,7 @@ export async function createCardsForActiveSetInBinder(): Promise<
       card
     );
     if (isOwned) {
-      tags.push(
-        await crCard.createCardImgForBinder(
-          card,
-          borderColors,
-          title,
-          filePathsObj
-        )
-      );
+      tags.push(await crCard.createCardImgForBinder(card, borderColors, title));
     } else {
       const fillColors = binder.generateFillColors(card);
       tags.push(

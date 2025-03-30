@@ -1,6 +1,5 @@
 import * as constants from './constants.js';
 import * as get from './get.js';
-import * as gh from './api-github.js';
 import * as localbase from './localbase.js';
 import * as pull from './pull-fn.js';
 import * as sort from './sort.js';
@@ -20,7 +19,6 @@ async function main() {
     }
     await ui.fillSetDropdown();
     await ui.createProgressBar();
-    await gh.fetchAndStoreGh();
     setEventListeners();
     localStorage.setItem('storage_init', 'SUCCESS');
     localStorage.setItem('storage_ver', constants.STORAGE_VERSION);
@@ -43,8 +41,5 @@ function setEventListeners() {
     utils
         .getElByIdOrThrow('clear-display-button')
         .addEventListener('click', ui.clearDisplay);
-    utils
-        .getElByIdOrThrow('debug-button')
-        .addEventListener('click', () => gh.getLatestCommitSha());
 }
 //# sourceMappingURL=pull.js.map

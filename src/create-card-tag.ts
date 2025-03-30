@@ -9,20 +9,18 @@ import * as store from './store.js';
 import * as tcg from './api-tcg.js';
 import * as types from './types.js';
 import * as ui from './ui.js';
-import * as gh from './api-github.js';
 import * as utils from './utils.js';
 
 export async function createCardImgForBinder(
   card: types.Card,
   borderColors: string,
-  title: string,
-  filePathsObj: types.GithubTree[]
+  title: string
 ): Promise<HTMLImageElement> {
   const width = get.getCardSize();
   const height = width * 1.4; // keeps cards that are a couple pixels off of standard size from breaking alignment
 
   const img = new Image(width, height);
-  await getImgSrc(card, img, filePathsObj);
+  img.src = card.zRaw.images.large;
   img.title = title;
   img.style.setProperty(
     'background',
@@ -40,39 +38,4 @@ export async function createCardImgForBinder(
     ui.zoomCardInBinder(img);
   };
   return img;
-}
-
-export async function getImgSrc(
-  cardObj: types.Card,
-  img: HTMLImageElement,
-  filePathsObj: types.GithubTree[]
-) {
-  const url = new URL(cardObj.zRaw.images.large);
-  const path = url.pathname.substring(1); // 'xy0/2_hires.png'
-
-  const pathStored = await isPathInStorage(
-    cardObj.zRaw.images.large,
-    filePathsObj
-  );
-  if (pathStored) {
-    img.src = `img/${path}`;
-  } else {
-    img.src = cardObj.zRaw.images.large;
-  }
-}
-
-export async function isPathInStorage(
-  cardUrl: string,
-  filePathsObj: types.GithubTree[]
-): Promise<boolean> {
-  localbase.db.config.debug = false;
-  if (!filePathsObj) {
-    return false;
-  }
-  const key = utils.extractDirAndFilenameWithoutExt(cardUrl);
-  const cardPathBlob = await localbase.db
-    .collection(constants.STORAGE_KEYS.filePaths)
-    .doc(key)
-    .get();
-  return cardPathBlob;
 }

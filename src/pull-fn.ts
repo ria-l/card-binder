@@ -14,13 +14,6 @@ import * as utils from './utils.js';
 declare function pushToSheets(range: string, values: (string | Date)[][]): any;
 
 export async function openPack() {
-  const filePathsObj = await localbase.db
-    .collection(constants.STORAGE_KEYS.filePaths)
-    .get()
-    .then((blobs: any) => {
-      return blobs;
-    });
-
   const cards: { id: string; cards: types.Card[] } =
     await get.getCardsForActiveSet();
   const cardGroups = groupCardsByRarity(cards);
@@ -45,7 +38,7 @@ export async function openPack() {
     pulled.push(card);
   }
   console.log(pulled);
-  await processPulled(pulled, filePathsObj);
+  await processPulled(pulled);
   utils.toggleStatusModal('', 'hide');
 }
 
@@ -68,10 +61,7 @@ function groupCardsByRarity(obj: { id: string; cards: types.Card[] }) {
   return groupedCards;
 }
 
-async function processPulled(
-  pulled: types.Card[],
-  filePathsObj: types.GithubTree[]
-) {
+async function processPulled(pulled: types.Card[]) {
   const date = new Date();
   for (const [i, card] of pulled.entries()) {
     const { isOwned, title, borderColors } = await create.generateImgMetadata(
@@ -82,8 +72,7 @@ async function processPulled(
       card,
       isOwned,
       borderColors,
-      title,
-      filePathsObj
+      title
     );
     // for scrolling in to view
     const imgId = `${card.zRaw.id}${i.toString()}${new Date().toString()}`;

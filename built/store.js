@@ -53,18 +53,4 @@ export async function storeCardsBySetId(setId) {
         .add(toStore, setId);
     return toStore;
 }
-export async function storeGhImgPaths(data) {
-    console.log('== storeGhImgPaths ==');
-    const db = new Localbase('db'); // bugs out if not using a new instance for some reason and importing doesn't work 🤷🏻‍♀️
-    db.config.debug = false;
-    const mapped = data.tree
-        .filter((tree) => tree.path.includes('img'))
-        .map((tree) => {
-        tree['_key'] = utils.extractDirAndFilenameWithoutExt(tree.path);
-        return tree;
-    });
-    await db
-        .collection(constants.STORAGE_KEYS.filePaths)
-        .set(mapped, { keys: true });
-}
 //# sourceMappingURL=store.js.map

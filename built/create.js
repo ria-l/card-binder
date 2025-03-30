@@ -11,9 +11,9 @@ import * as types from './types.js';
 import * as ui from './ui.js';
 import * as utils from './utils.js';
 import * as crCard from './create-card-tag.js';
-export async function createCardImgForPulls(card, isOwned, borderColors, title, filePathsObj) {
+export async function createCardImgForPulls(card, isOwned, borderColors, title) {
     const img = new Image();
-    await crCard.getImgSrc(card, img, filePathsObj);
+    img.src = card.zRaw.images.large;
     img.title = title;
     if (isOwned) {
         img.classList.add('owned');
@@ -46,12 +46,6 @@ export async function createPlaceholderForBinder(borderColors, title, fillColors
 }
 export async function createCardsForActiveSetInBinder() {
     console.log('== createCardsForActiveSetInBinder ==');
-    const filePathsObj = await localbase.db
-        .collection(constants.STORAGE_KEYS.filePaths)
-        .get()
-        .then((objs) => {
-        return objs;
-    });
     const tags = [];
     const sorted = await sort.sortCards();
     if (!sorted) {
@@ -60,7 +54,7 @@ export async function createCardsForActiveSetInBinder() {
     for (const card of sorted) {
         const { isOwned, title, borderColors } = await create.generateImgMetadata(card);
         if (isOwned) {
-            tags.push(await crCard.createCardImgForBinder(card, borderColors, title, filePathsObj));
+            tags.push(await crCard.createCardImgForBinder(card, borderColors, title));
         }
         else {
             const fillColors = binder.generateFillColors(card);

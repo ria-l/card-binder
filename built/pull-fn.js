@@ -10,12 +10,6 @@ import * as types from './types.js';
 import * as ui from './ui.js';
 import * as utils from './utils.js';
 export async function openPack() {
-    const filePathsObj = await localbase.db
-        .collection(constants.STORAGE_KEYS.filePaths)
-        .get()
-        .then((blobs) => {
-        return blobs;
-    });
     const cards = await get.getCardsForActiveSet();
     const cardGroups = groupCardsByRarity(cards);
     const isGodPack = Math.floor(Math.random() * 2000) + 1 === 1;
@@ -42,7 +36,7 @@ export async function openPack() {
         pulled.push(card);
     }
     console.log(pulled);
-    await processPulled(pulled, filePathsObj);
+    await processPulled(pulled);
     utils.toggleStatusModal('', 'hide');
 }
 function groupCardsByRarity(obj) {
@@ -60,11 +54,11 @@ function groupCardsByRarity(obj) {
     }
     return groupedCards;
 }
-async function processPulled(pulled, filePathsObj) {
+async function processPulled(pulled) {
     const date = new Date();
     for (const [i, card] of pulled.entries()) {
         const { isOwned, title, borderColors } = await create.generateImgMetadata(card);
-        const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title, filePathsObj);
+        const cardImg = await create.createCardImgForPulls(card, isOwned, borderColors, title);
         // for scrolling in to view
         const imgId = `${card.zRaw.id}${i.toString()}${new Date().toString()}`;
         displayLargeCard(imgId, cardImg);
